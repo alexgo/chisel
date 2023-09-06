@@ -1,0 +1,173 @@
+{
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 1:01:39 PM PDT\n\nThis is a Dockerfile, which is a text document that contains all the commands a user could call on the command line to assemble an image. Docker can build images automatically by reading the instructions from a Dockerfile. The Dockerfile is divided into two stages: the build stage and the run stage.\n\n1. Build Stage:\n\nThe build stage is where the application is built. It starts with the `FROM golang:alpine AS build` command which pulls the golang:alpine image from Docker Hub. This is a lightweight Go (Golang) Docker image based on Alpine Linux.\n\n`RUN apk update && apk add git` is used to update the package list and install git in the image. Git is a version control system that lets you manage and keep track of your source code history.\n\n`ADD . /src` adds the contents of the current directory (on the host) to the `/src` directory in the image.\n\n`WORKDIR /src` changes the working directory of the Docker image to `/src`.\n\n`ENV CGO_ENABLED 0` sets an environment variable in the Docker image. CGO_ENABLED is a Go environment variable that enables or disables the use of CGo in Go programs.\n\nThe `RUN go build` command is used to build the Go application. The `-ldflags` option allows you to set linker options. The `-X` flag is a linker option that allows you to set the value of an uninitialized string variable in the Go source code. In this case, it's setting the value of the `github.com/jpillora/chisel/share.BuildVersion` variable to the output of the `git describe --abbrev=0 --tags` command.\n\n2. Run Stage:\n\nThe run stage is where the built application is run. It starts with `FROM scratch`, which creates a brand new, empty Docker image.\n\n`LABEL maintainer=\"dev@jpillora.com\"` sets metadata on the Docker image. In this case, it's setting the maintainer of the image.\n\n`COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/` copies the SSL certificates from the build image to the run image. This is necessary for the application to make secure connections.\n\n`WORKDIR /app` changes the working directory of the Docker image to `/app`.\n\n`COPY --from=build /tmp/bin /app/bin` copies the built application from the build image to the run image.\n\n`ENTRYPOINT [\"/app/bin\"]` sets the application that will be run when a container is started from the image.\n\nFor more information about Dockerfiles, you can visit the official Docker documentation here: https://docs.docker.com/engine/reference/builder/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 1:01:59 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle buildStage fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle runStage fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->buildStage;\nbuildStage-->runStage;\n```\n\nThe control flow graph for the given source code is a simple linear flow. It starts with the \"build stage\" and then proceeds to the \"run stage\". There are no alternate paths or error paths in this code."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 1:03:02 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Insecure Dockerfile practices\n\n   **Description**: The Dockerfile uses the 'latest' tag for the golang:alpine image. This can lead to non-reproducible builds, as 'latest' can point to any version. It's better to pin specific versions of images to ensure the build is reproducible and to avoid unexpected behavior due to changes in the image.\n\n   **Solution**: Replace 'golang:alpine' with a specific version like 'golang:1.16-alpine'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Insecure Dockerfile practices\n\n   **Description**: The Dockerfile uses 'apk add git' without specifying a version, which can lead to non-reproducible builds and potential exposure to vulnerabilities in unpatched versions.\n\n   **Solution**: Specify a version for git when adding it. For example: 'apk add git=<version>'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 2\n\n   **Bug Type**: Insecure Dockerfile practices\n\n   **Description**: The Dockerfile uses 'ADD' to copy files into the Docker image. 'ADD' has some features (like local-only tar extraction and remote URL support) that can lead to unexpected and potentially insecure results. 'COPY' is more secure and should be used instead.\n\n   **Solution**: Replace 'ADD . /src' with 'COPY . /src'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#add-or-copy\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 9\n\n   **Bug Type**: Insecure Dockerfile practices\n\n   **Description**: The Dockerfile uses 'FROM scratch' for the run stage. This means the container runs without an operating system, which can limit the debugging capabilities and potentially lead to unexpected behavior.\n\n   **Solution**: Consider using a minimal base image like 'alpine' instead of 'scratch'. This provides a minimal set of tools for debugging without significantly increasing the size of the image. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 6,
+                "bugType": "Insecure Dockerfile practices",
+                "description": "The Dockerfile uses the 'latest' tag for the golang:alpine image. This can lead to non-reproducible builds, as 'latest' can point to any version. It's better to pin specific versions of images to ensure the build is reproducible and to avoid unexpected behavior due to changes in the image.",
+                "solution": "Replace 'golang:alpine' with a specific version like 'golang:1.16-alpine'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from"
+              },
+              {
+                "lineNumber": 2,
+                "severity": 4,
+                "bugType": "Insecure Dockerfile practices",
+                "description": "The Dockerfile uses 'apk add git' without specifying a version, which can lead to non-reproducible builds and potential exposure to vulnerabilities in unpatched versions.",
+                "solution": "Specify a version for git when adding it. For example: 'apk add git=<version>'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run"
+              },
+              {
+                "lineNumber": 3,
+                "severity": 8,
+                "bugType": "Insecure Dockerfile practices",
+                "description": "The Dockerfile uses 'ADD' to copy files into the Docker image. 'ADD' has some features (like local-only tar extraction and remote URL support) that can lead to unexpected and potentially insecure results. 'COPY' is more secure and should be used instead.",
+                "solution": "Replace 'ADD . /src' with 'COPY . /src'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#add-or-copy"
+              },
+              {
+                "lineNumber": 10,
+                "severity": 7,
+                "bugType": "Insecure Dockerfile practices",
+                "description": "The Dockerfile uses 'FROM scratch' for the run stage. This means the container runs without an operating system, which can limit the debugging capabilities and potentially lead to unexpected behavior.",
+                "solution": "Consider using a minimal base image like 'alpine' instead of 'scratch'. This provides a minimal set of tools for debugging without significantly increasing the size of the image. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 1:04:03 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Disk\n\n   **Description**: The use of the 'apk update' command without the '--no-cache' flag can lead to increased disk usage because it leaves behind a cache of the downloaded packages.\n\n   **Solution**: Use the '--no-cache' flag with the 'apk update' command to avoid unnecessary disk usage. The command would look like this: 'apk update --no-cache'.\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 3\n\n   **Bug Type**: Disk\n\n   **Description**: The 'ADD .' command copies all files from the current directory into the Docker image, which could include unnecessary files and increase the size of the image.\n\n   **Solution**: Use a .dockerignore file to specify which files should not be copied into the Docker image. Alternatively, use the COPY command instead of ADD, as it is more transparent.\n\n\n3. **Severity**: 3/10\n\n   **Line Number**: 7\n\n   **Bug Type**: CPU\n\n   **Description**: The 'go build' command without the '-i' flag can lead to longer build times because it does not install the packages that are being compiled.\n\n   **Solution**: Use the '-i' flag with the 'go build' command to install the packages that are being compiled. The command would look like this: 'go build -i'.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "Disk",
+                "description": "The use of the 'apk update' command without the '--no-cache' flag can lead to increased disk usage because it leaves behind a cache of the downloaded packages.",
+                "solution": "Use the '--no-cache' flag with the 'apk update' command to avoid unnecessary disk usage. The command would look like this: 'apk update --no-cache'."
+              },
+              {
+                "lineNumber": 4,
+                "severity": 4,
+                "bugType": "Disk",
+                "description": "The 'ADD .' command copies all files from the current directory into the Docker image, which could include unnecessary files and increase the size of the image.",
+                "solution": "Use a .dockerignore file to specify which files should not be copied into the Docker image. Alternatively, use the COPY command instead of ADD, as it is more transparent."
+              },
+              {
+                "lineNumber": 8,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The 'go build' command without the '-i' flag can lead to longer build times because it does not install the packages that are being compiled.",
+                "solution": "Use the '-i' flag with the 'go build' command to install the packages that are being compiled. The command would look like this: 'go build -i'."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 1:05:06 PM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 1\n\n   **Bug Type**: GDPR\n\n   **Description**: The Docker image is being pulled from a public repository. There is no guarantee that the image has not been tampered with, which could lead to data breaches.\n\n   **Solution**: Use a private Docker registry or verify the integrity of the image before using it. Use a checksum or digital signature to ensure the image has not been tampered with.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 1\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code is updating and adding packages without verifying their authenticity. This could lead to the installation of malicious packages.\n\n   **Solution**: Verify the authenticity of the packages before installing them. Use checksums or digital signatures to ensure the packages have not been tampered with.\n\n\n3. **Severity**: 5/10\n\n   **Line Number**: 2\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code is adding the entire directory to the Docker image. If the directory contains sensitive data, it could be exposed in the image.\n\n   **Solution**: Only add necessary files to the Docker image. Use a .dockerignore file to exclude unnecessary or sensitive files.\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 8\n\n   **Bug Type**: GDPR\n\n   **Description**: The code is copying SSL certificates into the Docker image. If the certificates are not properly secured, they could be exposed in the image.\n\n   **Solution**: Secure the certificates before copying them into the Docker image. Use a secure method such as Docker secrets to manage sensitive data.\n\n\n5. **Severity**: 8/10\n\n   **Line Number**: 10\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code is copying the binary into the Docker image without verifying its authenticity. This could lead to the execution of malicious code.\n\n   **Solution**: Verify the authenticity of the binary before copying it into the Docker image. Use checksums or digital signatures to ensure the binary has not been tampered with.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 4,
+                "bugType": "GDPR",
+                "description": "The Docker image is being pulled from a public repository. There is no guarantee that the image has not been tampered with, which could lead to data breaches.",
+                "solution": "Use a private Docker registry or verify the integrity of the image before using it. Use a checksum or digital signature to ensure the image has not been tampered with.",
+                "webLink": "https://www.docker.com/what-docker"
+              },
+              {
+                "lineNumber": 2,
+                "severity": 6,
+                "bugType": "PCI DSS",
+                "description": "The code is updating and adding packages without verifying their authenticity. This could lead to the installation of malicious packages.",
+                "solution": "Verify the authenticity of the packages before installing them. Use checksums or digital signatures to ensure the packages have not been tampered with.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 3,
+                "severity": 5,
+                "bugType": "HIPAA",
+                "description": "The code is adding the entire directory to the Docker image. If the directory contains sensitive data, it could be exposed in the image.",
+                "solution": "Only add necessary files to the Docker image. Use a .dockerignore file to exclude unnecessary or sensitive files.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/index.html"
+              },
+              {
+                "lineNumber": 9,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The code is copying SSL certificates into the Docker image. If the certificates are not properly secured, they could be exposed in the image.",
+                "solution": "Secure the certificates before copying them into the Docker image. Use a secure method such as Docker secrets to manage sensitive data.",
+                "webLink": "https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 11,
+                "severity": 8,
+                "bugType": "PCI DSS",
+                "description": "The code is copying the binary into the Docker image without verifying its authenticity. This could lead to the execution of malicious code.",
+                "solution": "Verify the authenticity of the binary before copying it into the Docker image. Use checksums or digital signatures to ensure the binary has not been tampered with.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "plaintext",
+      "id": "0",
+      "value": "# build stage\nFROM golang:alpine AS build\nRUN apk update && apk add git\nADD . /src\nWORKDIR /src\nENV CGO_ENABLED 0\nRUN go build \\\n    -ldflags \"-X github.com/jpillora/chisel/share.BuildVersion=$(git describe --abbrev=0 --tags)\" \\\n    -o /tmp/bin\n# run stage\nFROM scratch\nLABEL maintainer=\"dev@jpillora.com\"\nCOPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/\nWORKDIR /app\nCOPY --from=build /tmp/bin /app/bin\nENTRYPOINT [\"/app/bin\"]",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": -1
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./Dockerfile"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "// +build pprof\n\npackage cos\n\nimport (\n\t\"log\"\n\t\"net/http\"\n\t_ \"net/http/pprof\" //import http profiler api\n)\n\nfunc init() {\n\tgo func() {\n\t\tlog.Fatal(http.ListenAndServe(\"localhost:6060\", nil))\n\t}()\n\tlog.Printf(\"[pprof] listening on 6060\")\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cos/pprof.go"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package settings\n\nimport (\n\t\"reflect\"\n\t\"testing\"\n)\n\nfunc TestRemoteDecode(t *testing.T) {\n\t//test table\n\tfor i, test := range []struct {\n\t\tInput   string\n\t\tOutput  Remote\n\t\tEncoded string\n\t}{\n\t\t{\n\t\t\t\"3000\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"3000\",\n\t\t\t\tRemoteHost: \"127.0.0.1\",\n\t\t\t\tRemotePort: \"3000\",\n\t\t\t},\n\t\t\t\"0.0.0.0:3000:127.0.0.1:3000\",\n\t\t},\n\t\t{\n\t\t\t\"google.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"80\",\n\t\t\t\tRemoteHost: \"google.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t},\n\t\t\t\"0.0.0.0:80:google.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"R:google.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"80\",\n\t\t\t\tRemoteHost: \"google.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t\tReverse:    true,\n\t\t\t},\n\t\t\t\"R:0.0.0.0:80:google.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"示例網站.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"80\",\n\t\t\t\tRemoteHost: \"示例網站.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t},\n\t\t\t\"0.0.0.0:80:示例網站.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"socks\",\n\t\t\tRemote{\n\t\t\t\tLocalHost: \"127.0.0.1\",\n\t\t\t\tLocalPort: \"1080\",\n\t\t\t\tSocks:     true,\n\t\t\t},\n\t\t\t\"127.0.0.1:1080:socks\",\n\t\t},\n\t\t{\n\t\t\t\"127.0.0.1:1081:socks\",\n\t\t\tRemote{\n\t\t\t\tLocalHost: \"127.0.0.1\",\n\t\t\t\tLocalPort: \"1081\",\n\t\t\t\tSocks:     true,\n\t\t\t},\n\t\t\t\"127.0.0.1:1081:socks\",\n\t\t},\n\t\t{\n\t\t\t\"1.1.1.1:53/udp\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:   \"53\",\n\t\t\t\tLocalProto:  \"udp\",\n\t\t\t\tRemoteHost:  \"1.1.1.1\",\n\t\t\t\tRemotePort:  \"53\",\n\t\t\t\tRemoteProto: \"udp\",\n\t\t\t},\n\t\t\t\"0.0.0.0:53:1.1.1.1:53/udp\",\n\t\t},\n\t\t{\n\t\t\t\"localhost:5353:1.1.1.1:53/udp\",\n\t\t\tRemote{\n\t\t\t\tLocalHost:   \"localhost\",\n\t\t\t\tLocalPort:   \"5353\",\n\t\t\t\tLocalProto:  \"udp\",\n\t\t\t\tRemoteHost:  \"1.1.1.1\",\n\t\t\t\tRemotePort:  \"53\",\n\t\t\t\tRemoteProto: \"udp\",\n\t\t\t},\n\t\t\t\"localhost:5353:1.1.1.1:53/udp\",\n\t\t},\n\t\t{\n\t\t\t\"[::1]:8080:google.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalHost:  \"[::1]\",\n\t\t\t\tLocalPort:  \"8080\",\n\t\t\t\tRemoteHost: \"google.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t},\n\t\t\t\"[::1]:8080:google.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"R:[::]:3000:[::1]:3000\",\n\t\t\tRemote{\n\t\t\t\tLocalHost:  \"[::]\",\n\t\t\t\tLocalPort:  \"3000\",\n\t\t\t\tRemoteHost: \"[::1]\",\n\t\t\t\tRemotePort: \"3000\",\n\t\t\t\tReverse:    true,\n\t\t\t},\n\t\t\t\"R:[::]:3000:[::1]:3000\",\n\t\t},\n\t} {\n\t\t//expected defaults\n\t\texpected := test.Output\n\t\tif expected.LocalHost == \"\" {\n\t\t\texpected.LocalHost = \"0.0.0.0\"\n\t\t}\n\t\tif expected.RemoteProto == \"\" {\n\t\t\texpected.RemoteProto = \"tcp\"\n\t\t}\n\t\tif expected.LocalProto == \"\" {\n\t\t\texpected.LocalProto = \"tcp\"\n\t\t}\n\t\t//compare\n\t\tgot, err := DecodeRemote(test.Input)\n\t\tif err != nil {\n\t\t\tt.Fatalf(\"decode #%d '%s' failed: %s\", i+1, test.Input, err)\n\t\t}\n\t\tif !reflect.DeepEqual(got, &expected) {\n\t\t\tt.Fatalf(\"decode #%d '%s' expected\\n  %#v\\ngot\\n  %#v\", i+1, test.Input, expected, got)\n\t\t}\n\t\tif e := got.Encode(); test.Encoded != e {\n\t\t\tt.Fatalf(\"encode #%d '%s' expected\\n  %#v\\ngot\\n  %#v\", i+1, test.Input, test.Encoded, e)\n\t\t}\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/settings/remote_test.go"
+  }
+}

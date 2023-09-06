@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "plaintext",
+      "id": "0",
+      "value": "FROM jpillora/chisel\nENTRYPOINT [\"/app/bin\", \"server\", \"--port\", \"443\", \"--tls-domain\", \"chisel.jpillora.com\"]",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": -1
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./example/Flyfile"
+  }
+}

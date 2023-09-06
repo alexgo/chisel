@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package cos\n\nimport (\n\t\"context\"\n\t\"os\"\n\t\"os/signal\"\n\t\"time\"\n)\n\n//InterruptContext returns a context which is\n//cancelled on OS Interrupt\nfunc InterruptContext() context.Context {\n\tctx, cancel := context.WithCancel(context.Background())\n\tgo func() {\n\t\tsig := make(chan os.Signal, 1)\n\t\tsignal.Notify(sig, os.Interrupt) //windows compatible?\n\t\t<-sig\n\t\tsignal.Stop(sig)\n\t\tcancel()\n\t}()\n\treturn ctx\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//SleepSignal sleeps for the given duration,\n//or until a SIGHUP is received\nfunc SleepSignal(d time.Duration) {\n\t<-AfterSignal(d)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 22
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cos/common.go"
+  }
+}

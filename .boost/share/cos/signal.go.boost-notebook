@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "//+build !windows\n\npackage cos\n\nimport (\n\t\"log\"\n\t\"os\"\n\t\"os/signal\"\n\t\"runtime\"\n\t\"syscall\"\n\t\"time\"\n\n\t\"github.com/jpillora/sizestr\"\n)\n\n//GoStats prints statistics to\n//stdout on SIGUSR2 (posix-only)\nfunc GoStats() {\n\t//silence complaints from windows\n\tconst SIGUSR2 = syscall.Signal(0x1f)\n\ttime.Sleep(time.Second)\n\tc := make(chan os.Signal, 1)\n\tsignal.Notify(c, SIGUSR2)\n\tfor range c {\n\t\tmemStats := runtime.MemStats{}\n\t\truntime.ReadMemStats(&memStats)\n\t\tlog.Printf(\"recieved SIGUSR2, go-routines: %d, go-memory-usage: %s\",\n\t\t\truntime.NumGoroutine(),\n\t\t\tsizestr.ToString(int64(memStats.Alloc)))\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//AfterSignal returns a channel which will be closed\n//after the given duration or until a SIGHUP is received\nfunc AfterSignal(d time.Duration) <-chan struct{} {\n\tch := make(chan struct{})\n\tgo func() {\n\t\tsig := make(chan os.Signal, 1)\n\t\tsignal.Notify(sig, syscall.SIGHUP)\n\t\tselect {\n\t\tcase <-time.After(d):\n\t\tcase <-sig:\n\t\t}\n\t\tsignal.Stop(sig)\n\t\tclose(ch)\n\t}()\n\treturn ch\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 31
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cos/signal.go"
+  }
+}

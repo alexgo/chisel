@@ -1,0 +1,116 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "0",
+      "value": "on: [push, pull_request]\nname: CI\njobs:\n  # ================\n  # TEST JOB\n  #   runs on every push and PR\n  #   runs 2x3 times (see matrix)\n  # ================\n  test:\n    name: Test\n    strategy:\n      matrix:\n        go-version: [1.21.x]\n        platform: [ubuntu-latest, macos-latest, windows-latest]\n    runs-on: ${{ matrix.platform }}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "1",
+      "value": "    steps:\n      - name: Install Go\n        uses: actions/setup-go@v3\n        with:\n          go-version: ${{ matrix.go-version }}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 15
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "2",
+      "value": "      - name: Checkout code\n        uses: actions/checkout@v3\n      - name: Build\n        run: go build -v -o /dev/null .\n      - name: Test\n        run: go test -v ./...\n  # ================\n  # RELEASE JOBS\n  #   runs after a success test\n  #   only runs on push \"v*\" tag\n  # ================\n  release_binaries:\n    name: Release Binaries\n    needs: test\n    if: startsWith(github.ref, 'refs/tags/v')\n    runs-on: ubuntu-latest\n    steps:\n      - name: Check out code\n        uses: actions/checkout@v3\n      - name: goreleaser\n        if: success()\n        uses: docker://goreleaser/goreleaser:latest\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 20
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "3",
+      "value": "        with:\n          args: release --config .github/goreleaser.yml\n  release_docker:\n    name: Release Docker Images\n    needs: test\n    if: startsWith(github.ref, 'refs/tags/v')\n    runs-on: ubuntu-latest\n    steps:\n      - name: Check out code\n        uses: actions/checkout@v3\n      - name: Set up QEMU\n        uses: docker/setup-qemu-action@v1\n      - name: Set up Docker Buildx\n        id: buildx\n        uses: docker/setup-buildx-action@v1\n      - name: Login to DockerHub\n        uses: docker/login-action@v2\n        with:\n          username: jpillora\n          password: ${{ secrets.DOCKERHUB_TOKEN }}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 44
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "4",
+      "value": "      - name: Docker meta\n        id: docker_meta\n        uses: docker/metadata-action@v4\n        with:\n          images: jpillora/chisel\n          tags: |\n            type=semver,pattern={{version}}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 64
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "5",
+      "value": "            type=semver,pattern={{major}}.{{minor}}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 71
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "6",
+      "value": "            type=semver,pattern={{major}}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 72
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "7",
+      "value": "      - name: Build and push\n        uses: docker/build-push-action@v3\n        with:\n          context: .\n          platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/386,linux/arm/v7,linux/arm/v6\n          push: true\n          tags: ${{ steps.docker_meta.outputs.tags }}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 73
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "8",
+      "value": "          labels: ${{ steps.docker_meta.outputs.labels }}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 80
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./.github/workflows/ci.yml"
+  }
+}

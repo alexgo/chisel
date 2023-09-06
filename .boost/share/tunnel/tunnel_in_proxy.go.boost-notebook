@@ -1,0 +1,104 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package tunnel\n\nimport (\n\t\"context\"\n\t\"io\"\n\t\"net\"\n\t\"sync\"\n\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/sizestr\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\n//sshTunnel exposes a subset of Tunnel to subtypes\ntype sshTunnel interface {\n\tgetSSH(ctx context.Context) ssh.Conn\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//Proxy is the inbound portion of a Tunnel\ntype Proxy struct {\n\t*cio.Logger\n\tsshTun sshTunnel\n\tid     int\n\tcount  int\n\tremote *settings.Remote\n\tdialer net.Dialer\n\ttcp    *net.TCPListener\n\tudp    *udpListener\n\tmu     sync.Mutex\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 18
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\n//NewProxy creates a Proxy\nfunc NewProxy(logger *cio.Logger, sshTun sshTunnel, index int, remote *settings.Remote) (*Proxy, error) {\n\tid := index + 1\n\tp := &Proxy{\n\t\tLogger: logger.Fork(\"proxy#%s\", remote.String()),\n\t\tsshTun: sshTun,\n\t\tid:     id,\n\t\tremote: remote,\n\t}\n\treturn p, p.listen()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 31
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (p *Proxy) listen() error {\n\tif p.remote.Stdio {\n\t\t//TODO check if pipes active?\n\t} else if p.remote.LocalProto == \"tcp\" {\n\t\taddr, err := net.ResolveTCPAddr(\"tcp\", p.remote.LocalHost+\":\"+p.remote.LocalPort)\n\t\tif err != nil {\n\t\t\treturn p.Errorf(\"resolve: %s\", err)\n\t\t}\n\t\tl, err := net.ListenTCP(\"tcp\", addr)\n\t\tif err != nil {\n\t\t\treturn p.Errorf(\"tcp: %s\", err)\n\t\t}\n\t\tp.Infof(\"Listening\")\n\t\tp.tcp = l\n\t} else if p.remote.LocalProto == \"udp\" {\n\t\tl, err := listenUDP(p.Logger, p.sshTun, p.remote)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tp.Infof(\"Listening\")\n\t\tp.udp = l\n\t} else {\n\t\treturn p.Errorf(\"unknown local proto\")\n\t}\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 43
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\n//Run enables the proxy and blocks while its active,\n//close the proxy by cancelling the context.\nfunc (p *Proxy) Run(ctx context.Context) error {\n\tif p.remote.Stdio {\n\t\treturn p.runStdio(ctx)\n\t} else if p.remote.LocalProto == \"tcp\" {\n\t\treturn p.runTCP(ctx)\n\t} else if p.remote.LocalProto == \"udp\" {\n\t\treturn p.udp.run(ctx)\n\t}\n\tpanic(\"should not get here\")\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 70
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc (p *Proxy) runStdio(ctx context.Context) error {\n\tdefer p.Infof(\"Closed\")\n\tfor {\n\t\tp.pipeRemote(ctx, cio.Stdio)\n\t\tselect {\n\t\tcase <-ctx.Done():\n\t\t\treturn nil\n\t\tdefault:\n\t\t\t// the connection is not ready yet, keep waiting\n\t\t}\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 83
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc (p *Proxy) runTCP(ctx context.Context) error {\n\tdone := make(chan struct{})\n\t//implements missing net.ListenContext\n\tgo func() {\n\t\tselect {\n\t\tcase <-ctx.Done():\n\t\t\tp.tcp.Close()\n\t\tcase <-done:\n\t\t}\n\t}()\n\tfor {\n\t\tsrc, err := p.tcp.Accept()\n\t\tif err != nil {\n\t\t\tselect {\n\t\t\tcase <-ctx.Done():\n\t\t\t\t//listener closed\n\t\t\t\terr = nil\n\t\t\tdefault:\n\t\t\t\tp.Infof(\"Accept error: %s\", err)\n\t\t\t}\n\t\t\tclose(done)\n\t\t\treturn err\n\t\t}\n\t\tgo p.pipeRemote(ctx, src)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 96
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\nfunc (p *Proxy) pipeRemote(ctx context.Context, src io.ReadWriteCloser) {\n\tdefer src.Close()\n\n\tp.mu.Lock()\n\tp.count++\n\tcid := p.count\n\tp.mu.Unlock()\n\n\tl := p.Fork(\"conn#%d\", cid)\n\tl.Debugf(\"Open\")\n\tsshConn := p.sshTun.getSSH(ctx)\n\tif sshConn == nil {\n\t\tl.Debugf(\"No remote connection\")\n\t\treturn\n\t}\n\t//ssh request for tcp connection for this proxy's remote\n\tdst, reqs, err := sshConn.OpenChannel(\"chisel\", []byte(p.remote.Remote()))\n\tif err != nil {\n\t\tl.Infof(\"Stream error: %s\", err)\n\t\treturn\n\t}\n\tgo ssh.DiscardRequests(reqs)\n\t//then pipe\n\ts, r := cio.Pipe(src, dst)\n\tl.Debugf(\"Close (sent %s received %s)\", sizestr.ToString(s), sizestr.ToString(r))\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 123
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/tunnel/tunnel_in_proxy.go"
+  }
+}

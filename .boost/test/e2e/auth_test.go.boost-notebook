@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package e2e_test\n\nimport (\n\t\"testing\"\n\n\tchclient \"github.com/jpillora/chisel/client\"\n\tchserver \"github.com/jpillora/chisel/server\"\n)\n\n//TODO tests for:\n// - failed auth\n// - dynamic auth (server add/remove user)\n// - watch auth file\n\nfunc TestAuth(t *testing.T) {\n\ttmpPort1 := availablePort()\n\ttmpPort2 := availablePort()\n\t//setup server, client, fileserver\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{\n\t\t\tKeySeed: \"foobar\",\n\t\t\tAuth:    \"../bench/userfile\",\n\t\t},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{\n\t\t\t\t\"0.0.0.0:\" + tmpPort1 + \":127.0.0.1:$FILEPORT\",\n\t\t\t\t\"0.0.0.0:\" + tmpPort2 + \":localhost:$FILEPORT\",\n\t\t\t},\n\t\t\tAuth: \"foo:bar\",\n\t\t})\n\tdefer teardown()\n\t//test first remote\n\tresult, err := post(\"http://localhost:\"+tmpPort1, \"foo\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif result != \"foo!\" {\n\t\tt.Fatalf(\"expected exclamation mark added\")\n\t}\n\t//test second remote\n\tresult, err = post(\"http://localhost:\"+tmpPort2, \"bar\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif result != \"bar!\" {\n\t\tt.Fatalf(\"expected exclamation mark added again\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/e2e/auth_test.go"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "plaintext",
+      "id": "0",
+      "value": "module github.com/jpillora/chisel\n\ngo 1.21\n\nrequire (\n\tgithub.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5\n\tgithub.com/fsnotify/fsnotify v1.6.0\n\tgithub.com/gorilla/websocket v1.5.0\n\tgithub.com/jpillora/backoff v1.0.0\n\tgithub.com/jpillora/requestlog v1.0.0\n\tgithub.com/jpillora/sizestr v1.0.0\n\tgolang.org/x/crypto v0.12.0\n\tgolang.org/x/net v0.14.0\n\tgolang.org/x/sync v0.3.0\n)\n\nrequire (\n\tgithub.com/andrew-d/go-termutil v0.0.0-20150726205930-009166a695a2 // indirect\n\tgithub.com/jpillora/ansi v1.0.3 // indirect\n\tgithub.com/tomasen/realip v0.0.0-20180522021738-f0c99a92ddce // indirect\n\tgolang.org/x/sys v0.11.0 // indirect\n\tgolang.org/x/text v0.12.0 // indirect\n)\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": -1
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./go.mod"
+  }
+}

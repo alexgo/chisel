@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package e2e_test\n\n//TODO tests for:\n// - SOCKS-client -> [client -> server SOCKS] -> endpoint\n// - SOCKS-client -> [server -> client SOCKS] -> endpoint\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/e2e/socks_test.go"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package ccrypto\n\nimport (\n\t\"crypto/sha256\"\n\t\"encoding/base64\"\n\t\"fmt\"\n\t\"os\"\n\n\t\"golang.org/x/crypto/ssh\"\n)\n\n// GenerateKey generates a PEM key\nfunc GenerateKey(seed string) ([]byte, error) {\n\treturn Seed2PEM(seed)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n// GenerateKeyFile generates an ChiselKey\nfunc GenerateKeyFile(keyFilePath, seed string) error {\n\tchiselKey, err := seed2ChiselKey(seed)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tif keyFilePath == \"-\" {\n\t\tfmt.Print(string(chiselKey))\n\t\treturn nil\n\t}\n\treturn os.WriteFile(keyFilePath, chiselKey, 0600)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 15
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\n// FingerprintKey calculates the SHA256 hash of an SSH public key\nfunc FingerprintKey(k ssh.PublicKey) string {\n\tbytes := sha256.Sum256(k.Marshal())\n\treturn base64.StdEncoding.EncodeToString(bytes[:])\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 29
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/ccrypto/keys.go"
+  }
+}

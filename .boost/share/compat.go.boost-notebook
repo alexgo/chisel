@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package chshare\n\n//this file exists to maintain backwards compatibility\n\nimport (\n\t\"github.com/jpillora/chisel/share/ccrypto\"\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/cos\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/chisel/share/tunnel\"\n)\n\nconst (\n\tDetermRandIter = ccrypto.DetermRandIter\n)\n\ntype (\n\tConfig     = settings.Config\n\tRemote     = settings.Remote\n\tRemotes    = settings.Remotes\n\tUser       = settings.User\n\tUsers      = settings.Users\n\tUserIndex  = settings.UserIndex\n\tHTTPServer = cnet.HTTPServer\n\tConnStats  = cnet.ConnCount\n\tLogger     = cio.Logger\n\tTCPProxy   = tunnel.Proxy\n)\n\nvar (\n\tNewDetermRand    = ccrypto.NewDetermRand\n\tGenerateKey      = ccrypto.GenerateKey\n\tFingerprintKey   = ccrypto.FingerprintKey\n\tPipe             = cio.Pipe\n\tNewLoggerFlag    = cio.NewLoggerFlag\n\tNewLogger        = cio.NewLogger\n\tStdio            = cio.Stdio\n\tDecodeConfig     = settings.DecodeConfig\n\tDecodeRemote     = settings.DecodeRemote\n\tNewUsers         = settings.NewUsers\n\tNewUserIndex     = settings.NewUserIndex\n\tUserAllowAll     = settings.UserAllowAll\n\tParseAuth        = settings.ParseAuth\n\tNewRWCConn       = cnet.NewRWCConn\n\tNewWebSocketConn = cnet.NewWebSocketConn\n\tNewHTTPServer    = cnet.NewHTTPServer\n\tGoStats          = cos.GoStats\n\tSleepSignal      = cos.SleepSignal\n\tNewTCPProxy      = tunnel.NewProxy\n)\n\n//EncodeConfig old version\nfunc EncodeConfig(c *settings.Config) ([]byte, error) {\n\treturn settings.EncodeConfig(*c), nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/compat.go"
+  }
+}

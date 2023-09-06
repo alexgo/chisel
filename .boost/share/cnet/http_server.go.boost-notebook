@@ -1,0 +1,92 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package cnet\n\nimport (\n\t\"context\"\n\t\"errors\"\n\t\"net\"\n\t\"net/http\"\n\t\"sync\"\n\n\t\"golang.org/x/sync/errgroup\"\n)\n\n//HTTPServer extends net/http Server and\n//adds graceful shutdowns\ntype HTTPServer struct {\n\t*http.Server\n\twaiterMux sync.Mutex\n\twaiter    *errgroup.Group\n\tlistenErr error\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//NewHTTPServer creates a new HTTPServer\nfunc NewHTTPServer() *HTTPServer {\n\treturn &HTTPServer{\n\t\tServer: &http.Server{},\n\t}\n\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 20
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (h *HTTPServer) GoListenAndServe(addr string, handler http.Handler) error {\n\treturn h.GoListenAndServeContext(context.Background(), addr, handler)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 28
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (h *HTTPServer) GoListenAndServeContext(ctx context.Context, addr string, handler http.Handler) error {\n\tif ctx == nil {\n\t\treturn errors.New(\"ctx must be set\")\n\t}\n\tl, err := net.Listen(\"tcp\", addr)\n\tif err != nil {\n\t\treturn err\n\t}\n\treturn h.GoServe(ctx, l, handler)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 32
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc (h *HTTPServer) GoServe(ctx context.Context, l net.Listener, handler http.Handler) error {\n\tif ctx == nil {\n\t\treturn errors.New(\"ctx must be set\")\n\t}\n\th.waiterMux.Lock()\n\tdefer h.waiterMux.Unlock()\n\th.Handler = handler\n\th.waiter, ctx = errgroup.WithContext(ctx)\n\th.waiter.Go(func() error {\n\t\treturn h.Serve(l)\n\t})\n\tgo func() {\n\t\t<-ctx.Done()\n\t\th.Close()\n\t}()\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 43
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc (h *HTTPServer) Close() error {\n\th.waiterMux.Lock()\n\tdefer h.waiterMux.Unlock()\n\tif h.waiter == nil {\n\t\treturn errors.New(\"not started yet\")\n\t}\n\treturn h.Server.Close()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 61
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc (h *HTTPServer) Wait() error {\n\th.waiterMux.Lock()\n\tunset := h.waiter == nil\n\th.waiterMux.Unlock()\n\tif unset {\n\t\treturn errors.New(\"not started yet\")\n\t}\n\th.waiterMux.Lock()\n\twait := h.waiter.Wait\n\th.waiterMux.Unlock()\n\terr := wait()\n\tif err == http.ErrServerClosed {\n\t\terr = nil //success\n\t}\n\treturn err\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 70
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cnet/http_server.go"
+  }
+}

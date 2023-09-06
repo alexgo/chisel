@@ -1,0 +1,104 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package tunnel\n\nimport (\n\t\"bytes\"\n\t\"context\"\n\t\"errors\"\n\t\"io/ioutil\"\n\t\"log\"\n\t\"os\"\n\t\"sync\"\n\t\"time\"\n\n\t\"github.com/armon/go-socks5\"\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"golang.org/x/crypto/ssh\"\n\t\"golang.org/x/sync/errgroup\"\n)\n\n//Config a Tunnel\ntype Config struct {\n\t*cio.Logger\n\tInbound   bool\n\tOutbound  bool\n\tSocks     bool\n\tKeepAlive time.Duration\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//Tunnel represents an SSH tunnel with proxy capabilities.\n//Both chisel client and server are Tunnels.\n//chisel client has a single set of remotes, whereas\n//chisel server has multiple sets of remotes (one set per client).\n//Each remote has a 1:1 mapping to a proxy.\n//Proxies listen, send data over ssh, and the other end of the ssh connection\n//communicates with the endpoint and returns the response.\ntype Tunnel struct {\n\tConfig\n\t//ssh connection\n\tactiveConnMut  sync.RWMutex\n\tactivatingConn waitGroup\n\tactiveConn     ssh.Conn\n\t//proxies\n\tproxyCount int\n\t//internals\n\tconnStats   cnet.ConnCount\n\tsocksServer *socks5.Server\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 28
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\n//New Tunnel from the given Config\nfunc New(c Config) *Tunnel {\n\tc.Logger = c.Logger.Fork(\"tun\")\n\tt := &Tunnel{\n\t\tConfig: c,\n\t}\n\tt.activatingConn.Add(1)\n\t//setup socks server (not listening on any port!)\n\textra := \"\"\n\tif c.Socks {\n\t\tsl := log.New(ioutil.Discard, \"\", 0)\n\t\tif t.Logger.Debug {\n\t\t\tsl = log.New(os.Stdout, \"[socks]\", log.Ldate|log.Ltime)\n\t\t}\n\t\tt.socksServer, _ = socks5.New(&socks5.Config{Logger: sl})\n\t\textra += \" (SOCKS enabled)\"\n\t}\n\tt.Debugf(\"Created%s\", extra)\n\treturn t\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 48
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\n//BindSSH provides an active SSH for use for tunnelling\nfunc (t *Tunnel) BindSSH(ctx context.Context, c ssh.Conn, reqs <-chan *ssh.Request, chans <-chan ssh.NewChannel) error {\n\t//link ctx to ssh-conn\n\tgo func() {\n\t\t<-ctx.Done()\n\t\tif c.Close() == nil {\n\t\t\tt.Debugf(\"SSH cancelled\")\n\t\t}\n\t\tt.activatingConn.DoneAll()\n\t}()\n\t//mark active and unblock\n\tt.activeConnMut.Lock()\n\tif t.activeConn != nil {\n\t\tpanic(\"double bind ssh\")\n\t}\n\tt.activeConn = c\n\tt.activeConnMut.Unlock()\n\tt.activatingConn.Done()\n\t//optional keepalive loop against this connection\n\tif t.Config.KeepAlive > 0 {\n\t\tgo t.keepAliveLoop(c)\n\t}\n\t//block until closed\n\tgo t.handleSSHRequests(reqs)\n\tgo t.handleSSHChannels(chans)\n\tt.Debugf(\"SSH connected\")\n\terr := c.Wait()\n\tt.Debugf(\"SSH disconnected\")\n\t//mark inactive and block\n\tt.activatingConn.Add(1)\n\tt.activeConnMut.Lock()\n\tt.activeConn = nil\n\tt.activeConnMut.Unlock()\n\treturn err\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 69
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\n//getSSH blocks while connecting\nfunc (t *Tunnel) getSSH(ctx context.Context) ssh.Conn {\n\t//cancelled already?\n\tif isDone(ctx) {\n\t\treturn nil\n\t}\n\tt.activeConnMut.RLock()\n\tc := t.activeConn\n\tt.activeConnMut.RUnlock()\n\t//connected already?\n\tif c != nil {\n\t\treturn c\n\t}\n\t//connecting...\n\tselect {\n\tcase <-ctx.Done(): //cancelled\n\t\treturn nil\n\tcase <-time.After(settings.EnvDuration(\"SSH_WAIT\", 35*time.Second)):\n\t\treturn nil //a bit longer than ssh timeout\n\tcase <-t.activatingConnWait():\n\t\tt.activeConnMut.RLock()\n\t\tc := t.activeConn\n\t\tt.activeConnMut.RUnlock()\n\t\treturn c\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 105
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc (t *Tunnel) activatingConnWait() <-chan struct{} {\n\tch := make(chan struct{})\n\tgo func() {\n\t\tt.activatingConn.Wait()\n\t\tclose(ch)\n\t}()\n\treturn ch\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 132
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\n//BindRemotes converts the given remotes into proxies, and blocks\n//until the caller cancels the context or there is a proxy error.\nfunc (t *Tunnel) BindRemotes(ctx context.Context, remotes []*settings.Remote) error {\n\tif len(remotes) == 0 {\n\t\treturn errors.New(\"no remotes\")\n\t}\n\tif !t.Inbound {\n\t\treturn errors.New(\"inbound connections blocked\")\n\t}\n\tproxies := make([]*Proxy, len(remotes))\n\tfor i, remote := range remotes {\n\t\tp, err := NewProxy(t.Logger, t, t.proxyCount, remote)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tproxies[i] = p\n\t\tt.proxyCount++\n\t}\n\t//TODO: handle tunnel close\n\teg, ctx := errgroup.WithContext(ctx)\n\tfor _, proxy := range proxies {\n\t\tp := proxy\n\t\teg.Go(func() error {\n\t\t\treturn p.Run(ctx)\n\t\t})\n\t}\n\tt.Debugf(\"Bound proxies\")\n\terr := eg.Wait()\n\tt.Debugf(\"Unbound proxies\")\n\treturn err\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 141
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\nfunc (t *Tunnel) keepAliveLoop(sshConn ssh.Conn) {\n\t//ping forever\n\tfor {\n\t\ttime.Sleep(t.Config.KeepAlive)\n\t\t_, b, err := sshConn.SendRequest(\"ping\", true, nil)\n\t\tif err != nil {\n\t\t\tbreak\n\t\t}\n\t\tif len(b) > 0 && !bytes.Equal(b, []byte(\"pong\")) {\n\t\t\tt.Debugf(\"strange ping response\")\n\t\t\tbreak\n\t\t}\n\t}\n\t//close ssh connection on abnormal ping\n\tsshConn.Close()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 173
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/tunnel/tunnel.go"
+  }
+}

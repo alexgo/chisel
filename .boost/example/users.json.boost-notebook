@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "json",
+      "id": "0",
+      "value": "{\n\t\"root:toor\": [\n\t\t\"\"\n\t],\n\t\"foo:bar\": [\n\t\t\"^0.0.0.0:3000$\"\n\t],\n\t\"ping:pong\": [\n\t\t\"^0.0.0.0:[45]000$\",\n\t\t\"^example.com:80$\",\n\t\t\"^R:0.0.0.0:7000$\"\n\t]\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./example/users.json"
+  }
+}

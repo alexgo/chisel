@@ -1,0 +1,188 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package cnet\n\nimport (\n\t\"io\"\n\t\"net\"\n\t\"sync/atomic\"\n\t\"time\"\n\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/sizestr\"\n)\n\n//NewMeter to measure readers/writers\nfunc NewMeter(l *cio.Logger) *Meter {\n\treturn &Meter{l: l}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//Meter can be inserted in the path or\n//of a reader or writer to measure the\n//throughput\ntype Meter struct {\n\t//meter state\n\tsent, recv int64\n\t//print state\n\tl            *cio.Logger\n\tprinting     uint32\n\tlast         int64\n\tlsent, lrecv int64\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 16
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (m *Meter) print() {\n\t//move out of the read/write path asap\n\tif atomic.CompareAndSwapUint32(&m.printing, 0, 1) {\n\t\tgo m.goprint()\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 29
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (m *Meter) goprint() {\n\ttime.Sleep(time.Second)\n\t//snapshot\n\ts := atomic.LoadInt64(&m.sent)\n\tr := atomic.LoadInt64(&m.recv)\n\t//compute speed\n\tcurr := time.Now().UnixNano()\n\tlast := atomic.LoadInt64(&m.last)\n\tdt := time.Duration(curr-last) * time.Nanosecond\n\tls := atomic.LoadInt64(&m.lsent)\n\tlr := atomic.LoadInt64(&m.lrecv)\n\t//DEBUG\n\t// m.l.Infof(\"%s = %d(%d-%d), %d(%d-%d)\", dt, s-ls, s, ls, r-lr, r, lr)\n\t//scale to per second V=D/T\n\tsps := int64(float64(s-ls) / float64(dt) * float64(time.Second))\n\trps := int64(float64(r-lr) / float64(dt) * float64(time.Second))\n\tif last > 0 && (sps != 0 || rps != 0) {\n\t\tm.l.Debugf(\"write %s/s read %s/s\", sizestr.ToString(sps), sizestr.ToString(rps))\n\t}\n\t//record last printed\n\tatomic.StoreInt64(&m.lsent, s)\n\tatomic.StoreInt64(&m.lrecv, r)\n\t//done\n\tatomic.StoreInt64(&m.last, curr)\n\tatomic.StoreUint32(&m.printing, 0)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 36
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\n//TeeReader inserts Meter into the read path\n//if the linked logger is in debug mode,\n//otherwise this is a no-op\nfunc (m *Meter) TeeReader(r io.Reader) io.Reader {\n\tif m.l.IsDebug() {\n\t\treturn &meterReader{m, r}\n\t}\n\treturn r\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 63
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\ntype meterReader struct {\n\t*Meter\n\tinner io.Reader\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 73
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc (m *meterReader) Read(p []byte) (n int, err error) {\n\tn, err = m.inner.Read(p)\n\tatomic.AddInt64(&m.recv, int64(n))\n\tm.Meter.print()\n\treturn\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 78
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\n//TeeWriter inserts Meter into the write path\n//if the linked logger is in debug mode,\n//otherwise this is a no-op\nfunc (m *Meter) TeeWriter(w io.Writer) io.Writer {\n\tif m.l.IsDebug() {\n\t\treturn &meterWriter{m, w}\n\t}\n\treturn w\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 85
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "8",
+      "value": "\ntype meterWriter struct {\n\t*Meter\n\tinner io.Writer\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 95
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "9",
+      "value": "\nfunc (m *meterWriter) Write(p []byte) (n int, err error) {\n\tn, err = m.inner.Write(p)\n\tatomic.AddInt64(&m.sent, int64(n))\n\tm.Meter.print()\n\treturn\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 100
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "10",
+      "value": "\n//MeterConn inserts Meter into the connection path\n//if the linked logger is in debug mode,\n//otherwise this is a no-op\nfunc MeterConn(l *cio.Logger, conn net.Conn) net.Conn {\n\tm := NewMeter(l)\n\treturn &meterConn{\n\t\tmread:  m.TeeReader(conn),\n\t\tmwrite: m.TeeWriter(conn),\n\t\tConn:   conn,\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 10,
+        "type": "originalCode",
+        "lineNumberBase": 107
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "11",
+      "value": "\ntype meterConn struct {\n\tmread  io.Reader\n\tmwrite io.Writer\n\tnet.Conn\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 11,
+        "type": "originalCode",
+        "lineNumberBase": 119
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "12",
+      "value": "\nfunc (m *meterConn) Read(p []byte) (n int, err error) {\n\treturn m.mread.Read(p)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 12,
+        "type": "originalCode",
+        "lineNumberBase": 125
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "13",
+      "value": "\nfunc (m *meterConn) Write(p []byte) (n int, err error) {\n\treturn m.mwrite.Write(p)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 13,
+        "type": "originalCode",
+        "lineNumberBase": 129
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "14",
+      "value": "\n//MeterRWC inserts Meter into the RWC path\n//if the linked logger is in debug mode,\n//otherwise this is a no-op\nfunc MeterRWC(l *cio.Logger, rwc io.ReadWriteCloser) io.ReadWriteCloser {\n\tm := NewMeter(l)\n\treturn &struct {\n\t\tio.Reader\n\t\tio.Writer\n\t\tio.Closer\n\t}{\n\t\tReader: m.TeeReader(rwc),\n\t\tWriter: m.TeeWriter(rwc),\n\t\tCloser: rwc,\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 14,
+        "type": "originalCode",
+        "lineNumberBase": 133
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cnet/meter.go"
+  }
+}

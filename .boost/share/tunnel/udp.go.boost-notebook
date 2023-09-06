@@ -1,0 +1,80 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package tunnel\n\nimport (\n\t\"context\"\n\t\"encoding/gob\"\n\t\"io\"\n)\n\ntype udpPacket struct {\n\tSrc     string\n\tPayload []byte\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc init() {\n\tgob.Register(&udpPacket{})\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 12
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\n//udpChannel encodes/decodes udp payloads over a stream\ntype udpChannel struct {\n\tr *gob.Decoder\n\tw *gob.Encoder\n\tc io.Closer\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 16
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (o *udpChannel) encode(src string, b []byte) error {\n\treturn o.w.Encode(udpPacket{\n\t\tSrc:     src,\n\t\tPayload: b,\n\t})\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 23
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc (o *udpChannel) decode(p *udpPacket) error {\n\treturn o.r.Decode(p)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 30
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc isDone(ctx context.Context) bool {\n\tselect {\n\tcase <-ctx.Done():\n\t\treturn true\n\tdefault:\n\t\treturn false\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 34
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/tunnel/udp.go"
+  }
+}

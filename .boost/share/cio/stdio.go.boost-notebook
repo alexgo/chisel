@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package cio\n\nimport (\n\t\"io\"\n\t\"io/ioutil\"\n\t\"os\"\n)\n\n//Stdio as a ReadWriteCloser\nvar Stdio = &struct {\n\tio.ReadCloser\n\tio.Writer\n}{\n\tioutil.NopCloser(os.Stdin),\n\tos.Stdout,\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cio/stdio.go"
+  }
+}

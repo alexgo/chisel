@@ -1,0 +1,56 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package cio\n\nimport (\n\t\"io\"\n\t\"log\"\n\t\"sync\"\n)\n\nfunc Pipe(src io.ReadWriteCloser, dst io.ReadWriteCloser) (int64, int64) {\n\tvar sent, received int64\n\tvar wg sync.WaitGroup\n\tvar o sync.Once\n\tclose := func() {\n\t\tsrc.Close()\n\t\tdst.Close()\n\t}\n\twg.Add(2)\n\tgo func() {\n\t\treceived, _ = io.Copy(src, dst)\n\t\to.Do(close)\n\t\twg.Done()\n\t}()\n\tgo func() {\n\t\tsent, _ = io.Copy(dst, src)\n\t\to.Do(close)\n\t\twg.Done()\n\t}()\n\twg.Wait()\n\treturn sent, received\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nconst vis = false\n\ntype pipeVisPrinter struct {\n\tname string\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 30
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (p pipeVisPrinter) Write(b []byte) (int, error) {\n\tlog.Printf(\">>> %s: %x\", p.name, b)\n\treturn len(b), nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 36
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc pipeVis(name string, r io.Reader) io.Reader {\n\tif vis {\n\t\treturn io.TeeReader(r, pipeVisPrinter{name})\n\t}\n\treturn r\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 41
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cio/pipe.go"
+  }
+}

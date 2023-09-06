@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package chserver\n\nimport (\n\t\"net/http\"\n\t\"strings\"\n\t\"sync/atomic\"\n\t\"time\"\n\n\tchshare \"github.com/jpillora/chisel/share\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/chisel/share/tunnel\"\n\t\"golang.org/x/crypto/ssh\"\n\t\"golang.org/x/sync/errgroup\"\n)\n\n// handleClientHandler is the main http websocket handler for the chisel server\nfunc (s *Server) handleClientHandler(w http.ResponseWriter, r *http.Request) {\n\t//websockets upgrade AND has chisel prefix\n\tupgrade := strings.ToLower(r.Header.Get(\"Upgrade\"))\n\tprotocol := r.Header.Get(\"Sec-WebSocket-Protocol\")\n\tif upgrade == \"websocket\"  {\n\t\tif protocol == chshare.ProtocolVersion {\n\t\t\ts.handleWebsocket(w, r)\n\t\t\treturn\n\t\t}\n\t\t//print into server logs and silently fall-through\n\t\ts.Infof(\"ignored client connection using protocol '%s', expected '%s'\",\n\t\t\tprotocol, chshare.ProtocolVersion)\n\t}\n\t//proxy target was provided\n\tif s.reverseProxy != nil {\n\t\ts.reverseProxy.ServeHTTP(w, r)\n\t\treturn\n\t}\n\t//no proxy defined, provide access to health/version checks\n\tswitch r.URL.Path {\n\tcase \"/health\":\n\t\tw.Write([]byte(\"OK\\n\"))\n\t\treturn\n\tcase \"/version\":\n\t\tw.Write([]byte(chshare.BuildVersion))\n\t\treturn\n\t}\n\t//missing :O\n\tw.WriteHeader(404)\n\tw.Write([]byte(\"Not found\"))\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n// handleWebsocket is responsible for handling the websocket connection\nfunc (s *Server) handleWebsocket(w http.ResponseWriter, req *http.Request) {\n\tid := atomic.AddInt32(&s.sessCount, 1)\n\tl := s.Fork(\"session#%d\", id)\n\twsConn, err := upgrader.Upgrade(w, req, nil)\n\tif err != nil {\n\t\tl.Debugf(\"Failed to upgrade (%s)\", err)\n\t\treturn\n\t}\n\tconn := cnet.NewWebSocketConn(wsConn)\n\t// perform SSH handshake on net.Conn\n\tl.Debugf(\"Handshaking with %s...\", req.RemoteAddr)\n\tsshConn, chans, reqs, err := ssh.NewServerConn(conn, s.sshConfig)\n\tif err != nil {\n\t\ts.Debugf(\"Failed to handshake (%s)\", err)\n\t\treturn\n\t}\n\t// pull the users from the session map\n\tvar user *settings.User\n\tif s.users.Len() > 0 {\n\t\tsid := string(sshConn.SessionID())\n\t\tu, ok := s.sessions.Get(sid)\n\t\tif !ok {\n\t\t\tpanic(\"bug in ssh auth handler\")\n\t\t}\n\t\tuser = u\n\t\ts.sessions.Del(sid)\n\t}\n\t// chisel server handshake (reverse of client handshake)\n\t// verify configuration\n\tl.Debugf(\"Verifying configuration\")\n\t// wait for request, with timeout\n\tvar r *ssh.Request\n\tselect {\n\tcase r = <-reqs:\n\tcase <-time.After(settings.EnvDuration(\"CONFIG_TIMEOUT\", 10*time.Second)):\n\t\tl.Debugf(\"Timeout waiting for configuration\")\n\t\tsshConn.Close()\n\t\treturn\n\t}\n\tfailed := func(err error) {\n\t\tl.Debugf(\"Failed: %s\", err)\n\t\tr.Reply(false, []byte(err.Error()))\n\t}\n\tif r.Type != \"config\" {\n\t\tfailed(s.Errorf(\"expecting config request\"))\n\t\treturn\n\t}\n\tc, err := settings.DecodeConfig(r.Payload)\n\tif err != nil {\n\t\tfailed(s.Errorf(\"invalid config\"))\n\t\treturn\n\t}\n\t//print if client and server  versions dont match\n\tif c.Version != chshare.BuildVersion {\n\t\tv := c.Version\n\t\tif v == \"\" {\n\t\t\tv = \"<unknown>\"\n\t\t}\n\t\tl.Infof(\"Client version (%s) differs from server version (%s)\",\n\t\t\tv, chshare.BuildVersion)\n\t}\n\t//validate remotes\n\tfor _, r := range c.Remotes {\n\t\t//if user is provided, ensure they have\n\t\t//access to the desired remotes\n\t\tif user != nil {\n\t\t\taddr := r.UserAddr()\n\t\t\tif !user.HasAccess(addr) {\n\t\t\t\tfailed(s.Errorf(\"access to '%s' denied\", addr))\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\t//confirm reverse tunnels are allowed\n\t\tif r.Reverse && !s.config.Reverse {\n\t\t\tl.Debugf(\"Denied reverse port forwarding request, please enable --reverse\")\n\t\t\tfailed(s.Errorf(\"Reverse port forwaring not enabled on server\"))\n\t\t\treturn\n\t\t}\n\t\t//confirm reverse tunnel is available\n\t\tif r.Reverse && !r.CanListen() {\n\t\t\tfailed(s.Errorf(\"Server cannot listen on %s\", r.String()))\n\t\t\treturn\n\t\t}\n\t}\n\t//successfuly validated config!\n\tr.Reply(true, nil)\n\t//tunnel per ssh connection\n\ttunnel := tunnel.New(tunnel.Config{\n\t\tLogger:    l,\n\t\tInbound:   s.config.Reverse,\n\t\tOutbound:  true, //server always accepts outbound\n\t\tSocks:     s.config.Socks5,\n\t\tKeepAlive: s.config.KeepAlive,\n\t})\n\t//bind\n\teg, ctx := errgroup.WithContext(req.Context())\n\teg.Go(func() error {\n\t\t//connected, handover ssh connection for tunnel to use, and block\n\t\treturn tunnel.BindSSH(ctx, sshConn, reqs, chans)\n\t})\n\teg.Go(func() error {\n\t\t//connected, setup reversed-remotes?\n\t\tserverInbound := c.Remotes.Reversed(true)\n\t\tif len(serverInbound) == 0 {\n\t\t\treturn nil\n\t\t}\n\t\t//block\n\t\treturn tunnel.BindRemotes(ctx, serverInbound)\n\t})\n\terr = eg.Wait()\n\tif err != nil && !strings.HasSuffix(err.Error(), \"EOF\") {\n\t\tl.Debugf(\"Closed connection (%s)\", err)\n\t} else {\n\t\tl.Debugf(\"Closed connection\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 48
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./server/server_handler.go"
+  }
+}

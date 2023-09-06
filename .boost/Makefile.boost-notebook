@@ -1,0 +1,157 @@
+{
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:55:50 PM PDT\n\nThe provided code is a `Makefile` used by the `make` command-line utility to automate the build process of a software project. It is written for a project using the Go programming language. The `Makefile` uses a set of rules and dependencies to build the project. It also provides commands for linting, testing, and releasing the software.\n\nHere is a detailed explanation of the code:\n\n1. The first few lines of the code are setting up variables:\n    - `VERSION` and `BUILD` are set using shell commands that interact with the git repository to get the latest tag and commit hash.\n    - `DIRBASE`, `DIR` are directory paths where the build artifacts will be stored.\n    - `LDFLAGS` are linker flags for the `go build` command. It includes the build ID and version number.\n    - `GOFILES` and `GOFILESNOTEST` are lists of Go files in the project, with the latter excluding test files.\n\n2. The `$(shell mkdir -p ${DIR})` command creates the directory structure for storing the build artifacts.\n\n3. The `all` target uses `goreleaser` to build the project. The `--skip-validate` and `--single-target` flags are used, and a configuration file is specified.\n\n4. The `freebsd`, `linux`, `windows`, and `darwin` targets are used to build the project for different operating systems. The `GOOS` and `GOARCH` environment variables are set to specify the target OS and architecture.\n\n5. The `docker` target builds a Docker image of the project.\n\n6. The `dep` target is used to fetch the project dependencies. It uses the `go get` and `go mod tidy` commands.\n\n7. The `lint` target is used to format the Go files and run the `go vet` command to report potential issues.\n\n8. The `test` target runs the unit tests and generates a coverage report. The `-race` flag is used to enable data race detection, and the `-short` flag is used to skip long-running tests.\n\n9. The `release` target first lints and tests the project, then uses `goreleaser` to create a new release.\n\n10. The `clean` target removes all files in the build directory.\n\n11. The `.PHONY` line is a special target in `Makefile` that is used to specify non-file targets.\n\nIn terms of algorithms, this `Makefile` mainly uses the procedural programming paradigm. The targets are executed in a top-down manner, and the dependencies are resolved before executing each target.\n\nFor more information about `Makefile`, you can refer to the GNU `make` manual: https://www.gnu.org/software/make/manual/make.html\n\nFor more information about Go's build process, you can refer to the official Go documentation: https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies\n\nFor more information about `goreleaser`, you can refer to its official GitHub repository: https://github.com/goreleaser/goreleaser"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:56:15 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle all fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle freebsd fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle linux fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle windows fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle darwin fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle docker fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle dep fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle lint fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle test fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle release fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle clean fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->all;\nStart-->freebsd;\nStart-->linux;\nStart-->windows;\nStart-->darwin;\nStart-->docker;\nStart-->dep;\nStart-->lint;\nStart-->test;\nStart-->release;\nStart-->clean;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:57:09 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Insecure Use of Environment Variables\n\n   **Description**: The script uses environment variables to store sensitive information such as version and build information. This can be exploited by an attacker to gain information about the system or the software.\n\n   **Solution**: Avoid storing sensitive information in environment variables. If it's necessary, ensure that they are properly secured and not accessible by unauthorized users. Refer to this link for more information: https://cheatsheetseries.owasp.org/cheatsheets/Environment_Variables_Cheat_Sheet.html\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 7\n\n   **Bug Type**: Insecure File Permissions\n\n   **Description**: The script creates a directory without explicitly setting the permissions. This can lead to insecure file permissions if the script is run with higher privileges.\n\n   **Solution**: Ensure that permissions are explicitly set when creating directories or files. Use the chmod command to set permissions. Refer to this link for more information: https://www.linux.com/training-tutorials/linux-file-permissions-explained/\n\n\n3. **Severity**: 7/10\n\n   **Line Number**: 33\n\n   **Bug Type**: Missing Authentication\n\n   **Description**: The script runs a docker build command without any form of authentication. This can allow unauthorized users to build and potentially run malicious docker images.\n\n   **Solution**: Ensure that docker commands are run with proper authentication. Refer to this link for more information: https://docs.docker.com/engine/security/\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "Insecure Use of Environment Variables",
+                "description": "The script uses environment variables to store sensitive information such as version and build information. This can be exploited by an attacker to gain information about the system or the software.",
+                "solution": "Avoid storing sensitive information in environment variables. If it's necessary, ensure that they are properly secured and not accessible by unauthorized users. Refer to this link for more information: https://cheatsheetseries.owasp.org/cheatsheets/Environment_Variables_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 8,
+                "severity": 6,
+                "bugType": "Insecure File Permissions",
+                "description": "The script creates a directory without explicitly setting the permissions. This can lead to insecure file permissions if the script is run with higher privileges.",
+                "solution": "Ensure that permissions are explicitly set when creating directories or files. Use the chmod command to set permissions. Refer to this link for more information: https://www.linux.com/training-tutorials/linux-file-permissions-explained/"
+              },
+              {
+                "lineNumber": 34,
+                "severity": 7,
+                "bugType": "Missing Authentication",
+                "description": "The script runs a docker build command without any form of authentication. This can allow unauthorized users to build and potentially run malicious docker images.",
+                "solution": "Ensure that docker commands are run with proper authentication. Refer to this link for more information: https://docs.docker.com/engine/security/"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:58:41 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Disk\n\n   **Description**: The script is using shell commands to get the git version and build. This can be inefficient as it creates a new process for each command.\n\n   **Solution**: Consider using a language-native git library, which would be more efficient and less resource-intensive.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 9\n\n   **Bug Type**: Disk\n\n   **Description**: The script is using `shell mkdir` to create directories. This can be inefficient as it creates a new process.\n\n   **Solution**: Consider using the `os.MkdirAll` function in Go, which is more efficient and does not create a new process.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 15\n\n   **Bug Type**: CPU\n\n   **Description**: The script is using the `go list` command twice to get the list of Go files. This can be inefficient as it results in unnecessary CPU usage.\n\n   **Solution**: Consider storing the result of `go list` in a variable and reusing it, which would reduce CPU usage.\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 30\n\n   **Bug Type**: Network\n\n   **Description**: The script is using `go get -u all` to update all dependencies. This can be inefficient as it downloads and updates all dependencies, even those that are not needed.\n\n   **Solution**: Consider using `go mod tidy`, which removes unnecessary dependencies, and `go get -u` with specific dependencies, which only updates the necessary ones.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "Disk",
+                "description": "The script is using shell commands to get the git version and build. This can be inefficient as it creates a new process for each command.",
+                "solution": "Consider using a language-native git library, which would be more efficient and less resource-intensive."
+              },
+              {
+                "lineNumber": 10,
+                "severity": 6,
+                "bugType": "Disk",
+                "description": "The script is using `shell mkdir` to create directories. This can be inefficient as it creates a new process.",
+                "solution": "Consider using the `os.MkdirAll` function in Go, which is more efficient and does not create a new process."
+              },
+              {
+                "lineNumber": 16,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The script is using the `go list` command twice to get the list of Go files. This can be inefficient as it results in unnecessary CPU usage.",
+                "solution": "Consider storing the result of `go list` in a variable and reusing it, which would reduce CPU usage."
+              },
+              {
+                "lineNumber": 31,
+                "severity": 7,
+                "bugType": "Network",
+                "description": "The script is using `go get -u all` to update all dependencies. This can be inefficient as it downloads and updates all dependencies, even those that are not needed.",
+                "solution": "Consider using `go mod tidy`, which removes unnecessary dependencies, and `go get -u` with specific dependencies, which only updates the necessary ones."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:59:47 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 9\n\n   **Bug Type**: GDPR\n\n   **Description**: The build process does not appear to include any data anonymization or pseudonymization steps, which are required under GDPR when handling personal data. The absence of these steps could lead to GDPR non-compliance.\n\n   **Solution**: Ensure that personal data is anonymized or pseudonymized during the build process. This could be achieved by implementing a data masking or encryption step during the build process. Make sure to include a step in your build process that handles data in a GDPR-compliant manner.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 16\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The build process does not include any explicit steps for secure handling of cardholder data, which could lead to PCI DSS non-compliance.\n\n   **Solution**: Ensure that any cardholder data is securely handled during the build process. This could be achieved by implementing secure coding practices, such as encryption, and ensuring that cardholder data is not stored in the build artifacts.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 23\n\n   **Bug Type**: HIPAA\n\n   **Description**: The build process does not include any explicit steps for secure handling of Protected Health Information (PHI), which could lead to HIPAA non-compliance.\n\n   **Solution**: Ensure that any PHI is securely handled during the build process. This could be achieved by implementing secure coding practices, such as encryption, and ensuring that PHI is not stored in the build artifacts.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 10,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The build process does not appear to include any data anonymization or pseudonymization steps, which are required under GDPR when handling personal data. The absence of these steps could lead to GDPR non-compliance.",
+                "solution": "Ensure that personal data is anonymized or pseudonymized during the build process. This could be achieved by implementing a data masking or encryption step during the build process. Make sure to include a step in your build process that handles data in a GDPR-compliant manner.",
+                "reference": "https://gdpr-info.eu/art-25-gdpr/"
+              },
+              {
+                "lineNumber": 17,
+                "severity": 6,
+                "bugType": "PCI DSS",
+                "description": "The build process does not include any explicit steps for secure handling of cardholder data, which could lead to PCI DSS non-compliance.",
+                "solution": "Ensure that any cardholder data is securely handled during the build process. This could be achieved by implementing secure coding practices, such as encryption, and ensuring that cardholder data is not stored in the build artifacts.",
+                "reference": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 24,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The build process does not include any explicit steps for secure handling of Protected Health Information (PHI), which could lead to HIPAA non-compliance.",
+                "solution": "Ensure that any PHI is securely handled during the build process. This could be achieved by implementing secure coding practices, such as encryption, and ensuring that PHI is not stored in the build artifacts.",
+                "reference": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "plaintext",
+      "id": "0",
+      "value": "VERSION=$(shell git describe --abbrev=0 --tags)\nBUILD=$(shell git rev-parse HEAD)\nDIRBASE=./build\nDIR=${DIRBASE}/${VERSION}/${BUILD}/bin\n\nLDFLAGS=-ldflags \"-s -w ${XBUILD} -buildid=${BUILD} -X github.com/jpillora/chisel/share.BuildVersion=${VERSION}\"\n\nGOFILES=`go list ./...`\nGOFILESNOTEST=`go list ./... | grep -v test`\n\n# Make Directory to store executables\n$(shell mkdir -p ${DIR})\n\nall:\n\t@goreleaser build --skip-validate --single-target --config .github/goreleaser.yml\n\nfreebsd: lint\n\tenv CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -o ${DIR}/chisel-freebsd_amd64 .\n\nlinux: lint\n\tenv CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -o ${DIR}/chisel-linux_amd64 .\n\nwindows: lint\n\tenv CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -o ${DIR}/chisel-windows_amd64 .\n\ndarwin:\n\tenv CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -o ${DIR}/chisel-darwin_amd64 .\n\ndocker:\n\t@docker build .\n\ndep: ## Get the dependencies\n\t@go get -u github.com/goreleaser/goreleaser\n\t@go get -u github.com/boumenot/gocover-cobertura\n\t@go get -v -d ./...\n\t@go get -u all\n\t@go mod tidy\n\nlint: ## Lint the files\n\t@go fmt ${GOFILES}\n\t@go vet ${GOFILESNOTEST}\n\ntest: ## Run unit tests\n\t@go test -coverprofile=${DIR}/coverage.out -race -short ${GOFILESNOTEST}\n\t@go tool cover -html=${DIR}/coverage.out -o ${DIR}/coverage.html\n\t@gocover-cobertura < ${DIR}/coverage.out > ${DIR}/coverage.xml\n\nrelease: lint test\n\tgoreleaser release --config .github/goreleaser.yml\n\nclean:\n\trm -rf ${DIRBASE}/*\n\n.PHONY: all freebsd linux windows docker dep lint test release clean",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": -1
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./Makefile"
+  }
+}

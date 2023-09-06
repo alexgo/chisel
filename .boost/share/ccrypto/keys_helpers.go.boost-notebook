@@ -1,0 +1,104 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package ccrypto\n\nimport (\n\t\"crypto/ecdsa\"\n\t\"crypto/elliptic\"\n\t\"crypto/rand\"\n\t\"crypto/x509\"\n\t\"encoding/base64\"\n\t\"encoding/pem\"\n\t\"strings\"\n)\n\nconst ChiselKeyPrefix = \"ck-\"\n\n//  Relations between entities:\n//\n//   .............> PEM <...........\n//   .               ^             .\n//   .               |             .\n//   .               |             .\n// Seed -------> PrivateKey        .\n//   .               ^             .\n//   .               |             .\n//   .               V             .\n//   ..........> ChiselKey .........\n\nfunc Seed2PEM(seed string) ([]byte, error) {\n\tprivateKey, err := seed2PrivateKey(seed)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn privateKey2PEM(privateKey)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc seed2ChiselKey(seed string) ([]byte, error) {\n\tprivateKey, err := seed2PrivateKey(seed)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn privateKey2ChiselKey(privateKey)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 34
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc seed2PrivateKey(seed string) (*ecdsa.PrivateKey, error) {\n\tif seed == \"\" {\n\t\treturn ecdsa.GenerateKey(elliptic.P256(), rand.Reader)\n\t} else {\n\t\treturn GenerateKeyGo119(elliptic.P256(), NewDetermRand([]byte(seed)))\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 43
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc privateKey2ChiselKey(privateKey *ecdsa.PrivateKey) ([]byte, error) {\n\tb, err := x509.MarshalECPrivateKey(privateKey)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tencodedPrivateKey := make([]byte, base64.RawStdEncoding.EncodedLen(len(b)))\n\tbase64.RawStdEncoding.Encode(encodedPrivateKey, b)\n\n\treturn append([]byte(ChiselKeyPrefix), encodedPrivateKey...), nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 51
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc privateKey2PEM(privateKey *ecdsa.PrivateKey) ([]byte, error) {\n\tb, err := x509.MarshalECPrivateKey(privateKey)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn pem.EncodeToMemory(&pem.Block{Type: \"EC PRIVATE KEY\", Bytes: b}), nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 63
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc chiselKey2PrivateKey(chiselKey []byte) (*ecdsa.PrivateKey, error) {\n\trawChiselKey := chiselKey[len(ChiselKeyPrefix):]\n\n\tdecodedPrivateKey := make([]byte, base64.RawStdEncoding.DecodedLen(len(rawChiselKey)))\n\t_, err := base64.RawStdEncoding.Decode(decodedPrivateKey, rawChiselKey)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn x509.ParseECPrivateKey(decodedPrivateKey)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 72
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc ChiselKey2PEM(chiselKey []byte) ([]byte, error) {\n\tprivateKey, err := chiselKey2PrivateKey(chiselKey)\n\tif err == nil {\n\t\treturn privateKey2PEM(privateKey)\n\t}\n\n\treturn nil, err\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 84
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\nfunc IsChiselKey(chiselKey []byte) bool {\n\treturn strings.HasPrefix(string(chiselKey), ChiselKeyPrefix)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 93
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/ccrypto/keys_helpers.go"
+  }
+}

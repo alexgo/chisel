@@ -1,0 +1,164 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package settings\n\nimport (\n\t\"errors\"\n\t\"net\"\n\t\"net/url\"\n\t\"regexp\"\n\t\"strconv\"\n\t\"strings\"\n)\n\n// short-hand conversions (see remote_test)\n//   3000 ->\n//     local  127.0.0.1:3000\n//     remote 127.0.0.1:3000\n//   foobar.com:3000 ->\n//     local  127.0.0.1:3000\n//     remote foobar.com:3000\n//   3000:google.com:80 ->\n//     local  127.0.0.1:3000\n//     remote google.com:80\n//   192.168.0.1:3000:google.com:80 ->\n//     local  192.168.0.1:3000\n//     remote google.com:80\n//   127.0.0.1:1080:socks\n//     local  127.0.0.1:1080\n//     remote socks\n//   stdio:example.com:22\n//     local  stdio\n//     remote example.com:22\n//   1.1.1.1:53/udp\n//     local  127.0.0.1:53/udp\n//     remote 1.1.1.1:53/udp\n\ntype Remote struct {\n\tLocalHost, LocalPort, LocalProto    string\n\tRemoteHost, RemotePort, RemoteProto string\n\tSocks, Reverse, Stdio               bool\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nconst revPrefix = \"R:\"\n\nfunc DecodeRemote(s string) (*Remote, error) {\n\treverse := false\n\tif strings.HasPrefix(s, revPrefix) {\n\t\ts = strings.TrimPrefix(s, revPrefix)\n\t\treverse = true\n\t}\n\tparts := regexp.MustCompile(`(\\[[^\\[\\]]+\\]|[^\\[\\]:]+):?`).FindAllStringSubmatch(s, -1)\n\tif len(parts) <= 0 || len(parts) >= 5 {\n\t\treturn nil, errors.New(\"Invalid remote\")\n\t}\n\tr := &Remote{Reverse: reverse}\n\t//parse from back to front, to set 'remote' fields first,\n\t//then to set 'local' fields second (allows the 'remote' side\n\t//to provide the defaults)\n\tfor i := len(parts) - 1; i >= 0; i-- {\n\t\tp := parts[i][1]\n\t\t//remote portion is socks?\n\t\tif i == len(parts)-1 && p == \"socks\" {\n\t\t\tr.Socks = true\n\t\t\tcontinue\n\t\t}\n\t\t//local portion is stdio?\n\t\tif i == 0 && p == \"stdio\" {\n\t\t\tr.Stdio = true\n\t\t\tcontinue\n\t\t}\n\t\tp, proto := L4Proto(p)\n\t\tif proto != \"\" {\n\t\t\tif r.RemotePort == \"\" {\n\t\t\t\tr.RemoteProto = proto\n\t\t\t} else if r.LocalProto == \"\" {\n\t\t\t\tr.LocalProto = proto\n\t\t\t}\n\t\t}\n\t\tif isPort(p) {\n\t\t\tif !r.Socks && r.RemotePort == \"\" {\n\t\t\t\tr.RemotePort = p\n\t\t\t}\n\t\t\tr.LocalPort = p\n\t\t\tcontinue\n\t\t}\n\t\tif !r.Socks && (r.RemotePort == \"\" && r.LocalPort == \"\") {\n\t\t\treturn nil, errors.New(\"Missing ports\")\n\t\t}\n\t\tif !isHost(p) {\n\t\t\treturn nil, errors.New(\"Invalid host\")\n\t\t}\n\t\tif !r.Socks && r.RemoteHost == \"\" {\n\t\t\tr.RemoteHost = p\n\t\t} else {\n\t\t\tr.LocalHost = p\n\t\t}\n\t}\n\t//remote string parsed, apply defaults...\n\tif r.Socks {\n\t\t//socks defaults\n\t\tif r.LocalHost == \"\" {\n\t\t\tr.LocalHost = \"127.0.0.1\"\n\t\t}\n\t\tif r.LocalPort == \"\" {\n\t\t\tr.LocalPort = \"1080\"\n\t\t}\n\t} else {\n\t\t//non-socks defaults\n\t\tif r.LocalHost == \"\" {\n\t\t\tr.LocalHost = \"0.0.0.0\"\n\t\t}\n\t\tif r.RemoteHost == \"\" {\n\t\t\tr.RemoteHost = \"127.0.0.1\"\n\t\t}\n\t}\n\tif r.RemoteProto == \"\" {\n\t\tr.RemoteProto = \"tcp\"\n\t}\n\tif r.LocalProto == \"\" {\n\t\tr.LocalProto = r.RemoteProto\n\t}\n\tif r.LocalProto != r.RemoteProto {\n\t\t//TODO support cross protocol\n\t\t//tcp <-> udp, is faily straight forward\n\t\t//udp <-> tcp, is trickier since udp is stateless and tcp is not\n\t\treturn nil, errors.New(\"cross-protocol remotes are not supported yet\")\n\t}\n\tif r.Socks && r.RemoteProto != \"tcp\" {\n\t\treturn nil, errors.New(\"only TCP SOCKS is supported\")\n\t}\n\tif r.Stdio && r.Reverse {\n\t\treturn nil, errors.New(\"stdio cannot be reversed\")\n\t}\n\treturn r, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 39
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc isPort(s string) bool {\n\tn, err := strconv.Atoi(s)\n\tif err != nil {\n\t\treturn false\n\t}\n\tif n <= 0 || n > 65535 {\n\t\treturn false\n\t}\n\treturn true\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 133
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc isHost(s string) bool {\n\t_, err := url.Parse(\"//\" + s)\n\tif err != nil {\n\t\treturn false\n\t}\n\treturn true\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 144
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nvar l4Proto = regexp.MustCompile(`(?i)\\/(tcp|udp)$`)\n\n//L4Proto extacts the layer-4 protocol from the given string\nfunc L4Proto(s string) (head, proto string) {\n\tif l4Proto.MatchString(s) {\n\t\tl := len(s)\n\t\treturn strings.ToLower(s[:l-4]), s[l-3:]\n\t}\n\treturn s, \"\"\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 152
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\n//implement Stringer\nfunc (r Remote) String() string {\n\tsb := strings.Builder{}\n\tif r.Reverse {\n\t\tsb.WriteString(revPrefix)\n\t}\n\tsb.WriteString(strings.TrimPrefix(r.Local(), \"0.0.0.0:\"))\n\tsb.WriteString(\"=>\")\n\tsb.WriteString(strings.TrimPrefix(r.Remote(), \"127.0.0.1:\"))\n\tif r.RemoteProto == \"udp\" {\n\t\tsb.WriteString(\"/udp\")\n\t}\n\treturn sb.String()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 163
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\n//Encode remote to a string\nfunc (r Remote) Encode() string {\n\tif r.LocalPort == \"\" {\n\t\tr.LocalPort = r.RemotePort\n\t}\n\tlocal := r.Local()\n\tremote := r.Remote()\n\tif r.RemoteProto == \"udp\" {\n\t\tremote += \"/udp\"\n\t}\n\tif r.Reverse {\n\t\treturn \"R:\" + local + \":\" + remote\n\t}\n\treturn local + \":\" + remote\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 178
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\n//Local is the decodable local portion\nfunc (r Remote) Local() string {\n\tif r.Stdio {\n\t\treturn \"stdio\"\n\t}\n\tif r.LocalHost == \"\" {\n\t\tr.LocalHost = \"0.0.0.0\"\n\t}\n\treturn r.LocalHost + \":\" + r.LocalPort\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 194
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "8",
+      "value": "\n//Remote is the decodable remote portion\nfunc (r Remote) Remote() string {\n\tif r.Socks {\n\t\treturn \"socks\"\n\t}\n\tif r.RemoteHost == \"\" {\n\t\tr.RemoteHost = \"127.0.0.1\"\n\t}\n\treturn r.RemoteHost + \":\" + r.RemotePort\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 205
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "9",
+      "value": "\n//UserAddr is checked when checking if a\n//user has access to a given remote\nfunc (r Remote) UserAddr() string {\n\tif r.Reverse {\n\t\treturn \"R:\" + r.LocalHost + \":\" + r.LocalPort\n\t}\n\treturn r.RemoteHost + \":\" + r.RemotePort\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 216
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "10",
+      "value": "\n//CanListen checks if the port can be listened on\nfunc (r Remote) CanListen() bool {\n\t//valid protocols\n\tswitch r.LocalProto {\n\tcase \"tcp\":\n\t\tconn, err := net.Listen(\"tcp\", r.Local())\n\t\tif err == nil {\n\t\t\tconn.Close()\n\t\t\treturn true\n\t\t}\n\t\treturn false\n\tcase \"udp\":\n\t\taddr, err := net.ResolveUDPAddr(\"udp\", r.Local())\n\t\tif err != nil {\n\t\t\treturn false\n\t\t}\n\t\tconn, err := net.ListenUDP(r.LocalProto, addr)\n\t\tif err == nil {\n\t\t\tconn.Close()\n\t\t\treturn true\n\t\t}\n\t\treturn false\n\t}\n\t//invalid\n\treturn false\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 10,
+        "type": "originalCode",
+        "lineNumberBase": 225
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "11",
+      "value": "\ntype Remotes []*Remote\n\n//Filter out forward reversed/non-reversed remotes\nfunc (rs Remotes) Reversed(reverse bool) Remotes {\n\tsubset := Remotes{}\n\tfor _, r := range rs {\n\t\tmatch := r.Reverse == reverse\n\t\tif match {\n\t\t\tsubset = append(subset, r)\n\t\t}\n\t}\n\treturn subset\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 11,
+        "type": "originalCode",
+        "lineNumberBase": 252
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "12",
+      "value": "\n//Encode back into strings\nfunc (rs Remotes) Encode() []string {\n\ts := make([]string, len(rs))\n\tfor i, r := range rs {\n\t\ts[i] = r.Encode()\n\t}\n\treturn s\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 12,
+        "type": "originalCode",
+        "lineNumberBase": 266
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/settings/remote.go"
+  }
+}

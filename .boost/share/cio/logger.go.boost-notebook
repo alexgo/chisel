@@ -1,0 +1,128 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package cio\n\nimport (\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n)\n\n//Logger is pkg/log Logger with prefixing and 2 log levels\ntype Logger struct {\n\tInfo, Debug bool\n\t//internal\n\tprefix      string\n\tlogger      *log.Logger\n\tinfo, debug *bool\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc NewLogger(prefix string) *Logger {\n\treturn NewLoggerFlag(prefix, log.Ldate|log.Ltime)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 16
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc NewLoggerFlag(prefix string, flag int) *Logger {\n\tl := &Logger{\n\t\tprefix: prefix,\n\t\tlogger: log.New(os.Stderr, \"\", flag),\n\t\tInfo:   false,\n\t\tDebug:  false,\n\t}\n\treturn l\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 20
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (l *Logger) Infof(f string, args ...interface{}) {\n\tif l.IsInfo() {\n\t\tl.logger.Printf(l.prefix+\": \"+f, args...)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 30
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc (l *Logger) Debugf(f string, args ...interface{}) {\n\tif l.IsDebug() {\n\t\tl.logger.Printf(l.prefix+\": \"+f, args...)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 36
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc (l *Logger) Errorf(f string, args ...interface{}) error {\n\treturn fmt.Errorf(l.prefix+\": \"+f, args...)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 42
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc (l *Logger) Fork(prefix string, args ...interface{}) *Logger {\n\t//slip the parent prefix at the front\n\targs = append([]interface{}{l.prefix}, args...)\n\tll := NewLogger(fmt.Sprintf(\"%s: \"+prefix, args...))\n\t//store link to parent settings too\n\tll.Info = l.Info\n\tif l.info != nil {\n\t\tll.info = l.info\n\t} else {\n\t\tll.info = &l.Info\n\t}\n\tll.Debug = l.Debug\n\tif l.debug != nil {\n\t\tll.debug = l.debug\n\t} else {\n\t\tll.debug = &l.Debug\n\t}\n\treturn ll\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 46
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\nfunc (l *Logger) Prefix() string {\n\treturn l.prefix\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 66
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "8",
+      "value": "\nfunc (l *Logger) IsInfo() bool {\n\treturn l.Info || (l.info != nil && *l.info)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 70
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "9",
+      "value": "\nfunc (l *Logger) IsDebug() bool {\n\treturn l.Debug || (l.debug != nil && *l.debug)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 74
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cio/logger.go"
+  }
+}

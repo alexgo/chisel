@@ -1,0 +1,286 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"; mermaid.initialize({ startOnLoad: true });</script>
+    <style>
+        @page {
+            margin: 2cm;
+            size: letter;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.0;
+            overflow-x: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        /* Use this class for analysis sections */
+        .analysis-section {
+            padding-top: 16px;
+            margin-top: 24px;
+            font-size: 12px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .new-page-section {
+            page-break-before: always;
+        }
+
+        .analysis-section h1, .analysis-section h2 {
+            color: #444;
+        }
+
+        .analysis-section p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Polyverse Boost Source Analysis Details: ./Dockerfile</h1>
+    <p>Date Generated: Wednesday, September 6, 2023 at 1:05:06 PM PDT</p>
+    <div class="><hr>
+<h3 id="boost-architectural-quick-summary-security-report">Boost Architectural Quick Summary Security Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:03:24 PM PDT</p>
+<p><strong>Executive Report: Software Project Analysis</strong></p>
+<p>Based on the analysis of the software project, the following key points have been identified:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The project&#39;s architecture is primarily influenced by the Dockerfile, which is responsible for creating the software&#39;s operating environment. The use of the &#39;latest&#39; tag for the golang:alpine image in the Dockerfile can lead to non-reproducible builds and unexpected behavior due to changes in the image. This could potentially impact the stability and reliability of the software architecture.</p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The risk associated with the project is moderate. The Dockerfile has been flagged with a warning for insecure practices. This could potentially lead to security vulnerabilities, impacting the integrity and confidentiality of the software. However, as this is the only file in the project, the risk is contained and can be mitigated by addressing the identified issue.</p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: Customers could potentially face issues with software stability and reliability due to the non-reproducible builds. In addition, potential security vulnerabilities could impact customer trust and satisfaction.</p>
+</li>
+<li><p><strong>Overall Issues</strong>: The overall health of the project source is fair. The only file in the project, the Dockerfile, has been flagged with a warning. This indicates that there is room for improvement in the project&#39;s development practices, particularly in relation to Dockerfile best practices.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: The overall risk of the project is moderate. 100% of the project files have been flagged with issues, all of which are warnings. This indicates a need for improvement in the project&#39;s development practices to reduce potential risks.</p>
+</li>
+</ol>
+<p>In conclusion, while the project has some issues that need to be addressed, they are not insurmountable. By addressing the identified issues and adhering to Dockerfile best practices, the project&#39;s overall health and risk can be significantly improved.</p>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-performance-report">Boost Architectural Quick Summary Performance Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:04:06 PM PDT</p>
+<p>Executive Report:</p>
+<ol>
+<li><strong>Architectural Impact</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Risk Analysis</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Potential Customer Impact</strong>: Based on the analysis, there are no severe issues that could potentially impact customers.</li>
+<li><strong>Performance Issues</strong>: Our analysis did not identify any explicit performance issues in the file.</li>
+<li><strong>Risk Assessment</strong>: Based on the current analysis of this file, no severe issues have been found. However, this doesn&#39;t guarantee that the file is risk-free.</li>
+</ol>
+<p>Highlights:</p>
+<ul>
+<li>No severe issues were identified in the current analysis of this file.</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-compliance-report">Boost Architectural Quick Summary Compliance Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:05:46 PM PDT</p>
+<p>Executive Report:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The Dockerfile, which is a critical component in defining the software&#39;s environment, has been flagged with several compliance issues. This could potentially impact the overall architecture of the software, as it may require changes or updates to ensure compliance with GDPR, HIPAA, and PCI DSS standards. </p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The Dockerfile has been flagged with a warning for PCI DSS compliance, indicating that the code is updating and adding packages without verifying their authenticity. This presents a significant risk, as it could lead to the installation of malicious packages, compromising the security of the software and potentially the entire system it is deployed on.</p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: The GDPR and HIPAA issues identified in the Dockerfile could potentially impact customers, particularly those in the European Union or in the healthcare sector, where these regulations are strictly enforced. Non-compliance could lead to legal penalties, loss of customer trust, and potential loss of business.</p>
+</li>
+<li><p><strong>Overall Issues</strong>: The Dockerfile is the only file in the project, and it has been flagged with multiple compliance issues. This suggests that there may be a lack of attention to compliance in the project, which could lead to further issues down the line.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: Given that the Dockerfile is the only file in the project and it has been flagged with multiple issues, the overall health of the project source is concerning. 100% of the project files have been flagged with issues, indicating a high risk level.</p>
+</li>
+</ol>
+<p>In conclusion, this software project appears to have significant compliance issues that could impact its architecture, security, and customer relations. Immediate attention should be given to resolving these issues to ensure the project&#39;s health and success.</p>
+</div><p></p>
+    <h1>Detailed Analysis</h1><div>
+                    <h2>./Dockerfile line 0:</h2>
+                    <p>Programming Language: plaintext</p>
+                    <pre><code><span class="hljs-comment"># build stage</span>
+<span class="hljs-keyword">FROM</span> golang:alpine AS build
+<span class="hljs-keyword">RUN</span><span class="language-bash"> apk update &amp;&amp; apk add git</span>
+<span class="hljs-keyword">ADD</span><span class="language-bash"> . /src</span>
+<span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /src</span>
+<span class="hljs-keyword">ENV</span> CGO_ENABLED <span class="hljs-number">0</span>
+<span class="hljs-keyword">RUN</span><span class="language-bash"> go build \
+    -ldflags <span class="hljs-string">&quot;-X github.com/jpillora/chisel/share.BuildVersion=<span class="hljs-subst">$(git describe --abbrev=0 --tags)</span>&quot;</span> \
+    -o /tmp/bin</span>
+<span class="hljs-comment"># run stage</span>
+<span class="hljs-keyword">FROM</span> scratch
+<span class="hljs-keyword">LABEL</span><span class="language-bash"> maintainer=<span class="hljs-string">&quot;dev@jpillora.com&quot;</span></span>
+<span class="hljs-keyword">COPY</span><span class="language-bash"> --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/</span>
+<span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app</span>
+<span class="hljs-keyword">COPY</span><span class="language-bash"> --from=build /tmp/bin /app/bin</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="hljs-string">&quot;/app/bin&quot;</span>]</span></code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:01:39 PM PDT</p>
+<p>This is a Dockerfile, which is a text document that contains all the commands a user could call on the command line to assemble an image. Docker can build images automatically by reading the instructions from a Dockerfile. The Dockerfile is divided into two stages: the build stage and the run stage.</p>
+<ol>
+<li>Build Stage:</li>
+</ol>
+<p>The build stage is where the application is built. It starts with the <code>FROM golang:alpine AS build</code> command which pulls the golang:alpine image from Docker Hub. This is a lightweight Go (Golang) Docker image based on Alpine Linux.</p>
+<p><code>RUN apk update &amp;&amp; apk add git</code> is used to update the package list and install git in the image. Git is a version control system that lets you manage and keep track of your source code history.</p>
+<p><code>ADD . /src</code> adds the contents of the current directory (on the host) to the <code>/src</code> directory in the image.</p>
+<p><code>WORKDIR /src</code> changes the working directory of the Docker image to <code>/src</code>.</p>
+<p><code>ENV CGO_ENABLED 0</code> sets an environment variable in the Docker image. CGO_ENABLED is a Go environment variable that enables or disables the use of CGo in Go programs.</p>
+<p>The <code>RUN go build</code> command is used to build the Go application. The <code>-ldflags</code> option allows you to set linker options. The <code>-X</code> flag is a linker option that allows you to set the value of an uninitialized string variable in the Go source code. In this case, it&#39;s setting the value of the <code>github.com/jpillora/chisel/share.BuildVersion</code> variable to the output of the <code>git describe --abbrev=0 --tags</code> command.</p>
+<ol start="2">
+<li>Run Stage:</li>
+</ol>
+<p>The run stage is where the built application is run. It starts with <code>FROM scratch</code>, which creates a brand new, empty Docker image.</p>
+<p><code>LABEL maintainer=&quot;dev@jpillora.com&quot;</code> sets metadata on the Docker image. In this case, it&#39;s setting the maintainer of the image.</p>
+<p><code>COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/</code> copies the SSL certificates from the build image to the run image. This is necessary for the application to make secure connections.</p>
+<p><code>WORKDIR /app</code> changes the working directory of the Docker image to <code>/app</code>.</p>
+<p><code>COPY --from=build /tmp/bin /app/bin</code> copies the built application from the build image to the run image.</p>
+<p><code>ENTRYPOINT [&quot;/app/bin&quot;]</code> sets the application that will be run when a container is started from the image.</p>
+<p>For more information about Dockerfiles, you can visit the official Docker documentation here: <a href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:01:59 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style buildStage fill:#228B22, stroke:#000000, stroke-width:4px;
+style runStage fill:#228B22, stroke:#000000, stroke-width:4px;
+
+Start-->buildStage;
+buildStage-->runStage;</pre>
+</code></pre><p>The control flow graph for the given source code is a simple linear flow. It starts with the &quot;build stage&quot; and then proceeds to the &quot;run stage&quot;. There are no alternate paths or error paths in this code.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:03:02 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: Insecure Dockerfile practices</p>
+<p><strong>Description</strong>: The Dockerfile uses the &#39;latest&#39; tag for the golang:alpine image. This can lead to non-reproducible builds, as &#39;latest&#39; can point to any version. It&#39;s better to pin specific versions of images to ensure the build is reproducible and to avoid unexpected behavior due to changes in the image.</p>
+<p><strong>Solution</strong>: Replace &#39;golang:alpine&#39; with a specific version like &#39;golang:1.16-alpine&#39;. Refer to Docker&#39;s best practices for more details: <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from">https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from</a></p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: Insecure Dockerfile practices</p>
+<p><strong>Description</strong>: The Dockerfile uses &#39;apk add git&#39; without specifying a version, which can lead to non-reproducible builds and potential exposure to vulnerabilities in unpatched versions.</p>
+<p><strong>Solution</strong>: Specify a version for git when adding it. For example: &#39;apk add git=<version>&#39;. Refer to Docker&#39;s best practices for more details: <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run">https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run</a></p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 2</p>
+<p><strong>Bug Type</strong>: Insecure Dockerfile practices</p>
+<p><strong>Description</strong>: The Dockerfile uses &#39;ADD&#39; to copy files into the Docker image. &#39;ADD&#39; has some features (like local-only tar extraction and remote URL support) that can lead to unexpected and potentially insecure results. &#39;COPY&#39; is more secure and should be used instead.</p>
+<p><strong>Solution</strong>: Replace &#39;ADD . /src&#39; with &#39;COPY . /src&#39;. Refer to Docker&#39;s best practices for more details: <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#add-or-copy">https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#add-or-copy</a></p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 9</p>
+<p><strong>Bug Type</strong>: Insecure Dockerfile practices</p>
+<p><strong>Description</strong>: The Dockerfile uses &#39;FROM scratch&#39; for the run stage. This means the container runs without an operating system, which can limit the debugging capabilities and potentially lead to unexpected behavior.</p>
+<p><strong>Solution</strong>: Consider using a minimal base image like &#39;alpine&#39; instead of &#39;scratch&#39;. This provides a minimal set of tools for debugging without significantly increasing the size of the image. Refer to Docker&#39;s best practices for more details: <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from">https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:04:03 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: Disk</p>
+<p><strong>Description</strong>: The use of the &#39;apk update&#39; command without the &#39;--no-cache&#39; flag can lead to increased disk usage because it leaves behind a cache of the downloaded packages.</p>
+<p><strong>Solution</strong>: Use the &#39;--no-cache&#39; flag with the &#39;apk update&#39; command to avoid unnecessary disk usage. The command would look like this: &#39;apk update --no-cache&#39;.</p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 3</p>
+<p><strong>Bug Type</strong>: Disk</p>
+<p><strong>Description</strong>: The &#39;ADD .&#39; command copies all files from the current directory into the Docker image, which could include unnecessary files and increase the size of the image.</p>
+<p><strong>Solution</strong>: Use a .dockerignore file to specify which files should not be copied into the Docker image. Alternatively, use the COPY command instead of ADD, as it is more transparent.</p>
+</li>
+<li><p><strong>Severity</strong>: 3/10</p>
+<p><strong>Line Number</strong>: 7</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The &#39;go build&#39; command without the &#39;-i&#39; flag can lead to longer build times because it does not install the packages that are being compiled.</p>
+<p><strong>Solution</strong>: Use the &#39;-i&#39; flag with the &#39;go build&#39; command to install the packages that are being compiled. The command would look like this: &#39;go build -i&#39;.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 1:05:06 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The Docker image is being pulled from a public repository. There is no guarantee that the image has not been tampered with, which could lead to data breaches.</p>
+<p><strong>Solution</strong>: Use a private Docker registry or verify the integrity of the image before using it. Use a checksum or digital signature to ensure the image has not been tampered with.</p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: PCI DSS</p>
+<p><strong>Description</strong>: The code is updating and adding packages without verifying their authenticity. This could lead to the installation of malicious packages.</p>
+<p><strong>Solution</strong>: Verify the authenticity of the packages before installing them. Use checksums or digital signatures to ensure the packages have not been tampered with.</p>
+</li>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 2</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: The code is adding the entire directory to the Docker image. If the directory contains sensitive data, it could be exposed in the image.</p>
+<p><strong>Solution</strong>: Only add necessary files to the Docker image. Use a .dockerignore file to exclude unnecessary or sensitive files.</p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 8</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The code is copying SSL certificates into the Docker image. If the certificates are not properly secured, they could be exposed in the image.</p>
+<p><strong>Solution</strong>: Secure the certificates before copying them into the Docker image. Use a secure method such as Docker secrets to manage sensitive data.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 10</p>
+<p><strong>Bug Type</strong>: PCI DSS</p>
+<p><strong>Description</strong>: The code is copying the binary into the Docker image without verifying its authenticity. This could lead to the execution of malicious code.</p>
+<p><strong>Solution</strong>: Verify the authenticity of the binary before copying it into the Docker image. Use checksums or digital signatures to ensure the binary has not been tampered with.</p>
+</li>
+</ol>
+</div'></div>
+</body>
+</html>

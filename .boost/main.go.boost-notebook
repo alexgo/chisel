@@ -1,0 +1,1177 @@
+{
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:17:36 PM PDT\n\nThis Go code is part of the Chisel project, which is a fast TCP tunnel over HTTP. It's a tool for managing SSH-like reverse and forward tunnels. \n\nThe code starts by importing necessary libraries and packages. It then sets a help message with some basic usage instructions and version information. \n\nIn the main function, it sets up some command-line flags for version and help. The flag package provides a way to define simple command-line flag syntax. It includes boolean switches like 'version' and 'help'. If these flags are present when the program is run, they will print the version or help text and then exit.\n\nThe main function then parses the command-line arguments. If the first argument is 'server', it calls the server function with the remaining arguments. If the first argument is 'client', it calls the client function with the remaining arguments. If there's no argument or an unrecognized argument, it prints the help text and exits.\n\nThe code does not include the implementation of the server and client functions, but based on the context, the server function likely starts a Chisel server, and the client function likely starts a Chisel client.\n\nThis code follows Go's idiomatic style and does not appear to conflict with any architectural guidelines. It's modular and straightforward, which makes it easy to maintain and extend, if necessary.\n\nFor more information on Chisel, you can visit its GitHub page: https://github.com/jpillora/chisel. For more information on Go's flag package, you can visit its official documentation: https://pkg.go.dev/flag."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:25:15 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle server fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle client fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->server;\nStart-->client;\n```\n\nThe control flow graph for the given source code is shown above. The code starts at the `main` function and then branches into two paths: `server` and `client`."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:27:45 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:00 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:35:11 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The code does not appear to implement any measures for data protection, such as encryption or anonymization, which could lead to potential GDPR, PCI DSS, and HIPAA compliance issues.\n\n   **Solution**: Implement data protection measures such as encryption for data at rest and in transit, and anonymization for personal data. Also, consider implementing access controls and audit logging.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "Data Compliance",
+                "description": "The code does not appear to implement any measures for data protection, such as encryption or anonymization, which could lead to potential GDPR, PCI DSS, and HIPAA compliance issues.",
+                "solution": "Implement data protection measures such as encryption for data at rest and in transit, and anonymization for personal data. Also, consider implementing access controls and audit logging."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "0",
+      "value": "package main\n\nimport (\n\t\"flag\"\n\t\"fmt\"\n\t\"io/ioutil\"\n\t\"log\"\n\t\"net/http\"\n\t\"os\"\n\t\"runtime\"\n\t\"strconv\"\n\t\"strings\"\n\t\"time\"\n\n\tchclient \"github.com/jpillora/chisel/client\"\n\tchserver \"github.com/jpillora/chisel/server\"\n\tchshare \"github.com/jpillora/chisel/share\"\n\t\"github.com/jpillora/chisel/share/ccrypto\"\n\t\"github.com/jpillora/chisel/share/cos\"\n\t\"github.com/jpillora/chisel/share/settings\"\n)\n\nvar help = `\n  Usage: chisel [command] [--help]\n\n  Version: ` + chshare.BuildVersion + ` (` + runtime.Version() + `)\n\n  Commands:\n    server - runs chisel in server mode\n    client - runs chisel in client mode\n\n  Read more:\n    https://github.com/jpillora/chisel\n\n`\n\nfunc main() {\n\n\tversion := flag.Bool(\"version\", false, \"\")\n\tv := flag.Bool(\"v\", false, \"\")\n\tflag.Bool(\"help\", false, \"\")\n\tflag.Bool(\"h\", false, \"\")\n\tflag.Usage = func() {}\n\tflag.Parse()\n\n\tif *version || *v {\n\t\tfmt.Println(chshare.BuildVersion)\n\t\tos.Exit(0)\n\t}\n\n\targs := flag.Args()\n\n\tsubcmd := \"\"\n\tif len(args) > 0 {\n\t\tsubcmd = args[0]\n\t\targs = args[1:]\n\t}\n\n\tswitch subcmd {\n\tcase \"server\":\n\t\tserver(args)\n\tcase \"client\":\n\t\tclient(args)\n\tdefault:\n\t\tfmt.Print(help)\n\t\tos.Exit(0)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:18:25 PM PDT\n\nThis is a simple piece of Go code that does two things: \n\n1. It defines a string called `commonHelp` which appears to be a help message for a command-line tool. This message includes some general usage instructions, a list of signals that the tool responds to, and the current version of the tool. The version is constructed from two pieces of data - `chshare.BuildVersion` and `runtime.Version()`. The former is likely a custom version string defined elsewhere in the code, and the latter is a function provided by Go's `runtime` package which returns the Go tree's version string.\n\n2. It defines a function called `generatePidFile` that creates a file named \"chisel.pid\" in the current working directory. This file contains the process ID (PID) of the currently running process. The PID is obtained using the `os.Getpid()` function, converted to a string using `strconv.Itoa()`, and then converted to a byte slice so it can be written to a file. The file is created with permissions set to `0644` (owner can read and write, others can only read). If there's an error during any of this, the program logs the error and then terminates immediately using `log.Fatal()`.\n\nThe algorithm used here is pretty straightforward - get the current PID, convert it to a string, convert that to bytes, and write those bytes to a file. If anything goes wrong, stop execution and log the error. \n\nFor more information on the Go functions and packages used here, you can refer to the official Go documentation:\n\n- `os.Getpid()`: https://golang.org/pkg/os/#Getpid\n- `strconv.Itoa()`: https://golang.org/pkg/strconv/#Itoa\n- `ioutil.WriteFile()`: https://golang.org/pkg/io/ioutil/#WriteFile\n- `log.Fatal()`: https://golang.org/pkg/log/#Fatal\n- `runtime.Version()`: https://golang.org/pkg/runtime/#Version\n\nRegarding the architectural guidelines, since there are no additional special architectural guidelines or constraints provided for this software project, this code does not appear to conflict with any architectural guidelines. It's a simple, straightforward piece of code that performs a specific task."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:25:22 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle generatePidFile fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->generatePidFile;\n```\nThe control flow starts at the function `generatePidFile`."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:28:13 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 151\n\n   **Bug Type**: Insecure File Permissions\n\n   **Description**: The function 'generatePidFile()' creates a file with permissions set to '0644'. This means that the file is readable by all users on the system, which can lead to information disclosure if the PID is sensitive.\n\n   **Solution**: Change the file permissions to '0600' to ensure that only the owner of the file can read and write to it. Read more here: https://en.wikipedia.org/wiki/File_system_permissions#Numeric_notation\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 149\n\n   **Bug Type**: Hard-coded file path\n\n   **Description**: The function 'generatePidFile()' writes the PID to a hard-coded file path, which could lead to issues if the program does not have the necessary permissions to write to that location, or if the file is needed in a different location.\n\n   **Solution**: Consider making the file path a configurable parameter. Read more here: https://owasp.org/www-community/vulnerabilities/Insecure_Configuration\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 83,
+                "severity": 5,
+                "bugType": "Insecure File Permissions",
+                "description": "The function 'generatePidFile()' creates a file with permissions set to '0644'. This means that the file is readable by all users on the system, which can lead to information disclosure if the PID is sensitive.",
+                "solution": "Change the file permissions to '0600' to ensure that only the owner of the file can read and write to it. Read more here: https://en.wikipedia.org/wiki/File_system_permissions#Numeric_notation"
+              },
+              {
+                "lineNumber": 81,
+                "severity": 3,
+                "bugType": "Hard-coded file path",
+                "description": "The function 'generatePidFile()' writes the PID to a hard-coded file path, which could lead to issues if the program does not have the necessary permissions to write to that location, or if the file is needed in a different location.",
+                "solution": "Consider making the file path a configurable parameter. Read more here: https://owasp.org/www-community/vulnerabilities/Insecure_Configuration"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:15 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 153\n\n   **Bug Type**: Disk\n\n   **Description**: The generatePidFile function writes to disk every time it's called. This could be a performance issue if the function is called frequently.\n\n   **Solution**: Consider caching the pid in memory if it does not change often, and only writing to disk when necessary. If the pid changes often, consider a more efficient disk writing strategy such as buffering or batch writes.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 85,
+                "severity": 5,
+                "bugType": "Disk",
+                "description": "The generatePidFile function writes to disk every time it's called. This could be a performance issue if the function is called frequently.",
+                "solution": "Consider caching the pid in memory if it does not change often, and only writing to disk when necessary. If the pid changes often, consider a more efficient disk writing strategy such as buffering or batch writes."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:35:34 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 144\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function 'generatePidFile' creates a file with the process ID (PID). This PID could potentially be used to gain unauthorized access to the process. This is a violation of GDPR's 'Integrity and confidentiality' principle, PCI DSS Requirement 6: 'Develop and maintain secure systems and applications', and HIPAA's 'Security Rule'.\n\n   **Solution**: Consider using a more secure method to store and handle PIDs. Avoid writing them to disk in plain text. If necessary, ensure the file is securely deleted after use. You may also want to consider encryption or hashing the PID if it needs to be stored.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 76,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The function 'generatePidFile' creates a file with the process ID (PID). This PID could potentially be used to gain unauthorized access to the process. This is a violation of GDPR's 'Integrity and confidentiality' principle, PCI DSS Requirement 6: 'Develop and maintain secure systems and applications', and HIPAA's 'Security Rule'.",
+                "solution": "Consider using a more secure method to store and handle PIDs. Avoid writing them to disk in plain text. If necessary, ensure the file is securely deleted after use. You may also want to consider encryption or hashing the PID if it needs to be stored.",
+                "webLink": "https://gdpr-info.eu/art-5-gdpr/"
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nvar commonHelp = `\n    --pid Generate pid file in current working directory\n\n    -v, Enable verbose logging\n\n    --help, This help text\n\n  Signals:\n    The chisel process is listening for:\n      a SIGUSR2 to print process stats, and\n      a SIGHUP to short-circuit the client reconnect timer\n\n  Version:\n    ` + chshare.BuildVersion + ` (` + runtime.Version() + `)\n\n  Read more:\n    https://github.com/jpillora/chisel\n\n`\n\nfunc generatePidFile() {\n\tpid := []byte(strconv.Itoa(os.Getpid()))\n\tif err := ioutil.WriteFile(\"chisel.pid\", pid, 0644); err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 68
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:18:43 PM PDT\n\nThis piece of code is a string that provides a help message for a server command in a program, possibly a command-line interface (CLI) program. It explains the usage and options of the `chisel server` command. The command seems to be for setting up a server with various parameters.\n\nHere are the options it explains:\n\n- `--host`: This option is used to define the HTTP listening host or the network interface. If not specified, it defaults to the environment variable HOST and if that is not set, it falls back to 0.0.0.0, which means it listens on all available network interfaces.\n\n- `--port` or `-p`: This option is used to define the HTTP listening port. If not specified, it defaults to the environment variable PORT and if that is not set, it falls back to port 8080.\n\n- `--key`: This deprecated option is used to seed the generation of an ECDSA public and private key pair. It defaults to the CHISEL_KEY environment variable. If not set, a new key pair is generated each run. ECDSA (Elliptic Curve Digital Signature Algorithm) is a cryptographic algorithm used for digital signatures. It is known for providing the same security with shorter key lengths than other algorithms, which makes it faster with less computational overhead.\n\n- `--keygen`: This option is used to specify a path to write a newly generated PEM-encoded SSH private key file.\n\n- `--keyfile`: This option is used to specify a path to a PEM-encoded SSH private key. When this flag is set, the `--key` option is ignored. It defaults to the CHISEL_KEY_FILE environment variable.\n\n- `--authfile`: This option is used to specify a path to a users.json file. This file should contain an object with users defined in a specific format.\n\nThis code does not contain any specific algorithms but it provides a user-friendly way to understand the use of different command-line options for configuring a server.\n\nFor more information on command-line interfaces, you can visit this link: [Command-line interface - Wikipedia](https://en.wikipedia.org/wiki/Command-line_interface)\n\nFor more information on ECDSA, you can visit this link: [Elliptic Curve Digital Signature Algorithm - Wikipedia](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:25:37 PM PDT\n\n```mermaid\n    graph TD;\n    style Start fill:#228B22, stroke:#000000, stroke-width:2px;\n    style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n    style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\n    Start-->ExampleProcess;\n    Start-->ExampleErrorPath;\n    ExampleProcess-->End;\n    ExampleErrorPath-->End;\n```\n\nThe control flow graph for the given source code is as follows:\n\n```\nchisel server [options] --> --host\nchisel server [options] --> --port\nchisel server [options] --> --key\nchisel server [options] --> --keygen\nchisel server [options] --> --keyfile\nchisel server [options] --> --authfile\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:28:44 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 203\n\n   **Bug Type**: Sensitive Data Exposure\n\n   **Description**: The --key option is deprecated but still present, and it allows for the seeding of a key pair with a known string, which could potentially be guessed or brute-forced, leading to unauthorized access.\n\n   **Solution**: Remove the deprecated --key option entirely to prevent potential abuse. Use secure methods of key generation that do not allow for predictable keys. For more information, refer to the OWASP guide on cryptographic storage: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 218\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The --authfile option reads from a users.json file that contains user credentials in plain text. If this file is improperly secured, it could lead to unauthorized access.\n\n   **Solution**: Never store passwords in plain text. Use a secure method of storing passwords, such as hashing with a salt. For more information, refer to the OWASP guide on password storage: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 108,
+                "severity": 5,
+                "bugType": "Sensitive Data Exposure",
+                "description": "The --key option is deprecated but still present, and it allows for the seeding of a key pair with a known string, which could potentially be guessed or brute-forced, leading to unauthorized access.",
+                "solution": "Remove the deprecated --key option entirely to prevent potential abuse. Use secure methods of key generation that do not allow for predictable keys. For more information, refer to the OWASP guide on cryptographic storage: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 123,
+                "severity": 8,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The --authfile option reads from a users.json file that contains user credentials in plain text. If this file is improperly secured, it could lead to unauthorized access.",
+                "solution": "Never store passwords in plain text. Use a secure method of storing passwords, such as hashing with a salt. For more information, refer to the OWASP guide on password storage: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:19 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:36:05 PM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 197\n\n   **Bug Type**: GDPR\n\n   **Description**: The use of a deprecated --key option may lead to insecure generation of keys and potential data breaches. This can be a violation of GDPR's 'integrity and confidentiality' principle.\n\n   **Solution**: Replace the deprecated --key option with --keygen and --keyfile options. Ensure that keys are generated securely and stored safely.\n\n\n2. **Severity**: 9/10\n\n   **Line Number**: 208\n\n   **Bug Type**: PCI DSS\n\n   **Description**: Storing user credentials in a file (users.json) can lead to insecure storage of cardholder data. This is a violation of PCI DSS Requirement 3: Protect Stored Cardholder Data.\n\n   **Solution**: Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework.\n\n\n3. **Severity**: 10/10\n\n   **Line Number**: 208\n\n   **Bug Type**: HIPAA\n\n   **Description**: Storing user credentials in a file (users.json) can lead to unauthorized access to Protected Health Information (PHI). This is a violation of the HIPAA Security Rule.\n\n   **Solution**: Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 102,
+                "severity": 8,
+                "bugType": "GDPR",
+                "description": "The use of a deprecated --key option may lead to insecure generation of keys and potential data breaches. This can be a violation of GDPR's 'integrity and confidentiality' principle.",
+                "solution": "Replace the deprecated --key option with --keygen and --keyfile options. Ensure that keys are generated securely and stored safely."
+              },
+              {
+                "lineNumber": 113,
+                "severity": 9,
+                "bugType": "PCI DSS",
+                "description": "Storing user credentials in a file (users.json) can lead to insecure storage of cardholder data. This is a violation of PCI DSS Requirement 3: Protect Stored Cardholder Data.",
+                "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework."
+              },
+              {
+                "lineNumber": 113,
+                "severity": 10,
+                "bugType": "HIPAA",
+                "description": "Storing user credentials in a file (users.json) can lead to unauthorized access to Protected Health Information (PHI). This is a violation of the HIPAA Security Rule.",
+                "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nvar serverHelp = `\n  Usage: chisel server [options]\n\n  Options:\n\n    --host, Defines the HTTP listening host – the network interface\n    (defaults the environment variable HOST and falls back to 0.0.0.0).\n\n    --port, -p, Defines the HTTP listening port (defaults to the environment\n    variable PORT and fallsback to port 8080).\n\n    --key, (deprecated use --keygen and --keyfile instead)\n    An optional string to seed the generation of a ECDSA public\n    and private key pair. All communications will be secured using this\n    key pair. Share the subsequent fingerprint with clients to enable detection\n    of man-in-the-middle attacks (defaults to the CHISEL_KEY environment\n    variable, otherwise a new key is generate each run).\n\n    --keygen, A path to write a newly generated PEM-encoded SSH private key file.\n    If users depend on your --key fingerprint, you may also include your --key to\n    output your existing key. Use - (dash) to output the generated key to stdout.\n\n    --keyfile, An optional path to a PEM-encoded SSH private key. When\n    this flag is set, the --key option is ignored, and the provided private key\n    is used to secure all communications. (defaults to the CHISEL_KEY_FILE\n    environment variable). Since ECDSA keys are short, you may also set keyfile\n    to an inline base64 private key (e.g. chisel server --keygen - | base64).\n\n    --authfile, An optional path to a users.json file. This file should\n    be an object with users defined like:\n      {\n        \"<user:pass>\": [\"<addr-regex>\",\"<addr-regex>\"]\n      }\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 95
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:19:03 PM PDT\n\nI'm sorry, but the text you've provided doesn't appear to be source code. It seems to be a description or documentation of some networking or authentication process, possibly related to SSH or some other secure connection method. \n\nThe text describes a process where a user connects to a system. Their password is verified and their remote address is compared against a list of address regular expressions for a match. The addresses always come in a specific format. It also mentions an optional authentication parameter, which is a string representing a user with full access. \n\nHowever, without actual source code, I'm unable to provide a detailed analysis of algorithms, data structures, or other code-specific elements. Could you please provide a snippet of actual source code for analysis?"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:25:50 PM PDT\n\n```mermaid\n    graph TD;\n    style Start fill:#228B22, stroke:#000000, stroke-width:2px;\n    style VerifyPass fill:#228B22, stroke:#000000, stroke-width:4px;\n    style CompareAddresses fill:#228B22, stroke:#000000, stroke-width:4px;\n    style MatchFound fill:#228B22, stroke:#000000, stroke-width:4px;\n    style NoMatchFound fill:#B22222, stroke:#000000, stroke-width:2px;\n\n    Start-->VerifyPass;\n    VerifyPass-->CompareAddresses;\n    CompareAddresses-->MatchFound;\n    CompareAddresses-->NoMatchFound;\n```\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:28:48 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:22 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:36:30 PM PDT\n\n1. **Severity**: 9/10\n\n   **Line Number**: 263\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The code seems to be storing passwords in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Storing passwords in plain text can lead to unauthorized access if the data is breached.\n\n   **Solution**: Passwords should be stored in a hashed and salted format. Consider using a strong cryptographic algorithm for this. Do not store passwords in plain text.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 267\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The code suggests that usernames and passwords are being transmitted in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Transmitting sensitive data in plain text can be intercepted and exploited.\n\n   **Solution**: Ensure that all communication of sensitive data is encrypted. Use secure communication protocols such as HTTPS.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 134,
+                "severity": 9,
+                "bugType": "Data Privacy",
+                "description": "The code seems to be storing passwords in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Storing passwords in plain text can lead to unauthorized access if the data is breached.",
+                "solution": "Passwords should be stored in a hashed and salted format. Consider using a strong cryptographic algorithm for this. Do not store passwords in plain text."
+              },
+              {
+                "lineNumber": 138,
+                "severity": 8,
+                "bugType": "Data Privacy",
+                "description": "The code suggests that usernames and passwords are being transmitted in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Transmitting sensitive data in plain text can be intercepted and exploited.",
+                "solution": "Ensure that all communication of sensitive data is encrypted. Use secure communication protocols such as HTTPS."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "3",
+      "value": "    when <user> connects, their <pass> will be verified and then\n    each of the remote addresses will be compared against the list\n    of address regular expressions for a match. Addresses will\n    always come in the form \"<remote-host>:<remote-port>\" for normal remotes\n    and \"R:<local-interface>:<local-port>\" for reverse port forwarding\n    remotes. This file will be automatically reloaded on change.\n\n    --auth, An optional string representing a single user with full\n    access, in the form of <user:pass>. It is equivalent to creating an\n    authfile with {\"<user:pass>\": [\"\"]}. If unset, it will use the\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 129
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:20:13 PM PDT\n\nThis code is written in Go programming language. It appears to be part of a command-line tool that implements a server with various options for configuration. The server is part of the \"chisel\" project, which is a fast TCP/UDP tunnel over HTTP.\n\nThe code starts with a long comment block describing various command-line flags that can be passed to the server command. These flags control various aspects of the server's behavior, such as whether it uses keepalive messages, whether it supports SOCKS5 proxying, whether it allows reverse port forwarding, and how it handles TLS encryption.\n\nThe `server` function is the main function that implements the server command. It starts by creating a new flag set with the `flag.NewFlagSet` function. This flag set will be used to parse the command-line arguments passed to the server command.\n\nThe `config` object is created to hold the configuration for the server. The `flags` object is used to bind each command-line flag to a field in the `config` object. For example, the `--key` flag is bound to the `KeySeed` field, the `--auth` flag is bound to the `Auth` field, and so on.\n\nThe `flags.Usage` function is set to a function that prints the server help message and exits the program. This function will be called if the user passes an invalid flag or requests help.\n\nThe `flags.Parse` function is called to parse the command-line arguments and populate the `config` object.\n\nNext, the function checks if the `--keygen` flag was passed. If so, it generates a new SSH private key and writes it to a file, then exits the program.\n\nThe function then checks if the `--key` flag was passed. If so, it logs a message indicating that this flag is deprecated and will be removed in a future version.\n\nThe function then sets the `host` and `port` variables, either from the corresponding command-line flags or from environment variables. If neither is provided, it defaults to \"0.0.0.0\" for the host and \"8080\" for the port.\n\nNext, the function creates a new chisel server with the `chserver.NewServer` function, passing the `config` object. If an error occurs, it logs the error and exits the program.\n\nThe function then sets the `Debug` field of the server object to the value of the `--verbose` flag, and if the `--pid` flag was passed, it calls the `generatePidFile` function.\n\nThe function then starts the server with the `StartContext` method, passing a context that will be cancelled if the program receives an interrupt signal. If an error occurs, it logs the error and exits the program.\n\nFinally, the function calls the `Wait` method of the server object, which blocks until the server is stopped. If an error occurs, it logs the error and exits the program.\n\nFor more information about the Go programming language, you can visit [Go official website](https://golang.org/). For more details about the chisel project, you can visit [Chisel's GitHub page](https://github.com/jpillora/chisel)."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:26:05 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExamplErrorPath-->End;\n```\n\nThe code provided does not have a clear entry point or function name to start the control flow graph from. Please provide the specific function name or entry point to generate the control flow graph."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:29:35 PM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 295\n\n   **Bug Type**: Insecure Default Configuration\n\n   **Description**: The server is configured to listen on all network interfaces (0.0.0.0) by default. This could unintentionally expose the server to the internet or other untrusted networks, leading to potential unauthorized access.\n\n   **Solution**: Consider changing the default configuration to listen on localhost (127.0.0.1) or a specific trusted network interface. If a broad network interface is required, ensure proper network security controls are in place. More info: https://owasp.org/www-community/Insecure_Configuration_Management\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 305\n\n   **Bug Type**: Insecure Environment Variables\n\n   **Description**: The application uses environment variables to store sensitive information. If an attacker can access these environment variables, they can potentially gain unauthorized access or perform other malicious actions.\n\n   **Solution**: Consider using secure methods for storing sensitive information, such as encrypted storage or secure vaults. More info: https://cheatsheetseries.owasp.org/cheatsheets/Environment_Variables_Cheat_Sheet.html\n\n\n3. **Severity**: 7/10\n\n   **Line Number**: 311\n\n   **Bug Type**: Insecure Error Handling\n\n   **Description**: The application crashes and terminates when it encounters an error. This could potentially lead to Denial of Service (DoS) if an attacker can trigger such errors intentionally.\n\n   **Solution**: Implement proper error handling mechanisms that prevent the application from crashing. Instead, log the error and continue or fail gracefully. More info: https://owasp.org/www-community/Improper_Error_Handling\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 327\n\n   **Bug Type**: Missing Authentication\n\n   **Description**: The server doesn't seem to have any authentication mechanism in place. This could allow unauthorized users to access or manipulate the server.\n\n   **Solution**: Implement a secure authentication mechanism to restrict access to authorized users only. More info: https://owasp.org/www-community/Authentication_Cheat_Sheet\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 156,
+                "severity": 8,
+                "bugType": "Insecure Default Configuration",
+                "description": "The server is configured to listen on all network interfaces (0.0.0.0) by default. This could unintentionally expose the server to the internet or other untrusted networks, leading to potential unauthorized access.",
+                "solution": "Consider changing the default configuration to listen on localhost (127.0.0.1) or a specific trusted network interface. If a broad network interface is required, ensure proper network security controls are in place. More info: https://owasp.org/www-community/Insecure_Configuration_Management"
+              },
+              {
+                "lineNumber": 166,
+                "severity": 6,
+                "bugType": "Insecure Environment Variables",
+                "description": "The application uses environment variables to store sensitive information. If an attacker can access these environment variables, they can potentially gain unauthorized access or perform other malicious actions.",
+                "solution": "Consider using secure methods for storing sensitive information, such as encrypted storage or secure vaults. More info: https://cheatsheetseries.owasp.org/cheatsheets/Environment_Variables_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 172,
+                "severity": 7,
+                "bugType": "Insecure Error Handling",
+                "description": "The application crashes and terminates when it encounters an error. This could potentially lead to Denial of Service (DoS) if an attacker can trigger such errors intentionally.",
+                "solution": "Implement proper error handling mechanisms that prevent the application from crashing. Instead, log the error and continue or fail gracefully. More info: https://owasp.org/www-community/Improper_Error_Handling"
+              },
+              {
+                "lineNumber": 188,
+                "severity": 7,
+                "bugType": "Missing Authentication",
+                "description": "The server doesn't seem to have any authentication mechanism in place. This could allow unauthorized users to access or manipulate the server.",
+                "solution": "Implement a secure authentication mechanism to restrict access to authorized users only. More info: https://owasp.org/www-community/Authentication_Cheat_Sheet"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:49 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 321\n\n   **Bug Type**: CPU\n\n   **Description**: The function generates a PID file every time it is called, which can be CPU intensive if the function is called frequently.\n\n   **Solution**: Consider generating the PID file once and reusing it, or only generating it if it does not already exist.\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 323\n\n   **Bug Type**: Network\n\n   **Description**: The function starts a new server every time it is called, which can be network intensive if the function is called frequently.\n\n   **Solution**: Consider reusing an existing server if one is available, or pooling servers to reduce the overhead of starting a new server for each request.\n\n\n3. **Severity**: 5/10\n\n   **Line Number**: 328\n\n   **Bug Type**: CPU\n\n   **Description**: The function waits for the server to stop every time it is called, which can be CPU intensive if the function is called frequently.\n\n   **Solution**: Consider using a non-blocking wait or a callback to handle the server stopping, to prevent blocking the CPU.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 182,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The function generates a PID file every time it is called, which can be CPU intensive if the function is called frequently.",
+                "solution": "Consider generating the PID file once and reusing it, or only generating it if it does not already exist."
+              },
+              {
+                "lineNumber": 184,
+                "severity": 4,
+                "bugType": "Network",
+                "description": "The function starts a new server every time it is called, which can be network intensive if the function is called frequently.",
+                "solution": "Consider reusing an existing server if one is available, or pooling servers to reduce the overhead of starting a new server for each request."
+              },
+              {
+                "lineNumber": 189,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "The function waits for the server to stop every time it is called, which can be CPU intensive if the function is called frequently.",
+                "solution": "Consider using a non-blocking wait or a callback to handle the server stopping, to prevent blocking the CPU."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:37:05 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 296\n\n   **Bug Type**: GDPR\n\n   **Description**: The server code retrieves environment variables which could potentially contain sensitive data. GDPR requires explicit consent for processing personal data.\n\n   **Solution**: Ensure explicit user consent is obtained before processing personal data. Use encryption for sensitive data and limit access to it. Data should be anonymized or pseudonymized where possible.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 348\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The server code does not implement any form of logging mechanism. PCI DSS requires all access to network resources and cardholder data to be tracked and monitored.\n\n   **Solution**: Implement a logging mechanism to track and monitor all access to network resources and cardholder data. Ensure these logs are reviewed regularly.\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 337\n\n   **Bug Type**: HIPAA\n\n   **Description**: The server code does not implement any form of encryption for data in transit. HIPAA requires that all Protected Health Information (PHI) be encrypted during transmission over networks.\n\n   **Solution**: Implement encryption for all data transmitted over networks. This can be achieved using Transport Layer Security (TLS) or Secure Sockets Layer (SSL).\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 157,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The server code retrieves environment variables which could potentially contain sensitive data. GDPR requires explicit consent for processing personal data.",
+                "solution": "Ensure explicit user consent is obtained before processing personal data. Use encryption for sensitive data and limit access to it. Data should be anonymized or pseudonymized where possible.",
+                "webLink": "https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 209,
+                "severity": 8,
+                "bugType": "PCI DSS",
+                "description": "The server code does not implement any form of logging mechanism. PCI DSS requires all access to network resources and cardholder data to be tracked and monitored.",
+                "solution": "Implement a logging mechanism to track and monitor all access to network resources and cardholder data. Ensure these logs are reviewed regularly.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 198,
+                "severity": 9,
+                "bugType": "HIPAA",
+                "description": "The server code does not implement any form of encryption for data in transit. HIPAA requires that all Protected Health Information (PHI) be encrypted during transmission over networks.",
+                "solution": "Implement encryption for all data transmitted over networks. This can be achieved using Transport Layer Security (TLS) or Secure Sockets Layer (SSL).",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/index.html"
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "4",
+      "value": "    environment variable AUTH.\n\n    --keepalive, An optional keepalive interval. Since the underlying\n    transport is HTTP, in many instances we'll be traversing through\n    proxies, often these proxies will close idle connections. You must\n    specify a time with a unit, for example '5s' or '2m'. Defaults\n    to '25s' (set to 0s to disable).\n\n    --backend, Specifies another HTTP server to proxy requests to when\n    chisel receives a normal HTTP request. Useful for hiding chisel in\n    plain sight.\n\n    --socks5, Allow clients to access the internal SOCKS5 proxy. See\n    chisel client --help for more information.\n\n    --reverse, Allow clients to specify reverse port forwarding remotes\n    in addition to normal remotes.\n\n    --tls-key, Enables TLS and provides optional path to a PEM-encoded\n    TLS private key. When this flag is set, you must also set --tls-cert,\n    and you cannot set --tls-domain.\n\n    --tls-cert, Enables TLS and provides optional path to a PEM-encoded\n    TLS certificate. When this flag is set, you must also set --tls-key,\n    and you cannot set --tls-domain.\n\n    --tls-domain, Enables TLS and automatically acquires a TLS key and\n    certificate using LetsEncrypt. Setting --tls-domain requires port 443.\n    You may specify multiple --tls-domain flags to serve multiple domains.\n    The resulting files are cached in the \"$HOME/.cache/chisel\" directory.\n    You can modify this path by setting the CHISEL_LE_CACHE variable,\n    or disable caching by setting this variable to \"-\". You can optionally\n    provide a certificate notification email by setting CHISEL_LE_EMAIL.\n\n    --tls-ca, a path to a PEM encoded CA certificate bundle or a directory\n    holding multiple PEM encode CA certificate bundle files, which is used to \n    validate client connections. The provided CA certificates will be used \n    instead of the system roots. This is commonly used to implement mutual-TLS. \n` + commonHelp\n\nfunc server(args []string) {\n\n\tflags := flag.NewFlagSet(\"server\", flag.ContinueOnError)\n\n\tconfig := &chserver.Config{}\n\tflags.StringVar(&config.KeySeed, \"key\", \"\", \"\")\n\tflags.StringVar(&config.KeyFile, \"keyfile\", \"\", \"\")\n\tflags.StringVar(&config.AuthFile, \"authfile\", \"\", \"\")\n\tflags.StringVar(&config.Auth, \"auth\", \"\", \"\")\n\tflags.DurationVar(&config.KeepAlive, \"keepalive\", 25*time.Second, \"\")\n\tflags.StringVar(&config.Proxy, \"proxy\", \"\", \"\")\n\tflags.StringVar(&config.Proxy, \"backend\", \"\", \"\")\n\tflags.BoolVar(&config.Socks5, \"socks5\", false, \"\")\n\tflags.BoolVar(&config.Reverse, \"reverse\", false, \"\")\n\tflags.StringVar(&config.TLS.Key, \"tls-key\", \"\", \"\")\n\tflags.StringVar(&config.TLS.Cert, \"tls-cert\", \"\", \"\")\n\tflags.Var(multiFlag{&config.TLS.Domains}, \"tls-domain\", \"\")\n\tflags.StringVar(&config.TLS.CA, \"tls-ca\", \"\", \"\")\n\n\thost := flags.String(\"host\", \"\", \"\")\n\tp := flags.String(\"p\", \"\", \"\")\n\tport := flags.String(\"port\", \"\", \"\")\n\tpid := flags.Bool(\"pid\", false, \"\")\n\tverbose := flags.Bool(\"v\", false, \"\")\n\tkeyGen := flags.String(\"keygen\", \"\", \"\")\n\n\tflags.Usage = func() {\n\t\tfmt.Print(serverHelp)\n\t\tos.Exit(0)\n\t}\n\tflags.Parse(args)\n\n\tif *keyGen != \"\" {\n\t\tif err := ccrypto.GenerateKeyFile(*keyGen, config.KeySeed); err != nil {\n\t\t\tlog.Fatal(err)\n\t\t}\n\t\treturn\n\t}\n\n\tif config.KeySeed != \"\" {\n\t\tlog.Print(\"Option `--key` is deprecated and will be removed in a future version of chisel.\")\n\t\tlog.Print(\"Please use `chisel server --keygen /file/path`, followed by `chisel server --keyfile /file/path` to specify the SSH private key\")\n\t}\n\n\tif *host == \"\" {\n\t\t*host = os.Getenv(\"HOST\")\n\t}\n\tif *host == \"\" {\n\t\t*host = \"0.0.0.0\"\n\t}\n\tif *port == \"\" {\n\t\t*port = *p\n\t}\n\tif *port == \"\" {\n\t\t*port = os.Getenv(\"PORT\")\n\t}\n\tif *port == \"\" {\n\t\t*port = \"8080\"\n\t}\n\tif config.KeyFile == \"\" {\n\t\tconfig.KeyFile = settings.Env(\"KEY_FILE\")\n\t} else if config.KeySeed == \"\" {\n\t\tconfig.KeySeed = settings.Env(\"KEY\")\n\t}\n\ts, err := chserver.NewServer(config)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\ts.Debug = *verbose\n\tif *pid {\n\t\tgeneratePidFile()\n\t}\n\tgo cos.GoStats()\n\tctx := cos.InterruptContext()\n\tif err := s.StartContext(ctx, *host, *port); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tif err := s.Wait(); err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 139
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:20:31 PM PDT\n\nThe code you've provided is a small piece of a larger Go program. It's defining a new type, `multiFlag`, which is a struct that contains a single field, `values`. \n\nThe `values` field is a pointer to a slice of strings. This means that the `values` field doesn't directly contain a slice of strings, but rather it contains the memory address where a slice of strings is stored. This is useful when you want to modify the slice in a function and have those changes persist outside of the function.\n\nHere is a bit more detail:\n\n- `type multiFlag struct`: This line is defining a new type named `multiFlag`. The `type` keyword is used to define new types. `struct` is a type that groups together zero or more data fields, each of which has a name and a type. \n\n- `values *[]string`: This line is defining a field named `values` in the `multiFlag` struct. The type of `values` is `*[]string`, which is a pointer to a slice of strings. The `*` character is used to denote a pointer, and `[]string` is a slice of strings. \n\nAs for algorithms, this small piece of code doesn't really use any. It's just defining a type, which is a way of grouping related data together.\n\nFor more information about structs and pointers in Go, you can refer to the official Go documentation:\n\n- Structs: https://golang.org/ref/spec#Struct_types\n- Pointers: https://golang.org/ref/spec#Pointer_types\n- Slices: https://golang.org/ref/spec#Slice_types\n\nAs for the architectural guidelines, since none were provided, we can only analyze the code based on general good practices. This piece of code seems to follow good practices: it's defining a struct to group related data together, and it's using a pointer to allow for efficient manipulation of a slice of strings."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:26:11 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle multiFlag fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->multiFlag;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:29:38 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:53 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:37:08 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "5",
+      "value": "\ntype multiFlag struct {\n\tvalues *[]string\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 260
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:21:13 PM PDT\n\nThe provided code is written in Go, a statically typed, compiled programming language developed by Google. This specific code is a method on a custom type, `multiFlag`.\n\nHere's a breakdown of the code:\n\n- `func (flag multiFlag) String() string {}` is a method named `String` on the type `multiFlag`. The `String` method is special in Go. When you define a `String` method for a type, it will be automatically called when you use the `fmt.Print` functions with a value of that type or when you use the `%v` format verb. This method is used to provide a custom string representation for the type. The `String` method takes no parameters and returns a string.\n\n- `strings.Join(*flag.values, \", \")`: `strings.Join` is a function from the Go standard library's `strings` package. It concatenates the elements of its first argument to create a single string. The elements are separated by the string provided as the second argument. In this case, `*flag.values` is the slice of strings to join, and `\", \"` is the separator. The `*` before `flag.values` is a pointer dereference. It means we're accessing the values pointed to by the `values` field of the `multiFlag`.\n\nThe algorithm used here is simple and straightforward: it joins a slice of strings into a single string with a specific separator.\n\nFor more information about the `strings.Join` function, you can check the official Go documentation: https://golang.org/pkg/strings/#Join\n\nFor more information about methods in Go, you can check this link: https://golang.org/doc/effective_go#methods\n\nRegarding the architectural guidelines, since no specific guidelines or constraints were provided, this code does not violate any. It's simple, clear, and idiomatic Go code. However, without more context about the `multiFlag` type and its `values` field, it's difficult to provide a more detailed architectural analysis."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:26:18 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Join fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Return fill:#228B22, stroke:#000000, stroke-width:2px;\n\nStart-->Join;\nJoin-->Return;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:29:41 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:56 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:37:11 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc (flag multiFlag) String() string {\n\treturn strings.Join(*flag.values, \", \")\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 264
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:22:05 PM PDT\n\nThis code snippet is written in Go programming language. It represents a method on a custom type `multiFlag`. \n\nThe `multiFlag` type is not defined in this snippet, but based on the context, it seems to be a type that holds a slice of string values. \n\nThe method `Set` is defined on `multiFlag` and takes a string argument `arg`. This method is typically used to set a new value to the `multiFlag`.\n\nHere is a detailed explanation of the code:\n\n- `func (flag multiFlag) Set(arg string) error {}`: This line is declaring a method named `Set` on `multiFlag` type. This method takes a string argument `arg` and returns an error. The `flag` is a receiver, which means the method `Set` is associated with `multiFlag` type and can be called using an instance of `multiFlag`.\n\n- `*flag.values = append(*flag.values, arg)`: This line is appending the string `arg` to the slice of strings `values` which is a field of `multiFlag`. The `*` before `flag.values` is dereferencing the pointer to the `values` slice. This means we are accessing the actual slice that the pointer is referring to.\n\n- `return nil`: This line returns `nil` indicating that no error occurred during the execution of the method. In Go, it is common to return an error as the last return value in a function or method. If everything goes as expected, the function/method returns `nil` for the error.\n\nThis code doesn't seem to use any specific algorithm, it's a simple implementation of a method on a custom type.\n\nFor more information on methods in Go, you can refer to this link: https://tour.golang.org/methods/1\n\nFor more information on error handling in Go, you can refer to this link: https://blog.golang.org/error-handling-and-go\n\nAs for the architectural guidelines, since there are no special guidelines or constraints specified for this software project, we can assume that this code follows the standard Go conventions and practices."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:26:30 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExampleErrorPath-->End;\n```\n\nIn this code, there is no control flow. The function `Set` simply appends the argument to the `values` slice and returns `nil`."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:30:03 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 539\n\n   **Bug Type**: Unrestricted File Upload\n\n   **Description**: This function appends any string value to the 'flag.values' without any validation. This can lead to various security issues like unrestricted file upload if the 'arg' is a file path. Unrestricted file upload can lead to execution of malicious scripts or overwrite important files.\n\n   **Solution**: Always validate and sanitize the input before processing. Limit the types of files that can be uploaded and restrict the directories where the files can be stored. Here are some resources on how to prevent unrestricted file upload:\n- https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html\n- https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 271,
+                "severity": 5,
+                "bugType": "Unrestricted File Upload",
+                "description": "This function appends any string value to the 'flag.values' without any validation. This can lead to various security issues like unrestricted file upload if the 'arg' is a file path. Unrestricted file upload can lead to execution of malicious scripts or overwrite important files.",
+                "solution": "Always validate and sanitize the input before processing. Limit the types of files that can be uploaded and restrict the directories where the files can be stored. Here are some resources on how to prevent unrestricted file upload:\n- https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html\n- https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:32:59 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:37:28 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 538\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function Set(arg string) directly appends the input argument to a flag values. If this function is used to process sensitive information, it could potentially lead to data privacy issues. GDPR, PCI DSS, and HIPAA require sensitive information to be handled securely, and direct appending of unsecured data can be a violation.\n\n   **Solution**: Consider encrypting the data before appending, or ensure that any data processed through this function is already secured in compliance with GDPR, PCI DSS, and HIPAA. Always sanitize and validate input data.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 270,
+                "severity": 6,
+                "bugType": "Data Privacy",
+                "description": "The function Set(arg string) directly appends the input argument to a flag values. If this function is used to process sensitive information, it could potentially lead to data privacy issues. GDPR, PCI DSS, and HIPAA require sensitive information to be handled securely, and direct appending of unsecured data can be a violation.",
+                "solution": "Consider encrypting the data before appending, or ensure that any data processed through this function is already secured in compliance with GDPR, PCI DSS, and HIPAA. Always sanitize and validate input data."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "7",
+      "value": "\nfunc (flag multiFlag) Set(arg string) error {\n\t*flag.values = append(*flag.values, arg)\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 268
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:22:49 PM PDT\n\nThe code you provided is written in Go language (also known as Golang) and it's a very small piece of code. It's defining a new type called `headerFlags` which embeds the `Header` type from the `http` package.\n\nHere's a breakdown of the code:\n\n1. `type headerFlags struct { ... }`: This line is defining a new type called `headerFlags`. In Go, you can define your own types. Here, the type being defined is a `struct`, which is a composite data type that groups together zero or more values of different types.\n\n2. `http.Header`: This line is an embedded field. It means that all the methods and fields of the `http.Header` type are directly accessible through the `headerFlags` type. The `http.Header` type represents the key-value pairs in an HTTP header, and it's a built-in type from Go's `net/http` package.\n\nThe `http.Header` is a map type, and it's used to represent the header fields in an HTTP request or response. Each key in the map is a header field name, and the corresponding value is a slice of strings representing all the values for that field.\n\nThis code doesn't include any specific algorithms, it's just a type definition. However, it hints at a larger context where HTTP headers are being manipulated or analyzed in some way.\n\nFor more information on Go's type system and the `http.Header` type, you can refer to the following resources:\n\n- Go's type system: https://tour.golang.org/moretypes/2\n- `http.Header` documentation: https://pkg.go.dev/net/http#Header\n\nRegarding the architectural guidelines, this code snippet doesn't provide enough context to make a judgment. It's a simple type definition, and it doesn't involve any architectural decisions or principles. However, the use of type embedding is a common practice in Go and it's generally considered good design as it promotes code reuse and simplicity."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:26:38 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:30:06 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:33:02 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:37:44 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 546\n\n   **Bug Type**: Data and privacy compliance\n\n   **Description**: The http.Header type is used to store request or response headers. It is a map type and can contain sensitive information such as cookies, authorization tokens, and personal data. This can lead to violation of GDPR, PCI DSS, and HIPAA compliance if the data is not properly protected.\n\n   **Solution**: Encrypt sensitive data before storing it in the http.Header. Also, ensure that the data is not logged or exposed in any way. Use secure methods to transmit data and follow the principle of least privilege when giving access to this data.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 273,
+                "severity": 7,
+                "bugType": "Data and privacy compliance",
+                "description": "The http.Header type is used to store request or response headers. It is a map type and can contain sensitive information such as cookies, authorization tokens, and personal data. This can lead to violation of GDPR, PCI DSS, and HIPAA compliance if the data is not properly protected.",
+                "solution": "Encrypt sensitive data before storing it in the http.Header. Also, ensure that the data is not logged or exposed in any way. Use secure methods to transmit data and follow the principle of least privilege when giving access to this data."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "8",
+      "value": "\ntype headerFlags struct {\n\thttp.Header\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 273
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:23:31 PM PDT\n\nThe provided code is written in Go language, and it defines a method named `String` on a type `headerFlags`. This method is used to convert the `headerFlags` object into a string representation.\n\nLet's break down the code:\n\n- `func (flag *headerFlags) String() string`: This line defines a method named `String` for the type `headerFlags`. The receiver (the type the method is associated with) is a pointer to a `headerFlags` object, denoted by `*headerFlags`. The method returns a string.\n\n- `out := \"\"`: This line initializes an empty string `out`.\n\n- `for k, v := range flag.Header`: This line starts a for loop that iterates over the `Header` field of the `flag` object. The `Header` field is assumed to be a map, where `k` and `v` represent the key and value of each entry in the map, respectively. The `range` keyword is used to iterate over elements in a variety of data structures in Go.\n\n- `out += fmt.Sprintf(\"%s: %s\\n\", k, v)`: This line concatenates the string representation of each key-value pair in the `Header` map to the `out` string. `fmt.Sprintf` is a function that formats and returns a string without printing it anywhere. It uses the format specifiers `%s` for string, and `\\n` is the escape sequence for a new line.\n\n- `return out`: This line returns the final string `out` which contains the string representation of all key-value pairs in the `Header` map.\n\nIn terms of architectural guidelines, the code is pretty straightforward and doesn't seem to conflict with any general good practices. It's a simple method that converts a data structure into a string, which can be useful for debugging or logging.\n\nHere is a link to Go's official documentation for more information about methods in Go: https://go.dev/tour/methods"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:26:45 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:30:10 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:33:16 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 559\n\n   **Bug Type**: Memory\n\n   **Description**: Inefficient string concatenation in a loop. This can cause significant memory overhead as a new string is created on each iteration.\n\n   **Solution**: Use a strings.Builder or bytes.Buffer to efficiently concatenate strings in a loop. This will significantly reduce memory usage and improve performance. Here is a link to the Go documentation for strings.Builder: https://golang.org/pkg/strings/#Builder\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 282,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "Inefficient string concatenation in a loop. This can cause significant memory overhead as a new string is created on each iteration.",
+                "solution": "Use a strings.Builder or bytes.Buffer to efficiently concatenate strings in a loop. This will significantly reduce memory usage and improve performance. Here is a link to the Go documentation for strings.Builder: https://golang.org/pkg/strings/#Builder"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:37:59 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 554\n\n   **Bug Type**: Data Exposure\n\n   **Description**: The function String() in the code is iterating over the header flags and printing them. This could potentially expose sensitive information contained in the headers, which could be a violation of GDPR, PCI DSS, and HIPAA compliance.\n\n   **Solution**: Avoid logging or printing sensitive data. If it is necessary to log data for debugging purposes, make sure to anonymize or encrypt the sensitive data. Consider implementing a data masking or a least privilege access control mechanism.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 277,
+                "severity": 7,
+                "bugType": "Data Exposure",
+                "description": "The function String() in the code is iterating over the header flags and printing them. This could potentially expose sensitive information contained in the headers, which could be a violation of GDPR, PCI DSS, and HIPAA compliance.",
+                "solution": "Avoid logging or printing sensitive data. If it is necessary to log data for debugging purposes, make sure to anonymize or encrypt the sensitive data. Consider implementing a data masking or a least privilege access control mechanism."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "9",
+      "value": "\nfunc (flag *headerFlags) String() string {\n\tout := \"\"\n\tfor k, v := range flag.Header {\n\t\tout += fmt.Sprintf(\"%s: %s\\n\", k, v)\n\t}\n\treturn out\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 277
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:24:11 PM PDT\n\nThis GoLang code is a method named `Set` that belongs to a struct `headerFlags`. This method is used to set the header of an HTTP request. The header is represented as a key-value pair, separated by a colon `:`. The key is the header name and the value is the header content. \n\nHere's a breakdown of the algorithm:\n\n1. The method takes an argument `arg` of type string. This argument is expected to be in the format `HeaderName: HeaderContent`.\n\n2. We use the `strings.Index` function to find the index of the colon `:` in the `arg` string. This function returns the index of the first instance of the specified substring (in this case, the colon) in the given string. If the substring isn't found, it returns -1.\n\n3. If the index is less than 0, it means the colon was not found in the `arg` string. In this case, an error is returned using `fmt.Errorf`, indicating that the header is invalid and should be in the format `HeaderName: HeaderContent`.\n\n4. If the header field of the `flag` struct is nil, it's initialized as an empty `http.Header` map.\n\n5. The `arg` string is then split into key and value at the index of the colon. The key is everything before the colon, and the value is everything after it.\n\n6. The `strings.TrimSpace` function is used to remove any leading or trailing white space from the value.\n\n7. The key-value pair is then set in the `flag.Header` map using the `Set` method.\n\n8. The function ends by returning `nil`, indicating that no error occurred.\n\nThis code doesn't seem to conflict with any architectural guidelines as no special constraints were provided. It's a simple, straightforward function for setting HTTP headers.\n\nFor more information on GoLang's `strings.Index` function, you can visit: https://golang.org/pkg/strings/#Index\n\nFor more information on GoLang's `http.Header`, you can visit: https://golang.org/pkg/net/http/#Header"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:27:09 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Set fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle InvalidHeader fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle FormatHeader fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle SetHeader fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle End fill:#228B22, stroke:#000000, stroke-width:2px;\n\nStart-->Set;\nSet-->InvalidHeader;\nSet-->FormatHeader;\nInvalidHeader-->End;\nFormatHeader-->SetHeader;\nSetHeader-->End;\n```\n\nThe control flow graph for the given source code is as follows:\n\n1. The control flow starts at the `Set` function.\n2. From `Set`, there are two possible paths:\n   - If the index of `:` in the argument is less than 0, the control flow goes to `InvalidHeader`.\n   - If the index of `:` in the argument is greater than or equal to 0, the control flow goes to `FormatHeader`.\n3. From `InvalidHeader`, the control flow goes directly to `End`.\n4. From `FormatHeader`, the control flow goes to `SetHeader`.\n5. From `SetHeader`, the control flow goes to `End`.\n\nThe primary path through the code is from `Set` to `FormatHeader` to `SetHeader` to `End`."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:30:14 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:33:33 PM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 579\n\n   **Bug Type**: Memory\n\n   **Description**: The use of strings.Index and slicing for splitting the string might lead to unnecessary memory allocation and copying, which can be inefficient if the string is large.\n\n   **Solution**: Consider using strings.SplitN function which splits the string only at the first occurrence of the separator. This would be more efficient in terms of memory usage. Here's how you can use it: \n\nkey, value := strings.SplitN(arg, \":\", 2)\n\nvalue = strings.TrimSpace(value)\n\nflag.Header.Set(key, value)\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 294,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "The use of strings.Index and slicing for splitting the string might lead to unnecessary memory allocation and copying, which can be inefficient if the string is large.",
+                "solution": "Consider using strings.SplitN function which splits the string only at the first occurrence of the separator. This would be more efficient in terms of memory usage. Here's how you can use it: \n\nkey, value := strings.SplitN(arg, \":\", 2)\n\nvalue = strings.TrimSpace(value)\n\nflag.Header.Set(key, value)"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:38:02 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "10",
+      "value": "\nfunc (flag *headerFlags) Set(arg string) error {\n\tindex := strings.Index(arg, \":\")\n\tif index < 0 {\n\t\treturn fmt.Errorf(`Invalid header (%s). Should be in the format \"HeaderName: HeaderContent\"`, arg)\n\t}\n\tif flag.Header == nil {\n\t\tflag.Header = http.Header{}\n\t}\n\tkey := arg[0:index]\n\tvalue := arg[index+1:]\n\tflag.Header.Set(key, strings.TrimSpace(value))\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 10,
+        "type": "originalCode",
+        "lineNumberBase": 285
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:24:54 PM PDT\n\nThe provided code is written in Go and it's part of a larger program named `chisel`. Chisel is a fast TCP/UDP tunnel, transported over HTTP, secured via SSH. This specific part of the code is the client side of the application.\n\nThe code starts with a long string `clientHelp` that provides detailed instructions on how to use the client side of the chisel application, including the various command line options and their usage.\n\nThe function `client(args []string)` is the main function for the client-side application. It takes a slice of strings as arguments, which are the command line arguments passed to the program.\n\nThe `flag.NewFlagSet(\"client\", flag.ContinueOnError)` is used to create a new set of command line flags with the specified name and error handling property. Then, the `flags` variable is used to define and register flags for various configuration options that the chisel client supports.\n\nThe `flags.Parse(args)` line is used to parse the command line arguments.\n\nThe `config.Server = args[0]` and `config.Remotes = args[1:]` lines are used to set the server URL and the remote connections.\n\nThe `chclient.NewClient(&config)` line is used to create a new chisel client with the provided configuration.\n\nThe `c.Start(ctx)` line is used to start the chisel client, and `c.Wait()` is used to wait until the client has stopped.\n\nThe `cos.InterruptContext()` function call is used to create a new context that will be cancelled when an interrupt signal is received.\n\nThis code does not appear to use any specific algorithms. It is mainly about creating a configuration for the client from command line arguments and environment variables, creating the client, and starting it.\n\nHere is the link to the GitHub repository of the chisel project for more information and context: [https://github.com/jpillora/chisel](https://github.com/jpillora/chisel)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:27:31 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExampleErrorPath-->End;\n```\n\nThe control flow graph for the given source code is as follows:\n\n- The start of the graph is the function `client`.\n- There are two paths from the start:\n  - The primary path (ExampleProcess) goes to the `config.Server` and `config.Remotes` variables.\n  - The error path (ExampleErrorPath) goes to the `log.Fatalf` function call.\n- Both paths converge at the `c, err := chclient.NewClient(&config)` line.\n- From there, the primary path (ExampleProcess) goes to the `c.Start(ctx)` function call, while the error path (ExampleErrorPath) goes to the `log.Fatal(err)` function call.\n- Both paths converge again at the `c.Wait()` function call.\n- Finally, both paths end at the `log.Fatal(err)` function call.\n\nNote: The code snippet provided does not contain any external library or non-standard function calls."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:30:56 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 621\n\n   **Bug Type**: Insecure Communication\n\n   **Description**: The code provides an option to skip TLS certificate verification (--tls-skip-verify flag). This could lead to Man-in-the-Middle (MITM) attacks as the client would accept any TLS certificate presented by the server.\n\n   **Solution**: Remove the --tls-skip-verify option or set it to false by default. Encourage users to use secure connections. More info: https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 614\n\n   **Bug Type**: Missing Authentication\n\n   **Description**: The code allows for default authentication if the --auth flag is not provided. This could lead to unauthorized access if the environment variable 'AUTH' is not set or is set incorrectly.\n\n   **Solution**: Ensure that proper authentication is enforced and do not allow default or fallback authentication mechanisms. More info: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 628\n\n   **Bug Type**: Information Exposure\n\n   **Description**: The code exposes verbose debug information if the -v flag is set. This could lead to information disclosure which could be used for further attacks.\n\n   **Solution**: Limit the amount of information exposed in debug mode or protect it with additional access controls. More info: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 322,
+                "severity": 7,
+                "bugType": "Insecure Communication",
+                "description": "The code provides an option to skip TLS certificate verification (--tls-skip-verify flag). This could lead to Man-in-the-Middle (MITM) attacks as the client would accept any TLS certificate presented by the server.",
+                "solution": "Remove the --tls-skip-verify option or set it to false by default. Encourage users to use secure connections. More info: https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning"
+              },
+              {
+                "lineNumber": 315,
+                "severity": 5,
+                "bugType": "Missing Authentication",
+                "description": "The code allows for default authentication if the --auth flag is not provided. This could lead to unauthorized access if the environment variable 'AUTH' is not set or is set incorrectly.",
+                "solution": "Ensure that proper authentication is enforced and do not allow default or fallback authentication mechanisms. More info: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication"
+              },
+              {
+                "lineNumber": 329,
+                "severity": 6,
+                "bugType": "Information Exposure",
+                "description": "The code exposes verbose debug information if the -v flag is set. This could lead to information disclosure which could be used for further attacks.",
+                "solution": "Limit the amount of information exposed in debug mode or protect it with additional access controls. More info: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:34:02 PM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 645\n\n   **Bug Type**: CPU\n\n   **Description**: The client function is not optimized for performance. There are multiple if checks, which could be reduced or optimized for better performance.\n\n   **Solution**: Try to reduce the number of if checks, or consider using a switch statement for better performance. Additionally, consider using a more efficient data structure or algorithm to handle the client configuration.\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 669\n\n   **Bug Type**: CPU\n\n   **Description**: The function chclient.NewClient is called with the entire config object, which might be large. This can lead to performance issues if the config object is large, as it is passed by value.\n\n   **Solution**: Consider passing the config object by reference instead of by value to avoid copying the entire object.\n\n\n3. **Severity**: 2/10\n\n   **Line Number**: 674\n\n   **Bug Type**: Memory\n\n   **Description**: The function generatePidFile is called without any error handling. If the function fails to generate a PID file, it could lead to memory leaks.\n\n   **Solution**: Add error handling to the generatePidFile function to ensure that any errors are properly handled and memory is freed up.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 346,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The client function is not optimized for performance. There are multiple if checks, which could be reduced or optimized for better performance.",
+                "solution": "Try to reduce the number of if checks, or consider using a switch statement for better performance. Additionally, consider using a more efficient data structure or algorithm to handle the client configuration."
+              },
+              {
+                "lineNumber": 370,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The function chclient.NewClient is called with the entire config object, which might be large. This can lead to performance issues if the config object is large, as it is passed by value.",
+                "solution": "Consider passing the config object by reference instead of by value to avoid copying the entire object."
+              },
+              {
+                "lineNumber": 375,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "The function generatePidFile is called without any error handling. If the function fails to generate a PID file, it could lead to memory leaks.",
+                "solution": "Add error handling to the generatePidFile function to ensure that any errors are properly handled and memory is freed up."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:38:45 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 630\n\n   **Bug Type**: GDPR\n\n   **Description**: The application is using a client fingerprint for host-key validation. If this fingerprint is associated with personal data, it could be a violation of GDPR.\n\n   **Solution**: Ensure that the fingerprint does not contain personal data or obtain explicit consent from the user. Consider using anonymized identifiers instead.\n\n\n2. **Severity**: 9/10\n\n   **Line Number**: 633\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The application allows username and password to be transmitted. If this data is not encrypted, it could be a violation of PCI DSS.\n\n   **Solution**: Ensure that sensitive data like passwords are securely hashed and transmitted over secure channels.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 659\n\n   **Bug Type**: HIPAA\n\n   **Description**: The application uses environment variables for authentication. If this includes PHI, it could violate HIPAA.\n\n   **Solution**: Ensure that PHI is not stored in environment variables or is properly encrypted if it is.\n\n\n4. **Severity**: 8/10\n\n   **Line Number**: 636\n\n   **Bug Type**: GDPR\n\n   **Description**: The application allows the user to skip TLS certificate verification. This could expose personal data to man-in-the-middle attacks, violating GDPR.\n\n   **Solution**: Remove the option to skip TLS certificate verification to ensure secure data transmission.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 331,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The application is using a client fingerprint for host-key validation. If this fingerprint is associated with personal data, it could be a violation of GDPR.",
+                "solution": "Ensure that the fingerprint does not contain personal data or obtain explicit consent from the user. Consider using anonymized identifiers instead.",
+                "link": "https://gdpr-info.eu/art-4-gdpr/"
+              },
+              {
+                "lineNumber": 334,
+                "severity": 9,
+                "bugType": "PCI DSS",
+                "description": "The application allows username and password to be transmitted. If this data is not encrypted, it could be a violation of PCI DSS.",
+                "solution": "Ensure that sensitive data like passwords are securely hashed and transmitted over secure channels.",
+                "link": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 360,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The application uses environment variables for authentication. If this includes PHI, it could violate HIPAA.",
+                "solution": "Ensure that PHI is not stored in environment variables or is properly encrypted if it is.",
+                "link": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              },
+              {
+                "lineNumber": 337,
+                "severity": 8,
+                "bugType": "GDPR",
+                "description": "The application allows the user to skip TLS certificate verification. This could expose personal data to man-in-the-middle attacks, violating GDPR.",
+                "solution": "Remove the option to skip TLS certificate verification to ensure secure data transmission.",
+                "link": "https://gdpr-info.eu/art-32-gdpr/"
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "go",
+      "id": "11",
+      "value": "\nvar clientHelp = `\n  Usage: chisel client [options] <server> <remote> [remote] [remote] ...\n\n  <server> is the URL to the chisel server.\n\n  <remote>s are remote connections tunneled through the server, each of\n  which come in the form:\n\n    <local-host>:<local-port>:<remote-host>:<remote-port>/<protocol>\n\n    ■ local-host defaults to 0.0.0.0 (all interfaces).\n    ■ local-port defaults to remote-port.\n    ■ remote-port is required*.\n    ■ remote-host defaults to 0.0.0.0 (server localhost).\n    ■ protocol defaults to tcp.\n\n  which shares <remote-host>:<remote-port> from the server to the client\n  as <local-host>:<local-port>, or:\n\n    R:<local-interface>:<local-port>:<remote-host>:<remote-port>/<protocol>\n\n  which does reverse port forwarding, sharing <remote-host>:<remote-port>\n  from the client to the server's <local-interface>:<local-port>.\n\n    example remotes\n\n      3000\n      example.com:3000\n      3000:google.com:80\n      192.168.0.5:3000:google.com:80\n      socks\n      5000:socks\n      R:2222:localhost:22\n      R:socks\n      R:5000:socks\n      stdio:example.com:22\n      1.1.1.1:53/udp\n\n    When the chisel server has --socks5 enabled, remotes can\n    specify \"socks\" in place of remote-host and remote-port.\n    The default local host and port for a \"socks\" remote is\n    127.0.0.1:1080. Connections to this remote will terminate\n    at the server's internal SOCKS5 proxy.\n\n    When the chisel server has --reverse enabled, remotes can\n    be prefixed with R to denote that they are reversed. That\n    is, the server will listen and accept connections, and they\n    will be proxied through the client which specified the remote.\n    Reverse remotes specifying \"R:socks\" will listen on the server's\n    default socks port (1080) and terminate the connection at the\n    client's internal SOCKS5 proxy.\n\n    When stdio is used as local-host, the tunnel will connect standard\n    input/output of this program with the remote. This is useful when \n    combined with ssh ProxyCommand. You can use\n      ssh -o ProxyCommand='chisel client chiselserver stdio:%h:%p' \\\n          user@example.com\n    to connect to an SSH server through the tunnel.\n\n  Options:\n\n    --fingerprint, A *strongly recommended* fingerprint string\n    to perform host-key validation against the server's public key.\n\tFingerprint mismatches will close the connection.\n\tFingerprints are generated by hashing the ECDSA public key using\n\tSHA256 and encoding the result in base64.\n\tFingerprints must be 44 characters containing a trailing equals (=).\n\n    --auth, An optional username and password (client authentication)\n    in the form: \"<user>:<pass>\". These credentials are compared to\n    the credentials inside the server's --authfile. defaults to the\n    AUTH environment variable.\n\n    --keepalive, An optional keepalive interval. Since the underlying\n    transport is HTTP, in many instances we'll be traversing through\n    proxies, often these proxies will close idle connections. You must\n    specify a time with a unit, for example '5s' or '2m'. Defaults\n    to '25s' (set to 0s to disable).\n\n    --max-retry-count, Maximum number of times to retry before exiting.\n    Defaults to unlimited.\n\n    --max-retry-interval, Maximum wait time before retrying after a\n    disconnection. Defaults to 5 minutes.\n\n    --proxy, An optional HTTP CONNECT or SOCKS5 proxy which will be\n    used to reach the chisel server. Authentication can be specified\n    inside the URL.\n    For example, http://admin:password@my-server.com:8081\n            or: socks://admin:password@my-server.com:1080\n\n    --header, Set a custom header in the form \"HeaderName: HeaderContent\".\n    Can be used multiple times. (e.g --header \"Foo: Bar\" --header \"Hello: World\")\n\n    --hostname, Optionally set the 'Host' header (defaults to the host\n    found in the server url).\n\n    --sni, Override the ServerName when using TLS (defaults to the \n    hostname).\n\n    --tls-ca, An optional root certificate bundle used to verify the\n    chisel server. Only valid when connecting to the server with\n    \"https\" or \"wss\". By default, the operating system CAs will be used.\n\n    --tls-skip-verify, Skip server TLS certificate verification of\n    chain and host name (if TLS is used for transport connections to\n    server). If set, client accepts any TLS certificate presented by\n    the server and any host name in that certificate. This only affects\n    transport https (wss) connection. Chisel server's public key\n    may be still verified (see --fingerprint) after inner connection\n    is established.\n\n    --tls-key, a path to a PEM encoded private key used for client \n    authentication (mutual-TLS).\n\n    --tls-cert, a path to a PEM encoded certificate matching the provided \n    private key. The certificate must have client authentication \n    enabled (mutual-TLS).\n` + commonHelp\n\nfunc client(args []string) {\n\tflags := flag.NewFlagSet(\"client\", flag.ContinueOnError)\n\tconfig := chclient.Config{Headers: http.Header{}}\n\tflags.StringVar(&config.Fingerprint, \"fingerprint\", \"\", \"\")\n\tflags.StringVar(&config.Auth, \"auth\", \"\", \"\")\n\tflags.DurationVar(&config.KeepAlive, \"keepalive\", 25*time.Second, \"\")\n\tflags.IntVar(&config.MaxRetryCount, \"max-retry-count\", -1, \"\")\n\tflags.DurationVar(&config.MaxRetryInterval, \"max-retry-interval\", 0, \"\")\n\tflags.StringVar(&config.Proxy, \"proxy\", \"\", \"\")\n\tflags.StringVar(&config.TLS.CA, \"tls-ca\", \"\", \"\")\n\tflags.BoolVar(&config.TLS.SkipVerify, \"tls-skip-verify\", false, \"\")\n\tflags.StringVar(&config.TLS.Cert, \"tls-cert\", \"\", \"\")\n\tflags.StringVar(&config.TLS.Key, \"tls-key\", \"\", \"\")\n\tflags.Var(&headerFlags{config.Headers}, \"header\", \"\")\n\thostname := flags.String(\"hostname\", \"\", \"\")\n\tsni := flags.String(\"sni\", \"\", \"\")\n\tpid := flags.Bool(\"pid\", false, \"\")\n\tverbose := flags.Bool(\"v\", false, \"\")\n\tflags.Usage = func() {\n\t\tfmt.Print(clientHelp)\n\t\tos.Exit(0)\n\t}\n\tflags.Parse(args)\n\t//pull out options, put back remaining args\n\targs = flags.Args()\n\tif len(args) < 2 {\n\t\tlog.Fatalf(\"A server and least one remote is required\")\n\t}\n\tconfig.Server = args[0]\n\tconfig.Remotes = args[1:]\n\t//default auth\n\tif config.Auth == \"\" {\n\t\tconfig.Auth = os.Getenv(\"AUTH\")\n\t}\n\t//move hostname onto headers\n\tif *hostname != \"\" {\n\t\tconfig.Headers.Set(\"Host\", *hostname)\n\t\tconfig.TLS.ServerName = *hostname\n\t}\n\n\tif *sni != \"\" {\n\t\tconfig.TLS.ServerName = *sni\n\t}\n\n\t//ready\n\tc, err := chclient.NewClient(&config)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc.Debug = *verbose\n\tif *pid {\n\t\tgeneratePidFile()\n\t}\n\tgo cos.GoStats()\n\tctx := cos.InterruptContext()\n\tif err := c.Start(ctx); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tif err := c.Wait(); err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 11,
+        "type": "originalCode",
+        "lineNumberBase": 299
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./main.go"
+  }
+}

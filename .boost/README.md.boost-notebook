@@ -1,0 +1,446 @@
+{
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:43:05 PM PDT\n\nThe code you've provided is not actually a piece of executable code, but rather a description and documentation of a project called Chisel, written in the Go programming language. It's a README file that typically exists in the root directory of a project repository.\n\nChisel is a fast TCP/UDP tunnel, transported over HTTP, secured via SSH. It's a single executable that includes both client and server. Its main use case is to pass through firewalls, but it can also be used to provide a secure endpoint into a network.\n\nThe README file provides some key features of Chisel:\n- Encrypted connections using the SSH protocol (via `crypto/ssh`)\n- Authenticated connections\n- Client auto-reconnects with exponential backoff\n- Clients can create multiple tunnel endpoints over one TCP connection\n- Reverse port forwarding\n- Server optionally doubles as a reverse proxy\n- Server optionally allows SOCKS5 connections\n- Clients optionally allow SOCKS5 connections from a reversed port forward\n- Client connections over stdio which supports `ssh -o ProxyCommand` providing SSH over HTTP\n\nIt also provides installation instructions for different platforms (Binaries, Docker, Fedora, Source), a demo of how to use it, and usage instructions for both server and client modes.\n\nHere are some links for further reading:\n- [Chisel Github repository](https://github.com/jpillora/chisel)\n- [GoDoc for Chisel](https://godoc.org/github.com/jpillora/chisel)\n- [Exponential backoff](https://github.com/jpillora/backoff)\n- [Reverse proxy in Go](http://golang.org/pkg/net/http/httputil/#NewSingleHostReverseProxy)\n- [SOCKS5](https://en.wikipedia.org/wiki/SOCKS)\n\nSince this is a README file, it doesn't directly implement any algorithms. However, the Chisel project itself likely uses various network communication and encryption algorithms to establish and secure its tunnels."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:45:23 PM PDT\n\nThe provided source code is not included in the project summary and analysis. Could you please provide the specific source code that you would like me to generate a control flow graph for?"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:47:05 PM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The code does not check if a user is authorized to access the specific resources they are requesting. This can lead to unauthorized access to sensitive data.\n\n   **Solution**: Implement access control checks to verify the user is authorized to access the resources they are requesting. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Insecure Cryptographic Storage\n\n   **Description**: The code uses a deprecated key parameter for ECDSA generation which could lead to weak keys being used. Weak keys can be cracked, leading to unauthorized access to encrypted data.\n\n   **Solution**: Use the recommended keygen and keyfile parameters for ECDSA key generation. More on this issue can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Insufficient Transport Layer Protection\n\n   **Description**: The code does not enforce the use of secure transport protocols. This can lead to data being transmitted in clear text, making it susceptible to interception and manipulation.\n\n   **Solution**: Enforce the use of secure transport protocols such as HTTPS. More on this issue can be found here: https://owasp.org/www-community/Insufficient_Transport_Layer_Protection\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Unvalidated Redirects and Forwards\n\n   **Description**: The code allows for the redirection of requests without validating the legitimacy of the target. This can be exploited to redirect users to malicious sites.\n\n   **Solution**: Implement validation checks on all redirects and forwards to ensure they are pointing to legitimate and safe locations. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A10_2017-Insufficient_Logging%2526Monitoring\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 8,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The code does not check if a user is authorized to access the specific resources they are requesting. This can lead to unauthorized access to sensitive data.",
+                "solution": "Implement access control checks to verify the user is authorized to access the resources they are requesting. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 7,
+                "bugType": "Insecure Cryptographic Storage",
+                "description": "The code uses a deprecated key parameter for ECDSA generation which could lead to weak keys being used. Weak keys can be cracked, leading to unauthorized access to encrypted data.",
+                "solution": "Use the recommended keygen and keyfile parameters for ECDSA key generation. More on this issue can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 8,
+                "bugType": "Insufficient Transport Layer Protection",
+                "description": "The code does not enforce the use of secure transport protocols. This can lead to data being transmitted in clear text, making it susceptible to interception and manipulation.",
+                "solution": "Enforce the use of secure transport protocols such as HTTPS. More on this issue can be found here: https://owasp.org/www-community/Insufficient_Transport_Layer_Protection"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 7,
+                "bugType": "Unvalidated Redirects and Forwards",
+                "description": "The code allows for the redirection of requests without validating the legitimacy of the target. This can be exploited to redirect users to malicious sites.",
+                "solution": "Implement validation checks on all redirects and forwards to ensure they are pointing to legitimate and safe locations. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A10_2017-Insufficient_Logging%2526Monitoring"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:49:41 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:50:36 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 127\n\n   **Bug Type**: GDPR\n\n   **Description**: The code uses a users.json file for storing user credentials. This might lead to data breaches if the file is not properly secured. Storing user credentials in plain text is a violation of GDPR.\n\n   **Solution**: Encrypt the users.json file or use a secure method such as hashing for storing passwords. Also, consider implementing a more secure authentication method like OAuth.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 105\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code transfers data over HTTP, which is not secure. This could potentially lead to data breaches and is a violation of PCI DSS.\n\n   **Solution**: Use HTTPS for data transfer to ensure the data is encrypted and secure.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 105\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code transfers data over HTTP, which is not secure. If any healthcare-related data is being transferred, this would be a violation of HIPAA.\n\n   **Solution**: Use HTTPS for data transfer to ensure the data is encrypted and secure. Also, ensure that any healthcare-related data is properly anonymized or de-identified to prevent violations of HIPAA.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 127,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The code uses a users.json file for storing user credentials. This might lead to data breaches if the file is not properly secured. Storing user credentials in plain text is a violation of GDPR.",
+                "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Also, consider implementing a more secure authentication method like OAuth."
+              },
+              {
+                "lineNumber": 105,
+                "severity": 6,
+                "bugType": "PCI DSS",
+                "description": "The code transfers data over HTTP, which is not secure. This could potentially lead to data breaches and is a violation of PCI DSS.",
+                "solution": "Use HTTPS for data transfer to ensure the data is encrypted and secure."
+              },
+              {
+                "lineNumber": 105,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The code transfers data over HTTP, which is not secure. If any healthcare-related data is being transferred, this would be a violation of HIPAA.",
+                "solution": "Use HTTPS for data transfer to ensure the data is encrypted and secure. Also, ensure that any healthcare-related data is properly anonymized or de-identified to prevent violations of HIPAA."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "0",
+      "value": "# Chisel\n\n[![GoDoc](https://godoc.org/github.com/jpillora/chisel?status.svg)](https://godoc.org/github.com/jpillora/chisel) [![CI](https://github.com/jpillora/chisel/workflows/CI/badge.svg)](https://github.com/jpillora/chisel/actions?workflow=CI)\n\nChisel is a fast TCP/UDP tunnel, transported over HTTP, secured via SSH. Single executable including both client and server. Written in Go (golang). Chisel is mainly useful for passing through firewalls, though it can also be used to provide a secure endpoint into your network.\n\n![overview](https://docs.google.com/drawings/d/1p53VWxzGNfy8rjr-mW8pvisJmhkoLl82vAgctO_6f1w/pub?w=960&h=720)\n\n## Table of Contents\n\n- [Features](#features)\n- [Install](#install)\n- [Demo](#demo)\n- [Usage](#usage)\n- [Contributing](#contributing)\n- [Changelog](#changelog)\n- [License](#license)\n\n## Features\n\n- Easy to use\n- [Performant](./test/bench/perf.md)\\*\n- [Encrypted connections](#security) using the SSH protocol (via `crypto/ssh`)\n- [Authenticated connections](#authentication); authenticated client connections with a users config file, authenticated server connections with fingerprint matching.\n- Client auto-reconnects with [exponential backoff](https://github.com/jpillora/backoff)\n- Clients can create multiple tunnel endpoints over one TCP connection\n- Clients can optionally pass through SOCKS or HTTP CONNECT proxies\n- Reverse port forwarding (Connections go through the server and out the client)\n- Server optionally doubles as a [reverse proxy](http://golang.org/pkg/net/http/httputil/#NewSingleHostReverseProxy)\n- Server optionally allows [SOCKS5](https://en.wikipedia.org/wiki/SOCKS) connections (See [guide below](#socks5-guide))\n- Clients optionally allow [SOCKS5](https://en.wikipedia.org/wiki/SOCKS) connections from a reversed port forward\n- Client connections over stdio which supports `ssh -o ProxyCommand` providing SSH over HTTP\n\n## Install\n\n### Binaries\n\n[![Releases](https://img.shields.io/github/release/jpillora/chisel.svg)](https://github.com/jpillora/chisel/releases) [![Releases](https://img.shields.io/github/downloads/jpillora/chisel/total.svg)](https://github.com/jpillora/chisel/releases)\n\nSee [the latest release](https://github.com/jpillora/chisel/releases/latest) or download and install it now with `curl https://i.jpillora.com/chisel! | bash`\n\n### Docker\n\n[![Docker Pulls](https://img.shields.io/docker/pulls/jpillora/chisel.svg)](https://hub.docker.com/r/jpillora/chisel/) [![Image Size](https://img.shields.io/docker/image-size/jpillora/chisel/latest)](https://microbadger.com/images/jpillora/chisel)\n\n```sh\ndocker run --rm -it jpillora/chisel --help\n```\n\n### Fedora\n\nThe package is maintained by the Fedora community. If you encounter issues related to the usage of the RPM, please use this [issue tracker](https://bugzilla.redhat.com/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&classification=Fedora&component=chisel&list_id=11614537&product=Fedora&product=Fedora%20EPEL).\n\n```sh\nsudo dnf -y install chisel\n```\n\n### Source\n\n```sh\n$ go install github.com/jpillora/chisel@latest\n```\n\n## Demo\n\nA [demo app](https://chisel-demo.herokuapp.com) on Heroku is running this `chisel server`:\n\n```sh\n$ chisel server --port $PORT --proxy http://example.com\n# listens on $PORT, proxy web requests to http://example.com\n```\n\nThis demo app is also running a [simple file server](https://www.npmjs.com/package/serve) on `:3000`, which is normally inaccessible due to Heroku's firewall. However, if we tunnel in with:\n\n```sh\n$ chisel client https://chisel-demo.herokuapp.com 3000\n# connects to chisel server at https://chisel-demo.herokuapp.com,\n# tunnels your localhost:3000 to the server's localhost:3000\n```\n\nand then visit [localhost:3000](http://localhost:3000/), we should see a directory listing. Also, if we visit the [demo app](https://chisel-demo.herokuapp.com) in the browser we should hit the server's default proxy and see a copy of [example.com](http://example.com).\n\n## Usage\n\n<!-- render these help texts by hand,\n  or use https://github.com/jpillora/md-tmpl\n    with $ md-tmpl -w README.md -->\n\n<!--tmpl,code=plain:echo \"$ chisel --help\" && go run main.go --help | sed 's#0.0.0-src (go1\\..*)#X.Y.Z#' -->\n``` plain \n$ chisel --help\n\n  Usage: chisel [command] [--help]\n\n  Version: X.Y.Z\n\n  Commands:\n    server - runs chisel in server mode\n    client - runs chisel in client mode\n\n  Read more:\n    https://github.com/jpillora/chisel\n\n```\n<!--/tmpl-->\n\n\n<!--tmpl,code=plain:echo \"$ chisel server --help\" && go run main.go server --help | cat | sed 's#0.0.0-src (go1\\..*)#X.Y.Z#' -->\n``` plain \n$ chisel server --help\n\n  Usage: chisel server [options]\n\n  Options:\n\n    --host, Defines the HTTP listening host – the network interface\n    (defaults the environment variable HOST and falls back to 0.0.0.0).\n\n    --port, -p, Defines the HTTP listening port (defaults to the environment\n    variable PORT and fallsback to port 8080).\n\n    --key, (deprecated use --keygen and --keyfile instead)\n    An optional string to seed the generation of a ECDSA public\n    and private key pair. All communications will be secured using this\n    key pair. Share the subsequent fingerprint with clients to enable detection\n    of man-in-the-middle attacks (defaults to the CHISEL_KEY environment\n    variable, otherwise a new key is generate each run).\n\n    --keygen, A path to write a newly generated PEM-encoded SSH private key file.\n    If users depend on your --key fingerprint, you may also include your --key to\n    output your existing key. Use - (dash) to output the generated key to stdout.\n\n    --keyfile, An optional path to a PEM-encoded SSH private key. When\n    this flag is set, the --key option is ignored, and the provided private key\n    is used to secure all communications. (defaults to the CHISEL_KEY_FILE\n    environment variable). Since ECDSA keys are short, you may also set keyfile\n    to an inline base64 private key (e.g. chisel server --keygen - | base64).\n\n    --authfile, An optional path to a users.json file. This file should\n    be an object with users defined like:\n      {\n        \"<user:pass>\": [\"<addr-regex>\",\"<addr-regex>\"]\n      }\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:43:38 PM PDT\n\nSorry for the confusion, but the provided text does not seem to be a piece of source code. It appears to be a part of a software documentation or a comment in the code, explaining how a certain feature or functionality works.\n\nFrom the text, it seems to be describing a process for user authentication and address verification in a system that supports remote connections and reverse port forwarding. Here's a breakdown:\n\n1. When a user (`<user>`) connects, their password (`<pass>`) is verified.\n2. The remote addresses are compared against a list of address regular expressions for a match.\n3. The format of the addresses is either \"<remote-host>:<remote-port>\" for normal remotes or \"R:<local-interface>:<local-port>\" for reverse port forwarding remotes.\n4. The file (presumably the one containing the list of address regular expressions) will be automatically reloaded if it changes.\n5. The `--auth` is an optional string representing a single user with full access, in the form of `<user:pass>`. It is equivalent to creating an authfile with `{\"<user:pass>\": [\"\"]}`. If unset, it will use the...\n\nUnfortunately, the text cuts off there, so we can't see what it will use if `--auth` is unset.\n\nHowever, without actual code, I can't provide a detailed analysis or discuss the algorithms used. If you have any source code related to this functionality, feel free to share it, and I'll be happy to analyze it for you."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:45:38 PM PDT\n\n```mermaid\n    graph TD;\n    style Start fill:#228B22, stroke:#000000, stroke-width:2px;\n    style VerifyPass fill:#228B22, stroke:#000000, stroke-width:2px;\n    style CompareAddresses fill:#228B22, stroke:#000000, stroke-width:2px;\n    style MatchFound fill:#228B22, stroke:#000000, stroke-width:2px;\n    style NoMatchFound fill:#B22222, stroke:#000000, stroke-width:2px;\n    style ReloadFile fill:#228B22, stroke:#000000, stroke-width:2px;\n\n    Start-->VerifyPass;\n    VerifyPass-->CompareAddresses;\n    CompareAddresses-->MatchFound;\n    CompareAddresses-->NoMatchFound;\n    NoMatchFound-->ReloadFile;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:47:24 PM PDT\n\n1. **Severity**: 9/10\n\n   **Line Number**: 291\n\n   **Bug Type**: Sensitive Data Exposure\n\n   **Description**: The user's password is being handled in plain text, which is a major security risk. If intercepted, this could lead to unauthorized access to the user's account. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n   **Solution**: Passwords should never be stored or transmitted in plain text. Consider using a secure password hashing algorithm such as bcrypt or argon2. The hashed password should then be compared with the hashed version of the input password for verification. More on secure password handling can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 295\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The software is using a user-provided string to reference objects directly, which could potentially lead to unauthorized access if a malicious user manipulates the string. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A4_2017-Insecure_Direct_Object_References\n\n   **Solution**: Instead of using user-provided strings to reference objects directly, consider using indirect references. This can be done by mapping the user-provided string to an internal reference which is then used to access the object. More on preventing IDOR can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 148,
+                "severity": 9,
+                "bugType": "Sensitive Data Exposure",
+                "description": "The user's password is being handled in plain text, which is a major security risk. If intercepted, this could lead to unauthorized access to the user's account. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure",
+                "solution": "Passwords should never be stored or transmitted in plain text. Consider using a secure password hashing algorithm such as bcrypt or argon2. The hashed password should then be compared with the hashed version of the input password for verification. More on secure password handling can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 152,
+                "severity": 8,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The software is using a user-provided string to reference objects directly, which could potentially lead to unauthorized access if a malicious user manipulates the string. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A4_2017-Insecure_Direct_Object_References",
+                "solution": "Instead of using user-provided strings to reference objects directly, consider using indirect references. This can be done by mapping the user-provided string to an internal reference which is then used to access the object. More on preventing IDOR can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:49:44 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:50:59 PM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 291\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The system is storing user credentials (<user:pass>) in plain text. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require that personal data, including passwords, be stored securely.\n\n   **Solution**: Use secure methods such as hashing for storing passwords. Avoid storing passwords in plain text. For hashing, you can use algorithms like bcrypt, scrypt or Argon2.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 286\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The system does not seem to be encrypting the user data during transmission. This could lead to unauthorized access and data breaches, which violates GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Implement encryption for all data transmitted over networks. You can use secure protocols like HTTPS and TLS for data transmission.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 148,
+                "severity": 8,
+                "bugType": "Data Compliance",
+                "description": "The system is storing user credentials (<user:pass>) in plain text. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require that personal data, including passwords, be stored securely.",
+                "solution": "Use secure methods such as hashing for storing passwords. Avoid storing passwords in plain text. For hashing, you can use algorithms like bcrypt, scrypt or Argon2."
+              },
+              {
+                "lineNumber": 143,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The system does not seem to be encrypting the user data during transmission. This could lead to unauthorized access and data breaches, which violates GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Implement encryption for all data transmitted over networks. You can use secure protocols like HTTPS and TLS for data transmission."
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "1",
+      "value": "    when <user> connects, their <pass> will be verified and then\n    each of the remote addresses will be compared against the list\n    of address regular expressions for a match. Addresses will\n    always come in the form \"<remote-host>:<remote-port>\" for normal remotes\n    and \"R:<local-interface>:<local-port>\" for reverse port forwarding\n    remotes. This file will be automatically reloaded on change.\n\n    --auth, An optional string representing a single user with full\n    access, in the form of <user:pass>. It is equivalent to creating an\n    authfile with {\"<user:pass>\": [\"\"]}. If unset, it will use the\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 143
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:44:48 PM PDT\n\nThe code you provided is the help documentation for a command-line tool called Chisel. Chisel is a fast TCP/UDP tunnel over HTTP. It is written in Go programming language. Chisel is a tool for managing SSH-like tunnels, it's a single executable including both client and server. \n\nLet's break down the server and client commands:\n\n### Server Command\nThe server command is used to start a Chisel server. It accepts several arguments like `--auth`, `--keepalive`, `--backend`, `--socks5`, `--reverse`, `--tls-key`, `--tls-cert`, `--tls-domain`, `--tls-ca`, `--pid`, `-v` and `--help`. \n\n- `--auth`: Specifies the authentication method for the server.\n- `--keepalive`: Sets the keepalive interval.\n- `--backend`: Specifies another HTTP server to proxy requests to when Chisel receives a normal HTTP request.\n- `--socks5`: Allows clients to access the internal SOCKS5 proxy.\n- `--reverse`: Allows clients to specify reverse port forwarding remotes in addition to normal remotes.\n- `--tls-key`, `--tls-cert`, `--tls-domain`, `--tls-ca`: These flags are used to enable and configure TLS (Transport Layer Security).\n- `--pid`: Generates pid file in the current working directory.\n- `-v`: Enables verbose logging.\n- `--help`: Displays the help text.\n\nThe server also listens for two signals `SIGUSR2` and `SIGHUP` to print process stats and to short-circuit the client reconnect timer respectively.\n\n### Client Command\nThe client command is used to start a Chisel client. It also accepts several arguments like `--fingerprint`, `--auth`, `--keepalive`, `--max-retry-count`, `--max-retry-interval`, `--proxy`, `--header`, `--hostname`, `--sni`, `--tls-ca`, `--tls-skip-verify`, `--tls-key`, `--tls-cert`, `--pid`, `-v` and `--help`.\n\n- `--fingerprint`: A strongly recommended fingerprint string to perform host-key validation against the server's public key.\n- `--auth`: An optional username and password for client authentication.\n- `--keepalive`: An optional keepalive interval.\n- `--max-retry-count`, `--max-retry-interval`: These flags set the maximum number of times to retry before exiting and the maximum wait time before retrying after a disconnection.\n- `--proxy`: An optional HTTP CONNECT or SOCKS5 proxy which will be used to reach the Chisel server.\n- `--header`: Sets a custom header.\n- `--hostname`, `--sni`: These flags are used to optionally set the 'Host' header and override the ServerName when using TLS.\n- `--tls-ca`, `--tls-skip-verify`, `--tls-key`, `--tls-cert`: These flags are used to configure TLS.\n- `--pid`: Generates pid file in the current working directory.\n- `-v`: Enables verbose logging.\n- `--help`: Displays the help text.\n\nThe client also listens for two signals `SIGUSR2` and `SIGHUP` to print process stats and to short-circuit the client reconnect timer respectively.\n\nYou can learn more about Chisel from its [GitHub repository](https://github.com/jpillora/chisel)."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:45:55 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\n```\n\nThe control flow graph for the given source code is as follows:\n\n- The start of the graph is the function name being analyzed.\n- There are two paths in the code: one is the primary path (ExampleProcess) and the other is the error path (ExampleErrorPath).\n- The primary path (ExampleProcess) is represented by a green color and has a thicker stroke.\n- The error path (ExampleErrorPath) is represented by a red color and has a thinner stroke.\n- The primary path starts from the start node and goes to the ExampleProcess node.\n- The error path starts from the start node and goes to the ExampleErrorPath node."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:48:27 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 314\n\n   **Bug Type**: Insecure Use of Cryptography\n\n   **Description**: The code uses TLS for encryption but allows the use of self-signed certificates. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.\n\n   **Solution**: Consider using certificates from a trusted Certificate Authority (CA). If self-signed certificates must be used, consider implementing a mechanism to securely distribute the public keys to the clients. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 319\n\n   **Bug Type**: Improper Authentication\n\n   **Description**: The code allows the use of the '--auth' option for client authentication, but it does not specify any mechanism for securely storing or transmitting these credentials. This could potentially expose sensitive information.\n\n   **Solution**: Consider using secure methods for storing and transmitting authentication credentials, such as secure password hashing and encryption. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 306\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The code allows the use of the '--pid' option to generate a PID file in the current working directory. This could potentially allow an attacker to manipulate the PID file to gain unauthorized access or disrupt the service.\n\n   **Solution**: Consider implementing a mechanism to protect the PID file, such as secure file permissions or storing the PID file in a secure directory. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html\n\n\n4. **Severity**: 8/10\n\n   **Line Number**: 314\n\n   **Bug Type**: Improper Certificate Validation\n\n   **Description**: The code allows the use of the '--tls-skip-verify' option, which skips the TLS certificate verification. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.\n\n   **Solution**: Avoid using the '--tls-skip-verify' option. Always validate TLS certificates to ensure the integrity and confidentiality of the data. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 161,
+                "severity": 6,
+                "bugType": "Insecure Use of Cryptography",
+                "description": "The code uses TLS for encryption but allows the use of self-signed certificates. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.",
+                "solution": "Consider using certificates from a trusted Certificate Authority (CA). If self-signed certificates must be used, consider implementing a mechanism to securely distribute the public keys to the clients. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 166,
+                "severity": 5,
+                "bugType": "Improper Authentication",
+                "description": "The code allows the use of the '--auth' option for client authentication, but it does not specify any mechanism for securely storing or transmitting these credentials. This could potentially expose sensitive information.",
+                "solution": "Consider using secure methods for storing and transmitting authentication credentials, such as secure password hashing and encryption. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 153,
+                "severity": 4,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The code allows the use of the '--pid' option to generate a PID file in the current working directory. This could potentially allow an attacker to manipulate the PID file to gain unauthorized access or disrupt the service.",
+                "solution": "Consider implementing a mechanism to protect the PID file, such as secure file permissions or storing the PID file in a secure directory. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 161,
+                "severity": 8,
+                "bugType": "Improper Certificate Validation",
+                "description": "The code allows the use of the '--tls-skip-verify' option, which skips the TLS certificate verification. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.",
+                "solution": "Avoid using the '--tls-skip-verify' option. Always validate TLS certificates to ensure the integrity and confidentiality of the data. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:49:48 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:51:53 PM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 331\n\n   **Bug Type**: GDPR\n\n   **Description**: The code uses environment variables for authentication which can potentially expose sensitive user data.\n\n   **Solution**: Consider using secure methods such as OAuth for user authentication. Refer to this for more information: https://auth0.com/learn/oauth2/\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 364\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code allows the use of HTTP proxies which can be insecure and expose sensitive health information.\n\n   **Solution**: Ensure all connections are made over HTTPS or a secure protocol. Refer to this for more information: https://www.owasp.org/index.php/SecureFlag\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 430\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code uses a custom header which can potentially expose sensitive cardholder data.\n\n   **Solution**: Avoid using custom headers for transmitting sensitive information. Refer to this for more information: https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html\n\n\n4. **Severity**: 10/10\n\n   **Line Number**: 495\n\n   **Bug Type**: GDPR\n\n   **Description**: The code uses a user.json file for storing user credentials which is a GDPR violation.\n\n   **Solution**: Store user credentials in a secure database and hash the passwords. Refer to this for more information: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\n\n\n5. **Severity**: 7/10\n\n   **Line Number**: 517\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code does not explicitly mention any encryption for the SOCKS5 connection which can potentially expose sensitive health information.\n\n   **Solution**: Ensure all connections are encrypted. Refer to this for more information: https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 178,
+                "severity": 8,
+                "bugType": "GDPR",
+                "description": "The code uses environment variables for authentication which can potentially expose sensitive user data.",
+                "solution": "Consider using secure methods such as OAuth for user authentication. Refer to this for more information: https://auth0.com/learn/oauth2/"
+              },
+              {
+                "lineNumber": 211,
+                "severity": 7,
+                "bugType": "HIPAA",
+                "description": "The code allows the use of HTTP proxies which can be insecure and expose sensitive health information.",
+                "solution": "Ensure all connections are made over HTTPS or a secure protocol. Refer to this for more information: https://www.owasp.org/index.php/SecureFlag"
+              },
+              {
+                "lineNumber": 277,
+                "severity": 9,
+                "bugType": "PCI DSS",
+                "description": "The code uses a custom header which can potentially expose sensitive cardholder data.",
+                "solution": "Avoid using custom headers for transmitting sensitive information. Refer to this for more information: https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 342,
+                "severity": 10,
+                "bugType": "GDPR",
+                "description": "The code uses a user.json file for storing user credentials which is a GDPR violation.",
+                "solution": "Store user credentials in a secure database and hash the passwords. Refer to this for more information: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 364,
+                "severity": 7,
+                "bugType": "HIPAA",
+                "description": "The code does not explicitly mention any encryption for the SOCKS5 connection which can potentially expose sensitive health information.",
+                "solution": "Ensure all connections are encrypted. Refer to this for more information: https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"
+              }
+            ]
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "2",
+      "value": "    environment variable AUTH.\n\n    --keepalive, An optional keepalive interval. Since the underlying\n    transport is HTTP, in many instances we'll be traversing through\n    proxies, often these proxies will close idle connections. You must\n    specify a time with a unit, for example '5s' or '2m'. Defaults\n    to '25s' (set to 0s to disable).\n\n    --backend, Specifies another HTTP server to proxy requests to when\n    chisel receives a normal HTTP request. Useful for hiding chisel in\n    plain sight.\n\n    --socks5, Allow clients to access the internal SOCKS5 proxy. See\n    chisel client --help for more information.\n\n    --reverse, Allow clients to specify reverse port forwarding remotes\n    in addition to normal remotes.\n\n    --tls-key, Enables TLS and provides optional path to a PEM-encoded\n    TLS private key. When this flag is set, you must also set --tls-cert,\n    and you cannot set --tls-domain.\n\n    --tls-cert, Enables TLS and provides optional path to a PEM-encoded\n    TLS certificate. When this flag is set, you must also set --tls-key,\n    and you cannot set --tls-domain.\n\n    --tls-domain, Enables TLS and automatically acquires a TLS key and\n    certificate using LetsEncrypt. Setting --tls-domain requires port 443.\n    You may specify multiple --tls-domain flags to serve multiple domains.\n    The resulting files are cached in the \"$HOME/.cache/chisel\" directory.\n    You can modify this path by setting the CHISEL_LE_CACHE variable,\n    or disable caching by setting this variable to \"-\". You can optionally\n    provide a certificate notification email by setting CHISEL_LE_EMAIL.\n\n    --tls-ca, a path to a PEM encoded CA certificate bundle or a directory\n    holding multiple PEM encode CA certificate bundle files, which is used to \n    validate client connections. The provided CA certificates will be used \n    instead of the system roots. This is commonly used to implement mutual-TLS. \n\n    --pid Generate pid file in current working directory\n\n    -v, Enable verbose logging\n\n    --help, This help text\n\n  Signals:\n    The chisel process is listening for:\n      a SIGUSR2 to print process stats, and\n      a SIGHUP to short-circuit the client reconnect timer\n\n  Version:\n    X.Y.Z\n\n  Read more:\n    https://github.com/jpillora/chisel\n\n```\n<!--/tmpl-->\n\n\n<!--tmpl,code=plain:echo \"$ chisel client --help\" && go run main.go client --help | sed 's#0.0.0-src (go1\\..*)#X.Y.Z#' -->\n``` plain \n$ chisel client --help\n\n  Usage: chisel client [options] <server> <remote> [remote] [remote] ...\n\n  <server> is the URL to the chisel server.\n\n  <remote>s are remote connections tunneled through the server, each of\n  which come in the form:\n\n    <local-host>:<local-port>:<remote-host>:<remote-port>/<protocol>\n\n    ■ local-host defaults to 0.0.0.0 (all interfaces).\n    ■ local-port defaults to remote-port.\n    ■ remote-port is required*.\n    ■ remote-host defaults to 0.0.0.0 (server localhost).\n    ■ protocol defaults to tcp.\n\n  which shares <remote-host>:<remote-port> from the server to the client\n  as <local-host>:<local-port>, or:\n\n    R:<local-interface>:<local-port>:<remote-host>:<remote-port>/<protocol>\n\n  which does reverse port forwarding, sharing <remote-host>:<remote-port>\n  from the client to the server's <local-interface>:<local-port>.\n\n    example remotes\n\n      3000\n      example.com:3000\n      3000:google.com:80\n      192.168.0.5:3000:google.com:80\n      socks\n      5000:socks\n      R:2222:localhost:22\n      R:socks\n      R:5000:socks\n      stdio:example.com:22\n      1.1.1.1:53/udp\n\n    When the chisel server has --socks5 enabled, remotes can\n    specify \"socks\" in place of remote-host and remote-port.\n    The default local host and port for a \"socks\" remote is\n    127.0.0.1:1080. Connections to this remote will terminate\n    at the server's internal SOCKS5 proxy.\n\n    When the chisel server has --reverse enabled, remotes can\n    be prefixed with R to denote that they are reversed. That\n    is, the server will listen and accept connections, and they\n    will be proxied through the client which specified the remote.\n    Reverse remotes specifying \"R:socks\" will listen on the server's\n    default socks port (1080) and terminate the connection at the\n    client's internal SOCKS5 proxy.\n\n    When stdio is used as local-host, the tunnel will connect standard\n    input/output of this program with the remote. This is useful when \n    combined with ssh ProxyCommand. You can use\n      ssh -o ProxyCommand='chisel client chiselserver stdio:%h:%p' \\\n          user@example.com\n    to connect to an SSH server through the tunnel.\n\n  Options:\n\n    --fingerprint, A *strongly recommended* fingerprint string\n    to perform host-key validation against the server's public key.\n\tFingerprint mismatches will close the connection.\n\tFingerprints are generated by hashing the ECDSA public key using\n\tSHA256 and encoding the result in base64.\n\tFingerprints must be 44 characters containing a trailing equals (=).\n\n    --auth, An optional username and password (client authentication)\n    in the form: \"<user>:<pass>\". These credentials are compared to\n    the credentials inside the server's --authfile. defaults to the\n    AUTH environment variable.\n\n    --keepalive, An optional keepalive interval. Since the underlying\n    transport is HTTP, in many instances we'll be traversing through\n    proxies, often these proxies will close idle connections. You must\n    specify a time with a unit, for example '5s' or '2m'. Defaults\n    to '25s' (set to 0s to disable).\n\n    --max-retry-count, Maximum number of times to retry before exiting.\n    Defaults to unlimited.\n\n    --max-retry-interval, Maximum wait time before retrying after a\n    disconnection. Defaults to 5 minutes.\n\n    --proxy, An optional HTTP CONNECT or SOCKS5 proxy which will be\n    used to reach the chisel server. Authentication can be specified\n    inside the URL.\n    For example, http://admin:password@my-server.com:8081\n            or: socks://admin:password@my-server.com:1080\n\n    --header, Set a custom header in the form \"HeaderName: HeaderContent\".\n    Can be used multiple times. (e.g --header \"Foo: Bar\" --header \"Hello: World\")\n\n    --hostname, Optionally set the 'Host' header (defaults to the host\n    found in the server url).\n\n    --sni, Override the ServerName when using TLS (defaults to the \n    hostname).\n\n    --tls-ca, An optional root certificate bundle used to verify the\n    chisel server. Only valid when connecting to the server with\n    \"https\" or \"wss\". By default, the operating system CAs will be used.\n\n    --tls-skip-verify, Skip server TLS certificate verification of\n    chain and host name (if TLS is used for transport connections to\n    server). If set, client accepts any TLS certificate presented by\n    the server and any host name in that certificate. This only affects\n    transport https (wss) connection. Chisel server's public key\n    may be still verified (see --fingerprint) after inner connection\n    is established.\n\n    --tls-key, a path to a PEM encoded private key used for client \n    authentication (mutual-TLS).\n\n    --tls-cert, a path to a PEM encoded certificate matching the provided \n    private key. The certificate must have client authentication \n    enabled (mutual-TLS).\n\n    --pid Generate pid file in current working directory\n\n    -v, Enable verbose logging\n\n    --help, This help text\n\n  Signals:\n    The chisel process is listening for:\n      a SIGUSR2 to print process stats, and\n      a SIGHUP to short-circuit the client reconnect timer\n\n  Version:\n    X.Y.Z\n\n  Read more:\n    https://github.com/jpillora/chisel\n\n```\n<!--/tmpl-->\n\n### Security\n\nEncryption is always enabled. When you start up a chisel server, it will generate an in-memory ECDSA public/private key pair. The public key fingerprint (base64 encoded SHA256) will be displayed as the server starts. Instead of generating a random key, the server may optionally specify a key file, using the `--keyfile` option. When clients connect, they will also display the server's public key fingerprint. The client can force a particular fingerprint using the `--fingerprint` option. See the `--help` above for more information.\n\n### Authentication\n\nUsing the `--authfile` option, the server may optionally provide a `user.json` configuration file to create a list of accepted users. The client then authenticates using the `--auth` option. See [users.json](example/users.json) for an example authentication configuration file. See the `--help` above for more information.\n\nInternally, this is done using the _Password_ authentication method provided by SSH. Learn more about `crypto/ssh` here http://blog.gopheracademy.com/go-and-ssh/.\n\n### SOCKS5 Guide with Docker\n\n1. Print a new private key to the terminal\n\n    ```sh\n    chisel server --keygen -\n    # or save it to disk --keygen /path/to/mykey\n    ```\n\n1. Start your chisel server\n\n    ```sh\n    jpillora/chisel server --keyfile '<ck-base64 string or file path>' -p 9312 --socks5\n    ```\n\n1. Connect your chisel client (using server's fingerprint)\n\n    ```sh\n    chisel client --fingerprint '<see server output>' <server-address>:9312 socks\n    ```\n\n1. Point your SOCKS5 clients (e.g. OS/Browser) to:\n\n    ```\n    <client-address>:1080\n    ```\n\n1. Now you have an encrypted, authenticated SOCKS5 connection over HTTP\n\n\n#### Caveats\n\nSince WebSockets support is required:\n\n- IaaS providers all will support WebSockets (unless an unsupporting HTTP proxy has been forced in front of you, in which case I'd argue that you've been downgraded to PaaS)\n- PaaS providers vary in their support for WebSockets\n  - Heroku has full support\n  - Openshift has full support though connections are only accepted on ports 8443 and 8080\n  - Google App Engine has **no** support (Track this on [their repo](https://code.google.com/p/googleappengine/issues/detail?id=2535))\n\n## Contributing\n\n- http://golang.org/doc/code.html\n- http://golang.org/doc/effective_go.html\n- `github.com/jpillora/chisel/share` contains the shared package\n- `github.com/jpillora/chisel/server` contains the server package\n- `github.com/jpillora/chisel/client` contains the client package\n\n## Changelog\n\n- `1.0` - Initial release\n- `1.1` - Replaced simple symmetric encryption for ECDSA SSH\n- `1.2` - Added SOCKS5 (server) and HTTP CONNECT (client) support\n- `1.3` - Added reverse tunnelling support\n- `1.4` - Added arbitrary HTTP header support\n- `1.5` - Added reverse SOCKS support (by @aus)\n- `1.6` - Added client stdio support (by @BoleynSu)\n- `1.7` - Added UDP support\n- `1.8` - Move to a `scratch`Docker image\n- `1.9` - Switch from `--key` seed to P256 key strings with `--key{gen,file}` + bump to Go 1.21 (by @cmenginnz)\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 153
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 12:45:07 PM PDT\n\nThe code you've provided is not an actual code snippet but a reference to a license for a software project. \n\nThe license mentioned here is the MIT License, and the link provided leads to the license file in the repository of a project named \"chisel\" by Jaime Pillora on GitHub. \n\nThe MIT License is a permissive free software license originating at the Massachusetts Institute of Technology (MIT). It's a simple license that only requires that the MIT license be included in all copies or substantial uses of the software. \n\nIn terms of architectural guidelines, the MIT license is very flexible and doesn't impose any particular architectural constraints or requirements. It allows the software to be used for any purpose, to be modified, and to be distributed, including in modified form. \n\nFor more information about the MIT License, you can visit this link: [MIT License](https://opensource.org/licenses/MIT)\n\nPlease provide a code snippet for a more detailed analysis regarding algorithms and architectural guidelines."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 12:46:04 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExampleErrorPath-->End;\n```\n\nThe code provided does not contain any control flow."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:48:32 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:49:51 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 12:51:56 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "3",
+      "value": "\n## License\n\n[MIT](https://github.com/jpillora/chisel/blob/master/LICENSE) © Jaime Pillora\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 425
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./README.md"
+  }
+}

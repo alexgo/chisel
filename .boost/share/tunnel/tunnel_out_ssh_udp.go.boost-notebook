@@ -1,0 +1,128 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package tunnel\n\nimport (\n\t\"encoding/gob\"\n\t\"io\"\n\t\"net\"\n\t\"os\"\n\t\"sync\"\n\t\"time\"\n\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/settings\"\n)\n\nfunc (t *Tunnel) handleUDP(l *cio.Logger, rwc io.ReadWriteCloser, hostPort string) error {\n\tconns := &udpConns{\n\t\tLogger: l,\n\t\tm:      map[string]*udpConn{},\n\t}\n\tdefer conns.closeAll()\n\th := &udpHandler{\n\t\tLogger:   l,\n\t\thostPort: hostPort,\n\t\tudpChannel: &udpChannel{\n\t\t\tr: gob.NewDecoder(rwc),\n\t\t\tw: gob.NewEncoder(rwc),\n\t\t\tc: rwc,\n\t\t},\n\t\tudpConns: conns,\n\t\tmaxMTU:   settings.EnvInt(\"UDP_MAX_SIZE\", 9012),\n\t}\n\th.Debugf(\"UDP max size: %d bytes\", h.maxMTU)\n\tfor {\n\t\tp := udpPacket{}\n\t\tif err := h.handleWrite(&p); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\ntype udpHandler struct {\n\t*cio.Logger\n\thostPort string\n\t*udpChannel\n\t*udpConns\n\tmaxMTU int\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 39
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (h *udpHandler) handleWrite(p *udpPacket) error {\n\tif err := h.r.Decode(&p); err != nil {\n\t\treturn err\n\t}\n\t//dial now, we know we must write\n\tconn, exists, err := h.udpConns.dial(p.Src, h.hostPort)\n\tif err != nil {\n\t\treturn err\n\t}\n\t//however, we dont know if we must read...\n\t//spawn up to <max-conns> go-routines to wait\n\t//for a reply.\n\t//TODO configurable\n\t//TODO++ dont use go-routines, switch to pollable\n\t//  array of listeners where all listeners are\n\t//  sweeped periodically, removing the idle ones\n\tconst maxConns = 100\n\tif !exists {\n\t\tif h.udpConns.len() <= maxConns {\n\t\t\tgo h.handleRead(p, conn)\n\t\t} else {\n\t\t\th.Debugf(\"exceeded max udp connections (%d)\", maxConns)\n\t\t}\n\t}\n\t_, err = conn.Write(p.Payload)\n\tif err != nil {\n\t\treturn err\n\t}\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 47
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (h *udpHandler) handleRead(p *udpPacket, conn *udpConn) {\n\t//ensure connection is cleaned up\n\tdefer h.udpConns.remove(conn.id)\n\tbuff := make([]byte, h.maxMTU)\n\tfor {\n\t\t//response must arrive within 15 seconds\n\t\tdeadline := settings.EnvDuration(\"UDP_DEADLINE\", 15*time.Second)\n\t\tconn.SetReadDeadline(time.Now().Add(deadline))\n\t\t//read response\n\t\tn, err := conn.Read(buff)\n\t\tif err != nil {\n\t\t\tif !os.IsTimeout(err) && err != io.EOF {\n\t\t\t\th.Debugf(\"read error: %s\", err)\n\t\t\t}\n\t\t\tbreak\n\t\t}\n\t\tb := buff[:n]\n\t\t//encode back over ssh connection\n\t\terr = h.udpChannel.encode(p.Src, b)\n\t\tif err != nil {\n\t\t\th.Debugf(\"encode error: %s\", err)\n\t\t\treturn\n\t\t}\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 78
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\ntype udpConns struct {\n\t*cio.Logger\n\tsync.Mutex\n\tm map[string]*udpConn\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 104
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc (cs *udpConns) dial(id, addr string) (*udpConn, bool, error) {\n\tcs.Lock()\n\tdefer cs.Unlock()\n\tconn, ok := cs.m[id]\n\tif !ok {\n\t\tc, err := net.Dial(\"udp\", addr)\n\t\tif err != nil {\n\t\t\treturn nil, false, err\n\t\t}\n\t\tconn = &udpConn{\n\t\t\tid:   id,\n\t\t\tConn: c, // cnet.MeterConn(cs.Logger.Fork(addr), c),\n\t\t}\n\t\tcs.m[id] = conn\n\t}\n\treturn conn, ok, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 110
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc (cs *udpConns) len() int {\n\tcs.Lock()\n\tl := len(cs.m)\n\tcs.Unlock()\n\treturn l\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 128
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\nfunc (cs *udpConns) remove(id string) {\n\tcs.Lock()\n\tdelete(cs.m, id)\n\tcs.Unlock()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 135
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "8",
+      "value": "\nfunc (cs *udpConns) closeAll() {\n\tcs.Lock()\n\tfor id, conn := range cs.m {\n\t\tconn.Close()\n\t\tdelete(cs.m, id)\n\t}\n\tcs.Unlock()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 141
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "9",
+      "value": "\ntype udpConn struct {\n\tid string\n\tnet.Conn\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 150
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/tunnel/tunnel_out_ssh_udp.go"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "0",
+      "value": "# test this goreleaser config with:\n# - cd chisel\n# - goreleaser --skip-publish --rm-dist --config .github/goreleaser.yml\nbuilds:\n  - env:\n      - CGO_ENABLED=0\n    ldflags:\n      - -s -w -X github.com/jpillora/chisel/share.BuildVersion={{.Version}}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "yaml",
+      "id": "1",
+      "value": "    flags:\n      - -trimpath\n    goos:\n      - linux\n      - darwin\n      - windows\n    goarch:\n      - 386\n      - amd64\n      - arm\n      - arm64\n      - ppc64\n      - ppc64le\n      - mips\n      - mipsle\n      - mips64\n      - mips64le\n      - s390x\n    goarm:\n      - 5\n      - 6\n      - 7\n    gomips:\n      - hardfloat\n      - softfloat\narchives:\n  - format: gz\n    files:\n      - none*\nrelease:\n  draft: true\n  prerelease: auto\nchangelog:\n  sort: asc\n  filters:\n    exclude:\n      - \"^docs:\"\n      - \"^test:\"\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 8
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./.github/goreleaser.yml"
+  }
+}

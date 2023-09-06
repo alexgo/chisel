@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "plaintext",
+      "id": "0",
+      "value": "app = \"jp-chisel\"\nkill_signal = \"SIGINT\"\nkill_timeout = 5\nprocesses = []\n\n[build]\n  dockerfile = \"Flyfile\"\n\n[[services]]\n  internal_port = 443\n  protocol = \"tcp\"\n  [[services.ports]]\n    port = \"443\"",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": -1
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./example/fly.toml"
+  }
+}

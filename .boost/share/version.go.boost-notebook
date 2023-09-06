@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package chshare\n\n//ProtocolVersion of chisel. When backwards\n//incompatible changes are made, this will\n//be incremented to signify a protocol\n//mismatch.\nvar ProtocolVersion = \"chisel-v3\"\n\nvar BuildVersion = \"0.0.0-src\"\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/version.go"
+  }
+}

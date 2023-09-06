@@ -1,0 +1,92 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package tunnel\n\nimport (\n\t\"context\"\n\t\"encoding/gob\"\n\t\"fmt\"\n\t\"io\"\n\t\"net\"\n\t\"strings\"\n\t\"sync\"\n\t\"sync/atomic\"\n\t\"time\"\n\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/sizestr\"\n\t\"golang.org/x/crypto/ssh\"\n\t\"golang.org/x/sync/errgroup\"\n)\n\n//listenUDP is a special listener which forwards packets via\n//the bound ssh connection. tricky part is multiplexing lots of\n//udp clients through the entry node. each will listen on its\n//own source-port for a response:\n//                                                (random)\n//    src-1 1111->...                         dst-1 6345->7777\n//    src-2 2222->... <---> udp <---> udp <-> dst-1 7543->7777\n//    src-3 3333->...    listener    handler  dst-1 1444->7777\n//\n//we must store these mappings (1111-6345, etc) in memory for a length\n//of time, so that when the exit node receives a response on 6345, it\n//knows to return it to 1111.\nfunc listenUDP(l *cio.Logger, sshTun sshTunnel, remote *settings.Remote) (*udpListener, error) {\n\ta, err := net.ResolveUDPAddr(\"udp\", remote.Local())\n\tif err != nil {\n\t\treturn nil, l.Errorf(\"resolve: %s\", err)\n\t}\n\tconn, err := net.ListenUDP(\"udp\", a)\n\tif err != nil {\n\t\treturn nil, l.Errorf(\"listen: %s\", err)\n\t}\n\t//ready\n\tu := &udpListener{\n\t\tLogger:  l,\n\t\tsshTun:  sshTun,\n\t\tremote:  remote,\n\t\tinbound: conn,\n\t\tmaxMTU:  settings.EnvInt(\"UDP_MAX_SIZE\", 9012),\n\t}\n\tu.Debugf(\"UDP max size: %d bytes\", u.maxMTU)\n\treturn u, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\ntype udpListener struct {\n\t*cio.Logger\n\tsshTun      sshTunnel\n\tremote      *settings.Remote\n\tinbound     *net.UDPConn\n\toutboundMut sync.Mutex\n\toutbound    *udpChannel\n\tsent, recv  int64\n\tmaxMTU      int\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 52
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (u *udpListener) run(ctx context.Context) error {\n\tdefer u.inbound.Close()\n\t//udp doesnt accept connections,\n\t//udp simply forwards packets\n\t//and therefore only needs to listen\n\teg, ctx := errgroup.WithContext(ctx)\n\teg.Go(func() error {\n\t\treturn u.runInbound(ctx)\n\t})\n\teg.Go(func() error {\n\t\treturn u.runOutbound(ctx)\n\t})\n\tif err := eg.Wait(); err != nil {\n\t\tu.Debugf(\"listen: %s\", err)\n\t\treturn err\n\t}\n\tu.Debugf(\"Close (sent %s received %s)\", sizestr.ToString(u.sent), sizestr.ToString(u.recv))\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 63
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (u *udpListener) runInbound(ctx context.Context) error {\n\tbuff := make([]byte, u.maxMTU)\n\tfor !isDone(ctx) {\n\t\t//read from inbound udp\n\t\tu.inbound.SetReadDeadline(time.Now().Add(time.Second))\n\t\tn, addr, err := u.inbound.ReadFromUDP(buff)\n\t\tif e, ok := err.(net.Error); ok && (e.Timeout() || e.Temporary()) {\n\t\t\tcontinue\n\t\t}\n\t\tif err != nil {\n\t\t\treturn u.Errorf(\"read error: %w\", err)\n\t\t}\n\t\t//upsert ssh channel\n\t\tuc, err := u.getUDPChan(ctx)\n\t\tif err != nil {\n\t\t\tif strings.HasSuffix(err.Error(), \"EOF\") {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\treturn u.Errorf(\"inbound-udpchan: %w\", err)\n\t\t}\n\t\t//send over channel, including source address\n\t\tb := buff[:n]\n\t\tif err := uc.encode(addr.String(), b); err != nil {\n\t\t\tif strings.HasSuffix(err.Error(), \"EOF\") {\n\t\t\t\tcontinue //dropped packet...\n\t\t\t}\n\t\t\treturn u.Errorf(\"encode error: %w\", err)\n\t\t}\n\t\t//stats\n\t\tatomic.AddInt64(&u.sent, int64(n))\n\t}\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 83
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc (u *udpListener) runOutbound(ctx context.Context) error {\n\tfor !isDone(ctx) {\n\t\t//upsert ssh channel\n\t\tuc, err := u.getUDPChan(ctx)\n\t\tif err != nil {\n\t\t\tif strings.HasSuffix(err.Error(), \"EOF\") {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\treturn u.Errorf(\"outbound-udpchan: %w\", err)\n\t\t}\n\t\t//receive from channel, including source address\n\t\tp := udpPacket{}\n\t\tif err := uc.decode(&p); err == io.EOF {\n\t\t\t//outbound ssh disconnected, get new connection...\n\t\t\tcontinue\n\t\t} else if err != nil {\n\t\t\treturn u.Errorf(\"decode error: %w\", err)\n\t\t}\n\t\t//write back to inbound udp\n\t\taddr, err := net.ResolveUDPAddr(\"udp\", p.Src)\n\t\tif err != nil {\n\t\t\treturn u.Errorf(\"resolve error: %w\", err)\n\t\t}\n\t\tn, err := u.inbound.WriteToUDP(p.Payload, addr)\n\t\tif err != nil {\n\t\t\treturn u.Errorf(\"write error: %w\", err)\n\t\t}\n\t\t//stats\n\t\tatomic.AddInt64(&u.recv, int64(n))\n\t}\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 117
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc (u *udpListener) getUDPChan(ctx context.Context) (*udpChannel, error) {\n\tu.outboundMut.Lock()\n\tdefer u.outboundMut.Unlock()\n\t//cached\n\tif u.outbound != nil {\n\t\treturn u.outbound, nil\n\t}\n\t//not cached, bind\n\tsshConn := u.sshTun.getSSH(ctx)\n\tif sshConn == nil {\n\t\treturn nil, fmt.Errorf(\"ssh-conn nil\")\n\t}\n\t//ssh request for udp packets for this proxy's remote,\n\t//just \"udp\" since the remote address is sent with each packet\n\tdstAddr := u.remote.Remote() + \"/udp\"\n\trwc, reqs, err := sshConn.OpenChannel(\"chisel\", []byte(dstAddr))\n\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"ssh-chan error: %s\", err)\n\t}\n\tgo ssh.DiscardRequests(reqs)\n\t//remove on disconnect\n\tgo u.unsetUDPChan(sshConn)\n\t//ready\n\to := &udpChannel{\n\t\tr: gob.NewDecoder(rwc),\n\t\tw: gob.NewEncoder(rwc),\n\t\tc: rwc,\n\t}\n\tu.outbound = o\n\tu.Debugf(\"aquired channel\")\n\treturn o, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 150
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc (u *udpListener) unsetUDPChan(sshConn ssh.Conn) {\n\tsshConn.Wait()\n\tu.Debugf(\"lost channel\")\n\tu.outboundMut.Lock()\n\tu.outbound = nil\n\tu.outboundMut.Unlock()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 183
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/tunnel/tunnel_in_proxy_udp.go"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package settings\n\nimport (\n\t\"regexp\"\n\t\"strings\"\n)\n\nvar UserAllowAll = regexp.MustCompile(\"\")\n\nfunc ParseAuth(auth string) (string, string) {\n\tif strings.Contains(auth, \":\") {\n\t\tpair := strings.SplitN(auth, \":\", 2)\n\t\treturn pair[0], pair[1]\n\t}\n\treturn \"\", \"\"\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\ntype User struct {\n\tName  string\n\tPass  string\n\tAddrs []*regexp.Regexp\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 16
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (u *User) HasAccess(addr string) bool {\n\tm := false\n\tfor _, r := range u.Addrs {\n\t\tif r.MatchString(addr) {\n\t\t\tm = true\n\t\t\tbreak\n\t\t}\n\t}\n\treturn m\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 22
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/settings/user.go"
+  }
+}

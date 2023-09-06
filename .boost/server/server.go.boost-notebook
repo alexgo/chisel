@@ -1,0 +1,176 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package chserver\n\nimport (\n\t\"context\"\n\t\"errors\"\n\t\"log\"\n\t\"net/http\"\n\t\"net/http/httputil\"\n\t\"net/url\"\n\t\"os\"\n\t\"regexp\"\n\t\"time\"\n\n\t\"github.com/gorilla/websocket\"\n\tchshare \"github.com/jpillora/chisel/share\"\n\t\"github.com/jpillora/chisel/share/ccrypto\"\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/requestlog\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\n// Config is the configuration for the chisel service\ntype Config struct {\n\tKeySeed   string\n\tKeyFile   string\n\tAuthFile  string\n\tAuth      string\n\tProxy     string\n\tSocks5    bool\n\tReverse   bool\n\tKeepAlive time.Duration\n\tTLS       TLSConfig\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n// Server respresent a chisel service\ntype Server struct {\n\t*cio.Logger\n\tconfig       *Config\n\tfingerprint  string\n\thttpServer   *cnet.HTTPServer\n\treverseProxy *httputil.ReverseProxy\n\tsessCount    int32\n\tsessions     *settings.Users\n\tsshConfig    *ssh.ServerConfig\n\tusers        *settings.UserIndex\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 35
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nvar upgrader = websocket.Upgrader{\n\tCheckOrigin:     func(r *http.Request) bool { return true },\n\tReadBufferSize:  settings.EnvInt(\"WS_BUFF_SIZE\", 0),\n\tWriteBufferSize: settings.EnvInt(\"WS_BUFF_SIZE\", 0),\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 48
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\n// NewServer creates and returns a new chisel server\nfunc NewServer(c *Config) (*Server, error) {\n\tserver := &Server{\n\t\tconfig:     c,\n\t\thttpServer: cnet.NewHTTPServer(),\n\t\tLogger:     cio.NewLogger(\"server\"),\n\t\tsessions:   settings.NewUsers(),\n\t}\n\tserver.Info = true\n\tserver.users = settings.NewUserIndex(server.Logger)\n\tif c.AuthFile != \"\" {\n\t\tif err := server.users.LoadUsers(c.AuthFile); err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t}\n\tif c.Auth != \"\" {\n\t\tu := &settings.User{Addrs: []*regexp.Regexp{settings.UserAllowAll}}\n\t\tu.Name, u.Pass = settings.ParseAuth(c.Auth)\n\t\tif u.Name != \"\" {\n\t\t\tserver.users.AddUser(u)\n\t\t}\n\t}\n\n\tvar pemBytes []byte\n\tvar err error\n\tif c.KeyFile != \"\" {\n\t\tvar key []byte\n\n\t\tif ccrypto.IsChiselKey([]byte(c.KeyFile)) {\n\t\t\tkey = []byte(c.KeyFile)\n\t\t} else {\n\t\t\tkey, err = os.ReadFile(c.KeyFile)\n\t\t\tif err != nil {\n\t\t\t\tlog.Fatalf(\"Failed to read key file %s\", c.KeyFile)\n\t\t\t}\n\t\t}\n\n\t\tpemBytes = key\n\t\tif ccrypto.IsChiselKey(key) {\n\t\t\tpemBytes, err = ccrypto.ChiselKey2PEM(key)\n\t\t\tif err != nil {\n\t\t\t\tlog.Fatalf(\"Invalid key %s\", string(key))\n\t\t\t}\n\t\t}\n\t} else {\n\t\t//generate private key (optionally using seed)\n\t\tpemBytes, err = ccrypto.Seed2PEM(c.KeySeed)\n\t\tif err != nil {\n\t\t\tlog.Fatal(\"Failed to generate key\")\n\t\t}\n\t}\n\n\t//convert into ssh.PrivateKey\n\tprivate, err := ssh.ParsePrivateKey(pemBytes)\n\tif err != nil {\n\t\tlog.Fatal(\"Failed to parse key\")\n\t}\n\t//fingerprint this key\n\tserver.fingerprint = ccrypto.FingerprintKey(private.PublicKey())\n\t//create ssh config\n\tserver.sshConfig = &ssh.ServerConfig{\n\t\tServerVersion:    \"SSH-\" + chshare.ProtocolVersion + \"-server\",\n\t\tPasswordCallback: server.authUser,\n\t}\n\tserver.sshConfig.AddHostKey(private)\n\t//setup reverse proxy\n\tif c.Proxy != \"\" {\n\t\tu, err := url.Parse(c.Proxy)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif u.Host == \"\" {\n\t\t\treturn nil, server.Errorf(\"Missing protocol (%s)\", u)\n\t\t}\n\t\tserver.reverseProxy = httputil.NewSingleHostReverseProxy(u)\n\t\t//always use proxy host\n\t\tserver.reverseProxy.Director = func(r *http.Request) {\n\t\t\t//enforce origin, keep path\n\t\t\tr.URL.Scheme = u.Scheme\n\t\t\tr.URL.Host = u.Host\n\t\t\tr.Host = u.Host\n\t\t}\n\t}\n\t//print when reverse tunnelling is enabled\n\tif c.Reverse {\n\t\tserver.Infof(\"Reverse tunnelling enabled\")\n\t}\n\treturn server, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 54
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\n// Run is responsible for starting the chisel service.\n// Internally this calls Start then Wait.\nfunc (s *Server) Run(host, port string) error {\n\tif err := s.Start(host, port); err != nil {\n\t\treturn err\n\t}\n\treturn s.Wait()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 144
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\n// Start is responsible for kicking off the http server\nfunc (s *Server) Start(host, port string) error {\n\treturn s.StartContext(context.Background(), host, port)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 153
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\n// StartContext is responsible for kicking off the http server,\n// and can be closed by cancelling the provided context\nfunc (s *Server) StartContext(ctx context.Context, host, port string) error {\n\ts.Infof(\"Fingerprint %s\", s.fingerprint)\n\tif s.users.Len() > 0 {\n\t\ts.Infof(\"User authentication enabled\")\n\t}\n\tif s.reverseProxy != nil {\n\t\ts.Infof(\"Reverse proxy enabled\")\n\t}\n\tl, err := s.listener(host, port)\n\tif err != nil {\n\t\treturn err\n\t}\n\th := http.Handler(http.HandlerFunc(s.handleClientHandler))\n\tif s.Debug {\n\t\to := requestlog.DefaultOptions\n\t\to.TrustProxy = true\n\t\th = requestlog.WrapWith(h, o)\n\t}\n\treturn s.httpServer.GoServe(ctx, l, h)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 158
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\n// Wait waits for the http server to close\nfunc (s *Server) Wait() error {\n\treturn s.httpServer.Wait()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 181
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "8",
+      "value": "\n// Close forcibly closes the http server\nfunc (s *Server) Close() error {\n\treturn s.httpServer.Close()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 186
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "9",
+      "value": "\n// GetFingerprint is used to access the server fingerprint\nfunc (s *Server) GetFingerprint() string {\n\treturn s.fingerprint\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 191
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "10",
+      "value": "\n// authUser is responsible for validating the ssh user / password combination\nfunc (s *Server) authUser(c ssh.ConnMetadata, password []byte) (*ssh.Permissions, error) {\n\t// check if user authentication is enabled and if not, allow all\n\tif s.users.Len() == 0 {\n\t\treturn nil, nil\n\t}\n\t// check the user exists and has matching password\n\tn := c.User()\n\tuser, found := s.users.Get(n)\n\tif !found || user.Pass != string(password) {\n\t\ts.Debugf(\"Login failed for user: %s\", n)\n\t\treturn nil, errors.New(\"Invalid authentication for username: %s\")\n\t}\n\t// insert the user session map\n\t// TODO this should probably have a lock on it given the map isn't thread-safe\n\ts.sessions.Set(string(c.SessionID()), user)\n\treturn nil, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 10,
+        "type": "originalCode",
+        "lineNumberBase": 196
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "11",
+      "value": "\n// AddUser adds a new user into the server user index\nfunc (s *Server) AddUser(user, pass string, addrs ...string) error {\n\tauthorizedAddrs := []*regexp.Regexp{}\n\tfor _, addr := range addrs {\n\t\tauthorizedAddr, err := regexp.Compile(addr)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tauthorizedAddrs = append(authorizedAddrs, authorizedAddr)\n\t}\n\ts.users.AddUser(&settings.User{\n\t\tName:  user,\n\t\tPass:  pass,\n\t\tAddrs: authorizedAddrs,\n\t})\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 11,
+        "type": "originalCode",
+        "lineNumberBase": 215
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "12",
+      "value": "\n// DeleteUser removes a user from the server user index\nfunc (s *Server) DeleteUser(user string) {\n\ts.users.Del(user)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 12,
+        "type": "originalCode",
+        "lineNumberBase": 233
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "13",
+      "value": "\n// ResetUsers in the server user index.\n// Use nil to remove all.\nfunc (s *Server) ResetUsers(users []*settings.User) {\n\ts.users.Reset(users)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 13,
+        "type": "originalCode",
+        "lineNumberBase": 238
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./server/server.go"
+  }
+}

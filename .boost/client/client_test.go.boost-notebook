@@ -1,0 +1,56 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package chclient\n\nimport (\n\t\"crypto/elliptic\"\n\t\"log\"\n\t\"net/http\"\n\t\"net/http/httptest\"\n\t\"sync\"\n\t\"testing\"\n\t\"time\"\n\n\t\"github.com/jpillora/chisel/share/ccrypto\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\nfunc TestCustomHeaders(t *testing.T) {\n\t//fake server\n\twg := sync.WaitGroup{}\n\twg.Add(1)\n\tserver := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {\n\t\tif req.Header.Get(\"Foo\") != \"Bar\" {\n\t\t\tt.Fatal(\"expected header Foo to be 'Bar'\")\n\t\t}\n\t\twg.Done()\n\t}))\n\tdefer server.Close()\n\t//client\n\theaders := http.Header{}\n\theaders.Set(\"Foo\", \"Bar\")\n\tconfig := Config{\n\t\tKeepAlive:        time.Second,\n\t\tMaxRetryInterval: time.Second,\n\t\tServer:           server.URL,\n\t\tRemotes:          []string{\"9000\"},\n\t\tHeaders:          headers,\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tgo c.Run()\n\t//wait for test to complete\n\twg.Wait()\n\tc.Close()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc TestFallbackLegacyFingerprint(t *testing.T) {\n\tconfig := Config{\n\t\tFingerprint: \"a5:32:92:c6:56:7a:9e:61:26:74:1b:81:a6:f5:1b:44\",\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tr := ccrypto.NewDetermRand([]byte(\"test123\"))\n\tpriv, err := ccrypto.GenerateKeyGo119(elliptic.P256(), r)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tpub, err := ssh.NewPublicKey(&priv.PublicKey)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\terr = c.verifyServer(\"\", nil, pub)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 45
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc TestVerifyLegacyFingerprint(t *testing.T) {\n\tconfig := Config{\n\t\tFingerprint: \"a5:32:92:c6:56:7a:9e:61:26:74:1b:81:a6:f5:1b:44\",\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tr := ccrypto.NewDetermRand([]byte(\"test123\"))\n\tpriv, err := ccrypto.GenerateKeyGo119(elliptic.P256(), r)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tpub, err := ssh.NewPublicKey(&priv.PublicKey)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\terr = c.verifyLegacyFingerprint(pub)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 68
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc TestVerifyFingerprint(t *testing.T) {\n\tconfig := Config{\n\t\tFingerprint: \"qmrRoo8MIqePv3jC8+wv49gU6uaFgD3FASQx9V8KdmY=\",\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tr := ccrypto.NewDetermRand([]byte(\"test123\"))\n\tpriv, err := ccrypto.GenerateKeyGo119(elliptic.P256(), r)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tpub, err := ssh.NewPublicKey(&priv.PublicKey)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\terr = c.verifyServer(\"\", nil, pub)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 91
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./client/client_test.go"
+  }
+}

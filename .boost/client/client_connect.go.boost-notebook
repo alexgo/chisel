@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package chclient\n\nimport (\n\t\"context\"\n\t\"errors\"\n\t\"fmt\"\n\t\"io\"\n\t\"strings\"\n\t\"time\"\n\n\t\"github.com/gorilla/websocket\"\n\t\"github.com/jpillora/backoff\"\n\tchshare \"github.com/jpillora/chisel/share\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/cos\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\nfunc (c *Client) connectionLoop(ctx context.Context) error {\n\t//connection loop!\n\tb := &backoff.Backoff{Max: c.config.MaxRetryInterval}\n\tfor {\n\t\tconnected, err := c.connectionOnce(ctx)\n\t\t//reset backoff after successful connections\n\t\tif connected {\n\t\t\tb.Reset()\n\t\t}\n\t\t//connection error\n\t\tattempt := int(b.Attempt())\n\t\tmaxAttempt := c.config.MaxRetryCount\n\t\t//dont print closed-connection errors\n\t\tif strings.HasSuffix(err.Error(), \"use of closed network connection\") {\n\t\t\terr = io.EOF\n\t\t}\n\t\t//show error message and attempt counts (excluding disconnects)\n\t\tif err != nil && err != io.EOF {\n\t\t\tmsg := fmt.Sprintf(\"Connection error: %s\", err)\n\t\t\tif attempt > 0 {\n\t\t\t\tmaxAttemptVal := fmt.Sprint(maxAttempt)\n\t\t\t\tif maxAttempt < 0 {\n\t\t\t\t\tmaxAttemptVal = \"unlimited\"\n\t\t\t\t}\n\t\t\t\tmsg += fmt.Sprintf(\" (Attempt: %d/%s)\", attempt, maxAttemptVal)\n\t\t\t}\n\t\t\tc.Infof(msg)\n\t\t}\n\t\t//give up?\n\t\tif maxAttempt >= 0 && attempt >= maxAttempt {\n\t\t\tc.Infof(\"Give up\")\n\t\t\tbreak\n\t\t}\n\t\td := b.Duration()\n\t\tc.Infof(\"Retrying in %s...\", d)\n\t\tselect {\n\t\tcase <-cos.AfterSignal(d):\n\t\t\tcontinue //retry now\n\t\tcase <-ctx.Done():\n\t\t\tc.Infof(\"Cancelled\")\n\t\t\treturn nil\n\t\t}\n\t}\n\tc.Close()\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n// connectionOnce connects to the chisel server and blocks\nfunc (c *Client) connectionOnce(ctx context.Context) (connected bool, err error) {\n\t//already closed?\n\tselect {\n\tcase <-ctx.Done():\n\t\treturn false, errors.New(\"Cancelled\")\n\tdefault:\n\t\t//still open\n\t}\n\tctx, cancel := context.WithCancel(ctx)\n\tdefer cancel()\n\t//prepare dialer\n\td := websocket.Dialer{\n\t\tHandshakeTimeout: settings.EnvDuration(\"WS_TIMEOUT\", 45*time.Second),\n\t\tSubprotocols:     []string{chshare.ProtocolVersion},\n\t\tTLSClientConfig:  c.tlsConfig,\n\t\tReadBufferSize:   settings.EnvInt(\"WS_BUFF_SIZE\", 0),\n\t\tWriteBufferSize:  settings.EnvInt(\"WS_BUFF_SIZE\", 0),\n\t\tNetDialContext:   c.config.DialContext,\n\t}\n\t//optional proxy\n\tif p := c.proxyURL; p != nil {\n\t\tif err := c.setProxy(p, &d); err != nil {\n\t\t\treturn false, err\n\t\t}\n\t}\n\twsConn, _, err := d.DialContext(ctx, c.server, c.config.Headers)\n\tif err != nil {\n\t\treturn false, err\n\t}\n\tconn := cnet.NewWebSocketConn(wsConn)\n\t// perform SSH handshake on net.Conn\n\tc.Debugf(\"Handshaking...\")\n\tsshConn, chans, reqs, err := ssh.NewClientConn(conn, \"\", c.sshConfig)\n\tif err != nil {\n\t\te := err.Error()\n\t\tif strings.Contains(e, \"unable to authenticate\") {\n\t\t\tc.Infof(\"Authentication failed\")\n\t\t\tc.Debugf(e)\n\t\t} else {\n\t\t\tc.Infof(e)\n\t\t}\n\t\treturn false, err\n\t}\n\tdefer sshConn.Close()\n\t// chisel client handshake (reverse of server handshake)\n\t// send configuration\n\tc.Debugf(\"Sending config\")\n\tt0 := time.Now()\n\t_, configerr, err := sshConn.SendRequest(\n\t\t\"config\",\n\t\ttrue,\n\t\tsettings.EncodeConfig(c.computed),\n\t)\n\tif err != nil {\n\t\tc.Infof(\"Config verification failed\")\n\t\treturn false, err\n\t}\n\tif len(configerr) > 0 {\n\t\treturn false, errors.New(string(configerr))\n\t}\n\tc.Infof(\"Connected (Latency %s)\", time.Since(t0))\n\t//connected, handover ssh connection for tunnel to use, and block\n\terr = c.tunnel.BindSSH(ctx, sshConn, reqs, chans)\n\tc.Infof(\"Disconnected\")\n\tconnected = time.Since(t0) > 5*time.Second\n\treturn connected, err\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 65
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./client/client_connect.go"
+  }
+}

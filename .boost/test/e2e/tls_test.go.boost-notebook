@@ -1,0 +1,56 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package e2e_test\n\nimport (\n\t\"path\"\n\t\"testing\"\n\n\tchclient \"github.com/jpillora/chisel/client\"\n\tchserver \"github.com/jpillora/chisel/server\"\n)\n\nfunc TestTLS(t *testing.T) {\n\ttlsConfig, err := newTestTLSConfig()\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer tlsConfig.Close()\n\n\ttmpPort := availablePort()\n\t//setup server, client, fileserver\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{\n\t\t\tTLS: *tlsConfig.serverTLS,\n\t\t},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{tmpPort + \":$FILEPORT\"},\n\t\t\tTLS:     *tlsConfig.clientTLS,\n\t\t\tServer:  \"https://localhost:\" + tmpPort,\n\t\t})\n\tdefer teardown()\n\t//test remote\n\tresult, err := post(\"http://localhost:\"+tmpPort, \"foo\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif result != \"foo!\" {\n\t\tt.Fatalf(\"expected exclamation mark added\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc TestMTLS(t *testing.T) {\n\ttlsConfig, err := newTestTLSConfig()\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer tlsConfig.Close()\n\t//provide no client cert, server should reject the client request\n\ttlsConfig.serverTLS.CA = path.Dir(tlsConfig.serverTLS.CA)\n\n\ttmpPort := availablePort()\n\t//setup server, client, fileserver\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{\n\t\t\tTLS: *tlsConfig.serverTLS,\n\t\t},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{tmpPort + \":$FILEPORT\"},\n\t\t\tTLS:     *tlsConfig.clientTLS,\n\t\t\tServer:  \"https://localhost:\" + tmpPort,\n\t\t})\n\tdefer teardown()\n\t//test remote\n\tresult, err := post(\"http://localhost:\"+tmpPort, \"foo\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif result != \"foo!\" {\n\t\tt.Fatalf(\"expected exclamation mark added\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 38
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc TestTLSMissingClientCert(t *testing.T) {\n\ttlsConfig, err := newTestTLSConfig()\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer tlsConfig.Close()\n\t//provide no client cert, server should reject the client request\n\ttlsConfig.clientTLS.Cert = \"\"\n\ttlsConfig.clientTLS.Key = \"\"\n\n\ttmpPort := availablePort()\n\t//setup server, client, fileserver\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{\n\t\t\tTLS: *tlsConfig.serverTLS,\n\t\t},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{tmpPort + \":$FILEPORT\"},\n\t\t\tTLS:     *tlsConfig.clientTLS,\n\t\t\tServer:  \"https://localhost:\" + tmpPort,\n\t\t})\n\tdefer teardown()\n\t//test remote\n\t_, err = post(\"http://localhost:\"+tmpPort, \"foo\")\n\tif err == nil {\n\t\tt.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 69
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc TestTLSMissingClientCA(t *testing.T) {\n\ttlsConfig, err := newTestTLSConfig()\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer tlsConfig.Close()\n\t//specify a CA which does not match the client cert\n\t//server should reject the client request\n\t//provide no client cert, server should reject the client request\n\ttlsConfig.serverTLS.CA = tlsConfig.clientTLS.CA\n\n\ttmpPort := availablePort()\n\t//setup server, client, fileserver\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{\n\t\t\tTLS: *tlsConfig.serverTLS,\n\t\t},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{tmpPort + \":$FILEPORT\"},\n\t\t\tTLS:     *tlsConfig.clientTLS,\n\t\t\tServer:  \"https://localhost:\" + tmpPort,\n\t\t})\n\tdefer teardown()\n\t//test remote\n\t_, err = post(\"http://localhost:\"+tmpPort, \"foo\")\n\tif err == nil {\n\t\tt.Fatal(err)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 98
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/e2e/tls_test.go"
+  }
+}

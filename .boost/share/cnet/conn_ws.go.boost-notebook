@@ -1,0 +1,68 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package cnet\n\nimport (\n\t\"net\"\n\t\"time\"\n\n\t\"github.com/gorilla/websocket\"\n)\n\ntype wsConn struct {\n\t*websocket.Conn\n\tbuff []byte\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//NewWebSocketConn converts a websocket.Conn into a net.Conn\nfunc NewWebSocketConn(websocketConn *websocket.Conn) net.Conn {\n\tc := wsConn{\n\t\tConn: websocketConn,\n\t}\n\treturn &c\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 13
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\n//Read is not threadsafe though thats okay since there\n//should never be more than one reader\nfunc (c *wsConn) Read(dst []byte) (int, error) {\n\tldst := len(dst)\n\t//use buffer or read new message\n\tvar src []byte\n\tif len(c.buff) > 0 {\n\t\tsrc = c.buff\n\t\tc.buff = nil\n\t} else if _, msg, err := c.Conn.ReadMessage(); err == nil {\n\t\tsrc = msg\n\t} else {\n\t\treturn 0, err\n\t}\n\t//copy src->dest\n\tvar n int\n\tif len(src) > ldst {\n\t\t//copy as much as possible of src into dst\n\t\tn = copy(dst, src[:ldst])\n\t\t//copy remainder into buffer\n\t\tr := src[ldst:]\n\t\tlr := len(r)\n\t\tc.buff = make([]byte, lr)\n\t\tcopy(c.buff, r)\n\t} else {\n\t\t//copy all of src into dst\n\t\tn = copy(dst, src)\n\t}\n\t//return bytes copied\n\treturn n, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 21
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (c *wsConn) Write(b []byte) (int, error) {\n\tif err := c.Conn.WriteMessage(websocket.BinaryMessage, b); err != nil {\n\t\treturn 0, err\n\t}\n\tn := len(b)\n\treturn n, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 53
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc (c *wsConn) SetDeadline(t time.Time) error {\n\tif err := c.Conn.SetReadDeadline(t); err != nil {\n\t\treturn err\n\t}\n\treturn c.Conn.SetWriteDeadline(t)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 61
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cnet/conn_ws.go"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package e2e_test\n\nimport (\n\t\"log\"\n\t\"net\"\n\t\"testing\"\n\t\"time\"\n\n\tchclient \"github.com/jpillora/chisel/client\"\n\tchserver \"github.com/jpillora/chisel/server\"\n\t\"golang.org/x/sync/errgroup\"\n)\n\nfunc TestUDP(t *testing.T) {\n\t//listen on random udp port\n\techoPort := availableUDPPort()\n\ta, _ := net.ResolveUDPAddr(\"udp\", \":\"+echoPort)\n\tl, err := net.ListenUDP(\"udp\", a)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\t//chisel client+server\n\tinboundPort := availableUDPPort()\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{\n\t\t\t\tinboundPort + \":\" + echoPort + \"/udp\",\n\t\t\t},\n\t\t},\n\t)\n\tdefer teardown()\n\t//fake udp server, read and echo back duplicated, close\n\teg := errgroup.Group{}\n\teg.Go(func() error {\n\t\tdefer l.Close()\n\t\tb := make([]byte, 128)\n\t\tn, a, err := l.ReadFrom(b)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif _, err = l.WriteTo(append(b[:n], b[:n]...), a); err != nil {\n\t\t\treturn err\n\t\t}\n\t\treturn nil\n\t})\n\t//fake udp client\n\tconn, err := net.Dial(\"udp4\", \"localhost:\"+inboundPort)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\t//write bazz through the tunnel\n\tif _, err := conn.Write([]byte(\"bazz\")); err != nil {\n\t\tt.Fatal(err)\n\t}\n\t//receive bazzbazz back\n\tb := make([]byte, 128)\n\tconn.SetReadDeadline(time.Now().Add(2 * time.Second))\n\tn, err := conn.Read(b)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t\treturn\n\t}\n\t//udp server should close correctly\n\tif err := eg.Wait(); err != nil {\n\t\tt.Fatal(err)\n\t\treturn\n\t}\n\t//ensure expected\n\ts := string(b[:n])\n\tif s != \"bazzbazz\" {\n\t\tt.Fatalf(\"expected double bazz\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc availableUDPPort() string {\n\ta, _ := net.ResolveUDPAddr(\"udp\", \":0\")\n\tl, err := net.ListenUDP(\"udp\", a)\n\tif err != nil {\n\t\tlog.Panicf(\"availability listen: %s\", err)\n\t}\n\tl.Close()\n\t_, port, err := net.SplitHostPort(l.LocalAddr().String())\n\tif err != nil {\n\t\tlog.Panic(err)\n\t}\n\treturn port\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 74
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/e2e/udp_test.go"
+  }
+}

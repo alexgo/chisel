@@ -1,0 +1,909 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"; mermaid.initialize({ startOnLoad: true });</script>
+    <style>
+        @page {
+            margin: 2cm;
+            size: letter;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.0;
+            overflow-x: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        /* Use this class for analysis sections */
+        .analysis-section {
+            padding-top: 16px;
+            margin-top: 24px;
+            font-size: 12px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .new-page-section {
+            page-break-before: always;
+        }
+
+        .analysis-section h1, .analysis-section h2 {
+            color: #444;
+        }
+
+        .analysis-section p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Polyverse Boost Source Analysis Details: ./README.md</h1>
+    <p>Date Generated: Wednesday, September 6, 2023 at 12:51:56 PM PDT</p>
+    <div class="><hr>
+<h3 id="boost-architectural-quick-summary-security-report">Boost Architectural Quick Summary Security Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:49:28 PM PDT</p>
+<p>Executive Level Report:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The software project appears to have a single file, README.md, which is unusual for a software project. This could indicate that the project is in its early stages or that the project&#39;s source code is not being properly detected. The architectural impact of the issues found is significant, as they indicate potential vulnerabilities in the project&#39;s security architecture.</p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The project has a high risk level due to the presence of severe security issues. The most severe issue is &quot;Sensitive Data Exposure&quot;, which is classified as an Error. This could lead to unauthorized access to sensitive data, posing a significant risk to the project. </p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: If these issues are not addressed, they could lead to unauthorized access to customer data, which could have severe consequences including loss of customer trust and potential legal implications.</p>
+</li>
+<li><p><strong>Overall Issues</strong>: The project has a variety of issues, including warnings for &quot;Insecure Direct Object References (IDOR)&quot;, &quot;Insecure Cryptographic Storage&quot;, &quot;Insufficient Transport Layer Protection&quot;, &quot;Unvalidated Redirects and Forwards&quot;, &quot;Insecure Use of Cryptography&quot;, and &quot;Improper Certificate Validation&quot;. These issues indicate a lack of secure coding practices, which could lead to vulnerabilities in the software.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: Given that all issues are found in a single file, the risk is concentrated. However, if this file is representative of the overall project, the risk is high. The fact that no files were found without issues is concerning and indicates a need for improved coding practices and potentially a review of the project&#39;s architecture.</p>
+</li>
+</ol>
+<p>Highlights:</p>
+<ul>
+<li>The project&#39;s single file, README.md, has a variety of severe security issues.</li>
+<li>The most severe issue, &quot;Sensitive Data Exposure&quot;, could lead to unauthorized access to sensitive data.</li>
+<li>The presence of multiple warnings indicates a lack of secure coding practices.</li>
+<li>The potential customer impact of these issues is high, as they could lead to unauthorized access to customer data.</li>
+<li>The risk assessment for the project is high, given the concentration of issues in a single file and the absence of files without issues.</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-performance-report">Boost Architectural Quick Summary Performance Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:49:55 PM PDT</p>
+<p>Executive Report:</p>
+<ol>
+<li><strong>Architectural Impact</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Risk Analysis</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Potential Customer Impact</strong>: Based on the analysis, there are no severe issues that could potentially impact customers.</li>
+<li><strong>Performance Issues</strong>: Our analysis did not identify any explicit performance issues in the file.</li>
+<li><strong>Risk Assessment</strong>: Based on the current analysis of this file, no severe issues have been found. However, this doesn&#39;t guarantee that the file is risk-free.</li>
+</ol>
+<p>Highlights:</p>
+<ul>
+<li>No severe issues were identified in the current analysis of this file.</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-compliance-report">Boost Architectural Quick Summary Compliance Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:52:46 PM PDT</p>
+<p>Executive Report:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The software project has a significant architectural impact due to the presence of high-severity issues related to GDPR and PCI DSS in the README.md file. The use of a custom header that can potentially expose sensitive cardholder data and the storage of user credentials in a user.json file are serious violations that can compromise the security architecture of the project. </p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The risk associated with this project is high. The presence of GDPR and PCI DSS errors in the README.md file indicates potential non-compliance with data protection regulations. This could lead to legal penalties, reputational damage, and loss of customer trust. </p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: Customers could be adversely affected if their sensitive data is compromised due to the architectural issues in the project. The use of a custom header for transmitting sensitive information and the storage of user credentials in a user.json file could lead to data breaches, resulting in potential identity theft and financial loss for customers.</p>
+</li>
+<li><p><strong>Overall Issues</strong>: The project has a total of 10 issues, with 2 errors and 8 warnings. The README.md file has the most severe issues, with 1 PCI DSS error and 1 GDPR error. The project also has warnings related to GDPR, PCI DSS, HIPAA, and Data Compliance.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: The overall health of the project source is concerning. The README.md file, which is the only file in the project, has multiple issues of varying severity. This indicates that 100% of the project files have issues, which is a significant risk factor.</p>
+</li>
+</ol>
+<p>In conclusion, the software project has serious architectural and compliance issues that need to be addressed urgently. The project is at high risk due to potential non-compliance with data protection regulations and the potential impact on customers is significant. The project needs a thorough review and remediation of the identified issues to ensure compliance and protect customer data.</p>
+</div><p></p>
+    <h1>Detailed Analysis</h1><div>
+                    <h2>./README.md :</h2>
+                    <p>Programming Language: markdown</p>
+                    <pre><code><span class="hljs-meta"># Chisel</span>
+
+[![GoDoc](https:<span class="hljs-comment">//godoc.org/github.com/jpillora/chisel?status.svg)](https://godoc.org/github.com/jpillora/chisel) [![CI](https://github.com/jpillora/chisel/workflows/CI/badge.svg)](https://github.com/jpillora/chisel/actions?workflow=CI)</span>
+
+Chisel <span class="hljs-keyword">is</span> a fast TCP/UDP tunnel, transported over HTTP, secured via SSH. Single executable including both <span class="hljs-keyword">client</span> and <span class="hljs-keyword">server</span>. Written <span class="hljs-keyword">in</span> Go (golang). Chisel <span class="hljs-keyword">is</span> mainly useful <span class="hljs-keyword">for</span> passing through firewalls, though it can also be used to provide a secure endpoint into your network.
+
+![overview](https:<span class="hljs-comment">//docs.google.com/drawings/d/1p53VWxzGNfy8rjr-mW8pvisJmhkoLl82vAgctO_6f1w/pub?w=960&amp;h=720)</span>
+
+<span class="hljs-meta">## Table of Contents</span>
+
+- [Features](<span class="hljs-meta">#features)</span>
+- [Install](<span class="hljs-meta">#install)</span>
+- [Demo](<span class="hljs-meta">#demo)</span>
+- [Usage](<span class="hljs-meta">#usage)</span>
+- [Contributing](<span class="hljs-meta">#contributing)</span>
+- [Changelog](<span class="hljs-meta">#changelog)</span>
+- [License](<span class="hljs-meta">#license)</span>
+
+<span class="hljs-meta">## Features</span>
+
+- Easy to use
+- [Performant](./test/bench/perf.md)\*
+- [Encrypted connections](<span class="hljs-meta">#security) using the SSH protocol (via `crypto/ssh`)</span>
+- [Authenticated connections](<span class="hljs-meta">#authentication); authenticated client connections with a users config file, authenticated server connections with fingerprint matching.</span>
+- Client auto-reconnects with [exponential backoff](https:<span class="hljs-comment">//github.com/jpillora/backoff)</span>
+- Clients can create multiple tunnel endpoints over one TCP connection
+- Clients can optionally pass through SOCKS or HTTP CONNECT proxies
+- Reverse port forwarding (Connections go through the <span class="hljs-keyword">server</span> and out the <span class="hljs-keyword">client</span>)
+- Server optionally doubles <span class="hljs-keyword">as</span> a [<span class="hljs-keyword">reverse</span> proxy](http:<span class="hljs-comment">//golang.org/pkg/net/http/httputil/#NewSingleHostReverseProxy)</span>
+- Server optionally allows [SOCKS5](https:<span class="hljs-comment">//en.wikipedia.org/wiki/SOCKS) connections (See [guide below](#socks5-guide))</span>
+- Clients optionally allow [SOCKS5](https:<span class="hljs-comment">//en.wikipedia.org/wiki/SOCKS) connections from a reversed port forward</span>
+- Client connections over stdio which supports `ssh -o ProxyCommand` providing SSH over HTTP
+
+<span class="hljs-meta">## Install</span>
+
+<span class="hljs-meta">### Binaries</span>
+
+[![Releases](https:<span class="hljs-comment">//img.shields.io/github/release/jpillora/chisel.svg)](https://github.com/jpillora/chisel/releases) [![Releases](https://img.shields.io/github/downloads/jpillora/chisel/total.svg)](https://github.com/jpillora/chisel/releases)</span>
+
+See [the latest release](https:<span class="hljs-comment">//github.com/jpillora/chisel/releases/latest) or download and install it now with `curl https://i.jpillora.com/chisel! | bash`</span>
+
+<span class="hljs-meta">### Docker</span>
+
+[![Docker Pulls](https:<span class="hljs-comment">//img.shields.io/docker/pulls/jpillora/chisel.svg)](https://hub.docker.com/r/jpillora/chisel/) [![Image Size](https://img.shields.io/docker/image-size/jpillora/chisel/latest)](https://microbadger.com/images/jpillora/chisel)</span>
+
+```sh
+docker run --rm -it jpillora/chisel --help
+```
+
+<span class="hljs-meta">### Fedora</span>
+
+The package <span class="hljs-keyword">is</span> maintained <span class="hljs-keyword">by</span> the Fedora community. If you encounter issues related to the usage of the RPM, please use <span class="hljs-keyword">this</span> [issue tracker](https:<span class="hljs-comment">//bugzilla.redhat.com/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;classification=Fedora&amp;component=chisel&amp;list_id=11614537&amp;product=Fedora&amp;product=Fedora%20EPEL).</span>
+
+```sh
+sudo dnf -y install chisel
+```
+
+<span class="hljs-meta">### Source</span>
+
+```sh
+$ go install github.com/jpillora/chisel@latest
+```
+
+<span class="hljs-meta">## Demo</span>
+
+A [demo app](https:<span class="hljs-comment">//chisel-demo.herokuapp.com) on Heroku is running this `chisel server`:</span>
+
+```sh
+$ chisel <span class="hljs-keyword">server</span> --port $PORT --proxy http:<span class="hljs-comment">//example.com</span>
+<span class="hljs-meta"># listens on $PORT, proxy web requests to http://example.com</span>
+```
+
+This demo app <span class="hljs-keyword">is</span> also running a [simple file <span class="hljs-keyword">server</span>](https:<span class="hljs-comment">//www.npmjs.com/package/serve) on `:3000`, which is normally inaccessible due to Heroku&#x27;s firewall. However, if we tunnel in with:</span>
+
+```sh
+$ chisel <span class="hljs-keyword">client</span> https:<span class="hljs-comment">//chisel-demo.herokuapp.com 3000</span>
+<span class="hljs-meta"># connects to chisel server at https://chisel-demo.herokuapp.com,</span>
+<span class="hljs-meta"># tunnels your localhost:3000 to the server&#x27;s localhost:3000</span>
+```
+
+and then visit [localhost:<span class="hljs-number">3000</span>](http:<span class="hljs-comment">//localhost:3000/), we should see a directory listing. Also, if we visit the [demo app](https://chisel-demo.herokuapp.com) in the browser we should hit the server&#x27;s default proxy and see a copy of [example.com](http://example.com).</span>
+
+<span class="hljs-meta">## Usage</span>
+
+&lt;!-- render these help texts <span class="hljs-keyword">by</span> hand,
+  or use https:<span class="hljs-comment">//github.com/jpillora/md-tmpl</span>
+    with $ md-tmpl -w README.md --&gt;
+
+&lt;!--tmpl,code=plain:echo <span class="hljs-string">&quot;$ chisel --help&quot;</span> &amp;&amp; go run main.go --help | sed <span class="hljs-string">&#x27;s#0.0.0-src (go1\..*)#X.Y.Z#&#x27;</span> --&gt;
+``` plain 
+$ chisel --help
+
+  Usage: chisel [command] [--help]
+
+  Version: X.Y.Z
+
+  Commands:
+    <span class="hljs-keyword">server</span> - runs chisel <span class="hljs-keyword">in</span> <span class="hljs-keyword">server</span> mode
+    <span class="hljs-keyword">client</span> - runs chisel <span class="hljs-keyword">in</span> <span class="hljs-keyword">client</span> mode
+
+  Read more:
+    https:<span class="hljs-comment">//github.com/jpillora/chisel</span>
+
+```
+&lt;!--/tmpl--&gt;
+
+
+&lt;!--tmpl,code=plain:echo <span class="hljs-string">&quot;$ chisel server --help&quot;</span> &amp;&amp; go run main.go <span class="hljs-keyword">server</span> --help | cat | sed <span class="hljs-string">&#x27;s#0.0.0-src (go1\..*)#X.Y.Z#&#x27;</span> --&gt;
+``` plain 
+$ chisel <span class="hljs-keyword">server</span> --help
+
+  Usage: chisel <span class="hljs-keyword">server</span> [options]
+
+  Options:
+
+    --host, Defines the HTTP listening host – the network <span class="hljs-keyword">interface</span>
+    (defaults the environment variable HOST and falls back to <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>).
+
+    --port, -p, Defines the HTTP listening port (defaults to the environment
+    variable PORT and fallsback to port <span class="hljs-number">8080</span>).
+
+    --key, (deprecated use --keygen and --keyfile instead)
+    An optional string to seed the generation of a ECDSA <span class="hljs-keyword">public</span>
+    and <span class="hljs-keyword">private</span> key pair. All communications will be secured <span class="hljs-keyword">using</span> <span class="hljs-keyword">this</span>
+    key pair. Share the subsequent fingerprint with clients to enable detection
+    of man-<span class="hljs-keyword">in</span>-the-middle attacks (defaults to the CHISEL_KEY environment
+    variable, otherwise a <span class="hljs-keyword">new</span> key <span class="hljs-keyword">is</span> generate each run).
+
+    --keygen, A path to write a newly generated PEM-encoded SSH <span class="hljs-keyword">private</span> key file.
+    If users depend on your --key fingerprint, you may also include your --key to
+    output your existing key. Use - (dash) to output the generated key to stdout.
+
+    --keyfile, An optional path to a PEM-encoded SSH <span class="hljs-keyword">private</span> key. When
+    <span class="hljs-keyword">this</span> flag <span class="hljs-keyword">is</span> set, the --key option <span class="hljs-keyword">is</span> ignored, and the provided <span class="hljs-keyword">private</span> key
+    <span class="hljs-keyword">is</span> used to secure all communications. (defaults to the CHISEL_KEY_FILE
+    environment variable). Since ECDSA keys are <span class="hljs-built_in">short</span>, you may also set keyfile
+    to an inline base64 <span class="hljs-keyword">private</span> key (e.g. chisel <span class="hljs-keyword">server</span> --keygen - | base64).
+
+    --authfile, An optional path to a users.json file. This file should
+    be an object with users defined <span class="hljs-keyword">like</span>:
+      {
+        <span class="hljs-string">&quot;&lt;user:pass&gt;&quot;</span>: [<span class="hljs-string">&quot;&lt;addr-regex&gt;&quot;</span>,<span class="hljs-string">&quot;&lt;addr-regex&gt;&quot;</span>]
+      }
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:43:05 PM PDT</p>
+<p>The code you&#39;ve provided is not actually a piece of executable code, but rather a description and documentation of a project called Chisel, written in the Go programming language. It&#39;s a README file that typically exists in the root directory of a project repository.</p>
+<p>Chisel is a fast TCP/UDP tunnel, transported over HTTP, secured via SSH. It&#39;s a single executable that includes both client and server. Its main use case is to pass through firewalls, but it can also be used to provide a secure endpoint into a network.</p>
+<p>The README file provides some key features of Chisel:</p>
+<ul>
+<li>Encrypted connections using the SSH protocol (via <code>crypto/ssh</code>)</li>
+<li>Authenticated connections</li>
+<li>Client auto-reconnects with exponential backoff</li>
+<li>Clients can create multiple tunnel endpoints over one TCP connection</li>
+<li>Reverse port forwarding</li>
+<li>Server optionally doubles as a reverse proxy</li>
+<li>Server optionally allows SOCKS5 connections</li>
+<li>Clients optionally allow SOCKS5 connections from a reversed port forward</li>
+<li>Client connections over stdio which supports <code>ssh -o ProxyCommand</code> providing SSH over HTTP</li>
+</ul>
+<p>It also provides installation instructions for different platforms (Binaries, Docker, Fedora, Source), a demo of how to use it, and usage instructions for both server and client modes.</p>
+<p>Here are some links for further reading:</p>
+<ul>
+<li><a href="https://github.com/jpillora/chisel">Chisel Github repository</a></li>
+<li><a href="https://godoc.org/github.com/jpillora/chisel">GoDoc for Chisel</a></li>
+<li><a href="https://github.com/jpillora/backoff">Exponential backoff</a></li>
+<li><a href="http://golang.org/pkg/net/http/httputil/#NewSingleHostReverseProxy">Reverse proxy in Go</a></li>
+<li><a href="https://en.wikipedia.org/wiki/SOCKS">SOCKS5</a></li>
+</ul>
+<p>Since this is a README file, it doesn&#39;t directly implement any algorithms. However, the Chisel project itself likely uses various network communication and encryption algorithms to establish and secure its tunnels.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:45:23 PM PDT</p>
+<p>The provided source code is not included in the project summary and analysis. Could you please provide the specific source code that you would like me to generate a control flow graph for?</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:47:05 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: Insecure Direct Object References (IDOR)</p>
+<p><strong>Description</strong>: The code does not check if a user is authorized to access the specific resources they are requesting. This can lead to unauthorized access to sensitive data.</p>
+<p><strong>Solution</strong>: Implement access control checks to verify the user is authorized to access the resources they are requesting. More on this issue can be found here: <a href="https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control">https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control</a></p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: Insecure Cryptographic Storage</p>
+<p><strong>Description</strong>: The code uses a deprecated key parameter for ECDSA generation which could lead to weak keys being used. Weak keys can be cracked, leading to unauthorized access to encrypted data.</p>
+<p><strong>Solution</strong>: Use the recommended keygen and keyfile parameters for ECDSA key generation. More on this issue can be found here: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html</a></p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: Insufficient Transport Layer Protection</p>
+<p><strong>Description</strong>: The code does not enforce the use of secure transport protocols. This can lead to data being transmitted in clear text, making it susceptible to interception and manipulation.</p>
+<p><strong>Solution</strong>: Enforce the use of secure transport protocols such as HTTPS. More on this issue can be found here: <a href="https://owasp.org/www-community/Insufficient_Transport_Layer_Protection">https://owasp.org/www-community/Insufficient_Transport_Layer_Protection</a></p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: Unvalidated Redirects and Forwards</p>
+<p><strong>Description</strong>: The code allows for the redirection of requests without validating the legitimacy of the target. This can be exploited to redirect users to malicious sites.</p>
+<p><strong>Solution</strong>: Implement validation checks on all redirects and forwards to ensure they are pointing to legitimate and safe locations. More on this issue can be found here: <a href="https://owasp.org/www-project-top-ten/2017/A10_2017-Insufficient_Logging%2526Monitoring">https://owasp.org/www-project-top-ten/2017/A10_2017-Insufficient_Logging%2526Monitoring</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:49:41 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:50:36 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 127</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The code uses a users.json file for storing user credentials. This might lead to data breaches if the file is not properly secured. Storing user credentials in plain text is a violation of GDPR.</p>
+<p><strong>Solution</strong>: Encrypt the users.json file or use a secure method such as hashing for storing passwords. Also, consider implementing a more secure authentication method like OAuth.</p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 105</p>
+<p><strong>Bug Type</strong>: PCI DSS</p>
+<p><strong>Description</strong>: The code transfers data over HTTP, which is not secure. This could potentially lead to data breaches and is a violation of PCI DSS.</p>
+<p><strong>Solution</strong>: Use HTTPS for data transfer to ensure the data is encrypted and secure.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 105</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: The code transfers data over HTTP, which is not secure. If any healthcare-related data is being transferred, this would be a violation of HIPAA.</p>
+<p><strong>Solution</strong>: Use HTTPS for data transfer to ensure the data is encrypted and secure. Also, ensure that any healthcare-related data is properly anonymized or de-identified to prevent violations of HIPAA.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./README.md line 144:</h2>
+                    <p>Programming Language: markdown</p>
+                    <pre><code>    <span class="hljs-keyword">when</span> &lt;<span class="hljs-keyword">user</span>&gt; connects, their &lt;pass&gt; will be verified <span class="hljs-keyword">and</span> <span class="hljs-keyword">then</span>
+    <span class="hljs-keyword">each</span> <span class="hljs-keyword">of</span> the remote addresses will be compared against the list
+    <span class="hljs-keyword">of</span> address regular expressions <span class="hljs-keyword">for</span> a match. Addresses will
+    <span class="hljs-keyword">always</span> come <span class="hljs-keyword">in</span> the form &quot;&lt;remote-host&gt;:&lt;remote-port&gt;&quot; <span class="hljs-keyword">for</span> normal remotes
+    <span class="hljs-keyword">and</span> &quot;R:&lt;local-interface&gt;:&lt;local-port&gt;&quot; <span class="hljs-keyword">for</span> <span class="hljs-keyword">reverse</span> port forwarding
+    remotes. This file will be automatically reloaded <span class="hljs-keyword">on</span> change.
+
+    <span class="hljs-comment">--auth, An optional string representing a single user with full</span>
+    <span class="hljs-keyword">access</span>, <span class="hljs-keyword">in</span> the form <span class="hljs-keyword">of</span> &lt;<span class="hljs-keyword">user</span>:pass&gt;. It <span class="hljs-keyword">is</span> equivalent <span class="hljs-keyword">to</span> creating an
+    authfile <span class="hljs-keyword">with</span> {&quot;&lt;user:pass&gt;&quot;: [&quot;&quot;]}. <span class="hljs-keyword">If</span> unset, it will use the
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:43:38 PM PDT</p>
+<p>Sorry for the confusion, but the provided text does not seem to be a piece of source code. It appears to be a part of a software documentation or a comment in the code, explaining how a certain feature or functionality works.</p>
+<p>From the text, it seems to be describing a process for user authentication and address verification in a system that supports remote connections and reverse port forwarding. Here&#39;s a breakdown:</p>
+<ol>
+<li>When a user (<code>&lt;user&gt;</code>) connects, their password (<code>&lt;pass&gt;</code>) is verified.</li>
+<li>The remote addresses are compared against a list of address regular expressions for a match.</li>
+<li>The format of the addresses is either &quot;<remote-host>:<remote-port>&quot; for normal remotes or &quot;R:<local-interface>:<local-port>&quot; for reverse port forwarding remotes.</li>
+<li>The file (presumably the one containing the list of address regular expressions) will be automatically reloaded if it changes.</li>
+<li>The <code>--auth</code> is an optional string representing a single user with full access, in the form of <code>&lt;user:pass&gt;</code>. It is equivalent to creating an authfile with <code>{&quot;&lt;user:pass&gt;&quot;: [&quot;&quot;]}</code>. If unset, it will use the...</li>
+</ol>
+<p>Unfortunately, the text cuts off there, so we can&#39;t see what it will use if <code>--auth</code> is unset.</p>
+<p>However, without actual code, I can&#39;t provide a detailed analysis or discuss the algorithms used. If you have any source code related to this functionality, feel free to share it, and I&#39;ll be happy to analyze it for you.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:45:38 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">    graph TD;
+    style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+    style VerifyPass fill:#228B22, stroke:#000000, stroke-width:2px;
+    style CompareAddresses fill:#228B22, stroke:#000000, stroke-width:2px;
+    style MatchFound fill:#228B22, stroke:#000000, stroke-width:2px;
+    style NoMatchFound fill:#B22222, stroke:#000000, stroke-width:2px;
+    style ReloadFile fill:#228B22, stroke:#000000, stroke-width:2px;
+
+    Start-->VerifyPass;
+    VerifyPass-->CompareAddresses;
+    CompareAddresses-->MatchFound;
+    CompareAddresses-->NoMatchFound;
+    NoMatchFound-->ReloadFile;</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:47:24 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 9/10</p>
+<p><strong>Line Number</strong>: 291</p>
+<p><strong>Bug Type</strong>: Sensitive Data Exposure</p>
+<p><strong>Description</strong>: The user&#39;s password is being handled in plain text, which is a major security risk. If intercepted, this could lead to unauthorized access to the user&#39;s account. More on this issue can be found here: <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure</a></p>
+<p><strong>Solution</strong>: Passwords should never be stored or transmitted in plain text. Consider using a secure password hashing algorithm such as bcrypt or argon2. The hashed password should then be compared with the hashed version of the input password for verification. More on secure password handling can be found here: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html</a></p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 295</p>
+<p><strong>Bug Type</strong>: Insecure Direct Object References (IDOR)</p>
+<p><strong>Description</strong>: The software is using a user-provided string to reference objects directly, which could potentially lead to unauthorized access if a malicious user manipulates the string. More on this issue can be found here: <a href="https://owasp.org/www-project-top-ten/2017/A4_2017-Insecure_Direct_Object_References">https://owasp.org/www-project-top-ten/2017/A4_2017-Insecure_Direct_Object_References</a></p>
+<p><strong>Solution</strong>: Instead of using user-provided strings to reference objects directly, consider using indirect references. This can be done by mapping the user-provided string to an internal reference which is then used to access the object. More on preventing IDOR can be found here: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:49:44 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:50:59 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 291</p>
+<p><strong>Bug Type</strong>: Data Compliance</p>
+<p><strong>Description</strong>: The system is storing user credentials (<a href="user:pass">user:pass</a>) in plain text. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require that personal data, including passwords, be stored securely.</p>
+<p><strong>Solution</strong>: Use secure methods such as hashing for storing passwords. Avoid storing passwords in plain text. For hashing, you can use algorithms like bcrypt, scrypt or Argon2.</p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 286</p>
+<p><strong>Bug Type</strong>: Data Compliance</p>
+<p><strong>Description</strong>: The system does not seem to be encrypting the user data during transmission. This could lead to unauthorized access and data breaches, which violates GDPR, PCI DSS, and HIPAA regulations.</p>
+<p><strong>Solution</strong>: Implement encryption for all data transmitted over networks. You can use secure protocols like HTTPS and TLS for data transmission.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./README.md line 154:</h2>
+                    <p>Programming Language: markdown</p>
+                    <pre><code>    environment <span class="hljs-keyword">variable</span> AUTH.
+
+    <span class="hljs-comment">--keepalive, An optional keepalive interval. Since the underlying</span>
+    <span class="hljs-keyword">transport</span> <span class="hljs-keyword">is</span> HTTP, <span class="hljs-keyword">in</span> many instances we<span class="hljs-symbol">&#x27;ll</span> be traversing through
+    proxies, often these proxies will close idle connections. You must
+    specify a <span class="hljs-built_in">time</span> <span class="hljs-keyword">with</span> a unit, <span class="hljs-keyword">for</span> example &#x27;<span class="hljs-number">5</span>s&#x27; <span class="hljs-keyword">or</span> &#x27;<span class="hljs-number">2</span>m&#x27;. Defaults
+    <span class="hljs-keyword">to</span> &#x27;<span class="hljs-number">25</span>s&#x27; (set <span class="hljs-keyword">to</span> <span class="hljs-number">0</span>s <span class="hljs-keyword">to</span> disable).
+
+    <span class="hljs-comment">--backend, Specifies another HTTP server to proxy requests to when</span>
+    chisel receives a normal HTTP request. Useful <span class="hljs-keyword">for</span> hiding chisel <span class="hljs-keyword">in</span>
+    plain sight.
+
+    <span class="hljs-comment">--socks5, Allow clients to access the internal SOCKS5 proxy. See</span>
+    chisel client <span class="hljs-comment">--help for more information.</span>
+
+    <span class="hljs-comment">--reverse, Allow clients to specify reverse port forwarding remotes</span>
+    <span class="hljs-keyword">in</span> addition <span class="hljs-keyword">to</span> normal remotes.
+
+    <span class="hljs-comment">--tls-key, Enables TLS and provides optional path to a PEM-encoded</span>
+    TLS private key. <span class="hljs-keyword">When</span> this flag <span class="hljs-keyword">is</span> set, you must also set <span class="hljs-comment">--tls-cert,</span>
+    <span class="hljs-keyword">and</span> you cannot set <span class="hljs-comment">--tls-domain.</span>
+
+    <span class="hljs-comment">--tls-cert, Enables TLS and provides optional path to a PEM-encoded</span>
+    TLS certificate. <span class="hljs-keyword">When</span> this flag <span class="hljs-keyword">is</span> set, you must also set <span class="hljs-comment">--tls-key,</span>
+    <span class="hljs-keyword">and</span> you cannot set <span class="hljs-comment">--tls-domain.</span>
+
+    <span class="hljs-comment">--tls-domain, Enables TLS and automatically acquires a TLS key and</span>
+    certificate using LetsEncrypt. Setting <span class="hljs-comment">--tls-domain requires port 443.</span>
+    You may specify multiple <span class="hljs-comment">--tls-domain flags to serve multiple domains.</span>
+    The resulting files are cached <span class="hljs-keyword">in</span> the <span class="hljs-string">&quot;$HOME/.cache/chisel&quot;</span> directory.
+    You can modify this path by setting the CHISEL_LE_CACHE <span class="hljs-keyword">variable</span>,
+    <span class="hljs-keyword">or</span> disable caching by setting this <span class="hljs-keyword">variable</span> <span class="hljs-keyword">to</span> <span class="hljs-string">&quot;-&quot;</span>. You can optionally
+    provide a certificate notification email by setting CHISEL_LE_EMAIL.
+
+    <span class="hljs-comment">--tls-ca, a path to a PEM encoded CA certificate bundle or a directory</span>
+    holding multiple PEM encode CA certificate bundle files, which <span class="hljs-keyword">is</span> used <span class="hljs-keyword">to</span> 
+    validate client connections. The provided CA certificates will be used 
+    instead <span class="hljs-keyword">of</span> the system roots. This <span class="hljs-keyword">is</span> commonly used <span class="hljs-keyword">to</span> implement mutual-TLS. 
+
+    <span class="hljs-comment">--pid Generate pid file in current working directory</span>
+
+    -v, Enable verbose logging
+
+    <span class="hljs-comment">--help, This help text</span>
+
+  Signals:
+    The chisel <span class="hljs-keyword">process</span> <span class="hljs-keyword">is</span> listening <span class="hljs-keyword">for</span>:
+      a SIGUSR2 <span class="hljs-keyword">to</span> print <span class="hljs-keyword">process</span> stats, <span class="hljs-keyword">and</span>
+      a SIGHUP <span class="hljs-keyword">to</span> short-circuit the client reconnect timer
+
+  Version:
+    X.Y.Z
+
+  Read more:
+    https://github.com/jpillora/chisel
+
+```
+&lt;!<span class="hljs-comment">--/tmpl--&gt;</span>
+
+
+&lt;!<span class="hljs-comment">--tmpl,code=plain:echo &quot;$ chisel client --help&quot; &amp;&amp; go run main.go client --help | sed &#x27;s#0.0.0-src (go1\..*)#X.Y.Z#&#x27; --&gt;</span>
+``` plain 
+$ chisel client <span class="hljs-comment">--help</span>
+
+  Usage: chisel client [options] &lt;server&gt; &lt;remote&gt; [remote] [remote] ...
+
+  &lt;server&gt; <span class="hljs-keyword">is</span> the URL <span class="hljs-keyword">to</span> the chisel server.
+
+  &lt;remote&gt;s are remote connections tunneled through the server, each <span class="hljs-keyword">of</span>
+  which come <span class="hljs-keyword">in</span> the form:
+
+    &lt;local-host&gt;:&lt;local-<span class="hljs-keyword">port</span>&gt;:&lt;remote-host&gt;:&lt;remote-<span class="hljs-keyword">port</span>&gt;/&lt;protocol&gt;
+
+    ■ local-host defaults <span class="hljs-keyword">to</span> <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span> (<span class="hljs-keyword">all</span> interfaces).
+    ■ local-<span class="hljs-keyword">port</span> defaults <span class="hljs-keyword">to</span> remote-<span class="hljs-keyword">port</span>.
+    ■ remote-<span class="hljs-keyword">port</span> <span class="hljs-keyword">is</span> required*.
+    ■ remote-host defaults <span class="hljs-keyword">to</span> <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span> (server localhost).
+    ■ protocol defaults <span class="hljs-keyword">to</span> tcp.
+
+  which shares &lt;remote-host&gt;:&lt;remote-<span class="hljs-keyword">port</span>&gt; from the server <span class="hljs-keyword">to</span> the client
+  as &lt;local-host&gt;:&lt;local-<span class="hljs-keyword">port</span>&gt;, <span class="hljs-keyword">or</span>:
+
+    R:&lt;local-interface&gt;:&lt;local-<span class="hljs-keyword">port</span>&gt;:&lt;remote-host&gt;:&lt;remote-<span class="hljs-keyword">port</span>&gt;/&lt;protocol&gt;
+
+  which does reverse <span class="hljs-keyword">port</span> forwarding, sharing &lt;remote-host&gt;:&lt;remote-<span class="hljs-keyword">port</span>&gt;
+  from the client <span class="hljs-keyword">to</span> the server<span class="hljs-symbol">&#x27;s</span> &lt;local-interface&gt;:&lt;local-<span class="hljs-keyword">port</span>&gt;.
+
+    example remotes
+
+      <span class="hljs-number">3000</span>
+      example.com:<span class="hljs-number">3000</span>
+      <span class="hljs-number">3000</span>:google.com:<span class="hljs-number">80</span>
+      <span class="hljs-number">192.168</span>.<span class="hljs-number">0.5</span>:<span class="hljs-number">3000</span>:google.com:<span class="hljs-number">80</span>
+      socks
+      <span class="hljs-number">5000</span>:socks
+      R:<span class="hljs-number">2222</span>:localhost:<span class="hljs-number">22</span>
+      R:socks
+      R:<span class="hljs-number">5000</span>:socks
+      stdio:example.com:<span class="hljs-number">22</span>
+      <span class="hljs-number">1.1</span>.<span class="hljs-number">1.1</span>:<span class="hljs-number">53</span>/udp
+
+    <span class="hljs-keyword">When</span> the chisel server has <span class="hljs-comment">--socks5 enabled, remotes can</span>
+    specify <span class="hljs-string">&quot;socks&quot;</span> <span class="hljs-keyword">in</span> place <span class="hljs-keyword">of</span> remote-host <span class="hljs-keyword">and</span> remote-<span class="hljs-keyword">port</span>.
+    The <span class="hljs-keyword">default</span> local host <span class="hljs-keyword">and</span> <span class="hljs-keyword">port</span> <span class="hljs-keyword">for</span> a <span class="hljs-string">&quot;socks&quot;</span> remote <span class="hljs-keyword">is</span>
+    <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">1080</span>. Connections <span class="hljs-keyword">to</span> this remote will terminate
+    at the server<span class="hljs-symbol">&#x27;s</span> internal SOCKS5 proxy.
+
+    <span class="hljs-keyword">When</span> the chisel server has <span class="hljs-comment">--reverse enabled, remotes can</span>
+    be prefixed <span class="hljs-keyword">with</span> R <span class="hljs-keyword">to</span> denote that they are reversed. That
+    <span class="hljs-keyword">is</span>, the server will listen <span class="hljs-keyword">and</span> accept connections, <span class="hljs-keyword">and</span> they
+    will be proxied through the client which specified the remote.
+    Reverse remotes specifying <span class="hljs-string">&quot;R:socks&quot;</span> will listen <span class="hljs-keyword">on</span> the server<span class="hljs-symbol">&#x27;s</span>
+    <span class="hljs-keyword">default</span> socks <span class="hljs-keyword">port</span> (<span class="hljs-number">1080</span>) <span class="hljs-keyword">and</span> terminate the connection at the
+    client<span class="hljs-symbol">&#x27;s</span> internal SOCKS5 proxy.
+
+    <span class="hljs-keyword">When</span> stdio <span class="hljs-keyword">is</span> used as local-host, the tunnel will connect standard
+    input/output <span class="hljs-keyword">of</span> this program <span class="hljs-keyword">with</span> the remote. This <span class="hljs-keyword">is</span> useful <span class="hljs-keyword">when</span> 
+    combined <span class="hljs-keyword">with</span> ssh ProxyCommand. You can <span class="hljs-keyword">use</span>
+      ssh -o ProxyCommand=<span class="hljs-symbol">&#x27;chisel</span> client chiselserver stdio:%h:%p&#x27; \
+          user@example.com
+    <span class="hljs-keyword">to</span> connect <span class="hljs-keyword">to</span> an SSH server through the tunnel.
+
+  Options:
+
+    <span class="hljs-comment">--fingerprint, A *strongly recommended* fingerprint string</span>
+    <span class="hljs-keyword">to</span> perform host-key validation against the server<span class="hljs-symbol">&#x27;s</span> public key.
+	Fingerprint mismatches will close the connection.
+	Fingerprints are generated by hashing the ECDSA public key using
+	SHA256 <span class="hljs-keyword">and</span> encoding the result <span class="hljs-keyword">in</span> base64.
+	Fingerprints must be <span class="hljs-number">44</span> characters containing a trailing equals (=).
+
+    <span class="hljs-comment">--auth, An optional username and password (client authentication)</span>
+    <span class="hljs-keyword">in</span> the form: <span class="hljs-string">&quot;&lt;user&gt;:&lt;pass&gt;&quot;</span>. These credentials are compared <span class="hljs-keyword">to</span>
+    the credentials inside the server<span class="hljs-symbol">&#x27;s</span> <span class="hljs-comment">--authfile. defaults to the</span>
+    AUTH environment <span class="hljs-keyword">variable</span>.
+
+    <span class="hljs-comment">--keepalive, An optional keepalive interval. Since the underlying</span>
+    <span class="hljs-keyword">transport</span> <span class="hljs-keyword">is</span> HTTP, <span class="hljs-keyword">in</span> many instances we<span class="hljs-symbol">&#x27;ll</span> be traversing through
+    proxies, often these proxies will close idle connections. You must
+    specify a <span class="hljs-built_in">time</span> <span class="hljs-keyword">with</span> a unit, <span class="hljs-keyword">for</span> example &#x27;<span class="hljs-number">5</span>s&#x27; <span class="hljs-keyword">or</span> &#x27;<span class="hljs-number">2</span>m&#x27;. Defaults
+    <span class="hljs-keyword">to</span> &#x27;<span class="hljs-number">25</span>s&#x27; (set <span class="hljs-keyword">to</span> <span class="hljs-number">0</span>s <span class="hljs-keyword">to</span> disable).
+
+    <span class="hljs-comment">--max-retry-count, Maximum number of times to retry before exiting.</span>
+    Defaults <span class="hljs-keyword">to</span> unlimited.
+
+    <span class="hljs-comment">--max-retry-interval, Maximum wait time before retrying after a</span>
+    disconnection. Defaults <span class="hljs-keyword">to</span> <span class="hljs-number">5</span> minutes.
+
+    <span class="hljs-comment">--proxy, An optional HTTP CONNECT or SOCKS5 proxy which will be</span>
+    used <span class="hljs-keyword">to</span> reach the chisel server. Authentication can be specified
+    inside the URL.
+    <span class="hljs-keyword">For</span> example, http://admin:password@my-server.com:<span class="hljs-number">8081</span>
+            <span class="hljs-keyword">or</span>: socks://admin:password@my-server.com:<span class="hljs-number">1080</span>
+
+    <span class="hljs-comment">--header, Set a custom header in the form &quot;HeaderName: HeaderContent&quot;.</span>
+    Can be used multiple times. (e.g <span class="hljs-comment">--header &quot;Foo: Bar&quot; --header &quot;Hello: World&quot;)</span>
+
+    <span class="hljs-comment">--hostname, Optionally set the &#x27;Host&#x27; header (defaults to the host</span>
+    found <span class="hljs-keyword">in</span> the server url).
+
+    <span class="hljs-comment">--sni, Override the ServerName when using TLS (defaults to the </span>
+    hostname).
+
+    <span class="hljs-comment">--tls-ca, An optional root certificate bundle used to verify the</span>
+    chisel server. Only valid <span class="hljs-keyword">when</span> connecting <span class="hljs-keyword">to</span> the server <span class="hljs-keyword">with</span>
+    <span class="hljs-string">&quot;https&quot;</span> <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;wss&quot;</span>. By <span class="hljs-keyword">default</span>, the operating system CAs will be used.
+
+    <span class="hljs-comment">--tls-skip-verify, Skip server TLS certificate verification of</span>
+    chain <span class="hljs-keyword">and</span> host name (<span class="hljs-keyword">if</span> TLS <span class="hljs-keyword">is</span> used <span class="hljs-keyword">for</span> <span class="hljs-keyword">transport</span> connections <span class="hljs-keyword">to</span>
+    server). <span class="hljs-keyword">If</span> set, client accepts any TLS certificate presented by
+    the server <span class="hljs-keyword">and</span> any host name <span class="hljs-keyword">in</span> that certificate. This only affects
+    <span class="hljs-keyword">transport</span> https (wss) connection. Chisel server<span class="hljs-symbol">&#x27;s</span> public key
+    may be still verified (see <span class="hljs-comment">--fingerprint) after inner connection</span>
+    <span class="hljs-keyword">is</span> established.
+
+    <span class="hljs-comment">--tls-key, a path to a PEM encoded private key used for client </span>
+    authentication (mutual-TLS).
+
+    <span class="hljs-comment">--tls-cert, a path to a PEM encoded certificate matching the provided </span>
+    private key. The certificate must have client authentication 
+    enabled (mutual-TLS).
+
+    <span class="hljs-comment">--pid Generate pid file in current working directory</span>
+
+    -v, Enable verbose logging
+
+    <span class="hljs-comment">--help, This help text</span>
+
+  Signals:
+    The chisel <span class="hljs-keyword">process</span> <span class="hljs-keyword">is</span> listening <span class="hljs-keyword">for</span>:
+      a SIGUSR2 <span class="hljs-keyword">to</span> print <span class="hljs-keyword">process</span> stats, <span class="hljs-keyword">and</span>
+      a SIGHUP <span class="hljs-keyword">to</span> short-circuit the client reconnect timer
+
+  Version:
+    X.Y.Z
+
+  Read more:
+    https://github.com/jpillora/chisel
+
+```
+&lt;!<span class="hljs-comment">--/tmpl--&gt;</span>
+
+### Security
+
+Encryption <span class="hljs-keyword">is</span> always enabled. <span class="hljs-keyword">When</span> you start up a chisel server, it will <span class="hljs-keyword">generate</span> an <span class="hljs-keyword">in</span>-memory ECDSA public/private key pair. The public key fingerprint (base64 encoded SHA256) will be displayed as the server starts. Instead <span class="hljs-keyword">of</span> generating a random key, the server may optionally specify a key <span class="hljs-keyword">file</span>, using the `<span class="hljs-comment">--keyfile` option. When clients connect, they will also display the server&#x27;s public key fingerprint. The client can force a particular fingerprint using the `--fingerprint` option. See the `--help` above for more information.</span>
+
+### Authentication
+
+Using the `<span class="hljs-comment">--authfile` option, the server may optionally provide a `user.json` configuration file to create a list of accepted users. The client then authenticates using the `--auth` option. See [users.json](example/users.json) for an example authentication configuration file. See the `--help` above for more information.</span>
+
+Internally, this <span class="hljs-keyword">is</span> done using the _Password_ authentication method provided by SSH. Learn more about `crypto/ssh` here http://blog.gopheracademy.com/go-<span class="hljs-keyword">and</span>-ssh/.
+
+### SOCKS5 Guide <span class="hljs-keyword">with</span> Docker
+
+<span class="hljs-number">1</span>. Print a <span class="hljs-keyword">new</span> private key <span class="hljs-keyword">to</span> the terminal
+
+    ```sh
+    chisel server <span class="hljs-comment">--keygen -</span>
+    # <span class="hljs-keyword">or</span> save it <span class="hljs-keyword">to</span> disk <span class="hljs-comment">--keygen /path/to/mykey</span>
+    ```
+
+<span class="hljs-number">1</span>. Start your chisel server
+
+    ```sh
+    jpillora/chisel server <span class="hljs-comment">--keyfile &#x27;&lt;ck-base64 string or file path&gt;&#x27; -p 9312 --socks5</span>
+    ```
+
+<span class="hljs-number">1</span>. Connect your chisel client (using server<span class="hljs-symbol">&#x27;s</span> fingerprint)
+
+    ```sh
+    chisel client <span class="hljs-comment">--fingerprint &#x27;&lt;see server output&gt;&#x27; &lt;server-address&gt;:9312 socks</span>
+    ```
+
+<span class="hljs-number">1</span>. Point your SOCKS5 clients (e.g. OS/Browser) <span class="hljs-keyword">to</span>:
+
+    ```
+    &lt;client-address&gt;:<span class="hljs-number">1080</span>
+    ```
+
+<span class="hljs-number">1</span>. Now you have an encrypted, authenticated SOCKS5 connection over HTTP
+
+
+#### Caveats
+
+Since WebSockets support <span class="hljs-keyword">is</span> required:
+
+- IaaS providers <span class="hljs-keyword">all</span> will support WebSockets (unless an unsupporting HTTP proxy has been forced <span class="hljs-keyword">in</span> front <span class="hljs-keyword">of</span> you, <span class="hljs-keyword">in</span> which <span class="hljs-keyword">case</span> I<span class="hljs-symbol">&#x27;d</span> argue that you<span class="hljs-symbol">&#x27;ve</span> been downgraded <span class="hljs-keyword">to</span> PaaS)
+- PaaS providers vary <span class="hljs-keyword">in</span> their support <span class="hljs-keyword">for</span> WebSockets
+  - Heroku has full support
+  - Openshift has full support though connections are only accepted <span class="hljs-keyword">on</span> ports <span class="hljs-number">8443</span> <span class="hljs-keyword">and</span> <span class="hljs-number">8080</span>
+  - Google App Engine has **no** support (Track this <span class="hljs-keyword">on</span> [their repo](https://code.google.com/p/googleappengine/issues/detail?id=<span class="hljs-number">2535</span>))
+
+## Contributing
+
+- http://golang.org/doc/code.html
+- http://golang.org/doc/effective_go.html
+- `github.com/jpillora/chisel/share` contains the <span class="hljs-keyword">shared</span> <span class="hljs-keyword">package</span>
+- `github.com/jpillora/chisel/server` contains the server <span class="hljs-keyword">package</span>
+- `github.com/jpillora/chisel/client` contains the client <span class="hljs-keyword">package</span>
+
+## Changelog
+
+- `<span class="hljs-number">1.0</span>` - Initial <span class="hljs-keyword">release</span>
+- `<span class="hljs-number">1.1</span>` - Replaced simple symmetric encryption <span class="hljs-keyword">for</span> ECDSA SSH
+- `<span class="hljs-number">1.2</span>` - Added SOCKS5 (server) <span class="hljs-keyword">and</span> HTTP CONNECT (client) support
+- `<span class="hljs-number">1.3</span>` - Added reverse tunnelling support
+- `<span class="hljs-number">1.4</span>` - Added arbitrary HTTP header support
+- `<span class="hljs-number">1.5</span>` - Added reverse SOCKS support (by @aus)
+- `<span class="hljs-number">1.6</span>` - Added client stdio support (by @BoleynSu)
+- `<span class="hljs-number">1.7</span>` - Added UDP support
+- `<span class="hljs-number">1.8</span>` - Move <span class="hljs-keyword">to</span> a `scratch`Docker image
+- `<span class="hljs-number">1.9</span>` - Switch from `<span class="hljs-comment">--key` seed to P256 key strings with `--key{gen,file}` + bump to Go 1.21 (by @cmenginnz)</span>
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:44:48 PM PDT</p>
+<p>The code you provided is the help documentation for a command-line tool called Chisel. Chisel is a fast TCP/UDP tunnel over HTTP. It is written in Go programming language. Chisel is a tool for managing SSH-like tunnels, it&#39;s a single executable including both client and server. </p>
+<p>Let&#39;s break down the server and client commands:</p>
+<h3 id="server-command">Server Command</h3>
+<p>The server command is used to start a Chisel server. It accepts several arguments like <code>--auth</code>, <code>--keepalive</code>, <code>--backend</code>, <code>--socks5</code>, <code>--reverse</code>, <code>--tls-key</code>, <code>--tls-cert</code>, <code>--tls-domain</code>, <code>--tls-ca</code>, <code>--pid</code>, <code>-v</code> and <code>--help</code>. </p>
+<ul>
+<li><code>--auth</code>: Specifies the authentication method for the server.</li>
+<li><code>--keepalive</code>: Sets the keepalive interval.</li>
+<li><code>--backend</code>: Specifies another HTTP server to proxy requests to when Chisel receives a normal HTTP request.</li>
+<li><code>--socks5</code>: Allows clients to access the internal SOCKS5 proxy.</li>
+<li><code>--reverse</code>: Allows clients to specify reverse port forwarding remotes in addition to normal remotes.</li>
+<li><code>--tls-key</code>, <code>--tls-cert</code>, <code>--tls-domain</code>, <code>--tls-ca</code>: These flags are used to enable and configure TLS (Transport Layer Security).</li>
+<li><code>--pid</code>: Generates pid file in the current working directory.</li>
+<li><code>-v</code>: Enables verbose logging.</li>
+<li><code>--help</code>: Displays the help text.</li>
+</ul>
+<p>The server also listens for two signals <code>SIGUSR2</code> and <code>SIGHUP</code> to print process stats and to short-circuit the client reconnect timer respectively.</p>
+<h3 id="client-command">Client Command</h3>
+<p>The client command is used to start a Chisel client. It also accepts several arguments like <code>--fingerprint</code>, <code>--auth</code>, <code>--keepalive</code>, <code>--max-retry-count</code>, <code>--max-retry-interval</code>, <code>--proxy</code>, <code>--header</code>, <code>--hostname</code>, <code>--sni</code>, <code>--tls-ca</code>, <code>--tls-skip-verify</code>, <code>--tls-key</code>, <code>--tls-cert</code>, <code>--pid</code>, <code>-v</code> and <code>--help</code>.</p>
+<ul>
+<li><code>--fingerprint</code>: A strongly recommended fingerprint string to perform host-key validation against the server&#39;s public key.</li>
+<li><code>--auth</code>: An optional username and password for client authentication.</li>
+<li><code>--keepalive</code>: An optional keepalive interval.</li>
+<li><code>--max-retry-count</code>, <code>--max-retry-interval</code>: These flags set the maximum number of times to retry before exiting and the maximum wait time before retrying after a disconnection.</li>
+<li><code>--proxy</code>: An optional HTTP CONNECT or SOCKS5 proxy which will be used to reach the Chisel server.</li>
+<li><code>--header</code>: Sets a custom header.</li>
+<li><code>--hostname</code>, <code>--sni</code>: These flags are used to optionally set the &#39;Host&#39; header and override the ServerName when using TLS.</li>
+<li><code>--tls-ca</code>, <code>--tls-skip-verify</code>, <code>--tls-key</code>, <code>--tls-cert</code>: These flags are used to configure TLS.</li>
+<li><code>--pid</code>: Generates pid file in the current working directory.</li>
+<li><code>-v</code>: Enables verbose logging.</li>
+<li><code>--help</code>: Displays the help text.</li>
+</ul>
+<p>The client also listens for two signals <code>SIGUSR2</code> and <code>SIGHUP</code> to print process stats and to short-circuit the client reconnect timer respectively.</p>
+<p>You can learn more about Chisel from its <a href="https://github.com/jpillora/chisel">GitHub repository</a>.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:45:55 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->ExampleProcess;
+Start-->ExampleErrorPath;</pre>
+</code></pre><p>The control flow graph for the given source code is as follows:</p>
+<ul>
+<li>The start of the graph is the function name being analyzed.</li>
+<li>There are two paths in the code: one is the primary path (ExampleProcess) and the other is the error path (ExampleErrorPath).</li>
+<li>The primary path (ExampleProcess) is represented by a green color and has a thicker stroke.</li>
+<li>The error path (ExampleErrorPath) is represented by a red color and has a thinner stroke.</li>
+<li>The primary path starts from the start node and goes to the ExampleProcess node.</li>
+<li>The error path starts from the start node and goes to the ExampleErrorPath node.</li>
+</ul>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:48:27 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 314</p>
+<p><strong>Bug Type</strong>: Insecure Use of Cryptography</p>
+<p><strong>Description</strong>: The code uses TLS for encryption but allows the use of self-signed certificates. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.</p>
+<p><strong>Solution</strong>: Consider using certificates from a trusted Certificate Authority (CA). If self-signed certificates must be used, consider implementing a mechanism to securely distribute the public keys to the clients. For more information, see: <a href="https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html</a></p>
+</li>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 319</p>
+<p><strong>Bug Type</strong>: Improper Authentication</p>
+<p><strong>Description</strong>: The code allows the use of the &#39;--auth&#39; option for client authentication, but it does not specify any mechanism for securely storing or transmitting these credentials. This could potentially expose sensitive information.</p>
+<p><strong>Solution</strong>: Consider using secure methods for storing and transmitting authentication credentials, such as secure password hashing and encryption. For more information, see: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html</a></p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 306</p>
+<p><strong>Bug Type</strong>: Insecure Direct Object References (IDOR)</p>
+<p><strong>Description</strong>: The code allows the use of the &#39;--pid&#39; option to generate a PID file in the current working directory. This could potentially allow an attacker to manipulate the PID file to gain unauthorized access or disrupt the service.</p>
+<p><strong>Solution</strong>: Consider implementing a mechanism to protect the PID file, such as secure file permissions or storing the PID file in a secure directory. For more information, see: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html</a></p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 314</p>
+<p><strong>Bug Type</strong>: Improper Certificate Validation</p>
+<p><strong>Description</strong>: The code allows the use of the &#39;--tls-skip-verify&#39; option, which skips the TLS certificate verification. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.</p>
+<p><strong>Solution</strong>: Avoid using the &#39;--tls-skip-verify&#39; option. Always validate TLS certificates to ensure the integrity and confidentiality of the data. For more information, see: <a href="https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:49:48 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:51:53 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 331</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The code uses environment variables for authentication which can potentially expose sensitive user data.</p>
+<p><strong>Solution</strong>: Consider using secure methods such as OAuth for user authentication. Refer to this for more information: <a href="https://auth0.com/learn/oauth2/">https://auth0.com/learn/oauth2/</a></p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 364</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: The code allows the use of HTTP proxies which can be insecure and expose sensitive health information.</p>
+<p><strong>Solution</strong>: Ensure all connections are made over HTTPS or a secure protocol. Refer to this for more information: <a href="https://www.owasp.org/index.php/SecureFlag">https://www.owasp.org/index.php/SecureFlag</a></p>
+</li>
+<li><p><strong>Severity</strong>: 9/10</p>
+<p><strong>Line Number</strong>: 430</p>
+<p><strong>Bug Type</strong>: PCI DSS</p>
+<p><strong>Description</strong>: The code uses a custom header which can potentially expose sensitive cardholder data.</p>
+<p><strong>Solution</strong>: Avoid using custom headers for transmitting sensitive information. Refer to this for more information: <a href="https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html</a></p>
+</li>
+<li><p><strong>Severity</strong>: 10/10</p>
+<p><strong>Line Number</strong>: 495</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The code uses a user.json file for storing user credentials which is a GDPR violation.</p>
+<p><strong>Solution</strong>: Store user credentials in a secure database and hash the passwords. Refer to this for more information: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html</a></p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 517</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: The code does not explicitly mention any encryption for the SOCKS5 connection which can potentially expose sensitive health information.</p>
+<p><strong>Solution</strong>: Ensure all connections are encrypted. Refer to this for more information: <a href="https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet">https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet</a></p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./README.md line 426:</h2>
+                    <p>Programming Language: markdown</p>
+                    <pre><code>
+<span class="hljs-comment">## License</span>
+
+[MIT](https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/jpillora/</span>chisel<span class="hljs-regexp">/blob/m</span>aster/LICENSE) © Jaime Pillora
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:45:07 PM PDT</p>
+<p>The code you&#39;ve provided is not an actual code snippet but a reference to a license for a software project. </p>
+<p>The license mentioned here is the MIT License, and the link provided leads to the license file in the repository of a project named &quot;chisel&quot; by Jaime Pillora on GitHub. </p>
+<p>The MIT License is a permissive free software license originating at the Massachusetts Institute of Technology (MIT). It&#39;s a simple license that only requires that the MIT license be included in all copies or substantial uses of the software. </p>
+<p>In terms of architectural guidelines, the MIT license is very flexible and doesn&#39;t impose any particular architectural constraints or requirements. It allows the software to be used for any purpose, to be modified, and to be distributed, including in modified form. </p>
+<p>For more information about the MIT License, you can visit this link: <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p>Please provide a code snippet for a more detailed analysis regarding algorithms and architectural guidelines.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:46:04 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->ExampleProcess;
+Start-->ExampleErrorPath;
+ExampleProcess-->End;
+ExampleErrorPath-->End;</pre>
+</code></pre><p>The code provided does not contain any control flow.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:48:32 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:49:51 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 12:51:56 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'></div>
+</body>
+</html>

@@ -1,0 +1,1788 @@
+{
+  "dataFormatVersion": "1.4.1",
+  "summary": {
+    "projectName": "chisel",
+    "summaryUrl": ".boost/chisel.summary.boost-notebook",
+    "filesToAnalyze": 62,
+    "filesAnalyzed": 62,
+    "issues": []
+  },
+  "sectionSummary": {
+    "summary": {
+      "analysisType": "summary",
+      "status": "not-started",
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "totalCells": 0,
+      "filesAnalyzed": 0
+    },
+    "explainCode": {
+      "analysisType": "explainCode",
+      "status": "completed",
+      "completedCells": 31,
+      "errorCells": 0,
+      "issueCells": 0,
+      "totalCells": 31,
+      "filesAnalyzed": 6
+    },
+    "flowDiagram": {
+      "analysisType": "flowDiagram",
+      "status": "completed",
+      "completedCells": 31,
+      "errorCells": 0,
+      "issueCells": 0,
+      "totalCells": 31,
+      "filesAnalyzed": 6
+    },
+    "bugAnalysisList": {
+      "analysisType": "bugAnalysisList",
+      "status": "completed",
+      "completedCells": 31,
+      "errorCells": 0,
+      "issueCells": 5,
+      "totalCells": 31,
+      "filesAnalyzed": 6,
+      "details": [
+        {
+          "lineNumber": 83,
+          "severity": 5,
+          "bugType": "Insecure File Permissions",
+          "description": "The function 'generatePidFile()' creates a file with permissions set to '0644'. This means that the file is readable by all users on the system, which can lead to information disclosure if the PID is sensitive.",
+          "solution": "Change the file permissions to '0600' to ensure that only the owner of the file can read and write to it. Read more here: https://en.wikipedia.org/wiki/File_system_permissions#Numeric_notation"
+        },
+        {
+          "lineNumber": 81,
+          "severity": 3,
+          "bugType": "Hard-coded file path",
+          "description": "The function 'generatePidFile()' writes the PID to a hard-coded file path, which could lead to issues if the program does not have the necessary permissions to write to that location, or if the file is needed in a different location.",
+          "solution": "Consider making the file path a configurable parameter. Read more here: https://owasp.org/www-community/vulnerabilities/Insecure_Configuration"
+        },
+        {
+          "lineNumber": 108,
+          "severity": 5,
+          "bugType": "Sensitive Data Exposure",
+          "description": "The --key option is deprecated but still present, and it allows for the seeding of a key pair with a known string, which could potentially be guessed or brute-forced, leading to unauthorized access.",
+          "solution": "Remove the deprecated --key option entirely to prevent potential abuse. Use secure methods of key generation that do not allow for predictable keys. For more information, refer to the OWASP guide on cryptographic storage: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"
+        },
+        {
+          "lineNumber": 123,
+          "severity": 8,
+          "bugType": "Insecure Direct Object References (IDOR)",
+          "description": "The --authfile option reads from a users.json file that contains user credentials in plain text. If this file is improperly secured, it could lead to unauthorized access.",
+          "solution": "Never store passwords in plain text. Use a secure method of storing passwords, such as hashing with a salt. For more information, refer to the OWASP guide on password storage: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+        },
+        {
+          "lineNumber": 156,
+          "severity": 8,
+          "bugType": "Insecure Default Configuration",
+          "description": "The server is configured to listen on all network interfaces (0.0.0.0) by default. This could unintentionally expose the server to the internet or other untrusted networks, leading to potential unauthorized access.",
+          "solution": "Consider changing the default configuration to listen on localhost (127.0.0.1) or a specific trusted network interface. If a broad network interface is required, ensure proper network security controls are in place. More info: https://owasp.org/www-community/Insecure_Configuration_Management"
+        },
+        {
+          "lineNumber": 166,
+          "severity": 6,
+          "bugType": "Insecure Environment Variables",
+          "description": "The application uses environment variables to store sensitive information. If an attacker can access these environment variables, they can potentially gain unauthorized access or perform other malicious actions.",
+          "solution": "Consider using secure methods for storing sensitive information, such as encrypted storage or secure vaults. More info: https://cheatsheetseries.owasp.org/cheatsheets/Environment_Variables_Cheat_Sheet.html"
+        },
+        {
+          "lineNumber": 172,
+          "severity": 7,
+          "bugType": "Insecure Error Handling",
+          "description": "The application crashes and terminates when it encounters an error. This could potentially lead to Denial of Service (DoS) if an attacker can trigger such errors intentionally.",
+          "solution": "Implement proper error handling mechanisms that prevent the application from crashing. Instead, log the error and continue or fail gracefully. More info: https://owasp.org/www-community/Improper_Error_Handling"
+        },
+        {
+          "lineNumber": 188,
+          "severity": 7,
+          "bugType": "Missing Authentication",
+          "description": "The server doesn't seem to have any authentication mechanism in place. This could allow unauthorized users to access or manipulate the server.",
+          "solution": "Implement a secure authentication mechanism to restrict access to authorized users only. More info: https://owasp.org/www-community/Authentication_Cheat_Sheet"
+        },
+        {
+          "lineNumber": 271,
+          "severity": 5,
+          "bugType": "Unrestricted File Upload",
+          "description": "This function appends any string value to the 'flag.values' without any validation. This can lead to various security issues like unrestricted file upload if the 'arg' is a file path. Unrestricted file upload can lead to execution of malicious scripts or overwrite important files.",
+          "solution": "Always validate and sanitize the input before processing. Limit the types of files that can be uploaded and restrict the directories where the files can be stored. Here are some resources on how to prevent unrestricted file upload:\n- https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html\n- https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload"
+        },
+        {
+          "lineNumber": 322,
+          "severity": 7,
+          "bugType": "Insecure Communication",
+          "description": "The code provides an option to skip TLS certificate verification (--tls-skip-verify flag). This could lead to Man-in-the-Middle (MITM) attacks as the client would accept any TLS certificate presented by the server.",
+          "solution": "Remove the --tls-skip-verify option or set it to false by default. Encourage users to use secure connections. More info: https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning"
+        },
+        {
+          "lineNumber": 315,
+          "severity": 5,
+          "bugType": "Missing Authentication",
+          "description": "The code allows for default authentication if the --auth flag is not provided. This could lead to unauthorized access if the environment variable 'AUTH' is not set or is set incorrectly.",
+          "solution": "Ensure that proper authentication is enforced and do not allow default or fallback authentication mechanisms. More info: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication"
+        },
+        {
+          "lineNumber": 329,
+          "severity": 6,
+          "bugType": "Information Exposure",
+          "description": "The code exposes verbose debug information if the -v flag is set. This could lead to information disclosure which could be used for further attacks.",
+          "solution": "Limit the amount of information exposed in debug mode or protect it with additional access controls. More info: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+        }
+      ]
+    },
+    "bugAnalysis": {
+      "analysisType": "bugAnalysis",
+      "status": "not-started",
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "totalCells": 1,
+      "filesAnalyzed": 1
+    },
+    "performanceList": {
+      "analysisType": "performanceList",
+      "status": "completed",
+      "completedCells": 31,
+      "errorCells": 0,
+      "issueCells": 5,
+      "totalCells": 31,
+      "filesAnalyzed": 6,
+      "details": [
+        {
+          "lineNumber": 85,
+          "severity": 5,
+          "bugType": "Disk",
+          "description": "The generatePidFile function writes to disk every time it's called. This could be a performance issue if the function is called frequently.",
+          "solution": "Consider caching the pid in memory if it does not change often, and only writing to disk when necessary. If the pid changes often, consider a more efficient disk writing strategy such as buffering or batch writes."
+        },
+        {
+          "lineNumber": 182,
+          "severity": 6,
+          "bugType": "CPU",
+          "description": "The function generates a PID file every time it is called, which can be CPU intensive if the function is called frequently.",
+          "solution": "Consider generating the PID file once and reusing it, or only generating it if it does not already exist."
+        },
+        {
+          "lineNumber": 184,
+          "severity": 4,
+          "bugType": "Network",
+          "description": "The function starts a new server every time it is called, which can be network intensive if the function is called frequently.",
+          "solution": "Consider reusing an existing server if one is available, or pooling servers to reduce the overhead of starting a new server for each request."
+        },
+        {
+          "lineNumber": 189,
+          "severity": 5,
+          "bugType": "CPU",
+          "description": "The function waits for the server to stop every time it is called, which can be CPU intensive if the function is called frequently.",
+          "solution": "Consider using a non-blocking wait or a callback to handle the server stopping, to prevent blocking the CPU."
+        },
+        {
+          "lineNumber": 282,
+          "severity": 7,
+          "bugType": "Memory",
+          "description": "Inefficient string concatenation in a loop. This can cause significant memory overhead as a new string is created on each iteration.",
+          "solution": "Use a strings.Builder or bytes.Buffer to efficiently concatenate strings in a loop. This will significantly reduce memory usage and improve performance. Here is a link to the Go documentation for strings.Builder: https://golang.org/pkg/strings/#Builder"
+        },
+        {
+          "lineNumber": 294,
+          "severity": 2,
+          "bugType": "Memory",
+          "description": "The use of strings.Index and slicing for splitting the string might lead to unnecessary memory allocation and copying, which can be inefficient if the string is large.",
+          "solution": "Consider using strings.SplitN function which splits the string only at the first occurrence of the separator. This would be more efficient in terms of memory usage. Here's how you can use it: \n\nkey, value := strings.SplitN(arg, \":\", 2)\n\nvalue = strings.TrimSpace(value)\n\nflag.Header.Set(key, value)"
+        },
+        {
+          "lineNumber": 346,
+          "severity": 4,
+          "bugType": "CPU",
+          "description": "The client function is not optimized for performance. There are multiple if checks, which could be reduced or optimized for better performance.",
+          "solution": "Try to reduce the number of if checks, or consider using a switch statement for better performance. Additionally, consider using a more efficient data structure or algorithm to handle the client configuration."
+        },
+        {
+          "lineNumber": 370,
+          "severity": 3,
+          "bugType": "CPU",
+          "description": "The function chclient.NewClient is called with the entire config object, which might be large. This can lead to performance issues if the config object is large, as it is passed by value.",
+          "solution": "Consider passing the config object by reference instead of by value to avoid copying the entire object."
+        },
+        {
+          "lineNumber": 375,
+          "severity": 2,
+          "bugType": "Memory",
+          "description": "The function generatePidFile is called without any error handling. If the function fails to generate a PID file, it could lead to memory leaks.",
+          "solution": "Add error handling to the generatePidFile function to ensure that any errors are properly handled and memory is freed up."
+        }
+      ]
+    },
+    "performance": {
+      "analysisType": "performance",
+      "status": "not-started",
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "totalCells": 2,
+      "filesAnalyzed": 1
+    },
+    "complianceCodeList": {
+      "analysisType": "complianceCodeList",
+      "status": "completed",
+      "completedCells": 31,
+      "errorCells": 0,
+      "issueCells": 9,
+      "totalCells": 31,
+      "filesAnalyzed": 6,
+      "details": [
+        {
+          "lineNumber": 1,
+          "severity": 5,
+          "bugType": "Data Compliance",
+          "description": "The code does not appear to implement any measures for data protection, such as encryption or anonymization, which could lead to potential GDPR, PCI DSS, and HIPAA compliance issues.",
+          "solution": "Implement data protection measures such as encryption for data at rest and in transit, and anonymization for personal data. Also, consider implementing access controls and audit logging."
+        },
+        {
+          "lineNumber": 76,
+          "severity": 7,
+          "bugType": "Data Compliance",
+          "description": "The function 'generatePidFile' creates a file with the process ID (PID). This PID could potentially be used to gain unauthorized access to the process. This is a violation of GDPR's 'Integrity and confidentiality' principle, PCI DSS Requirement 6: 'Develop and maintain secure systems and applications', and HIPAA's 'Security Rule'.",
+          "solution": "Consider using a more secure method to store and handle PIDs. Avoid writing them to disk in plain text. If necessary, ensure the file is securely deleted after use. You may also want to consider encryption or hashing the PID if it needs to be stored.",
+          "webLink": "https://gdpr-info.eu/art-5-gdpr/"
+        },
+        {
+          "lineNumber": 102,
+          "severity": 8,
+          "bugType": "GDPR",
+          "description": "The use of a deprecated --key option may lead to insecure generation of keys and potential data breaches. This can be a violation of GDPR's 'integrity and confidentiality' principle.",
+          "solution": "Replace the deprecated --key option with --keygen and --keyfile options. Ensure that keys are generated securely and stored safely."
+        },
+        {
+          "lineNumber": 113,
+          "severity": 9,
+          "bugType": "PCI DSS",
+          "description": "Storing user credentials in a file (users.json) can lead to insecure storage of cardholder data. This is a violation of PCI DSS Requirement 3: Protect Stored Cardholder Data.",
+          "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework."
+        },
+        {
+          "lineNumber": 113,
+          "severity": 10,
+          "bugType": "HIPAA",
+          "description": "Storing user credentials in a file (users.json) can lead to unauthorized access to Protected Health Information (PHI). This is a violation of the HIPAA Security Rule.",
+          "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework."
+        },
+        {
+          "lineNumber": 134,
+          "severity": 9,
+          "bugType": "Data Privacy",
+          "description": "The code seems to be storing passwords in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Storing passwords in plain text can lead to unauthorized access if the data is breached.",
+          "solution": "Passwords should be stored in a hashed and salted format. Consider using a strong cryptographic algorithm for this. Do not store passwords in plain text."
+        },
+        {
+          "lineNumber": 138,
+          "severity": 8,
+          "bugType": "Data Privacy",
+          "description": "The code suggests that usernames and passwords are being transmitted in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Transmitting sensitive data in plain text can be intercepted and exploited.",
+          "solution": "Ensure that all communication of sensitive data is encrypted. Use secure communication protocols such as HTTPS."
+        },
+        {
+          "lineNumber": 157,
+          "severity": 7,
+          "bugType": "GDPR",
+          "description": "The server code retrieves environment variables which could potentially contain sensitive data. GDPR requires explicit consent for processing personal data.",
+          "solution": "Ensure explicit user consent is obtained before processing personal data. Use encryption for sensitive data and limit access to it. Data should be anonymized or pseudonymized where possible.",
+          "webLink": "https://gdpr-info.eu/"
+        },
+        {
+          "lineNumber": 209,
+          "severity": 8,
+          "bugType": "PCI DSS",
+          "description": "The server code does not implement any form of logging mechanism. PCI DSS requires all access to network resources and cardholder data to be tracked and monitored.",
+          "solution": "Implement a logging mechanism to track and monitor all access to network resources and cardholder data. Ensure these logs are reviewed regularly.",
+          "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+        },
+        {
+          "lineNumber": 198,
+          "severity": 9,
+          "bugType": "HIPAA",
+          "description": "The server code does not implement any form of encryption for data in transit. HIPAA requires that all Protected Health Information (PHI) be encrypted during transmission over networks.",
+          "solution": "Implement encryption for all data transmitted over networks. This can be achieved using Transport Layer Security (TLS) or Secure Sockets Layer (SSL).",
+          "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/index.html"
+        },
+        {
+          "lineNumber": 270,
+          "severity": 6,
+          "bugType": "Data Privacy",
+          "description": "The function Set(arg string) directly appends the input argument to a flag values. If this function is used to process sensitive information, it could potentially lead to data privacy issues. GDPR, PCI DSS, and HIPAA require sensitive information to be handled securely, and direct appending of unsecured data can be a violation.",
+          "solution": "Consider encrypting the data before appending, or ensure that any data processed through this function is already secured in compliance with GDPR, PCI DSS, and HIPAA. Always sanitize and validate input data."
+        },
+        {
+          "lineNumber": 273,
+          "severity": 7,
+          "bugType": "Data and privacy compliance",
+          "description": "The http.Header type is used to store request or response headers. It is a map type and can contain sensitive information such as cookies, authorization tokens, and personal data. This can lead to violation of GDPR, PCI DSS, and HIPAA compliance if the data is not properly protected.",
+          "solution": "Encrypt sensitive data before storing it in the http.Header. Also, ensure that the data is not logged or exposed in any way. Use secure methods to transmit data and follow the principle of least privilege when giving access to this data."
+        },
+        {
+          "lineNumber": 277,
+          "severity": 7,
+          "bugType": "Data Exposure",
+          "description": "The function String() in the code is iterating over the header flags and printing them. This could potentially expose sensitive information contained in the headers, which could be a violation of GDPR, PCI DSS, and HIPAA compliance.",
+          "solution": "Avoid logging or printing sensitive data. If it is necessary to log data for debugging purposes, make sure to anonymize or encrypt the sensitive data. Consider implementing a data masking or a least privilege access control mechanism."
+        },
+        {
+          "lineNumber": 331,
+          "severity": 7,
+          "bugType": "GDPR",
+          "description": "The application is using a client fingerprint for host-key validation. If this fingerprint is associated with personal data, it could be a violation of GDPR.",
+          "solution": "Ensure that the fingerprint does not contain personal data or obtain explicit consent from the user. Consider using anonymized identifiers instead.",
+          "link": "https://gdpr-info.eu/art-4-gdpr/"
+        },
+        {
+          "lineNumber": 334,
+          "severity": 9,
+          "bugType": "PCI DSS",
+          "description": "The application allows username and password to be transmitted. If this data is not encrypted, it could be a violation of PCI DSS.",
+          "solution": "Ensure that sensitive data like passwords are securely hashed and transmitted over secure channels.",
+          "link": "https://www.pcisecuritystandards.org/pci_security/"
+        },
+        {
+          "lineNumber": 360,
+          "severity": 8,
+          "bugType": "HIPAA",
+          "description": "The application uses environment variables for authentication. If this includes PHI, it could violate HIPAA.",
+          "solution": "Ensure that PHI is not stored in environment variables or is properly encrypted if it is.",
+          "link": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+        },
+        {
+          "lineNumber": 337,
+          "severity": 8,
+          "bugType": "GDPR",
+          "description": "The application allows the user to skip TLS certificate verification. This could expose personal data to man-in-the-middle attacks, violating GDPR.",
+          "solution": "Remove the option to skip TLS certificate verification to ensure secure data transmission.",
+          "link": "https://gdpr-info.eu/art-32-gdpr/"
+        }
+      ]
+    },
+    "complianceCode": {
+      "analysisType": "complianceCode",
+      "status": "not-started",
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "totalCells": 3,
+      "filesAnalyzed": 1
+    }
+  },
+  "files": {
+    "share/cio/stdio.go": {
+      "sourceRelFile": "./share/cio/stdio.go",
+      "notebookRelFile": ".boost/share/cio/stdio.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cio/pipe.go": {
+      "sourceRelFile": "./share/cio/pipe.go",
+      "notebookRelFile": ".boost/share/cio/pipe.go.boost-notebook",
+      "totalCells": 4,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cio/logger.go": {
+      "sourceRelFile": "./share/cio/logger.go",
+      "notebookRelFile": ".boost/share/cio/logger.go.boost-notebook",
+      "totalCells": 10,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cnet/conn_ws.go": {
+      "sourceRelFile": "./share/cnet/conn_ws.go",
+      "notebookRelFile": ".boost/share/cnet/conn_ws.go.boost-notebook",
+      "totalCells": 5,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cnet/connstats.go": {
+      "sourceRelFile": "./share/cnet/connstats.go",
+      "notebookRelFile": ".boost/share/cnet/connstats.go.boost-notebook",
+      "totalCells": 5,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cnet/http_server.go": {
+      "sourceRelFile": "./share/cnet/http_server.go",
+      "notebookRelFile": ".boost/share/cnet/http_server.go.boost-notebook",
+      "totalCells": 7,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cnet/conn_rwc.go": {
+      "sourceRelFile": "./share/cnet/conn_rwc.go",
+      "notebookRelFile": ".boost/share/cnet/conn_rwc.go.boost-notebook",
+      "totalCells": 9,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cnet/meter.go": {
+      "sourceRelFile": "./share/cnet/meter.go",
+      "notebookRelFile": ".boost/share/cnet/meter.go.boost-notebook",
+      "totalCells": 15,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/ccrypto/generate_key_go119.go": {
+      "sourceRelFile": "./share/ccrypto/generate_key_go119.go",
+      "notebookRelFile": ".boost/share/ccrypto/generate_key_go119.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/ccrypto/determ_rand.go": {
+      "sourceRelFile": "./share/ccrypto/determ_rand.go",
+      "notebookRelFile": ".boost/share/ccrypto/determ_rand.go.boost-notebook",
+      "totalCells": 4,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/ccrypto/keys_helpers.go": {
+      "sourceRelFile": "./share/ccrypto/keys_helpers.go",
+      "notebookRelFile": ".boost/share/ccrypto/keys_helpers.go.boost-notebook",
+      "totalCells": 8,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/ccrypto/keys.go": {
+      "sourceRelFile": "./share/ccrypto/keys.go",
+      "notebookRelFile": ".boost/share/ccrypto/keys.go.boost-notebook",
+      "totalCells": 3,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/tunnel/udp.go": {
+      "sourceRelFile": "./share/tunnel/udp.go",
+      "notebookRelFile": ".boost/share/tunnel/udp.go.boost-notebook",
+      "totalCells": 6,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/tunnel/tunnel_in_proxy.go": {
+      "sourceRelFile": "./share/tunnel/tunnel_in_proxy.go",
+      "notebookRelFile": ".boost/share/tunnel/tunnel_in_proxy.go.boost-notebook",
+      "totalCells": 8,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/tunnel/tunnel_out_ssh_udp.go": {
+      "sourceRelFile": "./share/tunnel/tunnel_out_ssh_udp.go",
+      "notebookRelFile": ".boost/share/tunnel/tunnel_out_ssh_udp.go.boost-notebook",
+      "totalCells": 10,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/tunnel/tunnel_out_ssh.go": {
+      "sourceRelFile": "./share/tunnel/tunnel_out_ssh.go",
+      "notebookRelFile": ".boost/share/tunnel/tunnel_out_ssh.go.boost-notebook",
+      "totalCells": 5,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/tunnel/tunnel_in_proxy_udp.go": {
+      "sourceRelFile": "./share/tunnel/tunnel_in_proxy_udp.go",
+      "notebookRelFile": ".boost/share/tunnel/tunnel_in_proxy_udp.go.boost-notebook",
+      "totalCells": 7,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/tunnel/tunnel.go": {
+      "sourceRelFile": "./share/tunnel/tunnel.go",
+      "notebookRelFile": ".boost/share/tunnel/tunnel.go.boost-notebook",
+      "totalCells": 8,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/tunnel/wg.go": {
+      "sourceRelFile": "./share/tunnel/wg.go",
+      "notebookRelFile": ".boost/share/tunnel/wg.go.boost-notebook",
+      "totalCells": 5,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cos/signal.go": {
+      "sourceRelFile": "./share/cos/signal.go",
+      "notebookRelFile": ".boost/share/cos/signal.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/version.go": {
+      "sourceRelFile": "./share/version.go",
+      "notebookRelFile": ".boost/share/version.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/compat.go": {
+      "sourceRelFile": "./share/compat.go",
+      "notebookRelFile": ".boost/share/compat.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "main.go": {
+      "sourceRelFile": "./main.go",
+      "notebookRelFile": ".boost/main.go.boost-notebook",
+      "totalCells": 12,
+      "completedCells": 12,
+      "errorCells": 0,
+      "issueCells": 9,
+      "sections": {
+        "explainCode": {
+          "analysisType": "explainCode",
+          "status": "completed",
+          "completedCells": 12,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 12,
+          "filesAnalyzed": 1
+        },
+        "flowDiagram": {
+          "analysisType": "flowDiagram",
+          "status": "completed",
+          "completedCells": 12,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 12,
+          "filesAnalyzed": 1
+        },
+        "bugAnalysisList": {
+          "analysisType": "bugAnalysisList",
+          "status": "completed",
+          "completedCells": 12,
+          "errorCells": 0,
+          "issueCells": 5,
+          "totalCells": 12,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 83,
+              "severity": 5,
+              "bugType": "Insecure File Permissions",
+              "description": "The function 'generatePidFile()' creates a file with permissions set to '0644'. This means that the file is readable by all users on the system, which can lead to information disclosure if the PID is sensitive.",
+              "solution": "Change the file permissions to '0600' to ensure that only the owner of the file can read and write to it. Read more here: https://en.wikipedia.org/wiki/File_system_permissions#Numeric_notation"
+            },
+            {
+              "lineNumber": 81,
+              "severity": 3,
+              "bugType": "Hard-coded file path",
+              "description": "The function 'generatePidFile()' writes the PID to a hard-coded file path, which could lead to issues if the program does not have the necessary permissions to write to that location, or if the file is needed in a different location.",
+              "solution": "Consider making the file path a configurable parameter. Read more here: https://owasp.org/www-community/vulnerabilities/Insecure_Configuration"
+            },
+            {
+              "lineNumber": 108,
+              "severity": 5,
+              "bugType": "Sensitive Data Exposure",
+              "description": "The --key option is deprecated but still present, and it allows for the seeding of a key pair with a known string, which could potentially be guessed or brute-forced, leading to unauthorized access.",
+              "solution": "Remove the deprecated --key option entirely to prevent potential abuse. Use secure methods of key generation that do not allow for predictable keys. For more information, refer to the OWASP guide on cryptographic storage: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 123,
+              "severity": 8,
+              "bugType": "Insecure Direct Object References (IDOR)",
+              "description": "The --authfile option reads from a users.json file that contains user credentials in plain text. If this file is improperly secured, it could lead to unauthorized access.",
+              "solution": "Never store passwords in plain text. Use a secure method of storing passwords, such as hashing with a salt. For more information, refer to the OWASP guide on password storage: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 156,
+              "severity": 8,
+              "bugType": "Insecure Default Configuration",
+              "description": "The server is configured to listen on all network interfaces (0.0.0.0) by default. This could unintentionally expose the server to the internet or other untrusted networks, leading to potential unauthorized access.",
+              "solution": "Consider changing the default configuration to listen on localhost (127.0.0.1) or a specific trusted network interface. If a broad network interface is required, ensure proper network security controls are in place. More info: https://owasp.org/www-community/Insecure_Configuration_Management"
+            },
+            {
+              "lineNumber": 166,
+              "severity": 6,
+              "bugType": "Insecure Environment Variables",
+              "description": "The application uses environment variables to store sensitive information. If an attacker can access these environment variables, they can potentially gain unauthorized access or perform other malicious actions.",
+              "solution": "Consider using secure methods for storing sensitive information, such as encrypted storage or secure vaults. More info: https://cheatsheetseries.owasp.org/cheatsheets/Environment_Variables_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 172,
+              "severity": 7,
+              "bugType": "Insecure Error Handling",
+              "description": "The application crashes and terminates when it encounters an error. This could potentially lead to Denial of Service (DoS) if an attacker can trigger such errors intentionally.",
+              "solution": "Implement proper error handling mechanisms that prevent the application from crashing. Instead, log the error and continue or fail gracefully. More info: https://owasp.org/www-community/Improper_Error_Handling"
+            },
+            {
+              "lineNumber": 188,
+              "severity": 7,
+              "bugType": "Missing Authentication",
+              "description": "The server doesn't seem to have any authentication mechanism in place. This could allow unauthorized users to access or manipulate the server.",
+              "solution": "Implement a secure authentication mechanism to restrict access to authorized users only. More info: https://owasp.org/www-community/Authentication_Cheat_Sheet"
+            },
+            {
+              "lineNumber": 271,
+              "severity": 5,
+              "bugType": "Unrestricted File Upload",
+              "description": "This function appends any string value to the 'flag.values' without any validation. This can lead to various security issues like unrestricted file upload if the 'arg' is a file path. Unrestricted file upload can lead to execution of malicious scripts or overwrite important files.",
+              "solution": "Always validate and sanitize the input before processing. Limit the types of files that can be uploaded and restrict the directories where the files can be stored. Here are some resources on how to prevent unrestricted file upload:\n- https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html\n- https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload"
+            },
+            {
+              "lineNumber": 322,
+              "severity": 7,
+              "bugType": "Insecure Communication",
+              "description": "The code provides an option to skip TLS certificate verification (--tls-skip-verify flag). This could lead to Man-in-the-Middle (MITM) attacks as the client would accept any TLS certificate presented by the server.",
+              "solution": "Remove the --tls-skip-verify option or set it to false by default. Encourage users to use secure connections. More info: https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning"
+            },
+            {
+              "lineNumber": 315,
+              "severity": 5,
+              "bugType": "Missing Authentication",
+              "description": "The code allows for default authentication if the --auth flag is not provided. This could lead to unauthorized access if the environment variable 'AUTH' is not set or is set incorrectly.",
+              "solution": "Ensure that proper authentication is enforced and do not allow default or fallback authentication mechanisms. More info: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication"
+            },
+            {
+              "lineNumber": 329,
+              "severity": 6,
+              "bugType": "Information Exposure",
+              "description": "The code exposes verbose debug information if the -v flag is set. This could lead to information disclosure which could be used for further attacks.",
+              "solution": "Limit the amount of information exposed in debug mode or protect it with additional access controls. More info: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+            }
+          ]
+        },
+        "performanceList": {
+          "analysisType": "performanceList",
+          "status": "completed",
+          "completedCells": 12,
+          "errorCells": 0,
+          "issueCells": 5,
+          "totalCells": 12,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 85,
+              "severity": 5,
+              "bugType": "Disk",
+              "description": "The generatePidFile function writes to disk every time it's called. This could be a performance issue if the function is called frequently.",
+              "solution": "Consider caching the pid in memory if it does not change often, and only writing to disk when necessary. If the pid changes often, consider a more efficient disk writing strategy such as buffering or batch writes."
+            },
+            {
+              "lineNumber": 182,
+              "severity": 6,
+              "bugType": "CPU",
+              "description": "The function generates a PID file every time it is called, which can be CPU intensive if the function is called frequently.",
+              "solution": "Consider generating the PID file once and reusing it, or only generating it if it does not already exist."
+            },
+            {
+              "lineNumber": 184,
+              "severity": 4,
+              "bugType": "Network",
+              "description": "The function starts a new server every time it is called, which can be network intensive if the function is called frequently.",
+              "solution": "Consider reusing an existing server if one is available, or pooling servers to reduce the overhead of starting a new server for each request."
+            },
+            {
+              "lineNumber": 189,
+              "severity": 5,
+              "bugType": "CPU",
+              "description": "The function waits for the server to stop every time it is called, which can be CPU intensive if the function is called frequently.",
+              "solution": "Consider using a non-blocking wait or a callback to handle the server stopping, to prevent blocking the CPU."
+            },
+            {
+              "lineNumber": 282,
+              "severity": 7,
+              "bugType": "Memory",
+              "description": "Inefficient string concatenation in a loop. This can cause significant memory overhead as a new string is created on each iteration.",
+              "solution": "Use a strings.Builder or bytes.Buffer to efficiently concatenate strings in a loop. This will significantly reduce memory usage and improve performance. Here is a link to the Go documentation for strings.Builder: https://golang.org/pkg/strings/#Builder"
+            },
+            {
+              "lineNumber": 294,
+              "severity": 2,
+              "bugType": "Memory",
+              "description": "The use of strings.Index and slicing for splitting the string might lead to unnecessary memory allocation and copying, which can be inefficient if the string is large.",
+              "solution": "Consider using strings.SplitN function which splits the string only at the first occurrence of the separator. This would be more efficient in terms of memory usage. Here's how you can use it: \n\nkey, value := strings.SplitN(arg, \":\", 2)\n\nvalue = strings.TrimSpace(value)\n\nflag.Header.Set(key, value)"
+            },
+            {
+              "lineNumber": 346,
+              "severity": 4,
+              "bugType": "CPU",
+              "description": "The client function is not optimized for performance. There are multiple if checks, which could be reduced or optimized for better performance.",
+              "solution": "Try to reduce the number of if checks, or consider using a switch statement for better performance. Additionally, consider using a more efficient data structure or algorithm to handle the client configuration."
+            },
+            {
+              "lineNumber": 370,
+              "severity": 3,
+              "bugType": "CPU",
+              "description": "The function chclient.NewClient is called with the entire config object, which might be large. This can lead to performance issues if the config object is large, as it is passed by value.",
+              "solution": "Consider passing the config object by reference instead of by value to avoid copying the entire object."
+            },
+            {
+              "lineNumber": 375,
+              "severity": 2,
+              "bugType": "Memory",
+              "description": "The function generatePidFile is called without any error handling. If the function fails to generate a PID file, it could lead to memory leaks.",
+              "solution": "Add error handling to the generatePidFile function to ensure that any errors are properly handled and memory is freed up."
+            }
+          ]
+        },
+        "complianceCodeList": {
+          "analysisType": "complianceCodeList",
+          "status": "completed",
+          "completedCells": 12,
+          "errorCells": 0,
+          "issueCells": 9,
+          "totalCells": 12,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 1,
+              "severity": 5,
+              "bugType": "Data Compliance",
+              "description": "The code does not appear to implement any measures for data protection, such as encryption or anonymization, which could lead to potential GDPR, PCI DSS, and HIPAA compliance issues.",
+              "solution": "Implement data protection measures such as encryption for data at rest and in transit, and anonymization for personal data. Also, consider implementing access controls and audit logging."
+            },
+            {
+              "lineNumber": 76,
+              "severity": 7,
+              "bugType": "Data Compliance",
+              "description": "The function 'generatePidFile' creates a file with the process ID (PID). This PID could potentially be used to gain unauthorized access to the process. This is a violation of GDPR's 'Integrity and confidentiality' principle, PCI DSS Requirement 6: 'Develop and maintain secure systems and applications', and HIPAA's 'Security Rule'.",
+              "solution": "Consider using a more secure method to store and handle PIDs. Avoid writing them to disk in plain text. If necessary, ensure the file is securely deleted after use. You may also want to consider encryption or hashing the PID if it needs to be stored.",
+              "webLink": "https://gdpr-info.eu/art-5-gdpr/"
+            },
+            {
+              "lineNumber": 102,
+              "severity": 8,
+              "bugType": "GDPR",
+              "description": "The use of a deprecated --key option may lead to insecure generation of keys and potential data breaches. This can be a violation of GDPR's 'integrity and confidentiality' principle.",
+              "solution": "Replace the deprecated --key option with --keygen and --keyfile options. Ensure that keys are generated securely and stored safely."
+            },
+            {
+              "lineNumber": 113,
+              "severity": 9,
+              "bugType": "PCI DSS",
+              "description": "Storing user credentials in a file (users.json) can lead to insecure storage of cardholder data. This is a violation of PCI DSS Requirement 3: Protect Stored Cardholder Data.",
+              "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework."
+            },
+            {
+              "lineNumber": 113,
+              "severity": 10,
+              "bugType": "HIPAA",
+              "description": "Storing user credentials in a file (users.json) can lead to unauthorized access to Protected Health Information (PHI). This is a violation of the HIPAA Security Rule.",
+              "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Consider using a secure authentication and authorization framework."
+            },
+            {
+              "lineNumber": 134,
+              "severity": 9,
+              "bugType": "Data Privacy",
+              "description": "The code seems to be storing passwords in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Storing passwords in plain text can lead to unauthorized access if the data is breached.",
+              "solution": "Passwords should be stored in a hashed and salted format. Consider using a strong cryptographic algorithm for this. Do not store passwords in plain text."
+            },
+            {
+              "lineNumber": 138,
+              "severity": 8,
+              "bugType": "Data Privacy",
+              "description": "The code suggests that usernames and passwords are being transmitted in plain text. This is a violation of GDPR, PCI DSS, and HIPAA compliance. Transmitting sensitive data in plain text can be intercepted and exploited.",
+              "solution": "Ensure that all communication of sensitive data is encrypted. Use secure communication protocols such as HTTPS."
+            },
+            {
+              "lineNumber": 157,
+              "severity": 7,
+              "bugType": "GDPR",
+              "description": "The server code retrieves environment variables which could potentially contain sensitive data. GDPR requires explicit consent for processing personal data.",
+              "solution": "Ensure explicit user consent is obtained before processing personal data. Use encryption for sensitive data and limit access to it. Data should be anonymized or pseudonymized where possible.",
+              "webLink": "https://gdpr-info.eu/"
+            },
+            {
+              "lineNumber": 209,
+              "severity": 8,
+              "bugType": "PCI DSS",
+              "description": "The server code does not implement any form of logging mechanism. PCI DSS requires all access to network resources and cardholder data to be tracked and monitored.",
+              "solution": "Implement a logging mechanism to track and monitor all access to network resources and cardholder data. Ensure these logs are reviewed regularly.",
+              "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+            },
+            {
+              "lineNumber": 198,
+              "severity": 9,
+              "bugType": "HIPAA",
+              "description": "The server code does not implement any form of encryption for data in transit. HIPAA requires that all Protected Health Information (PHI) be encrypted during transmission over networks.",
+              "solution": "Implement encryption for all data transmitted over networks. This can be achieved using Transport Layer Security (TLS) or Secure Sockets Layer (SSL).",
+              "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/index.html"
+            },
+            {
+              "lineNumber": 270,
+              "severity": 6,
+              "bugType": "Data Privacy",
+              "description": "The function Set(arg string) directly appends the input argument to a flag values. If this function is used to process sensitive information, it could potentially lead to data privacy issues. GDPR, PCI DSS, and HIPAA require sensitive information to be handled securely, and direct appending of unsecured data can be a violation.",
+              "solution": "Consider encrypting the data before appending, or ensure that any data processed through this function is already secured in compliance with GDPR, PCI DSS, and HIPAA. Always sanitize and validate input data."
+            },
+            {
+              "lineNumber": 273,
+              "severity": 7,
+              "bugType": "Data and privacy compliance",
+              "description": "The http.Header type is used to store request or response headers. It is a map type and can contain sensitive information such as cookies, authorization tokens, and personal data. This can lead to violation of GDPR, PCI DSS, and HIPAA compliance if the data is not properly protected.",
+              "solution": "Encrypt sensitive data before storing it in the http.Header. Also, ensure that the data is not logged or exposed in any way. Use secure methods to transmit data and follow the principle of least privilege when giving access to this data."
+            },
+            {
+              "lineNumber": 277,
+              "severity": 7,
+              "bugType": "Data Exposure",
+              "description": "The function String() in the code is iterating over the header flags and printing them. This could potentially expose sensitive information contained in the headers, which could be a violation of GDPR, PCI DSS, and HIPAA compliance.",
+              "solution": "Avoid logging or printing sensitive data. If it is necessary to log data for debugging purposes, make sure to anonymize or encrypt the sensitive data. Consider implementing a data masking or a least privilege access control mechanism."
+            },
+            {
+              "lineNumber": 331,
+              "severity": 7,
+              "bugType": "GDPR",
+              "description": "The application is using a client fingerprint for host-key validation. If this fingerprint is associated with personal data, it could be a violation of GDPR.",
+              "solution": "Ensure that the fingerprint does not contain personal data or obtain explicit consent from the user. Consider using anonymized identifiers instead.",
+              "link": "https://gdpr-info.eu/art-4-gdpr/"
+            },
+            {
+              "lineNumber": 334,
+              "severity": 9,
+              "bugType": "PCI DSS",
+              "description": "The application allows username and password to be transmitted. If this data is not encrypted, it could be a violation of PCI DSS.",
+              "solution": "Ensure that sensitive data like passwords are securely hashed and transmitted over secure channels.",
+              "link": "https://www.pcisecuritystandards.org/pci_security/"
+            },
+            {
+              "lineNumber": 360,
+              "severity": 8,
+              "bugType": "HIPAA",
+              "description": "The application uses environment variables for authentication. If this includes PHI, it could violate HIPAA.",
+              "solution": "Ensure that PHI is not stored in environment variables or is properly encrypted if it is.",
+              "link": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+            },
+            {
+              "lineNumber": 337,
+              "severity": 8,
+              "bugType": "GDPR",
+              "description": "The application allows the user to skip TLS certificate verification. This could expose personal data to man-in-the-middle attacks, violating GDPR.",
+              "solution": "Remove the option to skip TLS certificate verification to ensure secure data transmission.",
+              "link": "https://gdpr-info.eu/art-32-gdpr/"
+            }
+          ]
+        }
+      }
+    },
+    "share/cos/pprof.go": {
+      "sourceRelFile": "./share/cos/pprof.go",
+      "notebookRelFile": ".boost/share/cos/pprof.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/cos/signal_windows.go": {
+      "sourceRelFile": "./share/cos/signal_windows.go",
+      "notebookRelFile": ".boost/share/cos/signal_windows.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "README.md": {
+      "sourceRelFile": "./README.md",
+      "notebookRelFile": ".boost/README.md.boost-notebook",
+      "totalCells": 4,
+      "completedCells": 4,
+      "errorCells": 0,
+      "issueCells": 3,
+      "sections": {
+        "explainCode": {
+          "analysisType": "explainCode",
+          "status": "completed",
+          "completedCells": 4,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 4,
+          "filesAnalyzed": 1
+        },
+        "flowDiagram": {
+          "analysisType": "flowDiagram",
+          "status": "completed",
+          "completedCells": 4,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 4,
+          "filesAnalyzed": 1
+        },
+        "bugAnalysisList": {
+          "analysisType": "bugAnalysisList",
+          "status": "completed",
+          "completedCells": 4,
+          "errorCells": 0,
+          "issueCells": 3,
+          "totalCells": 4,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 1,
+              "severity": 8,
+              "bugType": "Insecure Direct Object References (IDOR)",
+              "description": "The code does not check if a user is authorized to access the specific resources they are requesting. This can lead to unauthorized access to sensitive data.",
+              "solution": "Implement access control checks to verify the user is authorized to access the resources they are requesting. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control"
+            },
+            {
+              "lineNumber": 1,
+              "severity": 7,
+              "bugType": "Insecure Cryptographic Storage",
+              "description": "The code uses a deprecated key parameter for ECDSA generation which could lead to weak keys being used. Weak keys can be cracked, leading to unauthorized access to encrypted data.",
+              "solution": "Use the recommended keygen and keyfile parameters for ECDSA key generation. More on this issue can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 1,
+              "severity": 8,
+              "bugType": "Insufficient Transport Layer Protection",
+              "description": "The code does not enforce the use of secure transport protocols. This can lead to data being transmitted in clear text, making it susceptible to interception and manipulation.",
+              "solution": "Enforce the use of secure transport protocols such as HTTPS. More on this issue can be found here: https://owasp.org/www-community/Insufficient_Transport_Layer_Protection"
+            },
+            {
+              "lineNumber": 1,
+              "severity": 7,
+              "bugType": "Unvalidated Redirects and Forwards",
+              "description": "The code allows for the redirection of requests without validating the legitimacy of the target. This can be exploited to redirect users to malicious sites.",
+              "solution": "Implement validation checks on all redirects and forwards to ensure they are pointing to legitimate and safe locations. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A10_2017-Insufficient_Logging%2526Monitoring"
+            },
+            {
+              "lineNumber": 148,
+              "severity": 9,
+              "bugType": "Sensitive Data Exposure",
+              "description": "The user's password is being handled in plain text, which is a major security risk. If intercepted, this could lead to unauthorized access to the user's account. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure",
+              "solution": "Passwords should never be stored or transmitted in plain text. Consider using a secure password hashing algorithm such as bcrypt or argon2. The hashed password should then be compared with the hashed version of the input password for verification. More on secure password handling can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 152,
+              "severity": 8,
+              "bugType": "Insecure Direct Object References (IDOR)",
+              "description": "The software is using a user-provided string to reference objects directly, which could potentially lead to unauthorized access if a malicious user manipulates the string. More on this issue can be found here: https://owasp.org/www-project-top-ten/2017/A4_2017-Insecure_Direct_Object_References",
+              "solution": "Instead of using user-provided strings to reference objects directly, consider using indirect references. This can be done by mapping the user-provided string to an internal reference which is then used to access the object. More on preventing IDOR can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 161,
+              "severity": 6,
+              "bugType": "Insecure Use of Cryptography",
+              "description": "The code uses TLS for encryption but allows the use of self-signed certificates. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.",
+              "solution": "Consider using certificates from a trusted Certificate Authority (CA). If self-signed certificates must be used, consider implementing a mechanism to securely distribute the public keys to the clients. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 166,
+              "severity": 5,
+              "bugType": "Improper Authentication",
+              "description": "The code allows the use of the '--auth' option for client authentication, but it does not specify any mechanism for securely storing or transmitting these credentials. This could potentially expose sensitive information.",
+              "solution": "Consider using secure methods for storing and transmitting authentication credentials, such as secure password hashing and encryption. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 153,
+              "severity": 4,
+              "bugType": "Insecure Direct Object References (IDOR)",
+              "description": "The code allows the use of the '--pid' option to generate a PID file in the current working directory. This could potentially allow an attacker to manipulate the PID file to gain unauthorized access or disrupt the service.",
+              "solution": "Consider implementing a mechanism to protect the PID file, such as secure file permissions or storing the PID file in a secure directory. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 161,
+              "severity": 8,
+              "bugType": "Improper Certificate Validation",
+              "description": "The code allows the use of the '--tls-skip-verify' option, which skips the TLS certificate verification. This could potentially allow an attacker to use a Man-in-the-Middle (MITM) attack to intercept and possibly modify the data.",
+              "solution": "Avoid using the '--tls-skip-verify' option. Always validate TLS certificates to ensure the integrity and confidentiality of the data. For more information, see: https://cheatsheetseries.owasp.org/cheatsheets/TLS_Certificate_Pinning_Cheat_Sheet.html"
+            }
+          ]
+        },
+        "performanceList": {
+          "analysisType": "performanceList",
+          "status": "completed",
+          "completedCells": 4,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 4,
+          "filesAnalyzed": 1
+        },
+        "complianceCodeList": {
+          "analysisType": "complianceCodeList",
+          "status": "completed",
+          "completedCells": 4,
+          "errorCells": 0,
+          "issueCells": 3,
+          "totalCells": 4,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 127,
+              "severity": 7,
+              "bugType": "GDPR",
+              "description": "The code uses a users.json file for storing user credentials. This might lead to data breaches if the file is not properly secured. Storing user credentials in plain text is a violation of GDPR.",
+              "solution": "Encrypt the users.json file or use a secure method such as hashing for storing passwords. Also, consider implementing a more secure authentication method like OAuth."
+            },
+            {
+              "lineNumber": 105,
+              "severity": 6,
+              "bugType": "PCI DSS",
+              "description": "The code transfers data over HTTP, which is not secure. This could potentially lead to data breaches and is a violation of PCI DSS.",
+              "solution": "Use HTTPS for data transfer to ensure the data is encrypted and secure."
+            },
+            {
+              "lineNumber": 105,
+              "severity": 8,
+              "bugType": "HIPAA",
+              "description": "The code transfers data over HTTP, which is not secure. If any healthcare-related data is being transferred, this would be a violation of HIPAA.",
+              "solution": "Use HTTPS for data transfer to ensure the data is encrypted and secure. Also, ensure that any healthcare-related data is properly anonymized or de-identified to prevent violations of HIPAA."
+            },
+            {
+              "lineNumber": 148,
+              "severity": 8,
+              "bugType": "Data Compliance",
+              "description": "The system is storing user credentials (<user:pass>) in plain text. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require that personal data, including passwords, be stored securely.",
+              "solution": "Use secure methods such as hashing for storing passwords. Avoid storing passwords in plain text. For hashing, you can use algorithms like bcrypt, scrypt or Argon2."
+            },
+            {
+              "lineNumber": 143,
+              "severity": 7,
+              "bugType": "Data Compliance",
+              "description": "The system does not seem to be encrypting the user data during transmission. This could lead to unauthorized access and data breaches, which violates GDPR, PCI DSS, and HIPAA regulations.",
+              "solution": "Implement encryption for all data transmitted over networks. You can use secure protocols like HTTPS and TLS for data transmission."
+            },
+            {
+              "lineNumber": 178,
+              "severity": 8,
+              "bugType": "GDPR",
+              "description": "The code uses environment variables for authentication which can potentially expose sensitive user data.",
+              "solution": "Consider using secure methods such as OAuth for user authentication. Refer to this for more information: https://auth0.com/learn/oauth2/"
+            },
+            {
+              "lineNumber": 211,
+              "severity": 7,
+              "bugType": "HIPAA",
+              "description": "The code allows the use of HTTP proxies which can be insecure and expose sensitive health information.",
+              "solution": "Ensure all connections are made over HTTPS or a secure protocol. Refer to this for more information: https://www.owasp.org/index.php/SecureFlag"
+            },
+            {
+              "lineNumber": 277,
+              "severity": 9,
+              "bugType": "PCI DSS",
+              "description": "The code uses a custom header which can potentially expose sensitive cardholder data.",
+              "solution": "Avoid using custom headers for transmitting sensitive information. Refer to this for more information: https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 342,
+              "severity": 10,
+              "bugType": "GDPR",
+              "description": "The code uses a user.json file for storing user credentials which is a GDPR violation.",
+              "solution": "Store user credentials in a secure database and hash the passwords. Refer to this for more information: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 364,
+              "severity": 7,
+              "bugType": "HIPAA",
+              "description": "The code does not explicitly mention any encryption for the SOCKS5 connection which can potentially expose sensitive health information.",
+              "solution": "Ensure all connections are encrypted. Refer to this for more information: https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"
+            }
+          ]
+        }
+      }
+    },
+    "share/cos/common.go": {
+      "sourceRelFile": "./share/cos/common.go",
+      "notebookRelFile": ".boost/share/cos/common.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "go.sum": {
+      "sourceRelFile": "./go.sum",
+      "notebookRelFile": ".boost/go.sum.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 1,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {
+        "explainCode": {
+          "analysisType": "explainCode",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "flowDiagram": {
+          "analysisType": "flowDiagram",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "bugAnalysisList": {
+          "analysisType": "bugAnalysisList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "performanceList": {
+          "analysisType": "performanceList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "complianceCodeList": {
+          "analysisType": "complianceCodeList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        }
+      }
+    },
+    "Dockerfile": {
+      "sourceRelFile": "./Dockerfile",
+      "notebookRelFile": ".boost/Dockerfile.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 1,
+      "errorCells": 0,
+      "issueCells": 1,
+      "sections": {
+        "explainCode": {
+          "analysisType": "explainCode",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "flowDiagram": {
+          "analysisType": "flowDiagram",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "bugAnalysisList": {
+          "analysisType": "bugAnalysisList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 1,
+          "totalCells": 1,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 1,
+              "severity": 6,
+              "bugType": "Insecure Dockerfile practices",
+              "description": "The Dockerfile uses the 'latest' tag for the golang:alpine image. This can lead to non-reproducible builds, as 'latest' can point to any version. It's better to pin specific versions of images to ensure the build is reproducible and to avoid unexpected behavior due to changes in the image.",
+              "solution": "Replace 'golang:alpine' with a specific version like 'golang:1.16-alpine'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from"
+            },
+            {
+              "lineNumber": 2,
+              "severity": 4,
+              "bugType": "Insecure Dockerfile practices",
+              "description": "The Dockerfile uses 'apk add git' without specifying a version, which can lead to non-reproducible builds and potential exposure to vulnerabilities in unpatched versions.",
+              "solution": "Specify a version for git when adding it. For example: 'apk add git=<version>'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run"
+            },
+            {
+              "lineNumber": 3,
+              "severity": 8,
+              "bugType": "Insecure Dockerfile practices",
+              "description": "The Dockerfile uses 'ADD' to copy files into the Docker image. 'ADD' has some features (like local-only tar extraction and remote URL support) that can lead to unexpected and potentially insecure results. 'COPY' is more secure and should be used instead.",
+              "solution": "Replace 'ADD . /src' with 'COPY . /src'. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#add-or-copy"
+            },
+            {
+              "lineNumber": 10,
+              "severity": 7,
+              "bugType": "Insecure Dockerfile practices",
+              "description": "The Dockerfile uses 'FROM scratch' for the run stage. This means the container runs without an operating system, which can limit the debugging capabilities and potentially lead to unexpected behavior.",
+              "solution": "Consider using a minimal base image like 'alpine' instead of 'scratch'. This provides a minimal set of tools for debugging without significantly increasing the size of the image. Refer to Docker's best practices for more details: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#from"
+            }
+          ]
+        },
+        "performanceList": {
+          "analysisType": "performanceList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 1,
+          "totalCells": 1,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 1,
+              "severity": 5,
+              "bugType": "Disk",
+              "description": "The use of the 'apk update' command without the '--no-cache' flag can lead to increased disk usage because it leaves behind a cache of the downloaded packages.",
+              "solution": "Use the '--no-cache' flag with the 'apk update' command to avoid unnecessary disk usage. The command would look like this: 'apk update --no-cache'."
+            },
+            {
+              "lineNumber": 4,
+              "severity": 4,
+              "bugType": "Disk",
+              "description": "The 'ADD .' command copies all files from the current directory into the Docker image, which could include unnecessary files and increase the size of the image.",
+              "solution": "Use a .dockerignore file to specify which files should not be copied into the Docker image. Alternatively, use the COPY command instead of ADD, as it is more transparent."
+            },
+            {
+              "lineNumber": 8,
+              "severity": 3,
+              "bugType": "CPU",
+              "description": "The 'go build' command without the '-i' flag can lead to longer build times because it does not install the packages that are being compiled.",
+              "solution": "Use the '-i' flag with the 'go build' command to install the packages that are being compiled. The command would look like this: 'go build -i'."
+            }
+          ]
+        },
+        "complianceCodeList": {
+          "analysisType": "complianceCodeList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 1,
+          "totalCells": 1,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 1,
+              "severity": 4,
+              "bugType": "GDPR",
+              "description": "The Docker image is being pulled from a public repository. There is no guarantee that the image has not been tampered with, which could lead to data breaches.",
+              "solution": "Use a private Docker registry or verify the integrity of the image before using it. Use a checksum or digital signature to ensure the image has not been tampered with.",
+              "webLink": "https://www.docker.com/what-docker"
+            },
+            {
+              "lineNumber": 2,
+              "severity": 6,
+              "bugType": "PCI DSS",
+              "description": "The code is updating and adding packages without verifying their authenticity. This could lead to the installation of malicious packages.",
+              "solution": "Verify the authenticity of the packages before installing them. Use checksums or digital signatures to ensure the packages have not been tampered with.",
+              "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+            },
+            {
+              "lineNumber": 3,
+              "severity": 5,
+              "bugType": "HIPAA",
+              "description": "The code is adding the entire directory to the Docker image. If the directory contains sensitive data, it could be exposed in the image.",
+              "solution": "Only add necessary files to the Docker image. Use a .dockerignore file to exclude unnecessary or sensitive files.",
+              "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/index.html"
+            },
+            {
+              "lineNumber": 9,
+              "severity": 7,
+              "bugType": "GDPR",
+              "description": "The code is copying SSL certificates into the Docker image. If the certificates are not properly secured, they could be exposed in the image.",
+              "solution": "Secure the certificates before copying them into the Docker image. Use a secure method such as Docker secrets to manage sensitive data.",
+              "webLink": "https://gdpr-info.eu/"
+            },
+            {
+              "lineNumber": 11,
+              "severity": 8,
+              "bugType": "PCI DSS",
+              "description": "The code is copying the binary into the Docker image without verifying its authenticity. This could lead to the execution of malicious code.",
+              "solution": "Verify the authenticity of the binary before copying it into the Docker image. Use checksums or digital signatures to ensure the binary has not been tampered with.",
+              "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+            }
+          ]
+        }
+      }
+    },
+    "Makefile": {
+      "sourceRelFile": "./Makefile",
+      "notebookRelFile": ".boost/Makefile.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 1,
+      "errorCells": 0,
+      "issueCells": 1,
+      "sections": {
+        "explainCode": {
+          "analysisType": "explainCode",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "flowDiagram": {
+          "analysisType": "flowDiagram",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 0,
+          "totalCells": 1,
+          "filesAnalyzed": 1
+        },
+        "bugAnalysisList": {
+          "analysisType": "bugAnalysisList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 1,
+          "totalCells": 1,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 1,
+              "severity": 5,
+              "bugType": "Insecure Use of Environment Variables",
+              "description": "The script uses environment variables to store sensitive information such as version and build information. This can be exploited by an attacker to gain information about the system or the software.",
+              "solution": "Avoid storing sensitive information in environment variables. If it's necessary, ensure that they are properly secured and not accessible by unauthorized users. Refer to this link for more information: https://cheatsheetseries.owasp.org/cheatsheets/Environment_Variables_Cheat_Sheet.html"
+            },
+            {
+              "lineNumber": 8,
+              "severity": 6,
+              "bugType": "Insecure File Permissions",
+              "description": "The script creates a directory without explicitly setting the permissions. This can lead to insecure file permissions if the script is run with higher privileges.",
+              "solution": "Ensure that permissions are explicitly set when creating directories or files. Use the chmod command to set permissions. Refer to this link for more information: https://www.linux.com/training-tutorials/linux-file-permissions-explained/"
+            },
+            {
+              "lineNumber": 34,
+              "severity": 7,
+              "bugType": "Missing Authentication",
+              "description": "The script runs a docker build command without any form of authentication. This can allow unauthorized users to build and potentially run malicious docker images.",
+              "solution": "Ensure that docker commands are run with proper authentication. Refer to this link for more information: https://docs.docker.com/engine/security/"
+            }
+          ]
+        },
+        "performanceList": {
+          "analysisType": "performanceList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 1,
+          "totalCells": 1,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 1,
+              "severity": 5,
+              "bugType": "Disk",
+              "description": "The script is using shell commands to get the git version and build. This can be inefficient as it creates a new process for each command.",
+              "solution": "Consider using a language-native git library, which would be more efficient and less resource-intensive."
+            },
+            {
+              "lineNumber": 10,
+              "severity": 6,
+              "bugType": "Disk",
+              "description": "The script is using `shell mkdir` to create directories. This can be inefficient as it creates a new process.",
+              "solution": "Consider using the `os.MkdirAll` function in Go, which is more efficient and does not create a new process."
+            },
+            {
+              "lineNumber": 16,
+              "severity": 4,
+              "bugType": "CPU",
+              "description": "The script is using the `go list` command twice to get the list of Go files. This can be inefficient as it results in unnecessary CPU usage.",
+              "solution": "Consider storing the result of `go list` in a variable and reusing it, which would reduce CPU usage."
+            },
+            {
+              "lineNumber": 31,
+              "severity": 7,
+              "bugType": "Network",
+              "description": "The script is using `go get -u all` to update all dependencies. This can be inefficient as it downloads and updates all dependencies, even those that are not needed.",
+              "solution": "Consider using `go mod tidy`, which removes unnecessary dependencies, and `go get -u` with specific dependencies, which only updates the necessary ones."
+            }
+          ]
+        },
+        "complianceCodeList": {
+          "analysisType": "complianceCodeList",
+          "status": "completed",
+          "completedCells": 1,
+          "errorCells": 0,
+          "issueCells": 1,
+          "totalCells": 1,
+          "filesAnalyzed": 1,
+          "details": [
+            {
+              "lineNumber": 10,
+              "severity": 7,
+              "bugType": "GDPR",
+              "description": "The build process does not appear to include any data anonymization or pseudonymization steps, which are required under GDPR when handling personal data. The absence of these steps could lead to GDPR non-compliance.",
+              "solution": "Ensure that personal data is anonymized or pseudonymized during the build process. This could be achieved by implementing a data masking or encryption step during the build process. Make sure to include a step in your build process that handles data in a GDPR-compliant manner.",
+              "reference": "https://gdpr-info.eu/art-25-gdpr/"
+            },
+            {
+              "lineNumber": 17,
+              "severity": 6,
+              "bugType": "PCI DSS",
+              "description": "The build process does not include any explicit steps for secure handling of cardholder data, which could lead to PCI DSS non-compliance.",
+              "solution": "Ensure that any cardholder data is securely handled during the build process. This could be achieved by implementing secure coding practices, such as encryption, and ensuring that cardholder data is not stored in the build artifacts.",
+              "reference": "https://www.pcisecuritystandards.org/pci_security/"
+            },
+            {
+              "lineNumber": 24,
+              "severity": 8,
+              "bugType": "HIPAA",
+              "description": "The build process does not include any explicit steps for secure handling of Protected Health Information (PHI), which could lead to HIPAA non-compliance.",
+              "solution": "Ensure that any PHI is securely handled during the build process. This could be achieved by implementing secure coding practices, such as encryption, and ensuring that PHI is not stored in the build artifacts.",
+              "reference": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+            }
+          ]
+        }
+      }
+    },
+    "go.mod": {
+      "sourceRelFile": "./go.mod",
+      "notebookRelFile": ".boost/go.mod.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "LICENSE": {
+      "sourceRelFile": "./LICENSE",
+      "notebookRelFile": ".boost/LICENSE.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "example/Flyfile": {
+      "sourceRelFile": "./example/Flyfile",
+      "notebookRelFile": ".boost/example/Flyfile.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "example/fly.toml": {
+      "sourceRelFile": "./example/fly.toml",
+      "notebookRelFile": ".boost/example/fly.toml.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "example/reverse-tunneling-authenticated.md": {
+      "sourceRelFile": "./example/reverse-tunneling-authenticated.md",
+      "notebookRelFile": ".boost/example/reverse-tunneling-authenticated.md.boost-notebook",
+      "totalCells": 3,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "example/users.json": {
+      "sourceRelFile": "./example/users.json",
+      "notebookRelFile": ".boost/example/users.json.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    ".github/goreleaser.yml": {
+      "sourceRelFile": "./.github/goreleaser.yml",
+      "notebookRelFile": ".boost/.github/goreleaser.yml.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/settings/remote_test.go": {
+      "sourceRelFile": "./share/settings/remote_test.go",
+      "notebookRelFile": ".boost/share/settings/remote_test.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "server/server.go": {
+      "sourceRelFile": "./server/server.go",
+      "notebookRelFile": ".boost/server/server.go.boost-notebook",
+      "totalCells": 14,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "client/client_connect.go": {
+      "sourceRelFile": "./client/client_connect.go",
+      "notebookRelFile": ".boost/client/client_connect.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/settings/remote.go": {
+      "sourceRelFile": "./share/settings/remote.go",
+      "notebookRelFile": ".boost/share/settings/remote.go.boost-notebook",
+      "totalCells": 13,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/settings/user.go": {
+      "sourceRelFile": "./share/settings/user.go",
+      "notebookRelFile": ".boost/share/settings/user.go.boost-notebook",
+      "totalCells": 3,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "client/client.go": {
+      "sourceRelFile": "./client/client.go",
+      "notebookRelFile": ".boost/client/client.go.boost-notebook",
+      "totalCells": 11,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/settings/env.go": {
+      "sourceRelFile": "./share/settings/env.go",
+      "notebookRelFile": ".boost/share/settings/env.go.boost-notebook",
+      "totalCells": 4,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "client/client_test.go": {
+      "sourceRelFile": "./client/client_test.go",
+      "notebookRelFile": ".boost/client/client_test.go.boost-notebook",
+      "totalCells": 4,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/settings/config.go": {
+      "sourceRelFile": "./share/settings/config.go",
+      "notebookRelFile": ".boost/share/settings/config.go.boost-notebook",
+      "totalCells": 3,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    ".github/dependabot.yml": {
+      "sourceRelFile": "./.github/dependabot.yml",
+      "notebookRelFile": ".boost/.github/dependabot.yml.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "server/server_handler.go": {
+      "sourceRelFile": "./server/server_handler.go",
+      "notebookRelFile": ".boost/server/server_handler.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "share/settings/users.go": {
+      "sourceRelFile": "./share/settings/users.go",
+      "notebookRelFile": ".boost/share/settings/users.go.boost-notebook",
+      "totalCells": 13,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "server/server_listen.go": {
+      "sourceRelFile": "./server/server_listen.go",
+      "notebookRelFile": ".boost/server/server_listen.go.boost-notebook",
+      "totalCells": 6,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/cert_utils_test.go": {
+      "sourceRelFile": "./test/e2e/cert_utils_test.go",
+      "notebookRelFile": ".boost/test/e2e/cert_utils_test.go.boost-notebook",
+      "totalCells": 6,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/bench/main.go": {
+      "sourceRelFile": "./test/bench/main.go",
+      "notebookRelFile": ".boost/test/bench/main.go.boost-notebook",
+      "totalCells": 10,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/socks_test.go": {
+      "sourceRelFile": "./test/e2e/socks_test.go",
+      "notebookRelFile": ".boost/test/e2e/socks_test.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/udp_test.go": {
+      "sourceRelFile": "./test/e2e/udp_test.go",
+      "notebookRelFile": ".boost/test/e2e/udp_test.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/bench/perf.md": {
+      "sourceRelFile": "./test/bench/perf.md",
+      "notebookRelFile": ".boost/test/bench/perf.md.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/base_test.go": {
+      "sourceRelFile": "./test/e2e/base_test.go",
+      "notebookRelFile": ".boost/test/e2e/base_test.go.boost-notebook",
+      "totalCells": 2,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/auth_test.go": {
+      "sourceRelFile": "./test/e2e/auth_test.go",
+      "notebookRelFile": ".boost/test/e2e/auth_test.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/bench/userfile": {
+      "sourceRelFile": "./test/bench/userfile",
+      "notebookRelFile": ".boost/test/bench/userfile.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    ".github/workflows/ci.yml": {
+      "sourceRelFile": "./.github/workflows/ci.yml",
+      "notebookRelFile": ".boost/.github/workflows/ci.yml.boost-notebook",
+      "totalCells": 9,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/setup_test.go": {
+      "sourceRelFile": "./test/e2e/setup_test.go",
+      "notebookRelFile": ".boost/test/e2e/setup_test.go.boost-notebook",
+      "totalCells": 5,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/tls_test.go": {
+      "sourceRelFile": "./test/e2e/tls_test.go",
+      "notebookRelFile": ".boost/test/e2e/tls_test.go.boost-notebook",
+      "totalCells": 4,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    },
+    "test/e2e/proxy_test.go": {
+      "sourceRelFile": "./test/e2e/proxy_test.go",
+      "notebookRelFile": ".boost/test/e2e/proxy_test.go.boost-notebook",
+      "totalCells": 1,
+      "completedCells": 0,
+      "errorCells": 0,
+      "issueCells": 0,
+      "sections": {}
+    }
+  },
+  "account": {
+    "refreshed": true,
+    "enabled": true,
+    "status": "paid",
+    "trialRemaining": 0,
+    "usageThisMonth": 227.16,
+    "discountedUsage": 100,
+    "balanceDue": 127.16,
+    "couponType": "Polyverse Boost Free Trial",
+    "org": "polyverse-appsec",
+    "owner": "alex@polyverse.io",
+    "created": "2023-05-06",
+    "creditCardLinked": false
+  },
+  "uiState": {
+    "analysisState": "quiescent",
+    "activityBarState": {
+      "summaryViewState": {
+        "analysisMode": "top5-mode",
+        "analysisTypesState": {
+          "security": true,
+          "compliance": true,
+          "documentation": true
+        }
+      }
+    }
+  }
+}

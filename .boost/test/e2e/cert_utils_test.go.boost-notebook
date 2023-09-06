@@ -1,0 +1,80 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package e2e_test\n\nimport (\n\t\"bytes\"\n\t\"crypto/ecdsa\"\n\t\"crypto/ed25519\"\n\t\"crypto/elliptic\"\n\t\"crypto/rand\"\n\t\"crypto/rsa\"\n\t\"crypto/x509\"\n\t\"crypto/x509/pkix\"\n\t\"encoding/pem\"\n\t\"fmt\"\n\t\"io/ioutil\"\n\t\"math/big\"\n\t\"net\"\n\t\"os\"\n\t\"path\"\n\t\"time\"\n\n\tchclient \"github.com/jpillora/chisel/client\"\n\tchserver \"github.com/jpillora/chisel/server\"\n)\n\ntype tlsConfig struct {\n\tserverTLS *chserver.TLSConfig\n\tclientTLS *chclient.TLSConfig\n\ttmpDir    string\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc (t *tlsConfig) Close() {\n\tif t.tmpDir != \"\" {\n\t\tos.RemoveAll(t.tmpDir)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 29
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc newTestTLSConfig() (*tlsConfig, error) {\n\ttlsConfig := &tlsConfig{}\n\t_, serverCertPEM, serverKeyPEM, err := certGetCertificate(&certConfig{\n\t\thosts: []string{\n\t\t\t\"0.0.0.0\",\n\t\t\t\"localhost\",\n\t\t},\n\t\textKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},\n\t})\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\t_, clientCertPEM, clientKeyPEM, err := certGetCertificate(&certConfig{\n\t\textKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth},\n\t})\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\ttlsConfig.tmpDir, err = ioutil.TempDir(\"\", \"\")\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tdirServerCA := path.Join(tlsConfig.tmpDir, \"server-ca\")\n\tif err := os.Mkdir(dirServerCA, 0777); err != nil {\n\t\treturn nil, err\n\t}\n\tpathServerCACrt := path.Join(dirServerCA, \"client.crt\")\n\tif err := ioutil.WriteFile(pathServerCACrt, clientCertPEM, 0666); err != nil {\n\t\treturn nil, err\n\t}\n\n\tdirClientCA := path.Join(tlsConfig.tmpDir, \"client-ca\")\n\tif err := os.Mkdir(dirClientCA, 0777); err != nil {\n\t\treturn nil, err\n\t}\n\tpathClientCACrt := path.Join(dirClientCA, \"server.crt\")\n\tif err := ioutil.WriteFile(pathClientCACrt, serverCertPEM, 0666); err != nil {\n\t\treturn nil, err\n\t}\n\n\tdirServerCrt := path.Join(tlsConfig.tmpDir, \"server-crt\")\n\tif err := os.Mkdir(dirServerCrt, 0777); err != nil {\n\t\treturn nil, err\n\t}\n\tpathServerCrtCrt := path.Join(dirServerCrt, \"server.crt\")\n\tif err := ioutil.WriteFile(pathServerCrtCrt, serverCertPEM, 0666); err != nil {\n\t\treturn nil, err\n\t}\n\tpathServerCrtKey := path.Join(dirServerCrt, \"server.key\")\n\tif err := ioutil.WriteFile(pathServerCrtKey, serverKeyPEM, 0666); err != nil {\n\t\treturn nil, err\n\t}\n\n\tdirClientCrt := path.Join(tlsConfig.tmpDir, \"client-crt\")\n\tif err := os.Mkdir(dirClientCrt, 0777); err != nil {\n\t\treturn nil, err\n\t}\n\tpathClientCrtCrt := path.Join(dirClientCrt, \"client.crt\")\n\tif err := ioutil.WriteFile(pathClientCrtCrt, clientCertPEM, 0666); err != nil {\n\t\treturn nil, err\n\t}\n\tpathClientCrtKey := path.Join(dirClientCrt, \"client.key\")\n\tif err := ioutil.WriteFile(pathClientCrtKey, clientKeyPEM, 0666); err != nil {\n\t\treturn nil, err\n\t}\n\n\t// for self signed cert, it needs the server cert, for real cert, this need to be the trusted CA cert\n\ttlsConfig.serverTLS = &chserver.TLSConfig{\n\t\tCA:   pathServerCACrt,\n\t\tCert: pathServerCrtCrt,\n\t\tKey:  pathServerCrtKey,\n\t}\n\ttlsConfig.clientTLS = &chclient.TLSConfig{\n\t\tCA:   pathClientCACrt,\n\t\tCert: pathClientCrtCrt,\n\t\tKey:  pathClientCrtKey,\n\t}\n\treturn tlsConfig, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 35
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\ntype certConfig struct {\n\tsignCA      *x509.Certificate\n\tisCA        bool\n\thosts       []string\n\tvalidFrom   *time.Time\n\tvalidFor    *time.Time\n\textKeyUsage []x509.ExtKeyUsage\n\trsaBits     int\n\tecdsaCurve  string\n\ted25519Key  bool\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 117
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc certGetCertificate(c *certConfig) (*x509.Certificate, []byte, []byte, error) {\n\tvar err error\n\tvar priv interface{}\n\tswitch c.ecdsaCurve {\n\tcase \"\":\n\t\tif c.ed25519Key {\n\t\t\t_, priv, err = ed25519.GenerateKey(rand.Reader)\n\t\t} else {\n\t\t\trsaBits := c.rsaBits\n\t\t\tif rsaBits == 0 {\n\t\t\t\trsaBits = 2048\n\t\t\t}\n\t\t\tpriv, err = rsa.GenerateKey(rand.Reader, rsaBits)\n\t\t}\n\tcase \"P224\":\n\t\tpriv, err = ecdsa.GenerateKey(elliptic.P224(), rand.Reader)\n\tcase \"P256\":\n\t\tpriv, err = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)\n\tcase \"P384\":\n\t\tpriv, err = ecdsa.GenerateKey(elliptic.P384(), rand.Reader)\n\tcase \"P521\":\n\t\tpriv, err = ecdsa.GenerateKey(elliptic.P521(), rand.Reader)\n\tdefault:\n\t\treturn nil, nil, nil, fmt.Errorf(\"Unrecognized elliptic curve: %q\", c.ecdsaCurve)\n\t}\n\tif err != nil {\n\t\treturn nil, nil, nil, fmt.Errorf(\"Failed to generate private key: %v\", err)\n\t}\n\n\t// ECDSA, ED25519 and RSA subject keys should have the DigitalSignature\n\t// KeyUsage bits set in the x509.Certificate template\n\tkeyUsage := x509.KeyUsageDigitalSignature\n\t// Only RSA subject keys should have the KeyEncipherment KeyUsage bits set. In\n\t// the context of TLS this KeyUsage is particular to RSA key exchange and\n\t// authentication.\n\tif _, isRSA := priv.(*rsa.PrivateKey); isRSA {\n\t\tkeyUsage |= x509.KeyUsageKeyEncipherment\n\t}\n\n\tnotBefore := time.Now()\n\tif c.validFrom != nil {\n\t\tnotBefore = *c.validFrom\n\t}\n\n\tnotAfter := time.Now().Add(24 * time.Hour)\n\tif c.validFor != nil {\n\t\tnotAfter = *c.validFor\n\t}\n\n\tserialNumberLimit := new(big.Int).Lsh(big.NewInt(1), 128)\n\tserialNumber, err := rand.Int(rand.Reader, serialNumberLimit)\n\tif err != nil {\n\t\treturn nil, nil, nil, fmt.Errorf(\"Failed to generate serial number: %v\", err)\n\t}\n\n\tcert := &x509.Certificate{\n\t\tSerialNumber: serialNumber,\n\t\tSubject: pkix.Name{\n\t\t\tOrganizationalUnit: []string{\"test\"},\n\t\t\tOrganization:       []string{\"Chisel\"},\n\t\t\tCountry:            []string{\"us\"},\n\t\t\tProvince:           []string{\"ma\"},\n\t\t\tLocality:           []string{\"Boston\"},\n\t\t\tCommonName:         \"localhost\",\n\t\t},\n\t\tNotBefore: notBefore,\n\t\tNotAfter:  notAfter,\n\n\t\tKeyUsage:              keyUsage,\n\t\tExtKeyUsage:           c.extKeyUsage,\n\t\tBasicConstraintsValid: true,\n\t}\n\n\tfor _, h := range c.hosts {\n\t\tif ip := net.ParseIP(h); ip != nil {\n\t\t\tcert.IPAddresses = append(cert.IPAddresses, ip)\n\t\t} else {\n\t\t\tcert.DNSNames = append(cert.DNSNames, h)\n\t\t}\n\t}\n\n\tif c.isCA {\n\t\tcert.IsCA = true\n\t\tcert.KeyUsage |= x509.KeyUsageCertSign\n\t}\n\n\tca := cert\n\tif c.signCA != nil {\n\t\tca = c.signCA\n\t}\n\n\tcertBytes, err := x509.CreateCertificate(rand.Reader, cert, ca, certGetPublicKey(priv), priv)\n\tif err != nil {\n\t\treturn nil, nil, nil, fmt.Errorf(\"Failed to create certificate: %v\", err)\n\t}\n\n\tcertPEM := new(bytes.Buffer)\n\tpem.Encode(certPEM, &pem.Block{\n\t\tType:  \"CERTIFICATE\",\n\t\tBytes: certBytes,\n\t})\n\n\tprivBytes, err := x509.MarshalPKCS8PrivateKey(priv)\n\tif err != nil {\n\t\treturn nil, nil, nil, fmt.Errorf(\"Unable to marshal private key: %v\", err)\n\t}\n\tcertPrivKeyPEM := new(bytes.Buffer)\n\tpem.Encode(certPrivKeyPEM, &pem.Block{\n\t\tType:  \"PRIVATE KEY\",\n\t\tBytes: privBytes,\n\t})\n\n\treturn cert, certPEM.Bytes(), certPrivKeyPEM.Bytes(), nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 129
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc certGetPublicKey(priv interface{}) interface{} {\n\tswitch k := priv.(type) {\n\tcase *rsa.PrivateKey:\n\t\treturn &k.PublicKey\n\tcase *ecdsa.PrivateKey:\n\t\treturn &k.PublicKey\n\tcase ed25519.PrivateKey:\n\t\treturn k.Public().(ed25519.PublicKey)\n\tdefault:\n\t\treturn nil\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 244
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/e2e/cert_utils_test.go"
+  }
+}

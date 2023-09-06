@@ -1,0 +1,164 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package settings\n\nimport (\n\t\"encoding/json\"\n\t\"errors\"\n\t\"fmt\"\n\t\"io/ioutil\"\n\t\"regexp\"\n\t\"sync\"\n\n\t\"github.com/fsnotify/fsnotify\"\n\t\"github.com/jpillora/chisel/share/cio\"\n)\n\ntype Users struct {\n\tsync.RWMutex\n\tinner map[string]*User\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc NewUsers() *Users {\n\treturn &Users{inner: map[string]*User{}}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 18
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\n// Len returns the numbers of users\nfunc (u *Users) Len() int {\n\tu.RLock()\n\tl := len(u.inner)\n\tu.RUnlock()\n\treturn l\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 22
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\n// Get user from the index by key\nfunc (u *Users) Get(key string) (*User, bool) {\n\tu.RLock()\n\tuser, found := u.inner[key]\n\tu.RUnlock()\n\treturn user, found\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 30
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\n// Set a users into the list by specific key\nfunc (u *Users) Set(key string, user *User) {\n\tu.Lock()\n\tu.inner[key] = user\n\tu.Unlock()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 38
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\n// Del ete a users from the list\nfunc (u *Users) Del(key string) {\n\tu.Lock()\n\tdelete(u.inner, key)\n\tu.Unlock()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 45
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\n// AddUser adds a users to the set\nfunc (u *Users) AddUser(user *User) {\n\tu.Set(user.Name, user)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 52
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\n// Reset all users to the given set,\n// Use nil to remove all.\nfunc (u *Users) Reset(users []*User) {\n\tm := map[string]*User{}\n\tfor _, u := range users {\n\t\tm[u.Name] = u\n\t}\n\tu.Lock()\n\tu.inner = m\n\tu.Unlock()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 57
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "8",
+      "value": "\n// UserIndex is a reloadable user source\ntype UserIndex struct {\n\t*cio.Logger\n\t*Users\n\tconfigFile string\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 69
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "9",
+      "value": "\n// NewUserIndex creates a source for users\nfunc NewUserIndex(logger *cio.Logger) *UserIndex {\n\treturn &UserIndex{\n\t\tLogger: logger.Fork(\"users\"),\n\t\tUsers:  NewUsers(),\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 76
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "10",
+      "value": "\n// LoadUsers is responsible for loading users from a file\nfunc (u *UserIndex) LoadUsers(configFile string) error {\n\tu.configFile = configFile\n\tu.Infof(\"Loading configuration file %s\", configFile)\n\tif err := u.loadUserIndex(); err != nil {\n\t\treturn err\n\t}\n\tif err := u.addWatchEvents(); err != nil {\n\t\treturn err\n\t}\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 10,
+        "type": "originalCode",
+        "lineNumberBase": 84
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "11",
+      "value": "\n// watchEvents is responsible for watching for updates to the file and reloading\nfunc (u *UserIndex) addWatchEvents() error {\n\twatcher, err := fsnotify.NewWatcher()\n\tif err != nil {\n\t\treturn err\n\t}\n\tif err := watcher.Add(u.configFile); err != nil {\n\t\treturn err\n\t}\n\tgo func() {\n\t\tfor e := range watcher.Events {\n\t\t\tif e.Op&fsnotify.Write != fsnotify.Write {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tif err := u.loadUserIndex(); err != nil {\n\t\t\t\tu.Infof(\"Failed to reload the users configuration: %s\", err)\n\t\t\t} else {\n\t\t\t\tu.Debugf(\"Users configuration successfully reloaded from: %s\", u.configFile)\n\t\t\t}\n\t\t}\n\t}()\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 11,
+        "type": "originalCode",
+        "lineNumberBase": 97
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "12",
+      "value": "\n// loadUserIndex is responsible for loading the users configuration\nfunc (u *UserIndex) loadUserIndex() error {\n\tif u.configFile == \"\" {\n\t\treturn errors.New(\"configuration file not set\")\n\t}\n\tb, err := ioutil.ReadFile(u.configFile)\n\tif err != nil {\n\t\treturn fmt.Errorf(\"Failed to read auth file: %s, error: %s\", u.configFile, err)\n\t}\n\tvar raw map[string][]string\n\tif err := json.Unmarshal(b, &raw); err != nil {\n\t\treturn errors.New(\"Invalid JSON: \" + err.Error())\n\t}\n\tusers := []*User{}\n\tfor auth, remotes := range raw {\n\t\tuser := &User{}\n\t\tuser.Name, user.Pass = ParseAuth(auth)\n\t\tif user.Name == \"\" {\n\t\t\treturn errors.New(\"Invalid user:pass string\")\n\t\t}\n\t\tfor _, r := range remotes {\n\t\t\tif r == \"\" || r == \"*\" {\n\t\t\t\tuser.Addrs = append(user.Addrs, UserAllowAll)\n\t\t\t} else {\n\t\t\t\tre, err := regexp.Compile(r)\n\t\t\t\tif err != nil {\n\t\t\t\t\treturn errors.New(\"Invalid address regex\")\n\t\t\t\t}\n\t\t\t\tuser.Addrs = append(user.Addrs, re)\n\t\t\t}\n\t\t}\n\t\tusers = append(users, user)\n\t}\n\t//swap\n\tu.Reset(users)\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 12,
+        "type": "originalCode",
+        "lineNumberBase": 121
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/settings/users.go"
+  }
+}

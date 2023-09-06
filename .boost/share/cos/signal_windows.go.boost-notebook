@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "//+build windows\n\npackage cos\n\nimport (\n\t\"time\"\n)\n\nfunc GoStats() {\n\t//noop\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc AfterSignal(d time.Duration) <-chan struct{} {\n\tch := make(chan struct{})\n\tgo func() {\n\t\t<-time.After(d)\n\t\tclose(ch)\n\t}()\n\treturn ch\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 11
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/cos/signal_windows.go"
+  }
+}

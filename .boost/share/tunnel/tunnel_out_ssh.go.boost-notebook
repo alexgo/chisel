@@ -1,0 +1,68 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package tunnel\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net\"\n\t\"strings\"\n\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/sizestr\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\nfunc (t *Tunnel) handleSSHRequests(reqs <-chan *ssh.Request) {\n\tfor r := range reqs {\n\t\tswitch r.Type {\n\t\tcase \"ping\":\n\t\t\tr.Reply(true, []byte(\"pong\"))\n\t\tdefault:\n\t\t\tt.Debugf(\"Unknown request: %s\", r.Type)\n\t\t}\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc (t *Tunnel) handleSSHChannels(chans <-chan ssh.NewChannel) {\n\tfor ch := range chans {\n\t\tgo t.handleSSHChannel(ch)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 25
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (t *Tunnel) handleSSHChannel(ch ssh.NewChannel) {\n\tif !t.Config.Outbound {\n\t\tt.Debugf(\"Denied outbound connection\")\n\t\tch.Reject(ssh.Prohibited, \"Denied outbound connection\")\n\t\treturn\n\t}\n\tremote := string(ch.ExtraData())\n\t//extract protocol\n\thostPort, proto := settings.L4Proto(remote)\n\tudp := proto == \"udp\"\n\tsocks := hostPort == \"socks\"\n\tif socks && t.socksServer == nil {\n\t\tt.Debugf(\"Denied socks request, please enable socks\")\n\t\tch.Reject(ssh.Prohibited, \"SOCKS5 is not enabled\")\n\t\treturn\n\t}\n\tsshChan, reqs, err := ch.Accept()\n\tif err != nil {\n\t\tt.Debugf(\"Failed to accept stream: %s\", err)\n\t\treturn\n\t}\n\tstream := io.ReadWriteCloser(sshChan)\n\t//cnet.MeterRWC(t.Logger.Fork(\"sshchan\"), sshChan)\n\tdefer stream.Close()\n\tgo ssh.DiscardRequests(reqs)\n\tl := t.Logger.Fork(\"conn#%d\", t.connStats.New())\n\t//ready to handle\n\tt.connStats.Open()\n\tl.Debugf(\"Open %s\", t.connStats.String())\n\tif socks {\n\t\terr = t.handleSocks(stream)\n\t} else if udp {\n\t\terr = t.handleUDP(l, stream, hostPort)\n\t} else {\n\t\terr = t.handleTCP(l, stream, hostPort)\n\t}\n\tt.connStats.Close()\n\terrmsg := \"\"\n\tif err != nil && !strings.HasSuffix(err.Error(), \"EOF\") {\n\t\terrmsg = fmt.Sprintf(\" (error %s)\", err)\n\t}\n\tl.Debugf(\"Close %s%s\", t.connStats.String(), errmsg)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 31
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (t *Tunnel) handleSocks(src io.ReadWriteCloser) error {\n\treturn t.socksServer.ServeConn(cnet.NewRWCConn(src))\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 75
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc (t *Tunnel) handleTCP(l *cio.Logger, src io.ReadWriteCloser, hostPort string) error {\n\tdst, err := net.Dial(\"tcp\", hostPort)\n\tif err != nil {\n\t\treturn err\n\t}\n\ts, r := cio.Pipe(src, dst)\n\tl.Debugf(\"sent %s received %s\", sizestr.ToString(s), sizestr.ToString(r))\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 79
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/tunnel/tunnel_out_ssh.go"
+  }
+}

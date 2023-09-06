@@ -1,0 +1,56 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package ccrypto\n\n// Deterministic crypto.Reader\n// overview: half the result is used as the output\n// [a|...] -> sha512(a) -> [b|output] -> sha512(b)\n\nimport (\n\t\"crypto/sha512\"\n\t\"io\"\n)\n\nconst DetermRandIter = 2048\n\nfunc NewDetermRand(seed []byte) io.Reader {\n\tvar out []byte\n\t//strengthen seed\n\tvar next = seed\n\tfor i := 0; i < DetermRandIter; i++ {\n\t\tnext, out = hash(next)\n\t}\n\treturn &determRand{\n\t\tnext: next,\n\t\tout:  out,\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\ntype determRand struct {\n\tnext, out []byte\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 25
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (d *determRand) Read(b []byte) (int, error) {\n\tn := 0\n\tl := len(b)\n\tfor n < l {\n\t\tnext, out := hash(d.next)\n\t\tn += copy(b[n:], out)\n\t\td.next = next\n\t}\n\treturn n, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 29
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc hash(input []byte) (next []byte, output []byte) {\n\tnextout := sha512.Sum512(input)\n\treturn nextout[:sha512.Size/2], nextout[sha512.Size/2:]\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 40
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/ccrypto/determ_rand.go"
+  }
+}

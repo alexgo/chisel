@@ -1,0 +1,44 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package settings\n\nimport (\n\t\"encoding/json\"\n\t\"fmt\"\n)\n\ntype Config struct {\n\tVersion string\n\tRemotes\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc DecodeConfig(b []byte) (*Config, error) {\n\tc := &Config{}\n\terr := json.Unmarshal(b, c)\n\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"Invalid JSON config\")\n\t}\n\treturn c, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 11
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc EncodeConfig(c Config) []byte {\n\t//Config doesn't have types that can fail to marshal\n\tb, _ := json.Marshal(c)\n\treturn b\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 20
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/settings/config.go"
+  }
+}

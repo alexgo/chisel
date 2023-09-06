@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package ccrypto\n\nimport (\n\t\"crypto/ecdsa\"\n\t\"crypto/elliptic\"\n\t\"io\"\n\t\"math/big\"\n)\n\nvar one = new(big.Int).SetInt64(1)\n\n// This function is copied from ecdsa.GenerateKey() of Go 1.19\nfunc GenerateKeyGo119(c elliptic.Curve, rand io.Reader) (*ecdsa.PrivateKey, error) {\n\tk, err := randFieldElement(c, rand)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tpriv := new(ecdsa.PrivateKey)\n\tpriv.PublicKey.Curve = c\n\tpriv.D = k\n\tpriv.PublicKey.X, priv.PublicKey.Y = c.ScalarBaseMult(k.Bytes())\n\treturn priv, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n// This function is copied from Go 1.19\nfunc randFieldElement(c elliptic.Curve, rand io.Reader) (k *big.Int, err error) {\n\tparams := c.Params()\n\t// Note that for P-521 this will actually be 63 bits more than the order, as\n\t// division rounds down, but the extra bit is inconsequential.\n\tb := make([]byte, params.N.BitLen()/8+8)\n\t_, err = io.ReadFull(rand, b)\n\tif err != nil {\n\t\treturn\n\t}\n\n\tk = new(big.Int).SetBytes(b)\n\tn := new(big.Int).Sub(params.N, one)\n\tk.Mod(k, n)\n\tk.Add(k, one)\n\treturn\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 24
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./share/ccrypto/generate_key_go119.go"
+  }
+}

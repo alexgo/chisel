@@ -1,0 +1,44 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "markdown",
+      "id": "0",
+      "value": "# Reverse Tunneling\n\n> **Use Case**: Host a website on your Raspberry Pi without opening ports on your router.\n\nThis guide will show you how to use an internet-facing server (for example, a cloud VPS) as a relay to bounce down TCP traffic on port 80 to your Raspberry Pi.\n\n## Chisel CLI\n\n### Server\n\nSetup a relay server on the VPS to bounce down TCP traffic on port 80:\n\n```bash\n#!/bin/bash\n\n# ⬇️ Start Chisel server in Reverse mode\nchisel server --reverse \\\n\n# ⬇️ Use the include users.json as an authfile\n--authfile=\"./users.json\" \\\n```\n\nThe corresponding `authfile` might look like this:\n\n```json\n{\n  \"foo:bar\": [\"0.0.0.0:80\"]\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "markdown",
+      "id": "1",
+      "value": "```\n\n### Client\n\nSetup a chisel client to receive bounced-down traffic and forward it to the webserver running on the Pi:\n\n```bash\n#!/bin/bash\n\nchisel client \\\n\n# ⬇️ Authenticates user \"foo\" with password \"bar\"\n--auth=\"foo:bar\" \\\n\n# ⬇️ Connects to chisel relay server example.com\n# listening on the default (\"fallback\") port, 8080\nexample.com \\\n\n# ⬇️ Reverse tunnels port 80 on the relay server to\n# port 80 on your Pi.\nR:80:localhost:80\n```\n\n---\n\n## Chisel Container\n\nThis guide makes use of Docker and Docker compose to accomplish the same task as the above guide.\n### Server\n\nSetup a relay server on the VPS to bounce down TCP traffic on port 80:\n\n```yaml\nversion: '3'\n\nservices:\n  chisel:\n    image: jpillora/chisel\n    restart: unless-stopped\n    container_name: chisel\n    # ⬇️ Pass CLI arguments one at a time in an array, as required by Docker compose.\n    command:\n      - 'server'\n      # ⬇️ Use the --key=value syntax, since Docker compose doesn't parse whitespace well.\n      - '--authfile=/users.json'\n      - '--reverse'\n    # ⬇️ Mount the authfile as a Docker volume\n    volumes:\n      - './users.json:/users.json'\n    # ⬇️ Give the container unrestricted access to the Docker host's network\n    network_mode: host\n```\n\nThe `authfile` (`users.json`) remains the same as in the non-containerized version - shown again with the username `foo` and password `bar`.\n\n```json\n{\n  \"foo:bar\": [\"0.0.0.0:80\"]\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 28
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "markdown",
+      "id": "2",
+      "value": "```\n\n### Client\n\nSetup an instance of the Chisel client on the Pi to receive relayed TCP traffic and feed it to the web server:\n\n```yaml\nversion: '3'\n\nservices:\n  chisel:\n    # ⬇️ Delay starting Chisel server until the web server container is started.\n    depends_on:\n      - webserver\n    image: jpillora/chisel\n    restart: unless-stopped\n    container_name: 'chisel'\n    command:\n      - 'client'\n      # ⬇️ Use username `foo` and password `bar` to authenticate with Chisel server.\n      - '--auth=foo:bar'\n      # ⬇️ Domain & port of Chisel server. Port defaults to 8080 on server, but must be manually set on client.\n      - 'proxy.example.com:8080'\n      # ⬇️ Reverse tunnel traffic from the chisel server to the web server container, identified in Docker using DNS by its service name `webserver`.\n      - 'R:80:webserver:80'\n    networks:\n      - internal\n  # ⬇️ Basic Nginx webserver for demo purposes.\n  webserver:\n    image: nginx\n    restart: unless-stopped\n    container_name: nginx\n    networks:\n      - internal\n\n# ⬇️ Make use of a Docker network called `internal`.\nnetworks:\n  internal:\n```\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 87
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./example/reverse-tunneling-authenticated.md"
+  }
+}

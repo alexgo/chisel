@@ -1,0 +1,128 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "//chisel end-to-end test\n//======================\n//\n//                    (direct)\n//         .--------------->----------------.\n//        /    chisel         chisel         \\\n// request--->client:2001--->server:2002---->fileserver:3000\n//        \\                                  /\n//         '--> crowbar:4001--->crowbar:4002'\n//              client           server\n//\n// crowbar and chisel binaries should be in your PATH\n\npackage main\n\nimport (\n\t\"flag\"\n\t\"fmt\"\n\t\"io\"\n\t\"io/ioutil\"\n\t\"log\"\n\t\"net/http\"\n\t\"os\"\n\t\"os/exec\"\n\t\"path\"\n\t\"strconv\"\n\n\t\"github.com/jpillora/chisel/share/cnet\"\n\n\t\"time\"\n)\n\nconst ENABLE_CROWBAR = false\n\nconst (\n\tB  = 1\n\tKB = 1000 * B\n\tMB = 1000 * KB\n\tGB = 1000 * MB\n)\n\nfunc run() {\n\tflag.Parse()\n\targs := flag.Args()\n\tif len(args) == 0 {\n\t\tfatal(\"go run main.go [test] or [bench]\")\n\t}\n\tfor _, a := range args {\n\t\tswitch a {\n\t\tcase \"test\":\n\t\t\ttest()\n\t\tcase \"bench\":\n\t\t\tbench()\n\t\t}\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\n//test\nfunc test() {\n\ttestTunnel(\"2001\", 500)\n\ttestTunnel(\"2001\", 50000)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 56
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\n//benchmark\nfunc bench() {\n\tbenchSizes(\"3000\")\n\tbenchSizes(\"2001\")\n\tif ENABLE_CROWBAR {\n\t\tbenchSizes(\"4001\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 62
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc benchSizes(port string) {\n\tfor size := 1; size <= 100*MB; size *= 10 {\n\t\ttestTunnel(port, size)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 71
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc testTunnel(port string, size int) {\n\tt0 := time.Now()\n\tresp, err := requestFile(port, size)\n\tif err != nil {\n\t\tfatal(err)\n\t}\n\tif resp.StatusCode != 200 {\n\t\tfatal(err)\n\t}\n\n\tn, err := io.Copy(ioutil.Discard, resp.Body)\n\tif err != nil {\n\t\tfatal(err)\n\t}\n\tt1 := time.Now()\n\tfmt.Printf(\":%s => %d bytes in %s\\n\", port, size, t1.Sub(t0))\n\tif int(n) != size {\n\t\tfatalf(\"%d bytes expected, got %d\", size, n)\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 77
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\n//============================\n\nfunc requestFile(port string, size int) (*http.Response, error) {\n\turl := \"http://127.0.0.1:\" + port + \"/\" + strconv.Itoa(size)\n\t// fmt.Println(url)\n\treturn http.Get(url)\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 98
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "6",
+      "value": "\nfunc makeFileServer() *cnet.HTTPServer {\n\tbsize := 3 * MB\n\tbytes := make([]byte, bsize)\n\t//filling huge buffer\n\tfor i := 0; i < len(bytes); i++ {\n\t\tbytes[i] = byte(i)\n\t}\n\n\ts := cnet.NewHTTPServer()\n\ts.Server.SetKeepAlivesEnabled(false)\n\thandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\trsize, _ := strconv.Atoi(r.URL.Path[1:])\n\t\tfor rsize >= bsize {\n\t\t\tw.Write(bytes)\n\t\t\trsize -= bsize\n\t\t}\n\t\tw.Write(bytes[:rsize])\n\t})\n\ts.GoListenAndServe(\"0.0.0.0:3000\", handler)\n\treturn s\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 6,
+        "type": "originalCode",
+        "lineNumberBase": 106
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "7",
+      "value": "\n//============================\n\nfunc fatal(args ...interface{}) {\n\tpanic(fmt.Sprint(args...))\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 7,
+        "type": "originalCode",
+        "lineNumberBase": 128
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "8",
+      "value": "func fatalf(f string, args ...interface{}) {\n\tpanic(fmt.Sprintf(f, args...))\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 8,
+        "type": "originalCode",
+        "lineNumberBase": 134
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "9",
+      "value": "\n//global setup\nfunc main() {\n\n\tfs := makeFileServer()\n\tgo func() {\n\t\terr := fs.Wait()\n\t\tif err != nil {\n\t\t\tfmt.Printf(\"fs server closed (%s)\\n\", err)\n\t\t}\n\t}()\n\n\tif ENABLE_CROWBAR {\n\t\tdir, _ := os.Getwd()\n\t\tcd := exec.Command(\"crowbard\",\n\t\t\t`-listen`, \"0.0.0.0:4002\",\n\t\t\t`-userfile`, path.Join(dir, \"userfile\"))\n\t\tif err := cd.Start(); err != nil {\n\t\t\tfatal(err)\n\t\t}\n\t\tgo func() {\n\t\t\tfatalf(\"crowbard: %v\", cd.Wait())\n\t\t}()\n\t\tdefer cd.Process.Kill()\n\n\t\ttime.Sleep(100 * time.Millisecond)\n\n\t\tcf := exec.Command(\"crowbar-forward\",\n\t\t\t\"-local=0.0.0.0:4001\",\n\t\t\t\"-server=http://127.0.0.1:4002\",\n\t\t\t\"-remote=127.0.0.1:3000\",\n\t\t\t\"-username\", \"foo\",\n\t\t\t\"-password\", \"bar\")\n\t\tif err := cf.Start(); err != nil {\n\t\t\tfatal(err)\n\t\t}\n\t\tdefer cf.Process.Kill()\n\t}\n\n\ttime.Sleep(100 * time.Millisecond)\n\n\thd := exec.Command(\"chisel\", \"server\",\n\t\t// \"-v\",\n\t\t\"--key\", \"foobar\",\n\t\t\"--port\", \"2002\")\n\thd.Stdout = os.Stdout\n\tif err := hd.Start(); err != nil {\n\t\tfatal(err)\n\t}\n\tdefer hd.Process.Kill()\n\n\ttime.Sleep(100 * time.Millisecond)\n\n\thf := exec.Command(\"chisel\", \"client\",\n\t\t// \"-v\",\n\t\t\"--fingerprint\", \"mOz4rg9zlQ409XAhhj6+fDDVwQMY42CL3Zg2W2oTYxA=\",\n\t\t\"127.0.0.1:2002\",\n\t\t\"2001:3000\")\n\thf.Stdout = os.Stdout\n\tif err := hf.Start(); err != nil {\n\t\tfatal(err)\n\t}\n\tdefer hf.Process.Kill()\n\n\ttime.Sleep(100 * time.Millisecond)\n\n\tdefer func() {\n\t\tif r := recover(); r != nil {\n\t\t\tlog.Print(r)\n\t\t}\n\t}()\n\trun()\n\n\tfs.Close()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 9,
+        "type": "originalCode",
+        "lineNumberBase": 137
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/bench/main.go"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package chserver\n\nimport (\n\t\"crypto/tls\"\n\t\"crypto/x509\"\n\t\"errors\"\n\t\"io/ioutil\"\n\t\"net\"\n\t\"os\"\n\t\"os/user\"\n\t\"path/filepath\"\n\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"golang.org/x/crypto/acme/autocert\"\n)\n\n//TLSConfig enables configures TLS\ntype TLSConfig struct {\n\tKey     string\n\tCert    string\n\tDomains []string\n\tCA      string\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc (s *Server) listener(host, port string) (net.Listener, error) {\n\thasDomains := len(s.config.TLS.Domains) > 0\n\thasKeyCert := s.config.TLS.Key != \"\" && s.config.TLS.Cert != \"\"\n\tif hasDomains && hasKeyCert {\n\t\treturn nil, errors.New(\"cannot use key/cert and domains\")\n\t}\n\tvar tlsConf *tls.Config\n\tif hasDomains {\n\t\ttlsConf = s.tlsLetsEncrypt(s.config.TLS.Domains)\n\t}\n\textra := \"\"\n\tif hasKeyCert {\n\t\tc, err := s.tlsKeyCert(s.config.TLS.Key, s.config.TLS.Cert, s.config.TLS.CA)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\ttlsConf = c\n\t\tif port != \"443\" && hasDomains {\n\t\t\textra = \" (WARNING: LetsEncrypt will attempt to connect to your domain on port 443)\"\n\t\t}\n\t}\n\t//tcp listen\n\tl, err := net.Listen(\"tcp\", host+\":\"+port)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\t//optionally wrap in tls\n\tproto := \"http\"\n\tif tlsConf != nil {\n\t\tproto += \"s\"\n\t\tl = tls.NewListener(l, tlsConf)\n\t}\n\tif err == nil {\n\t\ts.Infof(\"Listening on %s://%s:%s%s\", proto, host, port, extra)\n\t}\n\treturn l, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 23
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc (s *Server) tlsLetsEncrypt(domains []string) *tls.Config {\n\t//prepare cert manager\n\tm := &autocert.Manager{\n\t\tPrompt: func(tosURL string) bool {\n\t\t\ts.Infof(\"Accepting LetsEncrypt TOS and fetching certificate...\")\n\t\t\treturn true\n\t\t},\n\t\tEmail:      settings.Env(\"LE_EMAIL\"),\n\t\tHostPolicy: autocert.HostWhitelist(domains...),\n\t}\n\t//configure file cache\n\tc := settings.Env(\"LE_CACHE\")\n\tif c == \"\" {\n\t\th := os.Getenv(\"HOME\")\n\t\tif h == \"\" {\n\t\t\tif u, err := user.Current(); err == nil {\n\t\t\t\th = u.HomeDir\n\t\t\t}\n\t\t}\n\t\tc = filepath.Join(h, \".cache\", \"chisel\")\n\t}\n\tif c != \"-\" {\n\t\ts.Infof(\"LetsEncrypt cache directory %s\", c)\n\t\tm.Cache = autocert.DirCache(c)\n\t}\n\t//return lets-encrypt tls config\n\treturn m.TLSConfig()\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 61
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc (s *Server) tlsKeyCert(key, cert string, ca string) (*tls.Config, error) {\n\tkeypair, err := tls.LoadX509KeyPair(cert, key)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\t//file based tls config using tls defaults\n\tc := &tls.Config{\n\t\tCertificates: []tls.Certificate{keypair},\n\t}\n\t//mTLS requires server's CA\n\tif ca != \"\" {\n\t\tif err := addCA(ca, c); err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\ts.Infof(\"Loaded CA path: %s\", ca)\n\t}\n\treturn c, nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 90
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc addCA(ca string, c *tls.Config) error {\n\tfileInfo, err := os.Stat(ca)\n\tif err != nil {\n\t\treturn err\n\t}\n\tclientCAPool := x509.NewCertPool()\n\tif fileInfo.IsDir() {\n\t\t//this is a directory holding CA bundle files\n\t\tfiles, err := ioutil.ReadDir(ca)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\t//add all cert files from path\n\t\tfor _, file := range files {\n\t\t\tf := file.Name()\n\t\t\tif err := addPEMFile(filepath.Join(ca, f), clientCAPool); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t}\n\t} else {\n\t\t//this is a CA bundle file\n\t\tif err := addPEMFile(ca, clientCAPool); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n\t//set client CAs and enable cert verification\n\tc.ClientCAs = clientCAPool\n\tc.ClientAuth = tls.RequireAndVerifyClientCert\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 109
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "5",
+      "value": "\nfunc addPEMFile(path string, pool *x509.CertPool) error {\n\tcontent, err := ioutil.ReadFile(path)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif !pool.AppendCertsFromPEM(content) {\n\t\treturn errors.New(\"Fail to load certificates from : \" + path)\n\t}\n\treturn nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 5,
+        "type": "originalCode",
+        "lineNumberBase": 140
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./server/server_listen.go"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package e2e_test\n\nimport (\n\t\"testing\"\n\n\tchclient \"github.com/jpillora/chisel/client\"\n\tchserver \"github.com/jpillora/chisel/server\"\n)\n\nfunc TestBase(t *testing.T) {\n\ttmpPort := availablePort()\n\t//setup server, client, fileserver\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{tmpPort + \":$FILEPORT\"},\n\t\t})\n\tdefer teardown()\n\t//test remote\n\tresult, err := post(\"http://localhost:\"+tmpPort, \"foo\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif result != \"foo!\" {\n\t\tt.Fatalf(\"expected exclamation mark added\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc TestReverse(t *testing.T) {\n\ttmpPort := availablePort()\n\t//setup server, client, fileserver\n\tteardown := simpleSetup(t,\n\t\t&chserver.Config{\n\t\t\tReverse: true,\n\t\t},\n\t\t&chclient.Config{\n\t\t\tRemotes: []string{\"R:\" + tmpPort + \":$FILEPORT\"},\n\t\t})\n\tdefer teardown()\n\t//test remote (this goes through the server and out the client)\n\tresult, err := post(\"http://localhost:\"+tmpPort, \"foo\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif result != \"foo!\" {\n\t\tt.Fatalf(\"expected exclamation mark added\")\n\t}\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 27
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/e2e/base_test.go"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "markdown",
+      "id": "0",
+      "value": "\n### Performance\n\nWith [crowbar](https://github.com/q3k/crowbar), a connection is tunneled by repeatedly querying the server with updates. This results in a large amount of HTTP and TCP connection overhead. Chisel overcomes this using WebSockets combined with [crypto/ssh](https://golang.org/x/crypto/ssh) to create hundreds of logical connections, resulting in **one** TCP connection per client.\n\nIn this simple benchmark, we have:\n\n```\n\t\t\t\t\t(direct)\n        .--------------->----------------.\n       /    chisel         chisel         \\\nrequest--->client:2001--->server:2002---->fileserver:3000\n       \\                                  /\n        '--> crowbar:4001--->crowbar:4002'\n             client           server\n```\n\nNote, we're using an in-memory \"file\" server on localhost for these tests\n\n_direct_\n\n```\n:3000 => 1 bytes in 1.291417ms\n:3000 => 10 bytes in 713.525µs\n:3000 => 100 bytes in 562.48µs\n:3000 => 1000 bytes in 595.445µs\n:3000 => 10000 bytes in 1.053298ms\n:3000 => 100000 bytes in 741.351µs\n:3000 => 1000000 bytes in 1.367143ms\n:3000 => 10000000 bytes in 8.601549ms\n:3000 => 100000000 bytes in 76.3939ms\n```\n\n`chisel`\n\n```\n:2001 => 1 bytes in 1.351976ms\n:2001 => 10 bytes in 1.106086ms\n:2001 => 100 bytes in 1.005729ms\n:2001 => 1000 bytes in 1.254396ms\n:2001 => 10000 bytes in 1.139777ms\n:2001 => 100000 bytes in 2.35437ms\n:2001 => 1000000 bytes in 11.502673ms\n:2001 => 10000000 bytes in 123.130246ms\n:2001 => 100000000 bytes in 966.48636ms\n```\n\n~100MB in **~1 second**\n\n`crowbar`\n\n```\n:4001 => 1 bytes in 3.335797ms\n:4001 => 10 bytes in 1.453007ms\n:4001 => 100 bytes in 1.811727ms\n:4001 => 1000 bytes in 1.621525ms\n:4001 => 10000 bytes in 5.20729ms\n:4001 => 100000 bytes in 38.461926ms\n:4001 => 1000000 bytes in 358.784864ms\n:4001 => 10000000 bytes in 3.603206487s\n:4001 => 100000000 bytes in 36.332395213s\n```\n\n~100MB in **36 seconds**\n\nSee `test/bench/main.go`",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/bench/perf.md"
+  }
+}

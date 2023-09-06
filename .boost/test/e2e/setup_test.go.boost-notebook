@@ -1,0 +1,68 @@
+{
+  "cells": [
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "0",
+      "value": "package e2e_test\n\nimport (\n\t\"context\"\n\t\"io/ioutil\"\n\t\"log\"\n\t\"net\"\n\t\"net/http\"\n\t\"strings\"\n\t\"testing\"\n\t\"time\"\n\n\tchclient \"github.com/jpillora/chisel/client\"\n\tchserver \"github.com/jpillora/chisel/server\"\n)\n\nconst debug = true\n\n// test layout configuration\ntype testLayout struct {\n\tserver     *chserver.Config\n\tclient     *chclient.Config\n\tfileServer bool\n\tudpEcho    bool\n\tudpServer  bool\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 0,
+        "type": "originalCode",
+        "lineNumberBase": 0
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "1",
+      "value": "\nfunc (tl *testLayout) setup(t *testing.T) (server *chserver.Server, client *chclient.Client, teardown func()) {\n\t//start of the world\n\t// goroutines := runtime.NumGoroutine()\n\t//root cancel\n\tctx, cancel := context.WithCancel(context.Background())\n\t//fileserver (fake endpoint)\n\tfilePort := availablePort()\n\tif tl.fileServer {\n\t\tfileAddr := \"127.0.0.1:\" + filePort\n\t\tf := http.Server{\n\t\t\tHandler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\t\t\tb, _ := ioutil.ReadAll(r.Body)\n\t\t\t\tw.Write(append(b, '!'))\n\t\t\t}),\n\t\t}\n\t\tfl, err := net.Listen(\"tcp\", fileAddr)\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tlog.Printf(\"fileserver: listening on %s\", fileAddr)\n\t\tgo func() {\n\t\t\tf.Serve(fl)\n\t\t\tcancel()\n\t\t}()\n\t\tgo func() {\n\t\t\t<-ctx.Done()\n\t\t\tf.Close()\n\t\t}()\n\t}\n\t//server\n\tserver, err := chserver.NewServer(tl.server)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tserver.Debug = debug\n\tport := availablePort()\n\tif err := server.StartContext(ctx, \"127.0.0.1\", port); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tgo func() {\n\t\tserver.Wait()\n\t\tserver.Infof(\"Closed\")\n\t\tcancel()\n\t}()\n\t//client (with defaults)\n\ttl.client.Fingerprint = server.GetFingerprint()\n\tif tl.server.TLS.Key != \"\" {\n\t\t//the domain name has to be localhost to match the ssl cert\n\t\ttl.client.Server = \"https://localhost:\" + port\n\t} else {\n\t\ttl.client.Server = \"http://127.0.0.1:\" + port\n\t}\n\tfor i, r := range tl.client.Remotes {\n\t\t//convert $FILEPORT into the allocated port for this test case\n\t\tif tl.fileServer {\n\t\t\ttl.client.Remotes[i] = strings.Replace(r, \"$FILEPORT\", filePort, 1)\n\t\t}\n\t}\n\tclient, err = chclient.NewClient(tl.client)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tclient.Debug = debug\n\tif err := client.Start(ctx); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tgo func() {\n\t\tclient.Wait()\n\t\tclient.Infof(\"Closed\")\n\t\tcancel()\n\t}()\n\t//cancel context tree, and wait for both client and server to stop\n\tteardown = func() {\n\t\tcancel()\n\t\tserver.Wait()\n\t\tclient.Wait()\n\t\t//confirm goroutines have been cleaned up\n\t\t// time.Sleep(500 * time.Millisecond)\n\t\t// TODO remove sleep\n\t\t// d := runtime.NumGoroutine() - goroutines\n\t\t// if d != 0 {\n\t\t// \tpprof.Lookup(\"goroutine\").WriteTo(os.Stdout, 1)\n\t\t// \tt.Fatalf(\"goroutines left %d\", d)\n\t\t// }\n\t}\n\t//wait a bit...\n\t//TODO: client signal API, similar to os.Notify(signal)\n\t//      wait for client setup\n\ttime.Sleep(50 * time.Millisecond)\n\t//ready\n\treturn server, client, teardown\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 1,
+        "type": "originalCode",
+        "lineNumberBase": 26
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "2",
+      "value": "\nfunc simpleSetup(t *testing.T, s *chserver.Config, c *chclient.Config) context.CancelFunc {\n\tconf := testLayout{\n\t\tserver:     s,\n\t\tclient:     c,\n\t\tfileServer: true,\n\t}\n\t_, _, teardown := conf.setup(t)\n\treturn teardown\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 2,
+        "type": "originalCode",
+        "lineNumberBase": 119
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "3",
+      "value": "\nfunc post(url, body string) (string, error) {\n\tresp, err := http.Post(url, \"text/plain\", strings.NewReader(body))\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\tb, err := ioutil.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\treturn string(b), nil\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 3,
+        "type": "originalCode",
+        "lineNumberBase": 129
+      }
+    },
+    {
+      "outputs": [],
+      "languageId": "go",
+      "id": "4",
+      "value": "\nfunc availablePort() string {\n\tl, err := net.Listen(\"tcp\", \"127.0.0.1:0\")\n\tif err != nil {\n\t\tlog.Panic(err)\n\t}\n\tl.Close()\n\t_, port, err := net.SplitHostPort(l.Addr().String())\n\tif err != nil {\n\t\tlog.Panic(err)\n\t}\n\treturn port\n}\n",
+      "kind": 2,
+      "metadata": {
+        "id": 4,
+        "type": "originalCode",
+        "lineNumberBase": 141
+      }
+    }
+  ],
+  "metadata": {
+    "defaultDir": ".boost",
+    "sourceFile": "./test/e2e/setup_test.go"
+  }
+}
