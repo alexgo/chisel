@@ -1,5 +1,79 @@
 {
-  "cells": [],
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysis"
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "dcfe5771-e877-4e12-870c-81f014a3646e",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Security Report\n\nLast Updated: Thursday, September 7, 2023 at 12:16:34 AM PDT\n\n\nExecutive Report:\n\n1. **Architectural Impact**: The analysis of this file has not revealed any severe issues.\n2. **Risk Analysis**: The analysis of this file has not revealed any severe issues.\n3. **Potential Customer Impact**: Based on the analysis, there are no severe issues that could potentially impact customers.\n4. **Performance Issues**: Our analysis did not identify any explicit performance issues in the file.\n5. **Risk Assessment**: Based on the current analysis of this file, no severe issues have been found. However, this doesn't guarantee that the file is risk-free.\n\nHighlights:\n\n- No severe issues were identified in the current analysis of this file.\n",
+      "kind": 1,
+      "metadata": {
+        "id": "dcfe5771-e877-4e12-870c-81f014a3646e",
+        "outputType": "bugAnalysis",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "performance"
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "330de37c-f03d-4928-9797-a4dd4b63b46c",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Performance Report\n\nLast Updated: Thursday, September 7, 2023 at 12:16:43 AM PDT\n\n\nExecutive Report:\n\n1. **Architectural Impact**: The analysis of this file has not revealed any severe issues.\n2. **Risk Analysis**: The analysis of this file has not revealed any severe issues.\n3. **Potential Customer Impact**: Based on the analysis, there are no severe issues that could potentially impact customers.\n4. **Performance Issues**: Our analysis did not identify any explicit performance issues in the file.\n5. **Risk Assessment**: Based on the current analysis of this file, no severe issues have been found. However, this doesn't guarantee that the file is risk-free.\n\nHighlights:\n\n- No severe issues were identified in the current analysis of this file.\n",
+      "kind": 1,
+      "metadata": {
+        "id": "330de37c-f03d-4928-9797-a4dd4b63b46c",
+        "outputType": "performance",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCode",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "ec94a12c-5b37-4a5b-9e81-a3d6421d9685",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Compliance Report\n\nLast Updated: Thursday, September 7, 2023 at 12:18:16 AM PDT\n\n## Executive Report\n\n### Architectural Impact and Risk Analysis\n\n1. **HIPAA Compliance Risk**: The file `share/compat.go` has been flagged for potential HIPAA compliance issues. The code does not include explicit measures for the secure handling of Protected Health Information (PHI). This could lead to potential HIPAA compliance issues, which could have serious legal and financial implications. The risk is high due to the severity of the issue and the potential impact on the project.\n\n2. **GDPR and PCI DSS Warnings**: The same file `share/compat.go` also has warnings related to GDPR and PCI DSS compliance. These warnings indicate potential issues with data protection and payment card information security, respectively. The risk is moderate due to the severity of the warnings and the potential impact on the project.\n\n3. **Customer Impact**: The potential non-compliance with HIPAA, GDPR, and PCI DSS could impact customers who use this software for handling sensitive data. If the issues are not addressed, customers could face legal and financial penalties, and it could damage their trust in the software.\n\n4. **Overall Health of the Project**: The project consists of only one file, `share/compat.go`, which has been flagged with issues. This means 100% of the project files have issues, which indicates a high risk to the overall health of the project.\n\n### Highlights of the Analysis\n\n- The project has a high risk due to potential HIPAA compliance issues. The code does not include explicit measures for the secure handling of PHI, which could lead to potential HIPAA compliance issues.\n- The project also has moderate risk due to warnings related to GDPR and PCI DSS compliance. These warnings indicate potential issues with data protection and payment card information security.\n- The potential non-compliance with HIPAA, GDPR, and PCI DSS could impact customers who use this software for handling sensitive data. If the issues are not addressed, customers could face legal and financial penalties, and it could damage their trust in the software.\n- The overall health of the project is at high risk as 100% of the project files have issues. This indicates a need for immediate attention and remediation to ensure the project's success and customer satisfaction.",
+      "kind": 1,
+      "metadata": {
+        "id": "ec94a12c-5b37-4a5b-9e81-a3d6421d9685",
+        "outputType": "complianceCode",
+        "summaryType": "quick"
+      }
+    }
+  ],
   "metadata": {
     "defaultDir": ".boost",
     "sourceFile": "./share/compat.go"

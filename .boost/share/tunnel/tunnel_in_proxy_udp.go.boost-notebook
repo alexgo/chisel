@@ -1,7 +1,113 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:16:42 PM PDT\n\nThe code provided is written in Go and is a part of a larger project, Chisel, which is a fast TCP/UDP tunnel over HTTP. This particular code snippet is responsible for setting up a UDP listener that forwards packets via the bound SSH connection.\n\nThe `listenUDP` function is used to create a UDP listener on a particular address and port. It uses the `net.ResolveUDPAddr` and `net.ListenUDP` functions from the `net` package to create a UDP address and a UDP listener, respectively. \n\nThe function takes three arguments:\n- `l *cio.Logger`: a logger instance for logging purposes.\n- `sshTun sshTunnel`: an SSH tunnel instance for forwarding packets.\n- `remote *settings.Remote`: the remote settings, including the local address and port to listen on.\n\nThe function returns a pointer to a `udpListener` struct and an error. If there is an error during the resolution of the address or the creation of the listener, the function will return `nil` and the error.\n\nThe `udpListener` struct is defined elsewhere in the code and likely contains fields for the logger, SSH tunnel, remote settings, inbound connection, and maximum MTU size.\n\nThe function first resolves the UDP address using the `net.ResolveUDPAddr` function. If an error occurs during this process, it logs the error and returns `nil` and the error.\n\nNext, it creates a UDP listener on the resolved address using the `net.ListenUDP` function. Again, if an error occurs, it logs the error and returns `nil` and the error.\n\nIf no errors occur, it creates a `udpListener` instance with the logger, SSH tunnel, remote settings, inbound connection, and maximum MTU size. The maximum MTU size is retrieved from the environment variable `UDP_MAX_SIZE` with a default value of 9012 if the environment variable is not set.\n\nFinally, it logs the maximum MTU size and returns the `udpListener` instance and `nil` for the error.\n\nThe comment at the beginning of the function explains the challenge of multiplexing many UDP clients through a single entry node. Each client listens on its own source port for a response, and the mappings of these ports must be stored in memory for a certain length of time. This is so that when the exit node receives a response on a certain port, it knows to return it to the correct source port.\n\nFor more information on UDP and TCP tunnels, you can visit this link: [https://www.howtogeek.com/142044/what-is-ssh-tunneling-and-how-to-use-it/](https://www.howtogeek.com/142044/what-is-ssh-tunneling-and-how-to-use-it/)\n\nFor more information on the Go `net` package, you can visit this link: [https://golang.org/pkg/net/](https://golang.org/pkg/net/)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:20:54 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExampleErrorPath-->End;\n```\n\nThe code provided does not have any control flow."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:24:24 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 29\n\n   **Bug Type**: Insecure Configuration\n\n   **Description**: The use of environment variables to set configuration options such as 'UDP_MAX_SIZE' can lead to security issues if an attacker is able to manipulate these values. This could potentially lead to buffer overflow attacks.\n\n   **Solution**: Avoid using environment variables for critical configuration options. Instead, use secure configuration files or secure key storage solutions. More details can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Configuration_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 29,
+                "severity": 7,
+                "bugType": "Insecure Configuration",
+                "description": "The use of environment variables to set configuration options such as 'UDP_MAX_SIZE' can lead to security issues if an attacker is able to manipulate these values. This could potentially lead to buffer overflow attacks.",
+                "solution": "Avoid using environment variables for critical configuration options. Instead, use secure configuration files or secure key storage solutions. More details can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Configuration_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:28:41 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 40\n\n   **Bug Type**: Memory\n\n   **Description**: The code is storing UDP mappings in memory for an unspecified length of time. This could potentially lead to memory leaks if not properly managed.\n\n   **Solution**: Consider implementing a timeout or expiration policy for these mappings to free up memory over time. Alternatively, consider using a more efficient data structure to store these mappings, such as a hash map with weak references.\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 47\n\n   **Bug Type**: CPU\n\n   **Description**: The code is using the 'net.ResolveUDPAddr' and 'net.ListenUDP' functions which could potentially be CPU intensive if called frequently.\n\n   **Solution**: Consider caching the results of 'net.ResolveUDPAddr' if the address doesn't change often to reduce CPU usage. For 'net.ListenUDP', ensure it's not being called too frequently as it could lead to high CPU usage.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 41\n\n   **Bug Type**: Network\n\n   **Description**: The code is using UDP for network communication, which doesn't guarantee delivery of packets. This could lead to high network usage if packets are lost and need to be resent.\n\n   **Solution**: Consider implementing a mechanism to confirm delivery of packets or switch to a protocol that guarantees delivery, such as TCP, if the application allows it.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 40,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "The code is storing UDP mappings in memory for an unspecified length of time. This could potentially lead to memory leaks if not properly managed.",
+                "solution": "Consider implementing a timeout or expiration policy for these mappings to free up memory over time. Alternatively, consider using a more efficient data structure to store these mappings, such as a hash map with weak references."
+              },
+              {
+                "lineNumber": 47,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The code is using the 'net.ResolveUDPAddr' and 'net.ListenUDP' functions which could potentially be CPU intensive if called frequently.",
+                "solution": "Consider caching the results of 'net.ResolveUDPAddr' if the address doesn't change often to reduce CPU usage. For 'net.ListenUDP', ensure it's not being called too frequently as it could lead to high CPU usage."
+              },
+              {
+                "lineNumber": 41,
+                "severity": 4,
+                "bugType": "Network",
+                "description": "The code is using UDP for network communication, which doesn't guarantee delivery of packets. This could lead to high network usage if packets are lost and need to be resent.",
+                "solution": "Consider implementing a mechanism to confirm delivery of packets or switch to a protocol that guarantees delivery, such as TCP, if the application allows it."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:32:14 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 38\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The application is using UDP protocol for communication which is not secured. This could allow unauthorized access to the transmitted data, violating GDPR, PCI DSS, and HIPAA standards.\n\n   **Solution**: It is recommended to use a secure protocol like TLS for communication. If UDP is necessary, consider implementing Datagram Transport Layer Security (DTLS) to add a layer of security.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 38\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The application does not seem to implement any form of encryption on the data being transmitted. This could lead to a violation of GDPR, PCI DSS, and HIPAA standards.\n\n   **Solution**: Implement encryption on the data being transmitted. This can be done at the application level or by using a secure transport protocol.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 38,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The application is using UDP protocol for communication which is not secured. This could allow unauthorized access to the transmitted data, violating GDPR, PCI DSS, and HIPAA standards.",
+                "solution": "It is recommended to use a secure protocol like TLS for communication. If UDP is necessary, consider implementing Datagram Transport Layer Security (DTLS) to add a layer of security."
+              },
+              {
+                "lineNumber": 38,
+                "severity": 6,
+                "bugType": "Data Compliance",
+                "description": "The application does not seem to implement any form of encryption on the data being transmitted. This could lead to a violation of GDPR, PCI DSS, and HIPAA standards.",
+                "solution": "Implement encryption on the data being transmitted. This can be done at the application level or by using a secure transport protocol."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package tunnel\n\nimport (\n\t\"context\"\n\t\"encoding/gob\"\n\t\"fmt\"\n\t\"io\"\n\t\"net\"\n\t\"strings\"\n\t\"sync\"\n\t\"sync/atomic\"\n\t\"time\"\n\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/sizestr\"\n\t\"golang.org/x/crypto/ssh\"\n\t\"golang.org/x/sync/errgroup\"\n)\n\n//listenUDP is a special listener which forwards packets via\n//the bound ssh connection. tricky part is multiplexing lots of\n//udp clients through the entry node. each will listen on its\n//own source-port for a response:\n//                                                (random)\n//    src-1 1111->...                         dst-1 6345->7777\n//    src-2 2222->... <---> udp <---> udp <-> dst-1 7543->7777\n//    src-3 3333->...    listener    handler  dst-1 1444->7777\n//\n//we must store these mappings (1111-6345, etc) in memory for a length\n//of time, so that when the exit node receives a response on 6345, it\n//knows to return it to 1111.\nfunc listenUDP(l *cio.Logger, sshTun sshTunnel, remote *settings.Remote) (*udpListener, error) {\n\ta, err := net.ResolveUDPAddr(\"udp\", remote.Local())\n\tif err != nil {\n\t\treturn nil, l.Errorf(\"resolve: %s\", err)\n\t}\n\tconn, err := net.ListenUDP(\"udp\", a)\n\tif err != nil {\n\t\treturn nil, l.Errorf(\"listen: %s\", err)\n\t}\n\t//ready\n\tu := &udpListener{\n\t\tLogger:  l,\n\t\tsshTun:  sshTun,\n\t\tremote:  remote,\n\t\tinbound: conn,\n\t\tmaxMTU:  settings.EnvInt(\"UDP_MAX_SIZE\", 9012),\n\t}\n\tu.Debugf(\"UDP max size: %d bytes\", u.maxMTU)\n\treturn u, nil\n}\n",
@@ -13,7 +119,93 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:17:06 PM PDT\n\nThe given code snippet is written in Go programming language. It defines a structure `udpListener` with multiple fields. Let's break down each of them:\n\n- `*cio.Logger`: This is an embedded field of type pointer to `cio.Logger`. This suggests that the `udpListener` struct is using composition to include the functionality of a `Logger` from the `cio` package. The logger is likely used for logging events or errors that occur during the operation of the `udpListener`.\n\n- `sshTunnel`: This field is of type `sshTunnel`. It represents a secure shell (SSH) tunnel, which is a method of transporting arbitrary networking data over an encrypted SSH connection. It can be used to secure data being sent over a network.\n\n- `remote`: This field is of type pointer to `settings.Remote`. It likely represents the remote settings for the SSH tunnel, such as the remote server's IP address and port.\n\n- `inbound`: This field is of type pointer to `net.UDPConn`. It represents a UDP (User Datagram Protocol) connection for inbound traffic. UDP is a communication protocol used across the Internet for especially time-sensitive transmissions such as video playback or DNS lookups.\n\n- `outboundMut`: This field is of type `sync.Mutex`. Mutex is short for \"mutual exclusion\". It is used to protect shared resources from being simultaneously accessed by multiple goroutines, which can lead to unexpected behavior or race conditions.\n\n- `outbound`: This field is of type pointer to `udpChannel`. It likely represents a UDP channel for outbound traffic.\n\n- `sent, recv`: These are fields of type `int64`. They likely represent counters for the number of bytes sent and received, respectively.\n\n- `maxMTU`: This field is of type `int`. MTU stands for Maximum Transmission Unit, which is the size of the largest protocol data unit that can be communicated in a single network layer transaction. It's used in the context of setting the maximum packet size that a network connection can transmit.\n\nThe `udpListener` struct is likely used to handle UDP traffic over an SSH tunnel. It listens for inbound UDP packets, sends them over the SSH tunnel to a remote server, and handles responses from the remote server.\n\nAs for the architectural guidelines, since there are no additional special architectural guidelines or constraints provided, the code seems to follow common Go idioms and practices. The use of a struct to encapsulate related data, the use of a mutex to prevent race conditions, and the use of composition to include a logger are all common practices in Go.\n\nFor more information on Go structures, you can refer to the official Go documentation: https://golang.org/doc/effective_go#composite_literals. For more information on SSH tunneling, you can refer to this link: https://www.ssh.com/ssh/tunneling/."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:21:05 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle udpListener fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle udpTunnel fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle udpChannel fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->udpListener;\nudpListener-->udpTunnel;\nudpTunnel-->udpChannel;\nudpChannel-->udpTunnel;\nudpTunnel-->udpListener;\nudpListener-->udpChannel;\nudpChannel-->udpListener;\n```\n\nThe control flow graph for the `udpListener` struct shows a cyclic flow between `udpListener`, `udpTunnel`, and `udpChannel`. This indicates that there is a continuous interaction between these components. The primary path is shown in green, while the alternate non-error paths are shown in the default style."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:24:29 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:28:44 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:32:50 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 107\n\n   **Bug Type**: GDPR\n\n   **Description**: The 'sshTunnel' field in the 'udpListener' struct may contain sensitive data such as IP addresses and port numbers which are considered personal data under GDPR.\n\n   **Solution**: Encrypt the IP addresses and port numbers before storing them in the 'sshTunnel' field. Also, ensure that you have user consent before collecting this data.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 108\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The 'remote' field in the 'udpListener' struct may contain cardholder data. Storing cardholder data in an unencrypted format is a violation of PCI DSS.\n\n   **Solution**: Encrypt the cardholder data before storing it in the 'remote' field. Also, ensure that you have implemented proper access controls to prevent unauthorized access to this data.\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 109\n\n   **Bug Type**: HIPAA\n\n   **Description**: The 'inbound' field in the 'udpListener' struct may contain protected health information (PHI). Storing PHI in an unencrypted format is a violation of HIPAA.\n\n   **Solution**: Encrypt the PHI before storing it in the 'inbound' field. Also, ensure that you have implemented proper access controls to prevent unauthorized access to this data.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 55,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The 'sshTunnel' field in the 'udpListener' struct may contain sensitive data such as IP addresses and port numbers which are considered personal data under GDPR.",
+                "solution": "Encrypt the IP addresses and port numbers before storing them in the 'sshTunnel' field. Also, ensure that you have user consent before collecting this data.",
+                "link": "https://gdpr-info.eu/art-4-gdpr/"
+              },
+              {
+                "lineNumber": 56,
+                "severity": 8,
+                "bugType": "PCI DSS",
+                "description": "The 'remote' field in the 'udpListener' struct may contain cardholder data. Storing cardholder data in an unencrypted format is a violation of PCI DSS.",
+                "solution": "Encrypt the cardholder data before storing it in the 'remote' field. Also, ensure that you have implemented proper access controls to prevent unauthorized access to this data.",
+                "link": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 57,
+                "severity": 9,
+                "bugType": "HIPAA",
+                "description": "The 'inbound' field in the 'udpListener' struct may contain protected health information (PHI). Storing PHI in an unencrypted format is a violation of HIPAA.",
+                "solution": "Encrypt the PHI before storing it in the 'inbound' field. Also, ensure that you have implemented proper access controls to prevent unauthorized access to this data.",
+                "link": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\ntype udpListener struct {\n\t*cio.Logger\n\tsshTun      sshTunnel\n\tremote      *settings.Remote\n\tinbound     *net.UDPConn\n\toutboundMut sync.Mutex\n\toutbound    *udpChannel\n\tsent, recv  int64\n\tmaxMTU      int\n}\n",
@@ -25,7 +217,93 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:17:41 PM PDT\n\nThis is a function written in Go language. It appears to be a part of a UDP (User Datagram Protocol) listener object, which typically listens for incoming UDP packets. The function is named `run` and it accepts a context object as an argument. The context package in Go is used for carrying deadlines, cancellations signals, and other request-scoped values across API boundaries and between processes.\n\nThe function `run` starts by closing the `inbound` channel of the UDP listener when the function exits, using the `defer` keyword. The `inbound` channel is presumably where the listener receives incoming UDP packets.\n\nThe comment in the code explains that UDP does not accept connections like TCP does, it simply forwards packets and therefore only needs to listen. This is a characteristic of the UDP protocol, which is a connectionless protocol.\n\nThe `errgroup` package in Go is used to synchronize multiple goroutines and collect their errors. If any of the goroutines return an error, the `Wait` method of the `errgroup` returns that error. In this case, the `errgroup` is used to run `runInbound` and `runOutbound` methods concurrently. These methods likely handle the incoming and outgoing UDP packets, respectively.\n\nThe `runInbound` and `runOutbound` functions are run concurrently using goroutines. Goroutines are lightweight threads managed by the Go runtime.\n\nIf either `runInbound` or `runOutbound` returns an error, the `Wait` method will return that error and it will be logged and returned by the `run` function.\n\nFinally, the function logs the amount of data sent and received during its execution, and then it returns.\n\nFor more about UDP in Go, you can check this link: https://golang.org/pkg/net/#UDPConn\nFor more about error groups in Go, you can check this link: https://pkg.go.dev/golang.org/x/sync/errgroup\nFor more about context in Go, you can check this link: https://golang.org/pkg/context/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:22:32 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->ExampleProcess;\nExampleProcess-->"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:24:33 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:28:48 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:33:31 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 126\n\n   **Bug Type**: GDPR\n\n   **Description**: The function 'run' does not implement any data protection measures. It is unclear how the data is being processed and if it is being stored or transferred securely. This could potentially lead to a violation of GDPR regulations.\n\n   **Solution**: Implement data protection measures such as encryption for data in transit and at rest. Ensure that any data storage or transfer is done in compliance with GDPR regulations. Consider using secure protocols for data transfer.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 131\n\n   **Bug Type**: HIPAA\n\n   **Description**: The function 'run' does not implement any measures to protect health information. If any health information is being processed, stored, or transferred, it could potentially lead to a violation of HIPAA regulations.\n\n   **Solution**: Implement measures to protect health information such as encryption and secure data transfer protocols. Ensure that any processing, storage, or transfer of health information is done in compliance with HIPAA regulations.\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 136\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The function 'run' does not implement any measures to protect cardholder data. If any cardholder data is being processed, stored, or transferred, it could potentially lead to a violation of PCI DSS regulations.\n\n   **Solution**: Implement measures to protect cardholder data such as encryption and secure data transfer protocols. Ensure that any processing, storage, or transfer of cardholder data is done in compliance with PCI DSS regulations.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 63,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The function 'run' does not implement any data protection measures. It is unclear how the data is being processed and if it is being stored or transferred securely. This could potentially lead to a violation of GDPR regulations.",
+                "solution": "Implement data protection measures such as encryption for data in transit and at rest. Ensure that any data storage or transfer is done in compliance with GDPR regulations. Consider using secure protocols for data transfer.",
+                "link": "https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 68,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The function 'run' does not implement any measures to protect health information. If any health information is being processed, stored, or transferred, it could potentially lead to a violation of HIPAA regulations.",
+                "solution": "Implement measures to protect health information such as encryption and secure data transfer protocols. Ensure that any processing, storage, or transfer of health information is done in compliance with HIPAA regulations.",
+                "link": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              },
+              {
+                "lineNumber": 73,
+                "severity": 9,
+                "bugType": "PCI DSS",
+                "description": "The function 'run' does not implement any measures to protect cardholder data. If any cardholder data is being processed, stored, or transferred, it could potentially lead to a violation of PCI DSS regulations.",
+                "solution": "Implement measures to protect cardholder data such as encryption and secure data transfer protocols. Ensure that any processing, storage, or transfer of cardholder data is done in compliance with PCI DSS regulations.",
+                "link": "https://www.pcisecuritystandards.org/pci_security/"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\nfunc (u *udpListener) run(ctx context.Context) error {\n\tdefer u.inbound.Close()\n\t//udp doesnt accept connections,\n\t//udp simply forwards packets\n\t//and therefore only needs to listen\n\teg, ctx := errgroup.WithContext(ctx)\n\teg.Go(func() error {\n\t\treturn u.runInbound(ctx)\n\t})\n\teg.Go(func() error {\n\t\treturn u.runOutbound(ctx)\n\t})\n\tif err := eg.Wait(); err != nil {\n\t\tu.Debugf(\"listen: %s\", err)\n\t\treturn err\n\t}\n\tu.Debugf(\"Close (sent %s received %s)\", sizestr.ToString(u.sent), sizestr.ToString(u.recv))\n\treturn nil\n}\n",
@@ -37,7 +315,158 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:18:30 PM PDT\n\nThis code is a Go function named `runInbound` which belongs to a `udpListener` struct. The function reads data from a UDP connection and sends it over an SSH channel. \n\nLet's break down the code:\n\n1. `buff := make([]byte, u.maxMTU)`: This line creates a buffer with a size equal to the maximum transmission unit (MTU) of the UDP connection.\n\n2. `for !isDone(ctx) {`: This starts a loop that will continue until the context `ctx` is done.\n\n3. `u.inbound.SetReadDeadline(time.Now().Add(time.Second))`: This line sets a read deadline for the UDP connection. If no data is read within one second, the `ReadFromUDP` function will return a timeout error.\n\n4. `n, addr, err := u.inbound.ReadFromUDP(buff)`: This line reads data from the UDP connection into the buffer. It returns the number of bytes read, the address of the sender, and any error that occurred.\n\n5. The next lines handle any errors that occurred during the read operation. If the error is a temporary or timeout error, the loop continues. If it's another type of error, the function returns an error message.\n\n6. `uc, err := u.getUDPChan(ctx)`: This line gets an SSH channel to send the data over. If an error occurs, it checks if the error message ends with \"EOF\". If it does, the loop continues. If it's another type of error, the function returns an error message.\n\n7. `b := buff[:n]`: This line slices the buffer to the number of bytes that were read.\n\n8. `if err := uc.encode(addr.String(), b); err != nil {`: This line sends the data over the SSH channel, including the address of the sender. If an error occurs, it checks if the error message ends with \"EOF\". If it does, the loop continues. If it's another type of error, the function returns an error message.\n\n9. `atomic.AddInt64(&u.sent, int64(n))`: This line atomically adds the number of bytes sent to a counter.\n\n10. `return nil`: If the loop ends without any errors, the function returns nil.\n\nThe algorithm used in this code is a simple read-process loop. It reads data from a UDP connection, processes it, and sends it over an SSH channel. The code uses Go's standard library for network and context handling, and atomic package for safe counter increment. \n\nFor more information about these topics, you can check the following resources:\n\n- Go's net package: https://golang.org/pkg/net/\n- Go's context package: https://golang.org/pkg/context/\n- Go's atomic package: https://golang.org/pkg/sync/atomic/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:22:56 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ReadUDP fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Error fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle GetUDPChan fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Encode fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Stats fill:#228B22, stroke:#000000, stroke-width:2px;\n\nStart-->ReadUDP;\nReadUDP-->Error;\nReadUDP-->GetUDPChan;\nGetUDPChan-->Encode;\nEncode-->Stats;\nEncode-->Error;\nStats-->ReadUDP;\nError-->ReadUDP;\n```\n\nThe control flow graph for the `runInbound` function is as follows:\n\n1. The function starts at the `Start` node.\n2. From the `Start` node, the control flow goes to the `ReadUDP` node, which represents reading from the inbound UDP connection.\n3. From the `ReadUDP` node, there are two possible paths:\n   - If there is an error with the read operation, the control flow goes to the `Error` node, which represents handling the error. After handling the error, the control flow returns to the `ReadUDP` node to continue reading from the UDP connection.\n   - If there is no error with the read operation, the control flow goes to the `GetUDPChan` node, which represents getting or creating a UDP channel.\n4. From the `GetUDPChan` node, the control flow goes to the `Encode` node, which represents encoding the received data and sending it over the UDP channel.\n5. From the `Encode` node, there are two possible paths:\n   - If there is an error with the encoding operation, the control flow goes to the `Error` node, which represents handling the error. After handling the error, the control flow returns to the `ReadUDP` node to continue reading from the UDP connection.\n   - If there is no error with the encoding operation, the control flow goes to the `Stats` node, which represents updating the statistics for the sent data.\n6. From the `Stats` node, the control flow returns to the `ReadUDP` node to continue reading from the UDP connection.\n\nThis control flow graph represents the primary path through the code, where data is read from the UDP connection, encoded, and the statistics are updated. If there are any errors during the read or encode operations, they are handled and the control flow returns to the read operation."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:25:19 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 172\n\n   **Bug Type**: Improper Error Handling\n\n   **Description**: The error handling in this function could potentially allow an attacker to cause a denial of service by triggering an error that is not properly caught. This can happen if the error is neither a timeout nor temporary, and it is not 'EOF'.\n\n   **Solution**: Ensure all error cases are properly handled. Consider using a default case to catch any unhandled errors. More about proper error handling can be found here: https://www.owasp.org/index.php/Error_Handling\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 171\n\n   **Bug Type**: Uncontrolled Resource Consumption ('Resource Exhaustion')\n\n   **Description**: The function continually reads from a UDP connection into a buffer without any form of rate limiting. This can lead to resource exhaustion if an attacker sends a large amount of data in a short amount of time.\n\n   **Solution**: Implement a form of rate limiting to prevent resource exhaustion. More about resource exhaustion can be found here: https://www.owasp.org/index.php/Uncontrolled_Resource_Consumption_(Resource_Exhaustion)\n\n\n3. **Severity**: 5/10\n\n   **Line Number**: 176\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The function directly uses user-supplied input (the address from the UDP packet) to get an SSH channel. If an attacker can predict or control the address, they could potentially access or influence other SSH channels.\n\n   **Solution**: Validate or sanitize user-supplied input before using it to reference objects. More about IDOR can be found here: https://www.owasp.org/index.php/Top_10-2017_A5-Broken_Access_Control\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 181\n\n   **Bug Type**: Improper Error Handling\n\n   **Description**: The error handling in this function could potentially allow an attacker to cause a denial of service by triggering an error that is not properly caught. This can happen if the error is not 'EOF'.\n\n   **Solution**: Ensure all error cases are properly handled. Consider using a default case to catch any unhandled errors. More about proper error handling can be found here: https://www.owasp.org/index.php/Error_Handling\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 89,
+                "severity": 7,
+                "bugType": "Improper Error Handling",
+                "description": "The error handling in this function could potentially allow an attacker to cause a denial of service by triggering an error that is not properly caught. This can happen if the error is neither a timeout nor temporary, and it is not 'EOF'.",
+                "solution": "Ensure all error cases are properly handled. Consider using a default case to catch any unhandled errors. More about proper error handling can be found here: https://www.owasp.org/index.php/Error_Handling"
+              },
+              {
+                "lineNumber": 88,
+                "severity": 6,
+                "bugType": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
+                "description": "The function continually reads from a UDP connection into a buffer without any form of rate limiting. This can lead to resource exhaustion if an attacker sends a large amount of data in a short amount of time.",
+                "solution": "Implement a form of rate limiting to prevent resource exhaustion. More about resource exhaustion can be found here: https://www.owasp.org/index.php/Uncontrolled_Resource_Consumption_(Resource_Exhaustion)"
+              },
+              {
+                "lineNumber": 93,
+                "severity": 5,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The function directly uses user-supplied input (the address from the UDP packet) to get an SSH channel. If an attacker can predict or control the address, they could potentially access or influence other SSH channels.",
+                "solution": "Validate or sanitize user-supplied input before using it to reference objects. More about IDOR can be found here: https://www.owasp.org/index.php/Top_10-2017_A5-Broken_Access_Control"
+              },
+              {
+                "lineNumber": 98,
+                "severity": 7,
+                "bugType": "Improper Error Handling",
+                "description": "The error handling in this function could potentially allow an attacker to cause a denial of service by triggering an error that is not properly caught. This can happen if the error is not 'EOF'.",
+                "solution": "Ensure all error cases are properly handled. Consider using a default case to catch any unhandled errors. More about proper error handling can be found here: https://www.owasp.org/index.php/Error_Handling"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:29:35 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 167\n\n   **Bug Type**: Memory\n\n   **Description**: The buffer is created with a size of maxMTU for each UDP packet. If maxMTU is large, this could lead to excessive memory usage.\n\n   **Solution**: Consider using a buffer pool to reuse buffers, reducing memory allocation and garbage collection overhead. Here is a link to a tutorial: https://golang.org/doc/effective_go#allocation_new\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 169\n\n   **Bug Type**: CPU\n\n   **Description**: The loop is continuously checking the context for completion. This could lead to unnecessary CPU usage if the loop is running for a long time.\n\n   **Solution**: Consider using a select statement with a done channel from the context to avoid continuously checking the context. Here is a link to a tutorial: https://gobyexample.com/context\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 176\n\n   **Bug Type**: CPU\n\n   **Description**: The getUDPChan function is called for each packet, which could be a performance issue if the function performs heavy operations.\n\n   **Solution**: Consider caching the result of getUDPChan if it's not changing frequently. Here is a link to a tutorial: https://www.alexedwards.net/blog/caching-in-go\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 182\n\n   **Bug Type**: CPU\n\n   **Description**: The encode function is called for each packet, which could be a performance issue if the function performs heavy operations.\n\n   **Solution**: Consider optimizing the encode function, or using a faster encoding library if possible. Here is a link to a tutorial: https://golang.org/pkg/encoding/\n\n\n5. **Severity**: 2/10\n\n   **Line Number**: 187\n\n   **Bug Type**: CPU\n\n   **Description**: The atomic.AddInt64 function is called for each packet, which could be a performance issue if there are a large number of packets.\n\n   **Solution**: Consider using a separate goroutine to periodically update the sent value, reducing the number of atomic operations. Here is a link to a tutorial: https://golang.org/pkg/sync/atomic/\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 84,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "The buffer is created with a size of maxMTU for each UDP packet. If maxMTU is large, this could lead to excessive memory usage.",
+                "solution": "Consider using a buffer pool to reuse buffers, reducing memory allocation and garbage collection overhead. Here is a link to a tutorial: https://golang.org/doc/effective_go#allocation_new"
+              },
+              {
+                "lineNumber": 86,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The loop is continuously checking the context for completion. This could lead to unnecessary CPU usage if the loop is running for a long time.",
+                "solution": "Consider using a select statement with a done channel from the context to avoid continuously checking the context. Here is a link to a tutorial: https://gobyexample.com/context"
+              },
+              {
+                "lineNumber": 93,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The getUDPChan function is called for each packet, which could be a performance issue if the function performs heavy operations.",
+                "solution": "Consider caching the result of getUDPChan if it's not changing frequently. Here is a link to a tutorial: https://www.alexedwards.net/blog/caching-in-go"
+              },
+              {
+                "lineNumber": 99,
+                "severity": 7,
+                "bugType": "CPU",
+                "description": "The encode function is called for each packet, which could be a performance issue if the function performs heavy operations.",
+                "solution": "Consider optimizing the encode function, or using a faster encoding library if possible. Here is a link to a tutorial: https://golang.org/pkg/encoding/"
+              },
+              {
+                "lineNumber": 104,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The atomic.AddInt64 function is called for each packet, which could be a performance issue if there are a large number of packets.",
+                "solution": "Consider using a separate goroutine to periodically update the sent value, reducing the number of atomic operations. Here is a link to a tutorial: https://golang.org/pkg/sync/atomic/"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:33:53 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 166\n\n   **Bug Type**: GDPR\n\n   **Description**: The function 'runInbound' reads data from a UDP connection and does not appear to implement any data anonymization or pseudonymization measures, which could potentially lead to the processing of personal data. This could be a violation of the GDPR's principles of 'data minimisation' and 'privacy by design and by default'.\n\n   **Solution**: Consider implementing anonymization or pseudonymization measures when processing data, such as removing or replacing personal identifiers from the data. This can help to comply with the GDPR's principles of 'data minimisation' and 'privacy by design and by default'.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 173\n\n   **Bug Type**: HIPAA\n\n   **Description**: The function 'runInbound' reads data from a UDP connection and does not appear to implement any encryption or secure transmission measures. This may lead to the exposure of Protected Health Information (PHI), which is a violation of the HIPAA Security Rule.\n\n   **Solution**: Consider implementing encryption measures when transmitting data. This can help to protect the confidentiality and integrity of the data, and comply with the HIPAA Security Rule.\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 182\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The function 'runInbound' reads data from a UDP connection and does not appear to implement any measures to protect cardholder data, which could potentially lead to the exposure of cardholder data. This is a violation of the PCI DSS requirement 4, which mandates the secure transmission of cardholder data over open, public networks.\n\n   **Solution**: Consider implementing encryption measures when transmitting cardholder data. This can help to protect the data and comply with the PCI DSS requirement 4.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 83,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The function 'runInbound' reads data from a UDP connection and does not appear to implement any data anonymization or pseudonymization measures, which could potentially lead to the processing of personal data. This could be a violation of the GDPR's principles of 'data minimisation' and 'privacy by design and by default'.",
+                "solution": "Consider implementing anonymization or pseudonymization measures when processing data, such as removing or replacing personal identifiers from the data. This can help to comply with the GDPR's principles of 'data minimisation' and 'privacy by design and by default'.",
+                "webLink": "https://gdpr-info.eu/art-25-gdpr/"
+              },
+              {
+                "lineNumber": 90,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The function 'runInbound' reads data from a UDP connection and does not appear to implement any encryption or secure transmission measures. This may lead to the exposure of Protected Health Information (PHI), which is a violation of the HIPAA Security Rule.",
+                "solution": "Consider implementing encryption measures when transmitting data. This can help to protect the confidentiality and integrity of the data, and comply with the HIPAA Security Rule.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              },
+              {
+                "lineNumber": 99,
+                "severity": 6,
+                "bugType": "PCI DSS",
+                "description": "The function 'runInbound' reads data from a UDP connection and does not appear to implement any measures to protect cardholder data, which could potentially lead to the exposure of cardholder data. This is a violation of the PCI DSS requirement 4, which mandates the secure transmission of cardholder data over open, public networks.",
+                "solution": "Consider implementing encryption measures when transmitting cardholder data. This can help to protect the data and comply with the PCI DSS requirement 4.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/maintaining_payment_security"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\nfunc (u *udpListener) runInbound(ctx context.Context) error {\n\tbuff := make([]byte, u.maxMTU)\n\tfor !isDone(ctx) {\n\t\t//read from inbound udp\n\t\tu.inbound.SetReadDeadline(time.Now().Add(time.Second))\n\t\tn, addr, err := u.inbound.ReadFromUDP(buff)\n\t\tif e, ok := err.(net.Error); ok && (e.Timeout() || e.Temporary()) {\n\t\t\tcontinue\n\t\t}\n\t\tif err != nil {\n\t\t\treturn u.Errorf(\"read error: %w\", err)\n\t\t}\n\t\t//upsert ssh channel\n\t\tuc, err := u.getUDPChan(ctx)\n\t\tif err != nil {\n\t\t\tif strings.HasSuffix(err.Error(), \"EOF\") {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\treturn u.Errorf(\"inbound-udpchan: %w\", err)\n\t\t}\n\t\t//send over channel, including source address\n\t\tb := buff[:n]\n\t\tif err := uc.encode(addr.String(), b); err != nil {\n\t\t\tif strings.HasSuffix(err.Error(), \"EOF\") {\n\t\t\t\tcontinue //dropped packet...\n\t\t\t}\n\t\t\treturn u.Errorf(\"encode error: %w\", err)\n\t\t}\n\t\t//stats\n\t\tatomic.AddInt64(&u.sent, int64(n))\n\t}\n\treturn nil\n}\n",
@@ -49,7 +478,151 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:19:10 PM PDT\n\nThis Go function `runOutbound` is part of a `udpListener` struct and manages outbound connections for a UDP (User Datagram Protocol) listener.\n\nHere's a breakdown of what it does:\n\n1. This function runs in a loop until the context is done, which is checked by the `isDone(ctx)` function. This is a common pattern in Go to handle cancellation of long-running operations.\n\n2. It calls `u.getUDPChan(ctx)` to get a UDP channel. If there's an error and the error message ends with \"EOF\", it continues to the next iteration of the loop. If there's a different error, it wraps the error message with \"outbound-udpchan:\" and returns it.\n\n3. It receives a packet from the channel by calling `uc.decode(&p)`. If the error returned is `io.EOF`, meaning the channel is closed, it continues to the next iteration of the loop. If there's a different error, it wraps the error message with \"decode error:\" and returns it.\n\n4. It resolves the source address of the packet into a `net.UDPAddr` object. If there's an error, it wraps the error message with \"resolve error:\" and returns it.\n\n5. It writes the packet payload back to the inbound UDP connection by calling `u.inbound.WriteToUDP(p.Payload, addr)`. If there's an error, it wraps the error message with \"write error:\" and returns it.\n\n6. It updates a statistic `u.recv` (presumably the number of bytes received) by adding the number of bytes written to the inbound UDP connection.\n\n7. If the loop finishes without errors, it returns `nil`.\n\nThis function doesn't seem to use any specific algorithms, it's more about managing network connections and handling errors appropriately. The function is written in a way that is idiomatic to Go, with error checking after each operation that could potentially fail.\n\nTo learn more about UDP in Go, you can read the official Go documentation: https://pkg.go.dev/net#UDPConn"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:23:34 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->A;\nA-->B;\nB-->C;\nC-->D;\nD-->E;\nE-->F;\nF-->G;\nG-->H;\nH-->I;\nI-->J;\nJ-->K;\nK-->L;\nL-->M;\nM-->N;\nN-->O;\nO-->P;\nP-->Q;\nQ-->R;\nR-->S;\nS-->T;\nT-->U;\nU-->V;\nV-->W;\nW-->X;\nX-->Y;\nY-->Z;\nZ-->A;\n\nstyle A fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle B fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle C fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle D fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle E fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle F fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle G fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle H fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle I fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle J fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle K fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle L fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle M fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle N fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle O fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle P fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Q fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle R fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle S fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle T fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle U fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle V fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle W fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle X fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Y fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Z fill:#B22222, stroke:#000000, stroke-width:2px;\n```\n\nThe control flow graph for the provided source code is as follows:\n\n- The start of the graph is the function `runOutbound`.\n- The primary path through the code is represented by the green arrows.\n- The error path is represented by the red arrows.\n- The function `isDone` is not shown in the diagram as it is an external function.\n- The function `u.getUDPChan` is shown as a distinct flow block.\n- The function `uc.decode` is shown as a distinct flow block.\n- The function `net.ResolveUDPAddr` is shown as a distinct flow block.\n- The function `u.inbound.WriteToUDP` is shown as a distinct flow block.\n\nPlease note that the diagram is generated based on the provided code and may not cover all possible execution paths."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:26:18 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 239\n\n   **Bug Type**: Error Handling\n\n   **Description**: Error handling is not done properly. When the 'getUDPChan' function returns an error, the error message is checked if it ends with 'EOF'. If it does, the loop continues. This could potentially lead to an infinite loop if the error keeps being 'EOF'.\n\n   **Solution**: Instead of checking the error message, check the type of error returned. If it is a network error, handle it accordingly. Also, consider implementing a back-off strategy to avoid potential infinite loops. More on error handling can be found here: https://blog.golang.org/error-handling-and-go\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 246\n\n   **Bug Type**: Error Handling\n\n   **Description**: The function 'decode' might return an error which is not properly handled. If the error is not 'EOF', the function returns with an error. This could potentially lead to a Denial of Service (DoS) if an attacker can trigger such an error.\n\n   **Solution**: Make sure to handle all possible errors that could be returned by the 'decode' function. This might include network errors, format errors, etc. More on error handling can be found here: https://blog.golang.org/error-handling-and-go\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 253\n\n   **Bug Type**: Uncontrolled Resource Consumption ('Resource Exhaustion')\n\n   **Description**: The function 'WriteToUDP' is used to write the payload back to the source address. If the payload is large, this could lead to a buffer overflow and potential Denial of Service (DoS) or even Remote Code Execution (RCE) if an attacker can control the payload.\n\n   **Solution**: Consider implementing a limit to the size of the payload that can be written back to the source address. Also, consider using a more secure function to write the payload back. More on buffer overflow can be found here: https://owasp.org/www-community/vulnerabilities/Buffer_Overflow\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 251\n\n   **Bug Type**: Improper Input Validation\n\n   **Description**: The source address ('p.Src') is used without proper validation. If an attacker can control the source address, this could lead to a variety of attacks such as Server Side Request Forgery (SSRF).\n\n   **Solution**: Make sure to validate the source address before using it. This could include checking if it is a valid IP address, if it is in a allowed range, etc. More on SSRF can be found here: https://owasp.org/www-community/attacks/Server_Side_Request_Forgery\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 122,
+                "severity": 7,
+                "bugType": "Error Handling",
+                "description": "Error handling is not done properly. When the 'getUDPChan' function returns an error, the error message is checked if it ends with 'EOF'. If it does, the loop continues. This could potentially lead to an infinite loop if the error keeps being 'EOF'.",
+                "solution": "Instead of checking the error message, check the type of error returned. If it is a network error, handle it accordingly. Also, consider implementing a back-off strategy to avoid potential infinite loops. More on error handling can be found here: https://blog.golang.org/error-handling-and-go"
+              },
+              {
+                "lineNumber": 129,
+                "severity": 8,
+                "bugType": "Error Handling",
+                "description": "The function 'decode' might return an error which is not properly handled. If the error is not 'EOF', the function returns with an error. This could potentially lead to a Denial of Service (DoS) if an attacker can trigger such an error.",
+                "solution": "Make sure to handle all possible errors that could be returned by the 'decode' function. This might include network errors, format errors, etc. More on error handling can be found here: https://blog.golang.org/error-handling-and-go"
+              },
+              {
+                "lineNumber": 136,
+                "severity": 9,
+                "bugType": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
+                "description": "The function 'WriteToUDP' is used to write the payload back to the source address. If the payload is large, this could lead to a buffer overflow and potential Denial of Service (DoS) or even Remote Code Execution (RCE) if an attacker can control the payload.",
+                "solution": "Consider implementing a limit to the size of the payload that can be written back to the source address. Also, consider using a more secure function to write the payload back. More on buffer overflow can be found here: https://owasp.org/www-community/vulnerabilities/Buffer_Overflow"
+              },
+              {
+                "lineNumber": 134,
+                "severity": 7,
+                "bugType": "Improper Input Validation",
+                "description": "The source address ('p.Src') is used without proper validation. If an attacker can control the source address, this could lead to a variety of attacks such as Server Side Request Forgery (SSRF).",
+                "solution": "Make sure to validate the source address before using it. This could include checking if it is a valid IP address, if it is in a allowed range, etc. More on SSRF can be found here: https://owasp.org/www-community/attacks/Server_Side_Request_Forgery"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:30:12 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 240\n\n   **Bug Type**: CPU\n\n   **Description**: The function 'getUDPChan(ctx)' is called in every iteration of the loop, which could lead to high CPU usage if it involves complex computations or IO operations.\n\n   **Solution**: Consider caching the result of 'getUDPChan(ctx)' if it does not change frequently. If the function results can't be cached, consider optimizing the function to reduce its computational complexity.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 248\n\n   **Bug Type**: Network\n\n   **Description**: The function 'net.ResolveUDPAddr' is called in every iteration of the loop, which can lead to network latency if the DNS resolution takes a long time.\n\n   **Solution**: Consider caching the resolved addresses or using a library that provides cached DNS resolution.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 251\n\n   **Bug Type**: Network\n\n   **Description**: The function 'WriteToUDP' writes to the network in every iteration of the loop, which can cause network congestion if large amounts of data are being sent frequently.\n\n   **Solution**: Consider batching the data to be sent and sending it in chunks to reduce the number of network calls. Also, consider using a more efficient protocol if UDP is not a strict requirement.\n\n\n4. **Severity**: 3/10\n\n   **Line Number**: 254\n\n   **Bug Type**: CPU\n\n   **Description**: The function 'atomic.AddInt64' is used to increment a counter, which can cause contention and slow down performance if multiple goroutines are accessing it concurrently.\n\n   **Solution**: Consider using a different mechanism for counting, such as a channel or a mutex-protected counter, if the contention becomes a problem.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 123,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The function 'getUDPChan(ctx)' is called in every iteration of the loop, which could lead to high CPU usage if it involves complex computations or IO operations.",
+                "solution": "Consider caching the result of 'getUDPChan(ctx)' if it does not change frequently. If the function results can't be cached, consider optimizing the function to reduce its computational complexity."
+              },
+              {
+                "lineNumber": 131,
+                "severity": 7,
+                "bugType": "Network",
+                "description": "The function 'net.ResolveUDPAddr' is called in every iteration of the loop, which can lead to network latency if the DNS resolution takes a long time.",
+                "solution": "Consider caching the resolved addresses or using a library that provides cached DNS resolution."
+              },
+              {
+                "lineNumber": 134,
+                "severity": 8,
+                "bugType": "Network",
+                "description": "The function 'WriteToUDP' writes to the network in every iteration of the loop, which can cause network congestion if large amounts of data are being sent frequently.",
+                "solution": "Consider batching the data to be sent and sending it in chunks to reduce the number of network calls. Also, consider using a more efficient protocol if UDP is not a strict requirement."
+              },
+              {
+                "lineNumber": 137,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The function 'atomic.AddInt64' is used to increment a counter, which can cause contention and slow down performance if multiple goroutines are accessing it concurrently.",
+                "solution": "Consider using a different mechanism for counting, such as a channel or a mutex-protected counter, if the contention becomes a problem."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:34:38 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 243\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function 'runOutbound' is handling UDP packets without any form of encryption or security measures. This could potentially expose sensitive data being transmitted over the network, which is a violation of GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Implement encryption for data being transmitted over the network. Use secure protocols like TLS for transmitting data. This would help in ensuring that the data being transmitted is secure and not easily accessible by unauthorized entities.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 245\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function 'getUDPChan' is being used to retrieve UDP channels without any checks for authorization or authentication. This could potentially allow unauthorized access to sensitive data, violating GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Implement authentication and authorization checks before allowing access to UDP channels. This would help in ensuring that only authorized entities have access to the data being transmitted.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 256\n\n   **Bug Type**: Data Retention\n\n   **Description**: The function 'runOutbound' is writing data back to inbound UDP without any checks for data retention policies. This could potentially lead to non-compliant data handling and retention, which is a violation of GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Implement data retention policies and checks before writing data back to inbound UDP. This would help in ensuring that the data being handled is in compliance with data retention regulations.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 126,
+                "severity": 6,
+                "bugType": "Data Privacy",
+                "description": "The function 'runOutbound' is handling UDP packets without any form of encryption or security measures. This could potentially expose sensitive data being transmitted over the network, which is a violation of GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Implement encryption for data being transmitted over the network. Use secure protocols like TLS for transmitting data. This would help in ensuring that the data being transmitted is secure and not easily accessible by unauthorized entities.",
+                "webLink": "https://www.csoonline.com/article/3246212/what-is-encryption-how-it-works-and-how-it-can-protect-your-data.html"
+              },
+              {
+                "lineNumber": 128,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The function 'getUDPChan' is being used to retrieve UDP channels without any checks for authorization or authentication. This could potentially allow unauthorized access to sensitive data, violating GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Implement authentication and authorization checks before allowing access to UDP channels. This would help in ensuring that only authorized entities have access to the data being transmitted.",
+                "webLink": "https://www.csoonline.com/article/2124681/what-is-iam-identity-and-access-management-explained.html"
+              },
+              {
+                "lineNumber": 139,
+                "severity": 8,
+                "bugType": "Data Retention",
+                "description": "The function 'runOutbound' is writing data back to inbound UDP without any checks for data retention policies. This could potentially lead to non-compliant data handling and retention, which is a violation of GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Implement data retention policies and checks before writing data back to inbound UDP. This would help in ensuring that the data being handled is in compliance with data retention regulations.",
+                "webLink": "https://www.varonis.com/blog/data-retention-policies/"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "4",
       "value": "\nfunc (u *udpListener) runOutbound(ctx context.Context) error {\n\tfor !isDone(ctx) {\n\t\t//upsert ssh channel\n\t\tuc, err := u.getUDPChan(ctx)\n\t\tif err != nil {\n\t\t\tif strings.HasSuffix(err.Error(), \"EOF\") {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\treturn u.Errorf(\"outbound-udpchan: %w\", err)\n\t\t}\n\t\t//receive from channel, including source address\n\t\tp := udpPacket{}\n\t\tif err := uc.decode(&p); err == io.EOF {\n\t\t\t//outbound ssh disconnected, get new connection...\n\t\t\tcontinue\n\t\t} else if err != nil {\n\t\t\treturn u.Errorf(\"decode error: %w\", err)\n\t\t}\n\t\t//write back to inbound udp\n\t\taddr, err := net.ResolveUDPAddr(\"udp\", p.Src)\n\t\tif err != nil {\n\t\t\treturn u.Errorf(\"resolve error: %w\", err)\n\t\t}\n\t\tn, err := u.inbound.WriteToUDP(p.Payload, addr)\n\t\tif err != nil {\n\t\t\treturn u.Errorf(\"write error: %w\", err)\n\t\t}\n\t\t//stats\n\t\tatomic.AddInt64(&u.recv, int64(n))\n\t}\n\treturn nil\n}\n",
@@ -61,7 +634,136 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:19:57 PM PDT\n\nThis Go function is part of a UDP Listener in a network tunneling application, likely part of the Chisel project you mentioned earlier. The function `getUDPChan` is responsible for obtaining a UDP channel for communication. \n\nThe function takes a context as a parameter, which is often used for cancellation, timeouts, and passing request-scoped data. \n\nThe function begins by locking the `outboundMut` mutex to prevent other goroutines from executing the same piece of code simultaneously, which could lead to race conditions. The `defer` keyword ensures that the mutex is unlocked when the function returns, regardless of where it returns.\n\nNext, it checks if an outbound UDP channel already exists (`u.outbound != nil`). If it does, the function returns this channel.\n\nIf an outbound channel does not exist, the function attempts to create a new one. It gets the SSH connection (`sshConn`) from the `sshTun` object. If there is no SSH connection, it returns an error.\n\nThe function then sends an SSH request for UDP packets for the proxy's remote address. The remote address is appended with \"/udp\" and is sent as part of the SSH request. The OpenChannel method of the sshConn object is called with the channel type \"chisel\" and the destination address.\n\nIf there is an error in opening the channel, it returns an error. Otherwise, it discards any incoming out-of-band requests (`ssh.DiscardRequests(reqs)`) and sets up a goroutine to unset the UDP channel when the SSH connection disconnects.\n\nFinally, it creates a new `udpChannel` object with the read-write closer from the SSH channel and a new gob encoder and decoder. It then sets this as the outbound channel and logs that the channel has been acquired before returning the channel.\n\nThe algorithm used here is a simple check-create pattern with error handling. It uses the Go standard library's `net`, `context`, `sync`, and `encoding/gob` packages, and the third-party `golang.org/x/crypto/ssh` package for SSH communication.\n\nFor more information on these topics, you can refer to the following links:\n- Go's context package: https://golang.org/pkg/context/\n- Go's sync package: https://golang.org/pkg/sync/\n- Go's encoding/gob package: https://golang.org/pkg/encoding/gob/\n- Go's crypto/ssh package: https://godoc.org/golang.org/x/crypto/ssh\n- SSH and Go: https://blog.gopheracademy.com/go-and-ssh/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:24:00 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Cached fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Bind fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle SSHConn fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle SSHChan fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Error fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DiscardRequests fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle UnsetUDPChan fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Ready fill:#228B22, stroke:#000000, stroke-width:2px;\n\nStart-->Cached;\nCached-->|u.outbound != nil|Ready;\nCached-->|u.outbound == nil|Bind;\nBind-->SSHConn;\nSSHConn-->|sshConn == nil|Error;\nSSHConn-->|sshConn != nil|SSHChan;\nSSHChan-->|err != nil|Error;\nSSHChan-->DiscardRequests;\nSSHChan-->UnsetUDPChan;\nUnsetUDPChan-->Ready;\nReady-->End;\nError-->End;\n```\n\nThe control flow starts at the function `getUDPChan`. The first decision point is whether `u.outbound` is `nil` or not. If it is not `nil`, the control flow goes to the `Ready` block, indicating that the channel is already cached and ready to use. If `u.outbound` is `nil`, the control flow goes to the `Bind` block, indicating that the channel needs to be bound.\n\nIn the `Bind` block, the control flow first gets the SSH connection using `u.sshTun.getSSH(ctx)`. If the SSH connection is `nil`, the control flow goes to the `Error` block, indicating an error occurred. If the SSH connection is not `nil`, the control flow goes to the `SSHChan` block.\n\nIn the `SSHChan` block, the control flow opens an SSH channel using `sshConn.OpenChannel(\"chisel\", []byte(dstAddr))`. If there is an error opening the channel, the control flow goes to the `Error` block. If the channel is successfully opened, the control flow goes to the `DiscardRequests` block, indicating that SSH requests should be discarded.\n\nAfter discarding requests, the control flow goes to the `UnsetUDPChan` block, indicating that the UDP channel should be unset on disconnect. Finally, the control flow goes to the `Ready` block, indicating that the channel is now ready to use.\n\nIf there is an error at any point in the control flow, the control flow goes to the `Error` block, indicating an error occurred."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:27:00 PM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 308\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The function getUDPChan uses the value of u.remote.Remote() directly in the dstAddr variable which is used in the sshConn.OpenChannel function. If an attacker can manipulate the value of u.remote.Remote(), they may be able to cause the OpenChannel function to connect to an unintended server, leading to potential unauthorized access or information disclosure.\n\n   **Solution**: To mitigate this, validate and sanitize the value of u.remote.Remote() before using it. Consider using a list of allowed servers and check if the value of u.remote.Remote() is in this list. Refer to OWASP's guide on preventing IDOR: https://owasp.org/www-project-top-ten/2017/A4_2017-Insecure_Direct_Object_References\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 310\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error returned by sshConn.OpenChannel function is directly passed to fmt.Errorf function without any sanitization. This could potentially leak sensitive information about the system or application, leading to information disclosure.\n\n   **Solution**: To prevent this, sanitize the error messages before logging or displaying them. Do not expose internal details of the application or system in the error messages. Refer to OWASP's guide on proper error handling: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html\n\n\n3. **Severity**: 2/10\n\n   **Line Number**: 312\n\n   **Bug Type**: Uncontrolled Resource Consumption ('Resource Exhaustion')\n\n   **Description**: The function ssh.DiscardRequests is used in a separate goroutine without any control over the number of goroutines created. If an attacker can trigger this function multiple times, it may lead to resource exhaustion, causing the application to slow down or crash.\n\n   **Solution**: To prevent this, limit the number of goroutines that can be created concurrently. Consider using a semaphore or a similar mechanism to control the number of concurrent goroutines. Refer to Go's documentation on controlling the number of goroutines: https://go.dev/play/p/5zHBOalL1O\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 158,
+                "severity": 4,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The function getUDPChan uses the value of u.remote.Remote() directly in the dstAddr variable which is used in the sshConn.OpenChannel function. If an attacker can manipulate the value of u.remote.Remote(), they may be able to cause the OpenChannel function to connect to an unintended server, leading to potential unauthorized access or information disclosure.",
+                "solution": "To mitigate this, validate and sanitize the value of u.remote.Remote() before using it. Consider using a list of allowed servers and check if the value of u.remote.Remote() is in this list. Refer to OWASP's guide on preventing IDOR: https://owasp.org/www-project-top-ten/2017/A4_2017-Insecure_Direct_Object_References"
+              },
+              {
+                "lineNumber": 160,
+                "severity": 3,
+                "bugType": "Error Handling",
+                "description": "The error returned by sshConn.OpenChannel function is directly passed to fmt.Errorf function without any sanitization. This could potentially leak sensitive information about the system or application, leading to information disclosure.",
+                "solution": "To prevent this, sanitize the error messages before logging or displaying them. Do not expose internal details of the application or system in the error messages. Refer to OWASP's guide on proper error handling: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 162,
+                "severity": 2,
+                "bugType": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
+                "description": "The function ssh.DiscardRequests is used in a separate goroutine without any control over the number of goroutines created. If an attacker can trigger this function multiple times, it may lead to resource exhaustion, causing the application to slow down or crash.",
+                "solution": "To prevent this, limit the number of goroutines that can be created concurrently. Consider using a semaphore or a similar mechanism to control the number of concurrent goroutines. Refer to Go's documentation on controlling the number of goroutines: https://go.dev/play/p/5zHBOalL1O"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:30:55 PM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 312\n\n   **Bug Type**: CPU\n\n   **Description**: The use of mutexes can lead to contention and degrade performance if not used carefully. The code locks the mutex at the start of the function and unlocks it at the end, which can potentially lead to unnecessary waiting if the function is called frequently.\n\n   **Solution**: Consider using a read-write lock (sync.RWMutex) if there are many more reads than writes, as it allows multiple threads to read the data in parallel. If the data is rarely updated, this can significantly improve performance.\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 317\n\n   **Bug Type**: Network\n\n   **Description**: The function makes a network request to open an SSH channel. Network requests are inherently slow and can significantly impact performance if not handled properly.\n\n   **Solution**: Consider using a connection pool to manage and reuse SSH connections. This can significantly reduce the overhead of establishing a new connection for each request. Also, handle network errors properly to avoid unnecessary retries.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 323\n\n   **Bug Type**: CPU\n\n   **Description**: The function launches two goroutines, one to discard requests and another to unset the UDP channel when the SSH connection is disconnected. Spawning goroutines can be expensive and can lead to high CPU usage if not managed properly.\n\n   **Solution**: Consider using a worker pool to limit the number of goroutines that can be created concurrently. This can prevent spikes in CPU usage and ensure that the system remains responsive under heavy load.\n\n\n4. **Severity**: 2/10\n\n   **Line Number**: 330\n\n   **Bug Type**: Memory\n\n   **Description**: The function creates a new udpChannel object for each call. If the function is called frequently, this can lead to high memory usage.\n\n   **Solution**: Consider using object pooling to reuse udpChannel objects. This can significantly reduce memory allocation and garbage collection overhead.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 162,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The use of mutexes can lead to contention and degrade performance if not used carefully. The code locks the mutex at the start of the function and unlocks it at the end, which can potentially lead to unnecessary waiting if the function is called frequently.",
+                "solution": "Consider using a read-write lock (sync.RWMutex) if there are many more reads than writes, as it allows multiple threads to read the data in parallel. If the data is rarely updated, this can significantly improve performance."
+              },
+              {
+                "lineNumber": 167,
+                "severity": 3,
+                "bugType": "Network",
+                "description": "The function makes a network request to open an SSH channel. Network requests are inherently slow and can significantly impact performance if not handled properly.",
+                "solution": "Consider using a connection pool to manage and reuse SSH connections. This can significantly reduce the overhead of establishing a new connection for each request. Also, handle network errors properly to avoid unnecessary retries."
+              },
+              {
+                "lineNumber": 173,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The function launches two goroutines, one to discard requests and another to unset the UDP channel when the SSH connection is disconnected. Spawning goroutines can be expensive and can lead to high CPU usage if not managed properly.",
+                "solution": "Consider using a worker pool to limit the number of goroutines that can be created concurrently. This can prevent spikes in CPU usage and ensure that the system remains responsive under heavy load."
+              },
+              {
+                "lineNumber": 180,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "The function creates a new udpChannel object for each call. If the function is called frequently, this can lead to high memory usage.",
+                "solution": "Consider using object pooling to reuse udpChannel objects. This can significantly reduce memory allocation and garbage collection overhead."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:35:07 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 304\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function 'getUDPChan' does not validate or sanitize the 'dstAddr' variable before using it in the sshConn.OpenChannel function. This could lead to a potential data leak or unauthorized access if the 'dstAddr' variable contains sensitive data.\n\n   **Solution**: Consider implementing data validation and sanitization for the 'dstAddr' variable before using it. This could be achieved by using regular expressions or built-in sanitization functions. Additionally, consider encrypting sensitive data during transmission to prevent data leaks.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 317\n\n   **Bug Type**: Data Encryption\n\n   **Description**: The function 'getUDPChan' uses gob.NewEncoder and gob.NewDecoder for data serialization and deserialization without any encryption. This could lead to a potential data leak if the data being transmitted is sensitive.\n\n   **Solution**: Consider implementing data encryption during serialization and deserialization. This could be achieved by using secure encryption algorithms such as AES or RSA. Additionally, consider using secure serialization formats such as Protocol Buffers or Avro that support data encryption.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 154,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The function 'getUDPChan' does not validate or sanitize the 'dstAddr' variable before using it in the sshConn.OpenChannel function. This could lead to a potential data leak or unauthorized access if the 'dstAddr' variable contains sensitive data.",
+                "solution": "Consider implementing data validation and sanitization for the 'dstAddr' variable before using it. This could be achieved by using regular expressions or built-in sanitization functions. Additionally, consider encrypting sensitive data during transmission to prevent data leaks.",
+                "link": "https://owasp.org/www-community/OWASP_Validation_Regex_Repository"
+              },
+              {
+                "lineNumber": 167,
+                "severity": 8,
+                "bugType": "Data Encryption",
+                "description": "The function 'getUDPChan' uses gob.NewEncoder and gob.NewDecoder for data serialization and deserialization without any encryption. This could lead to a potential data leak if the data being transmitted is sensitive.",
+                "solution": "Consider implementing data encryption during serialization and deserialization. This could be achieved by using secure encryption algorithms such as AES or RSA. Additionally, consider using secure serialization formats such as Protocol Buffers or Avro that support data encryption.",
+                "link": "https://cheatsheetseries.owasp.org/cheatsheets/Serialization_Cheat_Sheet.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "5",
       "value": "\nfunc (u *udpListener) getUDPChan(ctx context.Context) (*udpChannel, error) {\n\tu.outboundMut.Lock()\n\tdefer u.outboundMut.Unlock()\n\t//cached\n\tif u.outbound != nil {\n\t\treturn u.outbound, nil\n\t}\n\t//not cached, bind\n\tsshConn := u.sshTun.getSSH(ctx)\n\tif sshConn == nil {\n\t\treturn nil, fmt.Errorf(\"ssh-conn nil\")\n\t}\n\t//ssh request for udp packets for this proxy's remote,\n\t//just \"udp\" since the remote address is sent with each packet\n\tdstAddr := u.remote.Remote() + \"/udp\"\n\trwc, reqs, err := sshConn.OpenChannel(\"chisel\", []byte(dstAddr))\n\tif err != nil {\n\t\treturn nil, fmt.Errorf(\"ssh-chan error: %s\", err)\n\t}\n\tgo ssh.DiscardRequests(reqs)\n\t//remove on disconnect\n\tgo u.unsetUDPChan(sshConn)\n\t//ready\n\to := &udpChannel{\n\t\tr: gob.NewDecoder(rwc),\n\t\tw: gob.NewEncoder(rwc),\n\t\tc: rwc,\n\t}\n\tu.outbound = o\n\tu.Debugf(\"aquired channel\")\n\treturn o, nil\n}\n",
@@ -73,7 +775,83 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:20:39 PM PDT\n\nThis function is part of a larger program that uses the Go programming language and the SSH (Secure Shell) package. It appears to be part of a network application that uses UDP (User Datagram Protocol) and SSH for secure communication.\n\nThe function is called `unsetUDPChan` and it's defined on `udpListener` type. It takes an argument `sshConn` of type `ssh.Conn`, which is a connection object from the Go SSH package.\n\nLet's break down what the function does:\n\n1. `sshConn.Wait()`: This line is blocking and waits for the SSH connection to close. The `Wait` method in the `ssh.Conn` type waits for the server to send a request to close the connection. If the server never sends a request to close, this function will block indefinitely.\n\n2. `u.Debugf(\"lost channel\")`: This line is logging a debug message that a channel was lost. The `Debugf` function is typically a formatted debug log function, which in this case is logging the string \"lost channel\".\n\n3. `u.outboundMut.Lock()`: This line locks the `outboundMut` mutex. In concurrent programming, a mutex is used to protect shared data from being simultaneously accessed by multiple threads. In this case, it's used to prevent race conditions on the `outbound` field of the `udpListener`.\n\n4. `u.outbound = nil`: This line sets the `outbound` field of the `udpListener` to `nil`. This could be to indicate that there is no current outbound SSH connection.\n\n5. `u.outboundMut.Unlock()`: This line unlocks the `outboundMut` mutex, allowing other threads to access the `outbound` field.\n\nIn terms of algorithms, this function is fairly straightforward and doesn't seem to use any specific algorithm. It's more about managing the state of a network connection in a thread-safe way.\n\nFor more information about Go's SSH package, you can refer to the package's documentation [here](https://pkg.go.dev/golang.org/x/crypto/ssh). For more information on concurrent programming in Go and the use of mutexes, you can refer to this [blog post](https://blog.golang.org/mutex) by the Go team."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:24:06 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nExampleProcess-->End;\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:27:04 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:30:58 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:35:31 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 370\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function 'unsetUDPChan' does not have any control to validate the sshConn input. This could potentially allow unauthorized access to sensitive data if an attacker is able to manipulate the sshConn object.\n\n   **Solution**: Implement input validation to ensure the sshConn object is from a trusted source. Consider using an authentication mechanism to verify the sshConn object before it is used in the function.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 373\n\n   **Bug Type**: Data Access Control\n\n   **Description**: The function 'unsetUDPChan' modifies the 'outbound' field without any access control or validation. This could potentially lead to unauthorized modification of data.\n\n   **Solution**: Implement access control mechanisms to restrict who can modify the 'outbound' field. This could be done using access control lists or role-based access control.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 187,
+                "severity": 7,
+                "bugType": "Data Privacy",
+                "description": "The function 'unsetUDPChan' does not have any control to validate the sshConn input. This could potentially allow unauthorized access to sensitive data if an attacker is able to manipulate the sshConn object.",
+                "solution": "Implement input validation to ensure the sshConn object is from a trusted source. Consider using an authentication mechanism to verify the sshConn object before it is used in the function."
+              },
+              {
+                "lineNumber": 190,
+                "severity": 6,
+                "bugType": "Data Access Control",
+                "description": "The function 'unsetUDPChan' modifies the 'outbound' field without any access control or validation. This could potentially lead to unauthorized modification of data.",
+                "solution": "Implement access control mechanisms to restrict who can modify the 'outbound' field. This could be done using access control lists or role-based access control."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "6",
       "value": "\nfunc (u *udpListener) unsetUDPChan(sshConn ssh.Conn) {\n\tsshConn.Wait()\n\tu.Debugf(\"lost channel\")\n\tu.outboundMut.Lock()\n\tu.outbound = nil\n\tu.outboundMut.Unlock()\n}\n",

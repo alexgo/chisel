@@ -1,5 +1,81 @@
 {
-  "cells": [],
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysis",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "2c25a4e8-f352-4b99-9f86-10c8d6464fea",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Security Report\n\nLast Updated: Friday, September 8, 2023 at 5:43:44 PM PDT\n\n## Executive Report\n\n### Architectural Impact and Risk Analysis\n\nBased on the analysis of the software project, the following key points have been identified:\n\n1. **Insecure Cryptographic Storage**: The file `share/ccrypto/determ_rand.go` has been flagged for insecure cryptographic storage. This is a significant architectural risk as it could potentially lead to data breaches if sensitive information is not stored securely. The use of SHA-512 for deterministic random number generation is not recommended as it's not suitable for cryptographic random number generation. This could potentially impact the security of the entire system.\n\n2. **Insecure Randomness**: The same file `share/ccrypto/determ_rand.go` also has issues with insecure randomness. This could potentially lead to predictable patterns that could be exploited by malicious actors, leading to a compromise of the system's security.\n\n3. **Overall Health of the Project Source**: Only one file has been analyzed in this report, and it has been found to have issues of varying severity. This suggests that there may be other files in the project that could also have issues. A comprehensive review of the entire codebase is recommended to ensure the overall health of the project source.\n\n4. **Potential Customer Impact**: The identified issues could potentially impact the customers in terms of data security. If the issues are not addressed, it could lead to data breaches, loss of customer trust, and potential legal implications.\n\n5. **Risk Assessment**: Given that the issues identified are of high severity and could potentially impact the security of the system, the risk level for this project is high. Immediate action is recommended to address these issues.\n\nIn conclusion, while the project follows the client-server architecture and uses secure communication for tunneling, there are significant issues related to cryptographic storage and randomness that need to be addressed. These issues pose a high risk to the overall security of the system and could potentially impact the customers. A comprehensive review of the entire codebase is recommended to ensure the overall health of the project source.",
+      "kind": 1,
+      "metadata": {
+        "id": "2c25a4e8-f352-4b99-9f86-10c8d6464fea",
+        "outputType": "bugAnalysis",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "performance",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "03bfd2db-162b-4a49-bd44-8c8e48f6be76",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Performance Report\n\nLast Updated: Friday, September 8, 2023 at 5:44:32 PM PDT\n\nExecutive Level Report:\n\n1. **Architectural Impact**: The project appears to be well-structured, following the client-server architecture and using secure communication for tunneling. However, the file \"share/ccrypto/determ_rand.go\" has been flagged for CPU-intensive operations, which could potentially impact the performance of the software. This could be a concern if the software is expected to handle large volumes of data or run on systems with limited resources.\n\n2. **Risk Analysis**: The risk associated with this project is moderate. The main risk comes from the CPU-intensive operations in the \"share/ccrypto/determ_rand.go\" file. If not addressed, this could lead to performance issues, especially in systems with limited resources. However, since this issue is confined to a single file, the risk is localized and can be mitigated by optimizing the code in this file.\n\n3. **Potential Customer Impact**: Customers using systems with limited resources might experience performance issues due to the CPU-intensive operations in the \"share/ccrypto/determ_rand.go\" file. This could lead to slower response times and potentially impact the user experience. However, customers with more powerful systems might not notice any performance issues.\n\n4. **Overall Issues**: The overall health of the project source is good, with only one file having detected issues. This represents a small percentage of the project files, indicating that the majority of the codebase is free of issues. However, the severity of the issues in the \"share/ccrypto/determ_rand.go\" file is high, which warrants attention.\n\nRisk Assessment:\n\n- **Health of the Project Source**: The health of the project source is generally good. Only one file has been flagged for issues, indicating that the majority of the codebase is free of issues. However, the severity of the issues in the flagged file is high, which could potentially impact the performance of the software.\n\n- **Percentage of Project Files with Issues**: Based on the information provided, it appears that a small percentage of the project files have issues. This suggests that the majority of the codebase is well-written and free of issues.\n\nHighlights:\n\n- The project follows the client-server architecture and uses secure communication for tunneling, which aligns with best practices for this type of software.\n- The file \"share/ccrypto/determ_rand.go\" has been flagged for CPU-intensive operations, which could potentially impact the performance of the software.\n- The risk associated with this project is moderate, mainly due to the CPU-intensive operations in the \"share/ccrypto/determ_rand.go\" file.\n- Customers using systems with limited resources might experience performance issues due to the CPU-intensive operations in the \"share/ccrypto/determ_rand.go\" file.\n- The overall health of the project source is good, with only one file having detected issues. This represents a small percentage of the project files, indicating that the majority of the codebase is free of issues.",
+      "kind": 1,
+      "metadata": {
+        "id": "03bfd2db-162b-4a49-bd44-8c8e48f6be76",
+        "outputType": "performance",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCode",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "46dd21f4-5a78-4a33-8303-21c654b810e4",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Compliance Report\n\nLast Updated: Friday, September 8, 2023 at 5:45:15 PM PDT\n\nExecutive Level Report:\n\n1. **Architectural Impact**: The software project is a command-line tool that uses a client-server architecture and secure communication for tunneling. The project is written in Go and does not mention any specific data storage. The main architectural concern is the deterministic random number generator (DRNG) used in the file \"share/ccrypto/determ_rand.go\". This DRNG might be predictable if the seed is known or guessable, which can lead to potential attacks on the encryption mechanism. This could impact the overall security architecture of the project.\n\n2. **Risk Analysis**: The risk associated with the DRNG is high as it could potentially compromise the security of the software. This risk is further amplified by the fact that the software is designed to create secure tunnels to expose local servers to the internet or access remote servers securely. If the encryption mechanism is compromised, it could lead to unauthorized access to sensitive data.\n\n3. **Potential Customer Impact**: Customers using this software for secure communication could be at risk if the encryption mechanism is compromised. This could lead to unauthorized access to their local servers or remote servers, potentially leading to data breaches.\n\n4. **Overall Issues**: The main issue identified in the project is related to the use of a deterministic random number generator for cryptographic purposes. This issue is categorized as a warning and is found in the file \"share/ccrypto/determ_rand.go\". The issue is related to data encryption and could potentially impact the security of the software.\n\n5. **Risk Assessment**: Based on the analysis, the overall health of the project source is at risk due to the potential security issue identified. The project consists of one file, and this file has been flagged with a warning related to data encryption. This means that 100% of the project files have issues of warning severity.\n\nHighlights:\n\n- The software project uses a client-server architecture and secure communication for tunneling, which aligns with the architectural guidelines for this development project.\n- The main architectural concern is the deterministic random number generator used in the file \"share/ccrypto/determ_rand.go\", which could potentially compromise the security of the software.\n- The risk associated with the DRNG is high and could potentially lead to unauthorized access to sensitive data.\n- Customers using this software for secure communication could be at risk if the encryption mechanism is compromised.\n- The overall health of the project source is at risk due to the potential security issue identified. 100% of the project files have issues of warning severity.",
+      "kind": 1,
+      "metadata": {
+        "id": "46dd21f4-5a78-4a33-8303-21c654b810e4",
+        "outputType": "complianceCode",
+        "summaryType": "quick"
+      }
+    }
+  ],
   "metadata": {
     "defaultDir": ".boost",
     "sourceFile": "./share/ccrypto/determ_rand.go"

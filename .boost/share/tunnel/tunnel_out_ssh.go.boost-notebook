@@ -1,7 +1,83 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:02:46 PM PDT\n\nThis Go code snippet is part of the `tunnel` package, which is likely used to handle network tunneling for the Chisel project. The Chisel project is a fast TCP tunnel over HTTP, which allows users to expose local servers to the internet or access remote servers securely.\n\nThe `import` statement at the top of the code imports several packages that are used within the code. These include standard library packages like `fmt` (for formatted I/O), `io` (for basic input and output), `net` (for network I/O), and `strings` (for string manipulation). It also imports several packages from the Chisel project itself (`github.com/jpillora/chisel/share/cio`, `github.com/jpillora/chisel/share/cnet`, `github.com/jpillora/chisel/share/settings`) and `github.com/jpillora/sizestr` for size string parsing. The `golang.org/x/crypto/ssh` package is used for SSH-related operations.\n\nThe `handleSSHRequests` function is a method on the `Tunnel` type. It takes as an argument a receive-only channel of pointers to `ssh.Request` objects. This function is likely meant to be run as a goroutine, as it loops indefinitely over the `reqs` channel, handling incoming SSH requests.\n\nWithin the loop, it uses a `switch` statement to handle different types of requests. If the request type is \"ping\", it replies with \"pong\". If the request type is anything else, it logs a debug message saying that the request type is unknown. The `Debugf` method is not shown in this snippet, but it is presumably a method on the `Tunnel` type that logs debug messages.\n\nThe algorithm used here is quite simple: it's just an event loop that handles incoming requests. The actual handling of the requests is very minimal in this snippet; it's likely that more complex request types are handled elsewhere in the code.\n\nFor more information on the packages and concepts used in this code, you can refer to the following links:\n\n- Go standard library documentation: https://golang.org/pkg/\n- SSH package documentation: https://godoc.org/golang.org/x/crypto/ssh\n- Chisel project on GitHub: https://github.com/jpillora/chisel"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:06:01 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart \u0001 -->ExampleProcess;\nExampleProcess-->End;\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:07:01 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:09:15 PM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 9\n\n   **Bug Type**: CPU\n\n   **Description**: The handleSSHRequests function is continuously running in a loop waiting for requests. This leads to unnecessary CPU usage when there are no requests.\n\n   **Solution**: Consider using a more efficient mechanism to handle incoming requests, such as event-driven programming or a worker pool model. This would allow the CPU to be idle when there are no requests, thus saving CPU resources.\n\n\n2. **Severity**: 2/10\n\n   **Line Number**: 14\n\n   **Bug Type**: CPU\n\n   **Description**: The use of switch-case for handling request types can be sub-optimal if there are a large number of request types. Each switch-case statement has to be checked sequentially until a match is found, which can be CPU-intensive for a large number of cases.\n\n   **Solution**: Consider using a map or hash table to map request types to their handlers. This would allow for constant time complexity (O(1)) when handling requests, leading to improved performance.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 9,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The handleSSHRequests function is continuously running in a loop waiting for requests. This leads to unnecessary CPU usage when there are no requests.",
+                "solution": "Consider using a more efficient mechanism to handle incoming requests, such as event-driven programming or a worker pool model. This would allow the CPU to be idle when there are no requests, thus saving CPU resources."
+              },
+              {
+                "lineNumber": 14,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The use of switch-case for handling request types can be sub-optimal if there are a large number of request types. Each switch-case statement has to be checked sequentially until a match is found, which can be CPU-intensive for a large number of cases.",
+                "solution": "Consider using a map or hash table to map request types to their handlers. This would allow for constant time complexity (O(1)) when handling requests, leading to improved performance."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:11:12 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package tunnel\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net\"\n\t\"strings\"\n\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/sizestr\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\nfunc (t *Tunnel) handleSSHRequests(reqs <-chan *ssh.Request) {\n\tfor r := range reqs {\n\t\tswitch r.Type {\n\t\tcase \"ping\":\n\t\t\tr.Reply(true, []byte(\"pong\"))\n\t\tdefault:\n\t\t\tt.Debugf(\"Unknown request: %s\", r.Type)\n\t\t}\n\t}\n}\n",
@@ -13,7 +89,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:03:30 PM PDT\n\nThis is a function written in the Go programming language. The function is part of a `Tunnel` type, and it's used to handle SSH channels. The function's name is `handleSSHChannels` and it takes one parameter: `chans`, which is a read-only channel of `ssh.NewChannel` type.\n\nHere is a detailed breakdown of the function:\n\n- `func (t *Tunnel) handleSSHChannels(chans <-chan ssh.NewChannel) {`: This is the function declaration. `t *Tunnel` is a method receiver, which means this function is a method of the `Tunnel` type. The `chans <-chan ssh.NewChannel` is a parameter of the function. The `<-chan` keyword means that `chans` is a receive-only channel, so data can only be read from it, not written into it.\n\n- `for ch := range chans {`: This is a range loop that iterates over the `chans` channel. In each iteration, it receives a value from the `chans` channel and assigns it to the `ch` variable. The loop continues until the `chans` channel is closed and all values have been received.\n\n- `go t.handleSSHChannel(ch)`: This is a goroutine, which is a lightweight thread managed by the Go runtime. The `go` keyword means this function call will be executed concurrently with the rest of the code. The function being called is `handleSSHChannel`, which is another method of the `Tunnel` type. The `ch` variable, which holds the current value from the `chans` channel, is passed as an argument to the `handleSSHChannel` function.\n\nIn terms of the algorithm, this function uses concurrency to handle multiple SSH channels simultaneously. Each channel is handled independently in its own goroutine, which allows for efficient use of system resources and improved performance when dealing with multiple channels.\n\nThis code is consistent with the Go idiomatic way of handling multiple channels concurrently using goroutines and range loops.\n\nFor more information about Go concurrency and channels, you can refer to the official Go documentation: https://golang.org/doc/effective_go#concurrency"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:06:07 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle handleSSHChannels fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle handleSSHChannel fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->handleSSHChannels;\nhandleSSHChannels-->handleSSHChannel;\nhandleSSHChannel-->handleSSHChannel;\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:07:04 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:09:19 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:11:16 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\nfunc (t *Tunnel) handleSSHChannels(chans <-chan ssh.NewChannel) {\n\tfor ch := range chans {\n\t\tgo t.handleSSHChannel(ch)\n\t}\n}\n",
@@ -25,7 +162,151 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:04:23 PM PDT\n\nThis function is part of a `Tunnel` struct and is named `handleSSHChannel`. It is written in Go and is responsible for handling a new SSH channel. It accepts a new SSH channel as an argument and doesn't return any value.\n\nThe function starts by checking if the `Outbound` property of the `Tunnel` struct's `Config` is false. If it is, it logs a debug message and rejects the new SSH channel with a `Prohibited` message before returning.\n\nNext, it extracts the protocol from the `ExtraData` of the new SSH channel. It does this by calling the `L4Proto` function from the `settings` package with the `ExtraData` as an argument.\n\nThe function then checks if the protocol is UDP and if the host port is SOCKS. If the host port is SOCKS and the `socksServer` property of the `Tunnel` struct is `nil`, it logs a debug message and rejects the new SSH channel with a `Prohibited` message before returning.\n\nThe function then attempts to accept the new SSH channel by calling the `Accept` method on it. If this fails, it logs a debug message and returns.\n\nNext, the function creates a `stream` from the accepted SSH channel and defers its `Close` method to ensure that the stream is closed when the function returns.\n\nThe function then discards any requests from the SSH channel in a separate goroutine by calling the `DiscardRequests` function from the `ssh` package with the `reqs` as an argument.\n\nNext, the function creates a new logger and opens a new connection. It then logs a debug message with the connection's stats.\n\nThe function then checks if the protocol is SOCKS, UDP, or TCP and calls the appropriate handler function accordingly. If the handler function returns an error, it logs a debug message with the error.\n\nFinally, the function closes the connection and logs a debug message with the connection's stats and any error message.\n\nIn terms of algorithms, this function doesn't use any complex algorithms. Instead, it uses conditional logic and function calls to handle different types of SSH channels.\n\nFor more information about SSH in Go, you can refer to the GoDoc page for the `golang.org/x/crypto/ssh` package: https://pkg.go.dev/golang.org/x/crypto/ssh\n\nFor more information about handling SOCKS, UDP, and TCP in Go, you can refer to the GoDoc page for the `net` package: https://pkg.go.dev/net\n\nFor more information about logging in Go, you can refer to the GoDoc page for the `log` package: https://pkg.go.dev/log\n\nFor more information about goroutines in Go, you can refer to the GoDoc page for the `runtime` package: https://pkg.go.dev/runtime"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:06:27 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->CheckOutboundConnection;\nCheckOutboundConnection-->RejectOutboundConnection;\nCheckOutboundConnection-->ExtractProtocol;\nExtractProtocol-->CheckSocksRequest;\nCheckSocksRequest-->RejectSocksRequest;\nCheckSocksRequest-->AcceptStream;\nAcceptStream-->HandleStream;\nHandleStream-->HandleSocks;\nHandleStream-->HandleUDP;\nHandleStream-->HandleTCP;\nHandleSocks-->CloseConnection;\nHandleUDP-->CloseConnection;\nHandleTCP-->CloseConnection;\nCloseConnection-->LogCloseConnection;\n\nstyle CheckOutboundConnection fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle RejectOutboundConnection fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ExtractProtocol fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle CheckSocksRequest fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle RejectSocksRequest fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle AcceptStream fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle HandleStream fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle HandleSocks fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle HandleUDP fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle HandleTCP fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle CloseConnection fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle LogCloseConnection fill:#228B22, stroke:#000000, stroke-width:4px;\n\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:07:44 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 62\n\n   **Bug Type**: Information Disclosure\n\n   **Description**: The function handleSSHChannel logs potentially sensitive information, such as the reason for denying an outbound connection or a failure to accept a stream. This information could be useful to an attacker attempting to understand the system and identify potential vulnerabilities.\n\n   **Solution**: Avoid logging sensitive information, especially in production environments. If necessary, ensure logs are properly secured and monitored. More info: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 65\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The function handleSSHChannel uses data from the ssh.NewChannel object without any validation (ch.ExtraData()). An attacker could manipulate this data to access or modify data they are not authorized to.\n\n   **Solution**: Always validate and sanitize user input before using it. Consider implementing access control checks to ensure the current user is authorized to access or modify the requested data. More info: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 73\n\n   **Bug Type**: Error Handling\n\n   **Description**: The function handleSSHChannel does not handle the error from ch.Accept() properly. It logs the error and then continues execution. This could lead to unexpected behavior or vulnerabilities if the error is serious.\n\n   **Solution**: Always handle errors properly. Depending on the severity of the error, you may need to stop execution, return an error to the caller, or handle the error in a way that does not allow the program to continue in an erroneous state. More info: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 31,
+                "severity": 7,
+                "bugType": "Information Disclosure",
+                "description": "The function handleSSHChannel logs potentially sensitive information, such as the reason for denying an outbound connection or a failure to accept a stream. This information could be useful to an attacker attempting to understand the system and identify potential vulnerabilities.",
+                "solution": "Avoid logging sensitive information, especially in production environments. If necessary, ensure logs are properly secured and monitored. More info: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 34,
+                "severity": 8,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The function handleSSHChannel uses data from the ssh.NewChannel object without any validation (ch.ExtraData()). An attacker could manipulate this data to access or modify data they are not authorized to.",
+                "solution": "Always validate and sanitize user input before using it. Consider implementing access control checks to ensure the current user is authorized to access or modify the requested data. More info: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 42,
+                "severity": 6,
+                "bugType": "Error Handling",
+                "description": "The function handleSSHChannel does not handle the error from ch.Accept() properly. It logs the error and then continues execution. This could lead to unexpected behavior or vulnerabilities if the error is serious.",
+                "solution": "Always handle errors properly. Depending on the severity of the error, you may need to stop execution, return an error to the caller, or handle the error in a way that does not allow the program to continue in an erroneous state. More info: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:10:04 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 66\n\n   **Bug Type**: CPU\n\n   **Description**: The function settings.L4Proto(remote) is called without checking if the variable 'remote' is empty or not. If 'remote' is empty, it might lead to unnecessary CPU usage.\n\n   **Solution**: Check if 'remote' is empty before calling the function settings.L4Proto(remote).\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 68\n\n   **Bug Type**: Memory\n\n   **Description**: If 'socks' is true and 't.socksServer' is nil, the function ch.Accept() is not called and the resources allocated for 'sshChan', 'reqs', and 'err' are wasted.\n\n   **Solution**: Consider reordering the code to call ch.Accept() only when necessary.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 72\n\n   **Bug Type**: CPU\n\n   **Description**: The function ssh.DiscardRequests(reqs) is called in a separate goroutine which might consume unnecessary CPU resources if 'reqs' is empty.\n\n   **Solution**: Check if 'reqs' is empty before calling ssh.DiscardRequests(reqs) in a separate goroutine.\n\n\n4. **Severity**: 5/10\n\n   **Line Number**: 79\n\n   **Bug Type**: CPU\n\n   **Description**: The function calls t.handleSocks(stream), t.handleUDP(l, stream, hostPort), and t.handleTCP(l, stream, hostPort) are not checked for errors immediately. This might lead to unnecessary CPU usage if there are errors.\n\n   **Solution**: Check for errors immediately after calling these functions.\n\n\n5. **Severity**: 3/10\n\n   **Line Number**: 89\n\n   **Bug Type**: CPU\n\n   **Description**: The function strings.HasSuffix(err.Error(), 'EOF') is called without checking if 'err' is nil. If 'err' is nil, it might lead to unnecessary CPU usage.\n\n   **Solution**: Check if 'err' is not nil before calling strings.HasSuffix(err.Error(), 'EOF').\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 35,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The function settings.L4Proto(remote) is called without checking if the variable 'remote' is empty or not. If 'remote' is empty, it might lead to unnecessary CPU usage.",
+                "solution": "Check if 'remote' is empty before calling the function settings.L4Proto(remote)."
+              },
+              {
+                "lineNumber": 37,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "If 'socks' is true and 't.socksServer' is nil, the function ch.Accept() is not called and the resources allocated for 'sshChan', 'reqs', and 'err' are wasted.",
+                "solution": "Consider reordering the code to call ch.Accept() only when necessary."
+              },
+              {
+                "lineNumber": 41,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The function ssh.DiscardRequests(reqs) is called in a separate goroutine which might consume unnecessary CPU resources if 'reqs' is empty.",
+                "solution": "Check if 'reqs' is empty before calling ssh.DiscardRequests(reqs) in a separate goroutine."
+              },
+              {
+                "lineNumber": 48,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "The function calls t.handleSocks(stream), t.handleUDP(l, stream, hostPort), and t.handleTCP(l, stream, hostPort) are not checked for errors immediately. This might lead to unnecessary CPU usage if there are errors.",
+                "solution": "Check for errors immediately after calling these functions."
+              },
+              {
+                "lineNumber": 58,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The function strings.HasSuffix(err.Error(), 'EOF') is called without checking if 'err' is nil. If 'err' is nil, it might lead to unnecessary CPU usage.",
+                "solution": "Check if 'err' is not nil before calling strings.HasSuffix(err.Error(), 'EOF')."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:11:53 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 62\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function handleSSHChannel does not validate or sanitize the 'remote' variable, which is derived from channel data. This could potentially lead to data leakage or unauthorized data access.\n\n   **Solution**: Implement data validation and sanitization measures on the 'remote' variable to ensure it does not contain sensitive data or malicious input. Use secure coding practices to handle data securely.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 78\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function handleSSHChannel opens a stream (sshChan) without implementing any encryption or secure communication measures. This could lead to data being intercepted during transmission.\n\n   **Solution**: Implement secure communication measures, such as SSL/TLS, to encrypt the data during transmission. This will protect the data from being intercepted or modified.\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 95\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function handleSSHChannel does not handle errors securely. When an error occurs, it is logged with potentially sensitive information about the connection. This could lead to information disclosure.\n\n   **Solution**: Implement secure error handling measures. Do not log sensitive information about the connection or the error. Instead, log a generic error message and handle the error securely.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 31,
+                "severity": 5,
+                "bugType": "Data Privacy",
+                "description": "The function handleSSHChannel does not validate or sanitize the 'remote' variable, which is derived from channel data. This could potentially lead to data leakage or unauthorized data access.",
+                "solution": "Implement data validation and sanitization measures on the 'remote' variable to ensure it does not contain sensitive data or malicious input. Use secure coding practices to handle data securely.",
+                "webLink": "https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure.html"
+              },
+              {
+                "lineNumber": 47,
+                "severity": 7,
+                "bugType": "Data Privacy",
+                "description": "The function handleSSHChannel opens a stream (sshChan) without implementing any encryption or secure communication measures. This could lead to data being intercepted during transmission.",
+                "solution": "Implement secure communication measures, such as SSL/TLS, to encrypt the data during transmission. This will protect the data from being intercepted or modified.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/glossary#S"
+              },
+              {
+                "lineNumber": 64,
+                "severity": 6,
+                "bugType": "Data Privacy",
+                "description": "The function handleSSHChannel does not handle errors securely. When an error occurs, it is logged with potentially sensitive information about the connection. This could lead to information disclosure.",
+                "solution": "Implement secure error handling measures. Do not log sensitive information about the connection or the error. Instead, log a generic error message and handle the error securely.",
+                "webLink": "https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\nfunc (t *Tunnel) handleSSHChannel(ch ssh.NewChannel) {\n\tif !t.Config.Outbound {\n\t\tt.Debugf(\"Denied outbound connection\")\n\t\tch.Reject(ssh.Prohibited, \"Denied outbound connection\")\n\t\treturn\n\t}\n\tremote := string(ch.ExtraData())\n\t//extract protocol\n\thostPort, proto := settings.L4Proto(remote)\n\tudp := proto == \"udp\"\n\tsocks := hostPort == \"socks\"\n\tif socks && t.socksServer == nil {\n\t\tt.Debugf(\"Denied socks request, please enable socks\")\n\t\tch.Reject(ssh.Prohibited, \"SOCKS5 is not enabled\")\n\t\treturn\n\t}\n\tsshChan, reqs, err := ch.Accept()\n\tif err != nil {\n\t\tt.Debugf(\"Failed to accept stream: %s\", err)\n\t\treturn\n\t}\n\tstream := io.ReadWriteCloser(sshChan)\n\t//cnet.MeterRWC(t.Logger.Fork(\"sshchan\"), sshChan)\n\tdefer stream.Close()\n\tgo ssh.DiscardRequests(reqs)\n\tl := t.Logger.Fork(\"conn#%d\", t.connStats.New())\n\t//ready to handle\n\tt.connStats.Open()\n\tl.Debugf(\"Open %s\", t.connStats.String())\n\tif socks {\n\t\terr = t.handleSocks(stream)\n\t} else if udp {\n\t\terr = t.handleUDP(l, stream, hostPort)\n\t} else {\n\t\terr = t.handleTCP(l, stream, hostPort)\n\t}\n\tt.connStats.Close()\n\terrmsg := \"\"\n\tif err != nil && !strings.HasSuffix(err.Error(), \"EOF\") {\n\t\terrmsg = fmt.Sprintf(\" (error %s)\", err)\n\t}\n\tl.Debugf(\"Close %s%s\", t.connStats.String(), errmsg)\n}\n",
@@ -37,7 +318,76 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:05:13 PM PDT\n\nThis code snippet is written in Go programming language and appears to be a part of a larger network-related project, possibly related to a SOCKS (Socket Secure) proxy server. It's a method of a `Tunnel` struct, which suggests that the project might involve some form of network tunneling.\n\nHere's a detailed breakdown of the code:\n\n```go\nfunc (t *Tunnel) handleSocks(src io.ReadWriteCloser) error {\n\treturn t.socksServer.ServeConn(cnet.NewRWCConn(src))\n}\n```\n\n- `func (t *Tunnel) handleSocks(src io.ReadWriteCloser) error`: This line defines a method named `handleSocks` on the `Tunnel` struct. This method takes a parameter `src` which is of the interface type `io.ReadWriteCloser`. The `ReadWriteCloser` interface in Go's `io` package represents the capability to both read from, write to, and close a data stream. The method returns an error which is a built-in interface type in Go.\n\n- `return t.socksServer.ServeConn(cnet.NewRWCConn(src))`: This line calls the `ServeConn` method on the `socksServer` field of the `Tunnel` struct. It appears that `socksServer` is a server that's capable of handling SOCKS connections. The `ServeConn` method is generally used to handle an incoming connection and it takes as an argument a connection object. Here, it's being passed `cnet.NewRWCConn(src)`, which suggests that a new connection object is being created from `src` using `NewRWCConn` function of `cnet` package.\n\nThe algorithm used here is quite straightforward - it's simply passing the received connection to the SOCKS server to handle. The specifics of how the SOCKS server handles the connection would be defined in the `ServeConn` method of the `socksServer` object, which isn't shown in this code snippet.\n\nAs for the architectural guidelines, this code snippet seems to adhere to the general principles of Go and network programming. It's hard to say more without additional context or guidelines.\n\nFor more information on Go's `io` package and the `ReadWriteCloser` interface, you can refer to the Go documentation: https://pkg.go.dev/io#ReadWriteCloser\n\nFor more information on SOCKS protocol, you can refer to this link: https://en.wikipedia.org/wiki/SOCKS\n\nPlease note that the exact behavior of the `ServeConn` method and the `NewRWCConn` function would depend on their implementation in the `socksServer` and `cnet` types, respectively."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:06:33 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nExampleProcess-->End;\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:07:47 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:10:07 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:12:02 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 152\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function `handleSocks` does not perform any form of data sanitization or validation on the data it receives. This can lead to potential data compliance issues as it could allow for the processing of sensitive data in violation of GDPR, PCI DSS, and HIPAA compliance.\n\n   **Solution**: Implement data validation and sanitization methods to ensure that the data being processed complies with GDPR, PCI DSS, and HIPAA regulations. For example, ensure that no personal identifiable information (PII) or sensitive cardholder data is processed without proper consent and security measures in place.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 77,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The function `handleSocks` does not perform any form of data sanitization or validation on the data it receives. This can lead to potential data compliance issues as it could allow for the processing of sensitive data in violation of GDPR, PCI DSS, and HIPAA compliance.",
+                "solution": "Implement data validation and sanitization methods to ensure that the data being processed complies with GDPR, PCI DSS, and HIPAA regulations. For example, ensure that no personal identifiable information (PII) or sensitive cardholder data is processed without proper consent and security measures in place."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\nfunc (t *Tunnel) handleSocks(src io.ReadWriteCloser) error {\n\treturn t.socksServer.ServeConn(cnet.NewRWCConn(src))\n}\n",
@@ -49,7 +399,83 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:05:52 PM PDT\n\nThis function `handleTCP` is part of a `Tunnel` struct. It handles TCP connections for the tunnel. The function takes three parameters: a pointer to a logger (`l`), a `ReadWriteCloser` interface (`src`), and a string representing the host and port (`hostPort`).\n\nLet's break down what this function does:\n\n1. It attempts to establish a TCP connection to the `hostPort` using the `net.Dial` function. The `net.Dial` function connects to the address on the named network. In this case, the network is \"tcp\". If there's an error during this process, the function returns the error.\n\n2. If the connection is successful, it creates a pipe between the source (`src`) and the destination (`dst`) using the `cio.Pipe` function. The `cio.Pipe` function copies data from the source to the destination and vice versa, effectively creating a two-way communication channel.\n\n3. The `cio.Pipe` function returns two values: the number of bytes sent (`s`) and the number of bytes received (`r`). These values are logged using the `Debugf` method of the logger (`l`). The `sizestr.ToString` function is used to convert these byte values into a human-readable string format.\n\n4. The function then returns `nil`, indicating that the function executed without any errors.\n\nThis function is a part of the `Tunnel` struct, which suggests that this function is part of a larger system that handles network tunneling. Network tunneling is a method of sending data securely over a network.\n\nThe code is written in Go programming language and it's using standard libraries for network communication and I/O operations. It's following good practices of error handling and logging. There is no obvious conflict with the provided architectural guidelines.\n\nFor more information about network programming in Go, you can visit this link: [Go by Example: TCP Client](https://gobyexample.com/tcp-client)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:06:54 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle External fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart \u0001 -->DialTCP;\nDialTCP-->HandleError;\nDialTCP-->CreatePipe;\nCreatePipe-->LogDebug;\nCreatePipe-->End \u0001 ;\n\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle HandleError fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle CreatePipe fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle LogDebug fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle End fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle External fill:#FFA500, stroke:#000000, stroke-width:2px;\n\nstyle ErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->DialTCP;\nDialTCP-->HandleError;\nDialTCP-->CreatePipe;\nCreatePipe-->LogDebug;\nCreatePipe-->End;\nHandleError-->End;\n```\n\nThe control flow graph for the given source code is as follows:\n\n1. The flow starts at the \"Start\" node.\n2. The \"Start\" node leads to the \"DialTCP\" node, which represents the call to the external function `net.Dial`.\n3. From the \"DialTCP\" node, there are two possible paths:\n   - If the `net.Dial` function returns an error, the flow goes to the \"HandleError\" node, which represents the error handling code.\n   - If the `net.Dial` function is successful, the flow goes to the \"CreatePipe\" node, which represents the creation of a pipe for data transfer.\n4. From the \"CreatePipe\" node, there are two possible paths:\n   - The flow goes to the \"LogDebug\" node, which represents the logging of debug information.\n   - The flow goes directly to the \"End\" node, representing the end of the function.\n5. The \"HandleError\" node leads directly to the \"End\" node, representing the end of the function in case of an error.\n\nPlease note that the external function `net.Dial` is represented as an \"External\" node in the control flow graph."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:07:51 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:10:11 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:12:29 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 161\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function handleTCP does not implement any form of encryption during data transmission, which could lead to potential data leaks. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require data to be transmitted securely.\n\n   **Solution**: Implement some form of encryption, such as TLS or SSH, during data transmission to protect the data from being intercepted. This will ensure compliance with GDPR, PCI DSS, and HIPAA.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 163\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The logging of the amount of data sent and received could potentially include sensitive information. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require sensitive data to be protected.\n\n   **Solution**: Make sure to only log non-sensitive data, or to anonymize or pseudonymize any sensitive data that is logged. This will ensure compliance with GDPR, PCI DSS, and HIPAA.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 82,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The function handleTCP does not implement any form of encryption during data transmission, which could lead to potential data leaks. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require data to be transmitted securely.",
+                "solution": "Implement some form of encryption, such as TLS or SSH, during data transmission to protect the data from being intercepted. This will ensure compliance with GDPR, PCI DSS, and HIPAA."
+              },
+              {
+                "lineNumber": 84,
+                "severity": 8,
+                "bugType": "Data Privacy",
+                "description": "The logging of the amount of data sent and received could potentially include sensitive information. This is a violation of GDPR, PCI DSS, and HIPAA as these regulations require sensitive data to be protected.",
+                "solution": "Make sure to only log non-sensitive data, or to anonymize or pseudonymize any sensitive data that is logged. This will ensure compliance with GDPR, PCI DSS, and HIPAA."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "4",
       "value": "\nfunc (t *Tunnel) handleTCP(l *cio.Logger, src io.ReadWriteCloser, hostPort string) error {\n\tdst, err := net.Dial(\"tcp\", hostPort)\n\tif err != nil {\n\t\treturn err\n\t}\n\ts, r := cio.Pipe(src, dst)\n\tl.Debugf(\"sent %s received %s\", sizestr.ToString(s), sizestr.ToString(r))\n\treturn nil\n}\n",

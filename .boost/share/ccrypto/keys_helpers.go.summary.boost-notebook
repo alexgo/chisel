@@ -1,5 +1,81 @@
 {
-  "cells": [],
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysis",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "58eb7b29-396f-41eb-977a-56b8d232eb0d",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Security Report\n\nLast Updated: Friday, September 8, 2023 at 5:46:13 PM PDT\n\n## Executive Report\n\n### Architectural Impact and Risk Analysis\n\n1. **Insecure Randomness**: The file `share/ccrypto/keys_helpers.go` has been flagged for insecure randomness. This issue is of high severity and could potentially compromise the security of the application. The function 'seed2PrivateKey' uses a deterministic random number generator when a seed is provided. This can lead to predictable keys and compromise the security of the application. This is a significant architectural risk as it could potentially expose sensitive data to unauthorized users.\n\n2. **Sensitive Data Exposure**: The same file `share/ccrypto/keys_helpers.go` has also been flagged for sensitive data exposure. This is a high-risk issue that could lead to unauthorized access to sensitive data. This could have a significant impact on the overall security architecture of the project.\n\n3. **Improper Error Handling**: The file `share/ccrypto/keys_helpers.go` has been flagged for improper error handling. This is a medium-risk issue that could lead to unexpected behavior or crashes in the application. This could impact the reliability and robustness of the software architecture.\n\n4. **Use of a Broken or Risky Cryptographic Algorithm**: The file `share/ccrypto/keys_helpers.go` has been flagged for using a broken or risky cryptographic algorithm. This is a high-risk issue that could compromise the security of the application. This could have a significant impact on the overall security architecture of the project.\n\n### Potential Customer Impact\n\nThe issues identified could potentially impact customers in several ways. Insecure randomness and the use of a broken or risky cryptographic algorithm could compromise the security of the application, potentially leading to unauthorized access to sensitive data. Improper error handling could lead to unexpected behavior or crashes in the application, impacting the user experience.\n\n### Overall Health of the Project Source\n\nBased on the analysis, only one file `share/ccrypto/keys_helpers.go` has been flagged with issues. This suggests that the majority of the project files are free of detected issues. However, the severity of the issues identified in this file is high, indicating a significant risk to the overall health of the project.\n\n### Highlights of the Analysis\n\n- The file `share/ccrypto/keys_helpers.go` has been flagged with multiple high-severity issues, indicating a significant risk to the overall security and reliability of the application.\n- The issues identified include insecure randomness, sensitive data exposure, improper error handling, and the use of a broken or risky cryptographic algorithm.\n- These issues could potentially lead to unauthorized access to sensitive data and unexpected behavior or crashes in the application.\n- Despite the majority of the project files being free of detected issues, the severity of the issues identified in this file suggests a significant risk to the overall health of the project.",
+      "kind": 1,
+      "metadata": {
+        "id": "58eb7b29-396f-41eb-977a-56b8d232eb0d",
+        "outputType": "bugAnalysis",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "performance",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "0b39027c-272c-4ed0-b737-f56281fef8df",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Performance Report\n\nLast Updated: Friday, September 8, 2023 at 5:46:56 PM PDT\n\nExecutive Level Report:\n\n1. **Architectural Impact**: The software project appears to be well-structured and follows the client-server architecture. However, there is a potential performance issue in the `share/ccrypto/keys_helpers.go` file. The `GenerateKeyGo119` function can be computationally expensive, leading to high CPU usage. This could impact the overall performance of the software, especially in scenarios where this function is called frequently.\n\n2. **Risk Analysis**: The risk associated with this project is moderate. The computationally expensive function could lead to performance degradation, which could impact user experience. However, this risk can be mitigated by optimizing the function or implementing a caching mechanism for frequently used keys.\n\n3. **Potential Customer Impact**: If left unaddressed, the performance issue could lead to slower response times, especially under heavy load. This could potentially impact customer satisfaction and the overall user experience.\n\n4. **Overall Issues**: The project has a few issues related to CPU and memory usage. However, these issues are not widespread and are concentrated in the `share/ccrypto/keys_helpers.go` file. This suggests that the overall health of the project is good, but there is room for optimization in specific areas.\n\nRisk Assessment:\n\n- **Health of the Project Source**: Based on the analysis, only one file (`share/ccrypto/keys_helpers.go`) has been identified with issues. This suggests that the majority of the project files are free from severe issues, indicating a healthy project source.\n\n- **Percentage of Project Files with Issues**: Given that only one file has been identified with issues out of the total project files, the percentage of files with issues is relatively low. This further supports the assessment of a healthy project source.\n\nHighlights:\n\n- The project follows the client-server architecture and uses secure communication for tunneling, aligning with the architectural guidelines.\n- A potential performance issue has been identified in the `share/ccrypto/keys_helpers.go` file, which could impact the overall performance of the software.\n- The risk associated with this project is moderate, primarily due to the potential performance issue.\n- The overall health of the project source is good, with a low percentage of files having issues.\n- The potential customer impact could be significant if the performance issue is not addressed, potentially leading to slower response times and impacting user experience.",
+      "kind": 1,
+      "metadata": {
+        "id": "0b39027c-272c-4ed0-b737-f56281fef8df",
+        "outputType": "performance",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCode",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "f430f07d-c102-4850-9357-0052634d59af",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Compliance Report\n\nLast Updated: Friday, September 8, 2023 at 5:47:23 PM PDT\n\nExecutive Level Report:\n\n1. **Architectural Impact:** The software project appears to be well-structured, following a client-server architecture and using secure communication for tunneling. However, the file `share/ccrypto/keys_helpers.go` has been flagged for potential issues related to data encryption and privacy. These issues could have a significant impact on the overall architecture if not addressed, as they could compromise the security of the system.\n\n2. **Risk Analysis:** The identified issues in the `share/ccrypto/keys_helpers.go` file pose a risk to the security of the system. The lack of encryption on the seed in the Seed2PEM function and the unclear handling of the seed in the seed2ChiselKey function could potentially lead to data breaches, unauthorized access, and non-compliance with data protection regulations. This risk is heightened by the fact that this file is the only one in the project, meaning that any issues in this file could have a significant impact on the overall project.\n\n3. **Potential Customer Impact:** If the identified issues are not addressed, customers could be at risk of having their data exposed or intercepted. This could lead to a loss of trust in the product and potential legal repercussions if the product is found to be non-compliant with data protection regulations.\n\n4. **Overall Issues:** The overall health of the project source appears to be at risk due to the issues identified in the `share/ccrypto/keys_helpers.go` file. As this is the only file in the project, 100% of the project files have been flagged for issues of varying severity.\n\nRisk Assessment:\n\n- **Overall Health:** The overall health of the project source is concerning, as the only file in the project has been flagged for issues. This suggests that there may be systemic issues with the project's approach to data encryption and privacy.\n- **Severity of Issues:** The issues identified in the `share/ccrypto/keys_helpers.go` file are of high severity, potentially compromising the security of the system and putting customer data at risk.\n- **Percentage of Files with Issues:** 100% of the project files have been flagged for issues, indicating a high risk level for the project.\n\nHighlights:\n\n- The project follows a client-server architecture and uses secure communication for tunneling.\n- The only file in the project, `share/ccrypto/keys_helpers.go`, has been flagged for issues related to data encryption and privacy.\n- The lack of encryption on the seed in the Seed2PEM function and the unclear handling of the seed in the seed2ChiselKey function pose a risk to the security of the system.\n- 100% of the project files have been flagged for issues, indicating a high risk level for the project.\n- If the identified issues are not addressed, customers could be at risk of having their data exposed or intercepted.",
+      "kind": 1,
+      "metadata": {
+        "id": "f430f07d-c102-4850-9357-0052634d59af",
+        "outputType": "complianceCode",
+        "summaryType": "quick"
+      }
+    }
+  ],
   "metadata": {
     "defaultDir": ".boost",
     "sourceFile": "./share/ccrypto/keys_helpers.go"

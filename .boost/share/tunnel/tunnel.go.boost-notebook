@@ -1,7 +1,192 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:37:30 PM PDT\n\nThis is a Go package named \"tunnel\" that imports several other packages and defines a configuration type for a network tunnel.\n\nThe imported packages include:\n\n- `bytes`, `context`, `errors`, `io/ioutil`, `log`, `os`, `sync`, `time`: These are standard Go packages for handling byte slices, context management, error handling, IO utilities, logging, OS interaction, synchronization primitives, and time respectively.\n- `github.com/armon/go-socks5`: This is a Go implementation of a SOCKS5 server. SOCKS5 is a protocol that exchanges network packets between a client and server through a proxy server.\n- `github.com/jpillora/chisel/share/cio`, `github.com/jpillora/chisel/share/cnet`, `github.com/jpillora/chisel/share/settings`: These are packages from the Chisel project itself. The `cio` package likely provides logging functionality, `cnet` probably contains network utilities, and `settings` likely contains configuration settings for the project.\n- `golang.org/x/crypto/ssh`: This is an SSH package from the Go crypto library. SSH is a protocol for secure remote login and other secure network services over an insecure network.\n- `golang.org/x/sync/errgroup`: This package provides synchronization, error propagation, and Context cancelation for groups of goroutines.\n\nThe `Config` struct defined in this package represents the configuration for a network tunnel. The struct fields are:\n\n- `*cio.Logger`: This is an embedded field of type `*cio.Logger`, which likely represents a logger for logging information about the tunnel's operation.\n- `Inbound`, `Outbound`: These boolean fields likely indicate whether the tunnel supports inbound and outbound connections respectively.\n- `Socks`: This boolean field likely indicates whether the tunnel supports the SOCKS5 protocol.\n- `KeepAlive`: This field of type `time.Duration` likely represents the keep-alive interval for the tunnel. If no data is sent over the tunnel for this duration, a keep-alive message will be sent to maintain the connection.\n\nThe code doesn't seem to conflict with any architectural guidelines since none were provided. It follows standard Go idioms and conventions, and uses appropriate packages for creating a network tunnel.\n\nFor more information about the packages used, you can refer to their documentation:\n\n- [Go standard library](https://golang.org/pkg/)\n- [go-socks5](https://github.com/armon/go-socks5)\n- [golang.org/x/crypto/ssh](https://pkg.go.dev/golang.org/x/crypto/ssh)\n- [golang.org/x/sync/errgroup](https://pkg.go.dev/golang.org/x/sync/errgroup)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:43:50 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\n```\n\nThe control flow graph for the given code starts with the `Config` struct definition."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:45:43 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:50:11 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 3\n\n   **Bug Type**: Memory\n\n   **Description**: The 'bytes' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 4\n\n   **Bug Type**: Memory\n\n   **Description**: The 'context' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n3. **Severity**: 7/10\n\n   **Line Number**: 5\n\n   **Bug Type**: Memory\n\n   **Description**: The 'errors' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n4. **Severity**: 7/10\n\n   **Line Number**: 6\n\n   **Bug Type**: Memory\n\n   **Description**: The 'io/ioutil' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n5. **Severity**: 7/10\n\n   **Line Number**: 7\n\n   **Bug Type**: Memory\n\n   **Description**: The 'log' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n6. **Severity**: 7/10\n\n   **Line Number**: 8\n\n   **Bug Type**: Memory\n\n   **Description**: The 'os' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n7. **Severity**: 7/10\n\n   **Line Number**: 9\n\n   **Bug Type**: Memory\n\n   **Description**: The 'sync' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n8. **Severity**: 7/10\n\n   **Line Number**: 10\n\n   **Bug Type**: Memory\n\n   **Description**: The 'time' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n9. **Severity**: 7/10\n\n   **Line Number**: 12\n\n   **Bug Type**: Memory\n\n   **Description**: The 'github.com/armon/go-socks5' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n10. **Severity**: 7/10\n\n   **Line Number**: 13\n\n   **Bug Type**: Memory\n\n   **Description**: The 'github.com/jpillora/chisel/share/cio' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n11. **Severity**: 7/10\n\n   **Line Number**: 14\n\n   **Bug Type**: Memory\n\n   **Description**: The 'github.com/jpillora/chisel/share/cnet' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n12. **Severity**: 7/10\n\n   **Line Number**: 15\n\n   **Bug Type**: Memory\n\n   **Description**: The 'github.com/jpillora/chisel/share/settings' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n13. **Severity**: 7/10\n\n   **Line Number**: 16\n\n   **Bug Type**: Memory\n\n   **Description**: The 'golang.org/x/crypto/ssh' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n14. **Severity**: 7/10\n\n   **Line Number**: 17\n\n   **Bug Type**: Memory\n\n   **Description**: The 'golang.org/x/sync/errgroup' package is imported but not used in the code. This could lead to unnecessary memory usage.\n\n   **Solution**: Remove unnecessary imports to optimize memory usage.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 3,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'bytes' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 4,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'context' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 5,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'errors' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 6,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'io/ioutil' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 7,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'log' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 8,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'os' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 9,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'sync' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 10,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'time' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 12,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'github.com/armon/go-socks5' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 13,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'github.com/jpillora/chisel/share/cio' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 14,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'github.com/jpillora/chisel/share/cnet' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 15,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'github.com/jpillora/chisel/share/settings' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 16,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'golang.org/x/crypto/ssh' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              },
+              {
+                "lineNumber": 17,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The 'golang.org/x/sync/errgroup' package is imported but not used in the code. This could lead to unnecessary memory usage.",
+                "solution": "Remove unnecessary imports to optimize memory usage."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:55:03 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 9\n\n   **Bug Type**: GDPR\n\n   **Description**: The 'log' package is used, which may lead to logging of sensitive data. GDPR requires explicit consent for processing personal data, and logging user data without consent may be a violation.\n\n   **Solution**: Replace standard logging with a logging library that can be configured not to log sensitive data, or ensure that sensitive data is not logged. Additionally, implement a mechanism to get user consent before logging their data.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 16\n\n   **Bug Type**: PCI-DSS\n\n   **Description**: The 'ssh' package is imported from 'golang.org/x/crypto/ssh', which could lead to insecure data transmission if not properly configured. PCI DSS requires secure transmission of cardholder data over open, public networks.\n\n   **Solution**: Ensure that the 'ssh' package is correctly configured to use strong encryption for data transmission. Regularly update the package to the latest version to get security updates and patches.\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 18\n\n   **Bug Type**: HIPAA\n\n   **Description**: The 'Config' struct does not seem to have any data field for encryption or secure storage. HIPAA requires that PHI (Protected Health Information) should be encrypted in transit and at rest.\n\n   **Solution**: Add fields for encryption keys or other secure storage mechanisms in the 'Config' struct. Ensure that PHI is encrypted using strong encryption methods both in transit and at rest.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 9,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The 'log' package is used, which may lead to logging of sensitive data. GDPR requires explicit consent for processing personal data, and logging user data without consent may be a violation.",
+                "solution": "Replace standard logging with a logging library that can be configured not to log sensitive data, or ensure that sensitive data is not logged. Additionally, implement a mechanism to get user consent before logging their data.",
+                "webLink": "https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 16,
+                "severity": 8,
+                "bugType": "PCI-DSS",
+                "description": "The 'ssh' package is imported from 'golang.org/x/crypto/ssh', which could lead to insecure data transmission if not properly configured. PCI DSS requires secure transmission of cardholder data over open, public networks.",
+                "solution": "Ensure that the 'ssh' package is correctly configured to use strong encryption for data transmission. Regularly update the package to the latest version to get security updates and patches.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 18,
+                "severity": 6,
+                "bugType": "HIPAA",
+                "description": "The 'Config' struct does not seem to have any data field for encryption or secure storage. HIPAA requires that PHI (Protected Health Information) should be encrypted in transit and at rest.",
+                "solution": "Add fields for encryption keys or other secure storage mechanisms in the 'Config' struct. Ensure that PHI is encrypted using strong encryption methods both in transit and at rest.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package tunnel\n\nimport (\n\t\"bytes\"\n\t\"context\"\n\t\"errors\"\n\t\"io/ioutil\"\n\t\"log\"\n\t\"os\"\n\t\"sync\"\n\t\"time\"\n\n\t\"github.com/armon/go-socks5\"\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"golang.org/x/crypto/ssh\"\n\t\"golang.org/x/sync/errgroup\"\n)\n\n//Config a Tunnel\ntype Config struct {\n\t*cio.Logger\n\tInbound   bool\n\tOutbound  bool\n\tSocks     bool\n\tKeepAlive time.Duration\n}\n",
@@ -13,7 +198,107 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:38:22 PM PDT\n\nThe provided code is written in Go programming language and it defines a structure `Tunnel` that represents an SSH (Secure Shell) tunnel with proxy capabilities. This structure is used by both the client and the server in the Chisel software, which is a command-line tool for creating secure tunnels.\n\nLet's break this down:\n\n- `Config`: This is an embedded type within the `Tunnel` struct. It likely contains some configuration details for the tunnel. The actual fields of this struct are not provided in the code snippet.\n\n- `activeConnMut sync.RWMutex`: This is a read-write mutex which is used to ensure that only one goroutine can modify `activeConn` at a time. Other goroutines can read `activeConn` concurrently.\n\n- `activatingConn waitGroup`: This is a wait group that is used to ensure that all goroutines that are setting up the connection have finished before the tunnel is used.\n\n- `activeConn ssh.Conn`: This represents the active SSH connection of the tunnel.\n\n- `proxyCount int`: This is a counter for the number of proxies that are associated with the tunnel.\n\n- `connStats cnet.ConnCount`: This likely represents some statistics about the connections made through the tunnel.\n\n- `socksServer *socks5.Server`: This is a pointer to a SOCKS5 server. SOCKS5 is a protocol that is used for proxying data.\n\nThe comment above the struct definition explains the purpose of the `Tunnel` struct. It is used by both the client and the server side of the Chisel software. The client has a single set of remotes, whereas the server has multiple sets of remotes (one set per client). Each remote has a 1:1 mapping to a proxy. The proxies listen for data, send the data over the SSH connection, and the other end of the SSH connection communicates with the endpoint and returns the response.\n\nThis code is a part of a larger system and the complete functionality can only be understood by looking at the rest of the codebase. However, based on the provided snippet, it appears to follow good Go practices and seems to be well-organized and documented.\n\nFor more information about Go's struct, you can refer to this link: [Go by Example: Structs](https://gobyexample.com/structs)\n\nFor more information about SSH, you can refer to this link: [SSH (Secure Shell)](https://en.wikipedia.org/wiki/SSH_(Secure_Shell))\n\nFor more information about SOCKS5, you can refer to this link: [SOCKS](https://en.wikipedia.org/wiki/SOCKS)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:44:00 PM PDT\n\n```mermaid\ngraph TD;\nstyle Tunnel fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Config fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle sync.RWMutex fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle waitGroup fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ssh.Conn fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle cnet.ConnCount fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle socks5.Server fill:#228B22, stroke:#000000, stroke-width:2px;\n\nTunnel-->Config;\nTunnel-->sync.RWMutex;\nTunnel-->waitGroup;\nTunnel-->ssh.Conn;\nTunnel-->cnet.ConnCount;\nTunnel-->socks5.Server;\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:45:47 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:50:49 PM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 56\n\n   **Bug Type**: Memory\n\n   **Description**: The 'Tunnel' struct is potentially using more memory than necessary due to the inclusion of the entire 'Config' struct. If 'Config' contains many fields, this could lead to excessive memory usage.\n\n   **Solution**: Consider passing only necessary fields from the 'Config' struct to the 'Tunnel' struct to reduce memory usage. Alternatively, consider using pointers to share the 'Config' struct between multiple 'Tunnel' instances if applicable.\n\n\n2. **Severity**: 2/10\n\n   **Line Number**: 56\n\n   **Bug Type**: CPU\n\n   **Description**: The use of 'sync.RWMutex' can lead to high CPU usage if there are many more writers than readers, as each write operation will block all readers.\n\n   **Solution**: Consider using a different concurrency control mechanism if the number of write operations significantly outnumbers read operations. For example, a 'sync.Mutex' could be more efficient in this case.\n\n\n3. **Severity**: 2/10\n\n   **Line Number**: 56\n\n   **Bug Type**: Memory\n\n   **Description**: The usage of 'socks5.Server' pointer might lead to memory leaks if not properly closed or cleaned up after usage.\n\n   **Solution**: Ensure that 'socks5.Server' is properly closed or cleaned up after usage to prevent memory leaks. Consider using 'runtime.SetFinalizer' to automatically clean up resources when an instance of 'Tunnel' is garbage collected.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 28,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "The 'Tunnel' struct is potentially using more memory than necessary due to the inclusion of the entire 'Config' struct. If 'Config' contains many fields, this could lead to excessive memory usage.",
+                "solution": "Consider passing only necessary fields from the 'Config' struct to the 'Tunnel' struct to reduce memory usage. Alternatively, consider using pointers to share the 'Config' struct between multiple 'Tunnel' instances if applicable."
+              },
+              {
+                "lineNumber": 28,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The use of 'sync.RWMutex' can lead to high CPU usage if there are many more writers than readers, as each write operation will block all readers.",
+                "solution": "Consider using a different concurrency control mechanism if the number of write operations significantly outnumbers read operations. For example, a 'sync.Mutex' could be more efficient in this case."
+              },
+              {
+                "lineNumber": 28,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "The usage of 'socks5.Server' pointer might lead to memory leaks if not properly closed or cleaned up after usage.",
+                "solution": "Ensure that 'socks5.Server' is properly closed or cleaned up after usage to prevent memory leaks. Consider using 'runtime.SetFinalizer' to automatically clean up resources when an instance of 'Tunnel' is garbage collected."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:55:29 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 60\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The 'activeConn' field in the Tunnel struct holds the ssh connection which may contain sensitive data. This data could be exposed if it is not properly encrypted and protected.\n\n   **Solution**: Ensure that the ssh connection is properly encrypted and protected. Use secure coding practices to handle sensitive data.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 67\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The 'socksServer' field in the Tunnel struct could potentially expose user data if it's not properly secured. Socks5 servers can be vulnerable to various attacks if not properly configured.\n\n   **Solution**: Ensure that the socks5 server is properly secured. Use secure coding practices to handle sensitive data. Regularly update and patch the socks5 server to protect against known vulnerabilities.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 32,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The 'activeConn' field in the Tunnel struct holds the ssh connection which may contain sensitive data. This data could be exposed if it is not properly encrypted and protected.",
+                "solution": "Ensure that the ssh connection is properly encrypted and protected. Use secure coding practices to handle sensitive data.",
+                "webLink": "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"
+              },
+              {
+                "lineNumber": 39,
+                "severity": 8,
+                "bugType": "Data Privacy",
+                "description": "The 'socksServer' field in the Tunnel struct could potentially expose user data if it's not properly secured. Socks5 servers can be vulnerable to various attacks if not properly configured.",
+                "solution": "Ensure that the socks5 server is properly secured. Use secure coding practices to handle sensitive data. Regularly update and patch the socks5 server to protect against known vulnerabilities.",
+                "webLink": "https://www.sans.org/reading-room/whitepapers/vpns/overview-socks-protocol-1022"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\n//Tunnel represents an SSH tunnel with proxy capabilities.\n//Both chisel client and server are Tunnels.\n//chisel client has a single set of remotes, whereas\n//chisel server has multiple sets of remotes (one set per client).\n//Each remote has a 1:1 mapping to a proxy.\n//Proxies listen, send data over ssh, and the other end of the ssh connection\n//communicates with the endpoint and returns the response.\ntype Tunnel struct {\n\tConfig\n\t//ssh connection\n\tactiveConnMut  sync.RWMutex\n\tactivatingConn waitGroup\n\tactiveConn     ssh.Conn\n\t//proxies\n\tproxyCount int\n\t//internals\n\tconnStats   cnet.ConnCount\n\tsocksServer *socks5.Server\n}\n",
@@ -25,7 +310,123 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:39:26 PM PDT\n\nThis is a function written in Go that creates a new instance of a `Tunnel` struct, given a configuration of type `Config`.\n\nHere's a line-by-line explanation:\n\n1. `func New(c Config) *Tunnel {`: The function `New` takes a parameter `c` of type `Config` and returns a pointer to a `Tunnel` instance. \n\n2. `c.Logger = c.Logger.Fork(\"tun\")`: This line is forking the logger that is part of the `Config` struct and assigns it back to `c.Logger`. The `Fork` method typically creates a new logger that inherits the settings of the parent logger, but with a new name, in this case \"tun\". \n\n3. `t := &Tunnel{ Config: c, }`: Here, a new instance of `Tunnel` is created with the configuration `c`, and the address of this instance is assigned to `t`.\n\n4. `t.activatingConn.Add(1)`: This line is incrementing a counter in the `activatingConn` field of the `Tunnel` struct. This is typically used for synchronization purposes, like in a `sync.WaitGroup`.\n\n5. The following block of code is setting up a SOCKS server. SOCKS is a protocol for handling TCP traffic through a proxy server. It's not actually listening on any port at this point. \n\n6. `if c.Socks {`: This checks if the `Socks` field in the configuration is enabled.\n\n7. `sl := log.New(ioutil.Discard, \"\", 0)`: This creates a new logger that discards all log messages. `ioutil.Discard` is an `io.Writer` on which all `Write` calls succeed without doing anything.\n\n8. `if t.Logger.Debug { sl = log.New(os.Stdout, \"[socks]\", log.Ldate|log.Ltime) }`: If debug logging is enabled, it replaces the logger with one that writes to standard output and prefixes each log message with \"[socks]\". `log.Ldate|log.Ltime` are flags that tell the logger to include the date and time in log messages.\n\n9. `t.socksServer, _ = socks5.New(&socks5.Config{Logger: sl})`: This creates a new SOCKS5 server with the logger and assigns it to the `socksServer` field of the `Tunnel` struct. The second value returned by `socks5.New` is ignored with `_`.\n\n10. `extra += \" (SOCKS enabled)\"`: This appends \" (SOCKS enabled)\" to the `extra` string.\n\n11. `t.Debugf(\"Created%s\", extra)`: This logs a debug message indicating that the `Tunnel` has been created, along with the contents of the `extra` string.\n\n12. `return t`: The function finally returns the pointer to the newly created `Tunnel` instance.\n\nFor more about the SOCKS protocol, you can refer to [this link](https://en.wikipedia.org/wiki/SOCKS). For more about the Go standard library's log package, you can refer to [this link](https://golang.org/pkg/log/)."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:44:06 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:46:17 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 102\n\n   **Bug Type**: Improper Error Handling\n\n   **Description**: The error returned by socks5.New() is not checked. If an error occurs when initializing the socks5 server, it will be silently ignored. This can lead to unexpected behavior and potential security issues. For example, if the server fails to initialize properly, it might not enforce access controls as expected, potentially allowing unauthorized access.\n\n   **Solution**: Always check for errors and handle them appropriately. If an error occurs when initializing the socks5 server, the program should either exit or handle the error in a way that ensures security is not compromised. More about proper error handling can be found here: https://www.joeshaw.org/dont-defer-close-on-writable-files/\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 98\n\n   **Bug Type**: Information Disclosure\n\n   **Description**: The log messages contain potentially sensitive information about the internal state of the application. If the logs are not properly protected, this information could be accessed by an attacker.\n\n   **Solution**: Ensure that logs are stored securely and that access to them is restricted. If possible, avoid logging sensitive information. More about secure logging can be found here: https://owasp.org/www-project-cheat-sheets/cheatsheets/Logging_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 54,
+                "severity": 5,
+                "bugType": "Improper Error Handling",
+                "description": "The error returned by socks5.New() is not checked. If an error occurs when initializing the socks5 server, it will be silently ignored. This can lead to unexpected behavior and potential security issues. For example, if the server fails to initialize properly, it might not enforce access controls as expected, potentially allowing unauthorized access.",
+                "solution": "Always check for errors and handle them appropriately. If an error occurs when initializing the socks5 server, the program should either exit or handle the error in a way that ensures security is not compromised. More about proper error handling can be found here: https://www.joeshaw.org/dont-defer-close-on-writable-files/"
+              },
+              {
+                "lineNumber": 50,
+                "severity": 4,
+                "bugType": "Information Disclosure",
+                "description": "The log messages contain potentially sensitive information about the internal state of the application. If the logs are not properly protected, this information could be accessed by an attacker.",
+                "solution": "Ensure that logs are stored securely and that access to them is restricted. If possible, avoid logging sensitive information. More about secure logging can be found here: https://owasp.org/www-project-cheat-sheets/cheatsheets/Logging_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:51:12 PM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 102\n\n   **Bug Type**: Memory\n\n   **Description**: The 'extra' string is being concatenated using '+=' operator inside an if condition. This can lead to inefficient memory usage if the string grows large.\n\n   **Solution**: Consider using a StringBuilder for efficient string concatenation. Here is a reference link: https://golang.org/pkg/strings/#Builder\n\n\n2. **Severity**: 2/10\n\n   **Line Number**: 103\n\n   **Bug Type**: CPU\n\n   **Description**: The use of Debugf for logging can be CPU-intensive if the log level is set to debug and the application generates a large number of logs.\n\n   **Solution**: Consider using a more efficient logging library or implement log level checks to avoid unnecessary CPU usage. Here is a reference link: https://www.honeycomb.io/blog/how-are-structured-logging-and-events-related/\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 54,
+                "severity": 4,
+                "bugType": "Memory",
+                "description": "The 'extra' string is being concatenated using '+=' operator inside an if condition. This can lead to inefficient memory usage if the string grows large.",
+                "solution": "Consider using a StringBuilder for efficient string concatenation. Here is a reference link: https://golang.org/pkg/strings/#Builder"
+              },
+              {
+                "lineNumber": 55,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The use of Debugf for logging can be CPU-intensive if the log level is set to debug and the application generates a large number of logs.",
+                "solution": "Consider using a more efficient logging library or implement log level checks to avoid unnecessary CPU usage. Here is a reference link: https://www.honeycomb.io/blog/how-are-structured-logging-and-events-related/"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:56:10 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 101\n\n   **Bug Type**: GDPR\n\n   **Description**: The use of ioutil.Discard can lead to privacy issues as it discards the logs which might be essential for auditing and tracking data flow. This might be a violation of GDPR's principle of accountability and transparency.\n\n   **Solution**: Instead of discarding logs, consider implementing a secure logging system that respects user privacy and complies with GDPR. Ensure that logs do not contain personal data or if they do, they are properly anonymized or pseudonymized.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 104\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The creation of a new socks5 server without any specified authentication mechanism can lead to unauthorized access. This can be a violation of PCI DSS requirement 8.1, which mandates the use of a unique ID for each person with computer access.\n\n   **Solution**: Implement a proper authentication mechanism for the socks5 server. This could be username/password authentication or public key authentication.\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 104\n\n   **Bug Type**: HIPAA\n\n   **Description**: The creation of a new socks5 server without any specified authentication mechanism can lead to unauthorized access. This can be a violation of HIPAA Security Rule (45 CFR 164.312(a)(1)), which requires the implementation of technical policies and procedures that allow only authorized persons to access electronic protected health information (e-PHI).\n\n   **Solution**: Implement a proper authentication mechanism for the socks5 server. This could be username/password authentication or public key authentication.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 53,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The use of ioutil.Discard can lead to privacy issues as it discards the logs which might be essential for auditing and tracking data flow. This might be a violation of GDPR's principle of accountability and transparency.",
+                "solution": "Instead of discarding logs, consider implementing a secure logging system that respects user privacy and complies with GDPR. Ensure that logs do not contain personal data or if they do, they are properly anonymized or pseudonymized.",
+                "reference": "https://gdpr-info.eu/issues/log-files/"
+              },
+              {
+                "lineNumber": 56,
+                "severity": 8,
+                "bugType": "PCI DSS",
+                "description": "The creation of a new socks5 server without any specified authentication mechanism can lead to unauthorized access. This can be a violation of PCI DSS requirement 8.1, which mandates the use of a unique ID for each person with computer access.",
+                "solution": "Implement a proper authentication mechanism for the socks5 server. This could be username/password authentication or public key authentication.",
+                "reference": "https://www.pcisecuritystandards.org/pci_security/maintaining_payment_security"
+              },
+              {
+                "lineNumber": 56,
+                "severity": 9,
+                "bugType": "HIPAA",
+                "description": "The creation of a new socks5 server without any specified authentication mechanism can lead to unauthorized access. This can be a violation of HIPAA Security Rule (45 CFR 164.312(a)(1)), which requires the implementation of technical policies and procedures that allow only authorized persons to access electronic protected health information (e-PHI).",
+                "solution": "Implement a proper authentication mechanism for the socks5 server. This could be username/password authentication or public key authentication.",
+                "reference": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\n//New Tunnel from the given Config\nfunc New(c Config) *Tunnel {\n\tc.Logger = c.Logger.Fork(\"tun\")\n\tt := &Tunnel{\n\t\tConfig: c,\n\t}\n\tt.activatingConn.Add(1)\n\t//setup socks server (not listening on any port!)\n\textra := \"\"\n\tif c.Socks {\n\t\tsl := log.New(ioutil.Discard, \"\", 0)\n\t\tif t.Logger.Debug {\n\t\t\tsl = log.New(os.Stdout, \"[socks]\", log.Ldate|log.Ltime)\n\t\t}\n\t\tt.socksServer, _ = socks5.New(&socks5.Config{Logger: sl})\n\t\textra += \" (SOCKS enabled)\"\n\t}\n\tt.Debugf(\"Created%s\", extra)\n\treturn t\n}\n",
@@ -37,7 +438,134 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:40:18 PM PDT\n\nThis function, `BindSSH`, is part of a `Tunnel` type and is used to bind an active SSH connection for tunneling purposes. The function takes four parameters: `ctx` of type `Context`, `c` of type `ssh.Conn`, `reqs` which is a receive-only channel of pointers to `ssh.Request`, and `chans` which is a receive-only channel of `ssh.NewChannel`.\n\nHere is a line-by-line explanation of the function:\n\n1. A goroutine is created that waits for the context `ctx` to be done. If the context is done, it will close the SSH connection and log a debug message. It also marks all connections as done in `activatingConn`.\n\n2. It acquires a lock on `activeConnMut` to prevent race conditions when accessing `activeConn`. If there's already an active connection, the function panics with the message \"double bind ssh\". If there's no active connection, the SSH connection `c` is set as the active connection. The lock is then released.\n\n3. It checks if the `KeepAlive` configuration is greater than 0. If it is, it starts a goroutine that continuously sends keepalive messages to the SSH server to keep the connection alive.\n\n4. It starts two goroutines to handle SSH requests and channels. These goroutines run concurrently and independently of the main function.\n\n5. It logs a debug message \"SSH connected\" and then waits for the SSH connection to close. The `Wait` method blocks until the SSH connection is closed, either by an error or by the server.\n\n6. When the SSH connection is closed, it logs a debug message \"SSH disconnected\". It then increments the counter in `activatingConn` by 1 and sets the active connection to nil, effectively marking the connection as inactive.\n\n7. Finally, it returns the error returned by the `Wait` function.\n\nThe function uses the Go language's concurrency features (goroutines and channels) to handle multiple SSH requests and channels simultaneously. It also uses the `sync` package's `Mutex` to prevent race conditions when accessing shared resources. The function follows the Go language's error handling conventions by returning errors to the caller.\n\nFor more information on Go's concurrency features, you can check out this link: https://tour.golang.org/concurrency/1\n\nFor more information on the `sync` package and `Mutex`, you can check out this link: https://pkg.go.dev/sync#Mutex\n\nFor more information on error handling in Go, you can check out this link: https://blog.golang.org/error-handling-and-go"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:44:14 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExampleErrorPath-->End;\n```\n\nThe code provided does not have any control flow decision points. It consists of a single function definition without any conditional statements or loops. Therefore, the control flow graph is a simple linear flow from the start of the function to the end."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:46:39 PM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 141\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The function 'BindSSH' directly uses the ssh.Conn object 'c' provided as input without verifying its authenticity. This could allow an attacker to pass a malicious ssh.Conn object, leading to potential unauthorized access or data manipulation.\n\n   **Solution**: You should validate the ssh.Conn object 'c' before using it. This could involve verifying the SSH key against a list of known keys or implementing an authentication mechanism. Reference: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 151\n\n   **Bug Type**: Race Condition\n\n   **Description**: The function 'BindSSH' allows multiple goroutines to access and modify shared resources (t.activeConn) concurrently. This could lead to race conditions, where the outcome depends on the relative timing of the goroutines, potentially leading to inconsistent results or data corruption.\n\n   **Solution**: You should use synchronization primitives (like Mutex or RWMutex) to ensure that only one goroutine can access or modify the shared resources at a time. Reference: https://golang.org/doc/faq#What_is_the_purpose_of_the_race_detector\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 160\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error returned by the 'c.Wait()' function is not checked, which could lead to silent failures. If the SSH connection encounters an error, it would not be handled and could potentially lead to unexpected behavior.\n\n   **Solution**: You should always check for errors and handle them appropriately. This could involve logging the error, retrying the operation, or returning the error to the caller. Reference: https://golang.org/doc/effective_go#errors\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 72,
+                "severity": 8,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The function 'BindSSH' directly uses the ssh.Conn object 'c' provided as input without verifying its authenticity. This could allow an attacker to pass a malicious ssh.Conn object, leading to potential unauthorized access or data manipulation.",
+                "solution": "You should validate the ssh.Conn object 'c' before using it. This could involve verifying the SSH key against a list of known keys or implementing an authentication mechanism. Reference: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 82,
+                "severity": 7,
+                "bugType": "Race Condition",
+                "description": "The function 'BindSSH' allows multiple goroutines to access and modify shared resources (t.activeConn) concurrently. This could lead to race conditions, where the outcome depends on the relative timing of the goroutines, potentially leading to inconsistent results or data corruption.",
+                "solution": "You should use synchronization primitives (like Mutex or RWMutex) to ensure that only one goroutine can access or modify the shared resources at a time. Reference: https://golang.org/doc/faq#What_is_the_purpose_of_the_race_detector"
+              },
+              {
+                "lineNumber": 91,
+                "severity": 6,
+                "bugType": "Error Handling",
+                "description": "The error returned by the 'c.Wait()' function is not checked, which could lead to silent failures. If the SSH connection encounters an error, it would not be handled and could potentially lead to unexpected behavior.",
+                "solution": "You should always check for errors and handle them appropriately. This could involve logging the error, retrying the operation, or returning the error to the caller. Reference: https://golang.org/doc/effective_go#errors"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:51:30 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 146\n\n   **Bug Type**: CPU\n\n   **Description**: The function keepAliveLoop() is being called in a separate goroutine which might consume significant CPU resources if the keep alive interval is too short.\n\n   **Solution**: Consider introducing a configurable time interval for the keep alive messages to avoid unnecessary CPU usage. Also, consider using a more efficient method for sending keep alive messages if available in the ssh library.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 154\n\n   **Bug Type**: Memory\n\n   **Description**: The function handleSSHRequests() and handleSSHChannels() are being called in separate goroutines which might consume significant memory resources if there are many SSH requests or channels.\n\n   **Solution**: Consider introducing a worker pool pattern to limit the number of concurrent goroutines handling SSH requests and channels. This can help in controlling the memory usage.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 162\n\n   **Bug Type**: CPU\n\n   **Description**: The active connection is being set to nil and the mutex is being locked and unlocked without any condition which might lead to unnecessary CPU usage.\n\n   **Solution**: Consider checking if the active connection is not nil before setting it to nil and locking/unlocking the mutex. This can help in reducing unnecessary CPU usage.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 77,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "The function keepAliveLoop() is being called in a separate goroutine which might consume significant CPU resources if the keep alive interval is too short.",
+                "solution": "Consider introducing a configurable time interval for the keep alive messages to avoid unnecessary CPU usage. Also, consider using a more efficient method for sending keep alive messages if available in the ssh library."
+              },
+              {
+                "lineNumber": 85,
+                "severity": 7,
+                "bugType": "Memory",
+                "description": "The function handleSSHRequests() and handleSSHChannels() are being called in separate goroutines which might consume significant memory resources if there are many SSH requests or channels.",
+                "solution": "Consider introducing a worker pool pattern to limit the number of concurrent goroutines handling SSH requests and channels. This can help in controlling the memory usage."
+              },
+              {
+                "lineNumber": 93,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The active connection is being set to nil and the mutex is being locked and unlocked without any condition which might lead to unnecessary CPU usage.",
+                "solution": "Consider checking if the active connection is not nil before setting it to nil and locking/unlocking the mutex. This can help in reducing unnecessary CPU usage."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:56:46 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 147\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function 'BindSSH' handles sensitive SSH connection data but does not implement any form of encryption or secure data handling. This can lead to potential data leakage and is a violation of GDPR, PCI DSS, and HIPAA compliance.\n\n   **Solution**: Implement encryption techniques to secure the sensitive data being handled. Consider using libraries that provide secure data handling features. Always follow best practices for secure coding to prevent data leaks.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 161\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function 'BindSSH' does not log any of its operations which could be a potential violation of GDPR, PCI DSS, and HIPAA compliance. These regulations require maintaining logs for auditing and tracking purposes.\n\n   **Solution**: Implement logging in the function to keep track of its operations. The logs should be detailed enough to provide necessary information during auditing but should not contain any sensitive information.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 163\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function 'BindSSH' does not implement any form of access control. This could potentially allow unauthorized access to the SSH connection, compromising data privacy and violating GDPR, PCI DSS, and HIPAA compliance.\n\n   **Solution**: Implement proper access control mechanisms to restrict unauthorized access. Consider using libraries that provide access control features.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 78,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The function 'BindSSH' handles sensitive SSH connection data but does not implement any form of encryption or secure data handling. This can lead to potential data leakage and is a violation of GDPR, PCI DSS, and HIPAA compliance.",
+                "solution": "Implement encryption techniques to secure the sensitive data being handled. Consider using libraries that provide secure data handling features. Always follow best practices for secure coding to prevent data leaks."
+              },
+              {
+                "lineNumber": 92,
+                "severity": 6,
+                "bugType": "Data Compliance",
+                "description": "The function 'BindSSH' does not log any of its operations which could be a potential violation of GDPR, PCI DSS, and HIPAA compliance. These regulations require maintaining logs for auditing and tracking purposes.",
+                "solution": "Implement logging in the function to keep track of its operations. The logs should be detailed enough to provide necessary information during auditing but should not contain any sensitive information."
+              },
+              {
+                "lineNumber": 94,
+                "severity": 8,
+                "bugType": "Data Privacy",
+                "description": "The function 'BindSSH' does not implement any form of access control. This could potentially allow unauthorized access to the SSH connection, compromising data privacy and violating GDPR, PCI DSS, and HIPAA compliance.",
+                "solution": "Implement proper access control mechanisms to restrict unauthorized access. Consider using libraries that provide access control features."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\n//BindSSH provides an active SSH for use for tunnelling\nfunc (t *Tunnel) BindSSH(ctx context.Context, c ssh.Conn, reqs <-chan *ssh.Request, chans <-chan ssh.NewChannel) error {\n\t//link ctx to ssh-conn\n\tgo func() {\n\t\t<-ctx.Done()\n\t\tif c.Close() == nil {\n\t\t\tt.Debugf(\"SSH cancelled\")\n\t\t}\n\t\tt.activatingConn.DoneAll()\n\t}()\n\t//mark active and unblock\n\tt.activeConnMut.Lock()\n\tif t.activeConn != nil {\n\t\tpanic(\"double bind ssh\")\n\t}\n\tt.activeConn = c\n\tt.activeConnMut.Unlock()\n\tt.activatingConn.Done()\n\t//optional keepalive loop against this connection\n\tif t.Config.KeepAlive > 0 {\n\t\tgo t.keepAliveLoop(c)\n\t}\n\t//block until closed\n\tgo t.handleSSHRequests(reqs)\n\tgo t.handleSSHChannels(chans)\n\tt.Debugf(\"SSH connected\")\n\terr := c.Wait()\n\tt.Debugf(\"SSH disconnected\")\n\t//mark inactive and block\n\tt.activatingConn.Add(1)\n\tt.activeConnMut.Lock()\n\tt.activeConn = nil\n\tt.activeConnMut.Unlock()\n\treturn err\n}\n",
@@ -49,7 +577,137 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:41:15 PM PDT\n\nThis is a Go function named `getSSH` inside the `Tunnel` struct which is used to establish an SSH (Secure Shell) connection. Secure Shell is a protocol that provides a secure channel over an unsecured network in a client-server architecture.\n\nThe function takes a `context.Context` as an argument, which is a mechanism that allows you to manage long-running processes, especially in terms of cancellation, timeouts, and passing request-scoped data.\n\nHere's a line by line explanation of what the function does:\n\n1. `if isDone(ctx)`: This line checks if the context has been cancelled or done. If it's done, the function returns `nil`.\n\n2. `t.activeConnMut.RLock()`: This line acquires a read lock on `activeConnMut` mutex. This is to ensure thread-safety while reading the `activeConn` field of the `Tunnel` struct.\n\n3. `c := t.activeConn`: This line reads the `activeConn` field of the `Tunnel` struct into a local variable `c`.\n\n4. `t.activeConnMut.RUnlock()`: This line releases the read lock on `activeConnMut` mutex.\n\n5. `if c != nil`: This line checks if `c` is not `nil`, meaning there's an active connection already. If there's an active connection, the function returns `c`.\n\n6. `select` statement: This is used to wait for multiple channel operations. The `select` statement blocks until one of its cases can run, then it executes that case. It chooses one at random if multiple are ready.\n\n   - `case <-ctx.Done()`: This case is selected if the context has been cancelled or done. If this case is selected, the function returns `nil`.\n\n   - `case <-time.After(settings.EnvDuration(\"SSH_WAIT\", 35*time.Second))`: This case is selected if no other cases are ready within the specified timeout duration. The duration is fetched from the environment variable \"SSH_WAIT\" and defaults to 35 seconds if it's not set. If this case is selected, the function returns `nil`.\n\n   - `case <-t.activatingConnWait()`: This case is selected when the `activatingConnWait` function signals that a new connection is being activated. If this case is selected, the function re-reads the `activeConn` field and returns it.\n\nThis function doesn't use any specific algorithm, but it uses a pattern commonly used in Go for managing and controlling long-running processes, using context and channels. \n\nYou can learn more about context, channels, and select statement in Go from the official Go documentation:\n- Context: https://golang.org/pkg/context/\n- Channels: https://tour.golang.org/concurrency/2\n- Select statement: https://tour.golang.org/concurrency/5"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:44:34 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->isDone;\nisDone-->activeConnMut;\nactiveConnMut-->activeConn;\nactiveConn-->connectedAlready;\nconnectedAlready-->returnConnected;\nconnectedAlready-->connecting;\nconnecting-->ctxDone;\nctxDone-->returnCancelled;\nctxDone-->timeAfter;\ntimeAfter-->returnTimeout;\ntimeAfter-->activatingConnWait;\nactivatingConnWait-->activeConnMut;\nactiveConnMut-->activeConn;\nactiveConn-->returnConnected;\nreturnCancelled-->returnNil;\nreturnTimeout-->returnNil;\nreturnConnected-->returnConnected;\n```\n\nIn the code, the control flow starts at the function `getSSH`. The first decision point is whether the context is already cancelled (`isDone`). If it is cancelled, the function returns `nil`. \n\nIf the context is not cancelled, the function proceeds to acquire a read lock on `activeConnMut` and checks if `activeConn` is already set. If it is set, the function returns the existing connection (`returnConnected`).\n\nIf `activeConn` is not set, the function enters the `connecting` block. It waits for one of three events to occur: the context is cancelled (`ctxDone`), a timeout occurs (`timeAfter`), or the `activatingConnWait` channel is triggered. \n\nIf the context is cancelled, the function returns `nil` (`returnCancelled`). If a timeout occurs, the function also returns `nil` (`returnTimeout`). If the `activatingConnWait` channel is triggered, the function acquires a read lock on `activeConnMut` again and returns the existing connection (`returnConnected`).\n\nThis control flow diagram represents the primary path through the code, where the context is not cancelled and `activeConn` is not already set."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:46:58 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 218\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The function 'getSSH' directly uses input to access 'activeConn'. This can lead to Insecure Direct Object References (IDOR) if the input is controlled by an attacker. In this case, an attacker could potentially manipulate 'activeConn' to gain unauthorized access.\n\n   **Solution**: To mitigate this, consider validating or sanitizing the input before using it to access 'activeConn'. Alternatively, consider using indirect references instead of direct references to objects. More about IDOR can be found here: https://owasp.org/www-community/attacks/Insecure_Direct_Object_References\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 220\n\n   **Bug Type**: Race Condition\n\n   **Description**: The function 'getSSH' does not properly synchronize access to 'activeConn', which can lead to race conditions. A race condition occurs when two or more threads can access shared data and they try to change it at the same time. As a result, the value of variables may be unpredictable and vary depending on the timings of context switches of the processes.\n\n   **Solution**: To prevent race conditions, consider using synchronization primitives such as locks or semaphores to ensure that only one thread can access 'activeConn' at a time. More about Race Condition can be found here: https://owasp.org/www-community/vulnerabilities/Race_Conditions\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 224\n\n   **Bug Type**: Uncontrolled Resource Consumption ('Resource Exhaustion')\n\n   **Description**: The function 'getSSH' uses 'time.After' with a potentially long duration. This could lead to resource exhaustion, as 'time.After' creates a new timer each time it's called, and these timers are not garbage collected until they expire.\n\n   **Solution**: To mitigate this, consider using 'time.NewTimer' and calling 'Stop' on the timer when it's no longer needed. More about Uncontrolled Resource Consumption can be found here: https://cwe.mitre.org/data/definitions/400.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 113,
+                "severity": 5,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The function 'getSSH' directly uses input to access 'activeConn'. This can lead to Insecure Direct Object References (IDOR) if the input is controlled by an attacker. In this case, an attacker could potentially manipulate 'activeConn' to gain unauthorized access.",
+                "solution": "To mitigate this, consider validating or sanitizing the input before using it to access 'activeConn'. Alternatively, consider using indirect references instead of direct references to objects. More about IDOR can be found here: https://owasp.org/www-community/attacks/Insecure_Direct_Object_References"
+              },
+              {
+                "lineNumber": 115,
+                "severity": 6,
+                "bugType": "Race Condition",
+                "description": "The function 'getSSH' does not properly synchronize access to 'activeConn', which can lead to race conditions. A race condition occurs when two or more threads can access shared data and they try to change it at the same time. As a result, the value of variables may be unpredictable and vary depending on the timings of context switches of the processes.",
+                "solution": "To prevent race conditions, consider using synchronization primitives such as locks or semaphores to ensure that only one thread can access 'activeConn' at a time. More about Race Condition can be found here: https://owasp.org/www-community/vulnerabilities/Race_Conditions"
+              },
+              {
+                "lineNumber": 119,
+                "severity": 4,
+                "bugType": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
+                "description": "The function 'getSSH' uses 'time.After' with a potentially long duration. This could lead to resource exhaustion, as 'time.After' creates a new timer each time it's called, and these timers are not garbage collected until they expire.",
+                "solution": "To mitigate this, consider using 'time.NewTimer' and calling 'Stop' on the timer when it's no longer needed. More about Uncontrolled Resource Consumption can be found here: https://cwe.mitre.org/data/definitions/400.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:52:00 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 220\n\n   **Bug Type**: CPU\n\n   **Description**: The function uses time.After which creates a new timer each time it's called. This can lead to high CPU usage if the function is called frequently.\n\n   **Solution**: Consider using a time.Ticker for repeated events to reuse the same timer object. More details can be found here: https://golang.org/pkg/time/#Ticker\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 213\n\n   **Bug Type**: Memory\n\n   **Description**: The function repeatedly locks and unlocks the activeConnMut mutex. This could potentially lead to memory leak if the function is not properly handled.\n\n   **Solution**: Consider using a single lock and unlock operation within the function. More details can be found here: https://golang.org/pkg/sync/#Mutex\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 218\n\n   **Bug Type**: CPU\n\n   **Description**: The function uses a select statement with a potentially long timeout. This could lead to CPU wastage if the function is called frequently.\n\n   **Solution**: Consider using a context with a timeout instead of a select statement with a timeout. More details can be found here: https://golang.org/pkg/context/#WithTimeout\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 115,
+                "severity": 7,
+                "bugType": "CPU",
+                "description": "The function uses time.After which creates a new timer each time it's called. This can lead to high CPU usage if the function is called frequently.",
+                "solution": "Consider using a time.Ticker for repeated events to reuse the same timer object. More details can be found here: https://golang.org/pkg/time/#Ticker"
+              },
+              {
+                "lineNumber": 108,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "The function repeatedly locks and unlocks the activeConnMut mutex. This could potentially lead to memory leak if the function is not properly handled.",
+                "solution": "Consider using a single lock and unlock operation within the function. More details can be found here: https://golang.org/pkg/sync/#Mutex"
+              },
+              {
+                "lineNumber": 113,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The function uses a select statement with a potentially long timeout. This could lead to CPU wastage if the function is called frequently.",
+                "solution": "Consider using a context with a timeout instead of a select statement with a timeout. More details can be found here: https://golang.org/pkg/context/#WithTimeout"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:57:30 PM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 214\n\n   **Bug Type**: GDPR\n\n   **Description**: The function 'getSSH' does not implement any encryption or hashing for data that might be sent or received through the SSH connection. This could potentially expose sensitive user data during transmission, which is a violation of the GDPR's data protection requirements.\n\n   **Solution**: Consider implementing encryption or hashing for data sent or received through the SSH connection. This can be achieved by using libraries such as 'crypto/ssh' in Go. Always ensure that data transmitted over networks is encrypted to prevent unauthorized access.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 218\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The function 'getSSH' does not have any mechanism to protect cardholder data during transmission over open, public networks. This is a violation of PCI DSS Requirement 4, which mandates that cardholder data must be encrypted during transmission over open, public networks.\n\n   **Solution**: Consider implementing a secure transmission protocol such as TLS or SSL for transmitting cardholder data. This can be achieved by using libraries such as 'crypto/tls' in Go. Always ensure that cardholder data is encrypted during transmission over open, public networks.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 222\n\n   **Bug Type**: HIPAA\n\n   **Description**: The function 'getSSH' does not implement any mechanism to protect ePHI (electronic Protected Health Information) during transmission. This is a violation of the HIPAA Security Rule, which requires that ePHI must be protected from unauthorized access during transmission.\n\n   **Solution**: Consider implementing a secure transmission protocol such as TLS or SSL for transmitting ePHI. This can be achieved by using libraries such as 'crypto/tls' in Go. Always ensure that ePHI is encrypted during transmission to prevent unauthorized access.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 109,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The function 'getSSH' does not implement any encryption or hashing for data that might be sent or received through the SSH connection. This could potentially expose sensitive user data during transmission, which is a violation of the GDPR's data protection requirements.",
+                "solution": "Consider implementing encryption or hashing for data sent or received through the SSH connection. This can be achieved by using libraries such as 'crypto/ssh' in Go. Always ensure that data transmitted over networks is encrypted to prevent unauthorized access.",
+                "reference": "https://gdpr-info.eu/issues/data-protection/"
+              },
+              {
+                "lineNumber": 113,
+                "severity": 6,
+                "bugType": "PCI DSS",
+                "description": "The function 'getSSH' does not have any mechanism to protect cardholder data during transmission over open, public networks. This is a violation of PCI DSS Requirement 4, which mandates that cardholder data must be encrypted during transmission over open, public networks.",
+                "solution": "Consider implementing a secure transmission protocol such as TLS or SSL for transmitting cardholder data. This can be achieved by using libraries such as 'crypto/tls' in Go. Always ensure that cardholder data is encrypted during transmission over open, public networks.",
+                "reference": "https://www.pcisecuritystandards.org/pci_security/glossary#P"
+              },
+              {
+                "lineNumber": 117,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The function 'getSSH' does not implement any mechanism to protect ePHI (electronic Protected Health Information) during transmission. This is a violation of the HIPAA Security Rule, which requires that ePHI must be protected from unauthorized access during transmission.",
+                "solution": "Consider implementing a secure transmission protocol such as TLS or SSL for transmitting ePHI. This can be achieved by using libraries such as 'crypto/tls' in Go. Always ensure that ePHI is encrypted during transmission to prevent unauthorized access.",
+                "reference": "https://www.hhs.gov/hipaa/for-professionals/security/guidance/remote-use/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "4",
       "value": "\n//getSSH blocks while connecting\nfunc (t *Tunnel) getSSH(ctx context.Context) ssh.Conn {\n\t//cancelled already?\n\tif isDone(ctx) {\n\t\treturn nil\n\t}\n\tt.activeConnMut.RLock()\n\tc := t.activeConn\n\tt.activeConnMut.RUnlock()\n\t//connected already?\n\tif c != nil {\n\t\treturn c\n\t}\n\t//connecting...\n\tselect {\n\tcase <-ctx.Done(): //cancelled\n\t\treturn nil\n\tcase <-time.After(settings.EnvDuration(\"SSH_WAIT\", 35*time.Second)):\n\t\treturn nil //a bit longer than ssh timeout\n\tcase <-t.activatingConnWait():\n\t\tt.activeConnMut.RLock()\n\t\tc := t.activeConn\n\t\tt.activeConnMut.RUnlock()\n\t\treturn c\n\t}\n}\n",
@@ -61,7 +719,108 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:41:38 PM PDT\n\nThis Go function is part of a larger system, presumably a network tunneling system given the context. The function is a method of a `Tunnel` struct, and it's named `activatingConnWait`. It doesn't take any parameters other than the implicit `Tunnel` receiver, and it returns a receive-only channel of empty structs.\n\nLet's break down what the function does:\n\n1. It creates a new channel of empty structs: `ch := make(chan struct{})`. Channels are a way to communicate between different goroutines (concurrent threads) in Go. This channel will be used to signal when a certain operation has finished.\n\n2. It starts a new goroutine with `go func() {...}`. Goroutines are lightweight threads managed by the Go runtime.\n\n3. Inside this goroutine, it calls `t.activatingConn.Wait()`. This implies that `t.activatingConn` is of type `sync.WaitGroup`. A `WaitGroup` is a means of waiting for a collection of goroutines to finish executing. The `Wait()` method blocks until the `WaitGroup` counter is zero.\n\n4. After the `Wait()` call returns, it closes the channel `ch` with `close(ch)`. Closing a channel in Go is a signal that no more data will be sent on this channel. This is often used to signal completion to channel receivers.\n\n5. Finally, it returns the channel `ch`. The return type is `<-chan struct{}`, which is a receive-only channel of empty structs. This means that callers can only read from the returned channel, not write to it.\n\nIn terms of algorithms, this function uses concurrency mechanisms provided by Go, specifically goroutines, channels, and `sync.WaitGroup`. These are fundamental to writing concurrent code in Go and allow different parts of the program to execute independently and communicate safely.\n\nFor more information about these concepts, you can refer to the official Go documentation:\n- Goroutines: https://tour.golang.org/concurrency/1\n- Channels: https://tour.golang.org/concurrency/2\n- `sync.WaitGroup`: https://pkg.go.dev/sync#WaitGroup\n\nAs for architectural guidelines, this function appears to follow good practices for concurrent programming in Go. It uses channels to communicate between goroutines and `sync.WaitGroup` to wait for goroutines to finish, both of which are recommended practices. Without knowing more about the larger system, it's hard to say whether there are any conflicts with overall architectural guidelines or constraints."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:44:40 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nExampleProcess-->End;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:47:02 PM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:52:27 PM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 268\n\n   **Bug Type**: Memory\n\n   **Description**: The code is creating a new goroutine for each call to the activatingConnWait function. If this function is called frequently, it can lead to a high number of goroutines, which can consume a significant amount of memory.\n\n   **Solution**: Consider using a worker pool pattern to limit the number of goroutines that can be created. This will help manage memory usage. Refer to this link for more information: https://gobyexample.com/worker-pools\n\n\n2. **Severity**: 2/10\n\n   **Line Number**: 266\n\n   **Bug Type**: Memory\n\n   **Description**: The code is creating a new channel for each call to the activatingConnWait function. If this function is called frequently, it can lead to a high number of channels, which can consume a significant amount of memory.\n\n   **Solution**: Consider reusing channels where possible, or limiting the number of channels that can be created. This will help manage memory usage. Refer to this link for more information: https://golang.org/doc/effective_go#channels\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 136,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "The code is creating a new goroutine for each call to the activatingConnWait function. If this function is called frequently, it can lead to a high number of goroutines, which can consume a significant amount of memory.",
+                "solution": "Consider using a worker pool pattern to limit the number of goroutines that can be created. This will help manage memory usage. Refer to this link for more information: https://gobyexample.com/worker-pools"
+              },
+              {
+                "lineNumber": 134,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "The code is creating a new channel for each call to the activatingConnWait function. If this function is called frequently, it can lead to a high number of channels, which can consume a significant amount of memory.",
+                "solution": "Consider reusing channels where possible, or limiting the number of channels that can be created. This will help manage memory usage. Refer to this link for more information: https://golang.org/doc/effective_go#channels"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:58:20 PM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 268\n\n   **Bug Type**: GDPR\n\n   **Description**: The function 'activatingConnWait' may be non-compliant with GDPR if the 'Tunnel' object or 'activatingConn' attribute contains personal data. GDPR requires that personal data should be processed in a manner that ensures appropriate security, including protection against unauthorized or unlawful processing.\n\n   **Solution**: Ensure that any personal data in the 'Tunnel' object or 'activatingConn' attribute is processed in a secure manner. This could include encrypting the data, using secure communication channels, or implementing strong access controls.\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 268\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The function 'activatingConnWait' may be non-compliant with PCI DSS if the 'Tunnel' object or 'activatingConn' attribute contains cardholder data. PCI DSS requires that cardholder data should be protected in storage and during transmission over open, public networks.\n\n   **Solution**: Ensure that any cardholder data in the 'Tunnel' object or 'activatingConn' attribute is protected. This could include encrypting the data, using secure communication channels, or implementing strong access controls.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 268\n\n   **Bug Type**: HIPAA\n\n   **Description**: The function 'activatingConnWait' may be non-compliant with HIPAA if the 'Tunnel' object or 'activatingConn' attribute contains protected health information (PHI). HIPAA requires that PHI should be protected in storage and during transmission over open, public networks.\n\n   **Solution**: Ensure that any PHI in the 'Tunnel' object or 'activatingConn' attribute is protected. This could include encrypting the data, using secure communication channels, or implementing strong access controls.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 136,
+                "severity": 2,
+                "bugType": "GDPR",
+                "description": "The function 'activatingConnWait' may be non-compliant with GDPR if the 'Tunnel' object or 'activatingConn' attribute contains personal data. GDPR requires that personal data should be processed in a manner that ensures appropriate security, including protection against unauthorized or unlawful processing.",
+                "solution": "Ensure that any personal data in the 'Tunnel' object or 'activatingConn' attribute is processed in a secure manner. This could include encrypting the data, using secure communication channels, or implementing strong access controls.",
+                "webLink": "https://gdpr-info.eu/art-32-gdpr/"
+              },
+              {
+                "lineNumber": 136,
+                "severity": 3,
+                "bugType": "PCI DSS",
+                "description": "The function 'activatingConnWait' may be non-compliant with PCI DSS if the 'Tunnel' object or 'activatingConn' attribute contains cardholder data. PCI DSS requires that cardholder data should be protected in storage and during transmission over open, public networks.",
+                "solution": "Ensure that any cardholder data in the 'Tunnel' object or 'activatingConn' attribute is protected. This could include encrypting the data, using secure communication channels, or implementing strong access controls.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/maintaining_payment_security"
+              },
+              {
+                "lineNumber": 136,
+                "severity": 4,
+                "bugType": "HIPAA",
+                "description": "The function 'activatingConnWait' may be non-compliant with HIPAA if the 'Tunnel' object or 'activatingConn' attribute contains protected health information (PHI). HIPAA requires that PHI should be protected in storage and during transmission over open, public networks.",
+                "solution": "Ensure that any PHI in the 'Tunnel' object or 'activatingConn' attribute is protected. This could include encrypting the data, using secure communication channels, or implementing strong access controls.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/guidance/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "5",
       "value": "\nfunc (t *Tunnel) activatingConnWait() <-chan struct{} {\n\tch := make(chan struct{})\n\tgo func() {\n\t\tt.activatingConn.Wait()\n\t\tclose(ch)\n\t}()\n\treturn ch\n}\n",
@@ -73,7 +832,130 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:42:33 PM PDT\n\nThis function is part of a Tunnel struct, likely in a network tunneling software. The Tunnel struct seems to represent a tunnel for network connections, and this function, `BindRemotes`, is used to convert remote settings into proxies and bind them to the tunnel. It blocks until the provided context is cancelled or there is an error in the proxies.\n\nThe function signature is `func (t *Tunnel) BindRemotes(ctx context.Context, remotes []*settings.Remote) error`, which means it is a method of the `Tunnel` struct, takes a context and a slice of pointers to `Remote` objects, and returns an error.\n\nThe function first checks if the `remotes` slice is empty and if the tunnel is not inbound. If either of these conditions is true, it returns an error.\n\nThen, it creates a slice of `Proxy` pointers with the same length as `remotes`. It iterates over `remotes` and for each `remote`, it creates a new `Proxy` using the `NewProxy` function, passing the tunnel's logger, the tunnel itself, the current proxy count, and the `remote`. If there's an error creating the proxy, it returns the error. Otherwise, it adds the proxy to the `proxies` slice and increments the proxy count.\n\nAn error group (`eg`) is then created from the provided context. This is a concurrency pattern in Go that makes it easier to manage and synchronize multiple goroutines that can error out. For each `proxy` in `proxies`, a new goroutine is created in the error group that runs the `Run` method of the `proxy`, passing the context.\n\nAfter starting all the goroutines, it logs that the proxies are bound and waits for all the goroutines to finish by calling `eg.Wait()`. If any of the goroutines returns an error, `eg.Wait()` will return that error. After the wait, it logs that the proxies are unbound and returns any error that occurred.\n\nThe algorithm used here is a form of the Fan-Out, Fan-In concurrency pattern in Go, where multiple goroutines are started (fan-out), and their results are collected into a single result (fan-in). The error group simplifies this pattern by providing built-in error handling and synchronization.\n\nFor more information about the error group package in Go, you can visit the official Go documentation: https://pkg.go.dev/golang.org/x/sync/errgroup. For more information about the Fan-Out, Fan-In pattern, you can read this blog post: https://blog.golang.org/pipelines."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:44:58 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->CheckRemotes;\nCheckRemotes-->|len \u0001  == 0|ErrorNoRemotes;\nCheckRemotes-->|len \u0001  > 0|CheckInbound;\nCheckInbound-->|t.Inbound == false|ErrorInboundBlocked;\nCheckInbound-->|t.Inbound == true|CreateProxies;\nCreateProxies-->|NewProxy error|ErrorProxyCreation;\nCreateProxies-->|NewProxy success|BindProxies;\nBindProxies-->|proxy.Run error|ErrorProxyRun;\nBindProxies-->|proxy.Run success|UnbindProxies;\nUnbindProxies-->End;\nErrorNoRemotes-->End;\nErrorInboundBlocked-->End;\nErrorProxyCreation-->End;\nErrorProxyRun-->End;\n```\n\nIn the above control flow graph, the primary path is shown in green, while error paths are shown in red. The control flow starts at the \"CheckRemotes\" block and proceeds based on the conditions and results of each step. If there are no remotes, the control flow goes to the \"ErrorNoRemotes\" block. If there are remotes and the inbound connections are blocked, the control flow goes to the \"ErrorInboundBlocked\" block. If the creation of a proxy fails, the control flow goes to the \"ErrorProxyCreation\" block. If the execution of a proxy fails, the control flow goes to the \"ErrorProxyRun\" block. If all steps are successful, the control flow reaches the \"End\" block."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:47:29 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 290\n\n   **Bug Type**: Missing Error Handling\n\n   **Description**: The TODO comment suggests that the developer intended to handle the case where the tunnel closes unexpectedly, but this has not been implemented. This could lead to unexpected behavior or crashes if the tunnel closes while proxies are still running.\n\n   **Solution**: Implement a mechanism to gracefully handle the scenario where the tunnel closes. This could involve catching the error, logging it, and then performing any necessary cleanup operations. For more information, refer to https://blog.golang.org/error-handling-and-go.\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 293\n\n   **Bug Type**: Concurrency Issue\n\n   **Description**: The proxies are run in separate goroutines without any synchronization mechanism. This could potentially lead to race conditions if multiple goroutines access or modify shared resources concurrently.\n\n   **Solution**: Consider using a synchronization mechanism such as a mutex or a semaphore to ensure that only one goroutine can access or modify shared resources at a time. For more information, refer to https://tour.golang.org/concurrency/9.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 149,
+                "severity": 6,
+                "bugType": "Missing Error Handling",
+                "description": "The TODO comment suggests that the developer intended to handle the case where the tunnel closes unexpectedly, but this has not been implemented. This could lead to unexpected behavior or crashes if the tunnel closes while proxies are still running.",
+                "solution": "Implement a mechanism to gracefully handle the scenario where the tunnel closes. This could involve catching the error, logging it, and then performing any necessary cleanup operations. For more information, refer to https://blog.golang.org/error-handling-and-go."
+              },
+              {
+                "lineNumber": 152,
+                "severity": 4,
+                "bugType": "Concurrency Issue",
+                "description": "The proxies are run in separate goroutines without any synchronization mechanism. This could potentially lead to race conditions if multiple goroutines access or modify shared resources concurrently.",
+                "solution": "Consider using a synchronization mechanism such as a mutex or a semaphore to ensure that only one goroutine can access or modify shared resources at a time. For more information, refer to https://tour.golang.org/concurrency/9."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:52:54 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 289\n\n   **Bug Type**: Memory\n\n   **Description**: The creation of a new Proxy object for each remote in the remotes array could potentially lead to high memory usage if the number of remotes is large.\n\n   **Solution**: Consider using a pool of Proxy objects that can be reused, or limit the number of remotes that can be processed at a time.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 297\n\n   **Bug Type**: CPU\n\n   **Description**: The usage of goroutines for each proxy could lead to high CPU usage if the number of proxies is large and the tasks they are performing are CPU-intensive.\n\n   **Solution**: Consider limiting the number of goroutines that can be created at a time, or use a worker pool pattern to manage the goroutines.\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 306\n\n   **Bug Type**: CPU\n\n   **Description**: The eg.Wait() function blocks until all function calls from the errgroup have returned. This could lead to high CPU usage if the tasks performed by the goroutines are long running.\n\n   **Solution**: Consider using a context with timeout to prevent long running goroutines from blocking indefinitely.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 148,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "The creation of a new Proxy object for each remote in the remotes array could potentially lead to high memory usage if the number of remotes is large.",
+                "solution": "Consider using a pool of Proxy objects that can be reused, or limit the number of remotes that can be processed at a time."
+              },
+              {
+                "lineNumber": 156,
+                "severity": 7,
+                "bugType": "CPU",
+                "description": "The usage of goroutines for each proxy could lead to high CPU usage if the number of proxies is large and the tasks they are performing are CPU-intensive.",
+                "solution": "Consider limiting the number of goroutines that can be created at a time, or use a worker pool pattern to manage the goroutines."
+              },
+              {
+                "lineNumber": 165,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The eg.Wait() function blocks until all function calls from the errgroup have returned. This could lead to high CPU usage if the tasks performed by the goroutines are long running.",
+                "solution": "Consider using a context with timeout to prevent long running goroutines from blocking indefinitely."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:58:59 PM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 288\n\n   **Bug Type**: GDPR\n\n   **Description**: The function 'BindRemotes' does not have any mechanism to log or audit the data it processes. This could be a violation of Article 30 of GDPR which requires organizations to maintain a record of processing activities under its responsibility.\n\n   **Solution**: Implement logging or auditing mechanism to keep track of the data processing activities. This could be done by using logging libraries or services that are compliant with GDPR.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 291\n\n   **Bug Type**: HIPAA\n\n   **Description**: The function 'BindRemotes' creates multiple proxies without any apparent checks for secure transmission of data. This could potentially lead to violation of the HIPAA Security Rule, which requires that ePHI (Electronic Protected Health Information) be transmitted securely.\n\n   **Solution**: Ensure secure transmission of data by implementing encryption or other secure communication protocols when creating proxies.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 291\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The function 'BindRemotes' creates proxies without any apparent mechanism to protect cardholder data in transit. This could be a violation of PCI DSS Requirement 4 which mandates that cardholder data must be encrypted across open, public networks.\n\n   **Solution**: Implement encryption or use secure communication protocols to protect cardholder data when creating proxies.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 147,
+                "severity": 6,
+                "bugType": "GDPR",
+                "description": "The function 'BindRemotes' does not have any mechanism to log or audit the data it processes. This could be a violation of Article 30 of GDPR which requires organizations to maintain a record of processing activities under its responsibility.",
+                "solution": "Implement logging or auditing mechanism to keep track of the data processing activities. This could be done by using logging libraries or services that are compliant with GDPR.",
+                "webLink": "https://gdpr-info.eu/art-30-gdpr/"
+              },
+              {
+                "lineNumber": 150,
+                "severity": 7,
+                "bugType": "HIPAA",
+                "description": "The function 'BindRemotes' creates multiple proxies without any apparent checks for secure transmission of data. This could potentially lead to violation of the HIPAA Security Rule, which requires that ePHI (Electronic Protected Health Information) be transmitted securely.",
+                "solution": "Ensure secure transmission of data by implementing encryption or other secure communication protocols when creating proxies.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              },
+              {
+                "lineNumber": 150,
+                "severity": 8,
+                "bugType": "PCI DSS",
+                "description": "The function 'BindRemotes' creates proxies without any apparent mechanism to protect cardholder data in transit. This could be a violation of PCI DSS Requirement 4 which mandates that cardholder data must be encrypted across open, public networks.",
+                "solution": "Implement encryption or use secure communication protocols to protect cardholder data when creating proxies.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/maintaining_payment_security"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "6",
       "value": "\n//BindRemotes converts the given remotes into proxies, and blocks\n//until the caller cancels the context or there is a proxy error.\nfunc (t *Tunnel) BindRemotes(ctx context.Context, remotes []*settings.Remote) error {\n\tif len(remotes) == 0 {\n\t\treturn errors.New(\"no remotes\")\n\t}\n\tif !t.Inbound {\n\t\treturn errors.New(\"inbound connections blocked\")\n\t}\n\tproxies := make([]*Proxy, len(remotes))\n\tfor i, remote := range remotes {\n\t\tp, err := NewProxy(t.Logger, t, t.proxyCount, remote)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tproxies[i] = p\n\t\tt.proxyCount++\n\t}\n\t//TODO: handle tunnel close\n\teg, ctx := errgroup.WithContext(ctx)\n\tfor _, proxy := range proxies {\n\t\tp := proxy\n\t\teg.Go(func() error {\n\t\t\treturn p.Run(ctx)\n\t\t})\n\t}\n\tt.Debugf(\"Bound proxies\")\n\terr := eg.Wait()\n\tt.Debugf(\"Unbound proxies\")\n\treturn err\n}\n",
@@ -85,7 +967,122 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Wednesday, September 6, 2023 at 11:43:34 PM PDT\n\nThe provided code is written in Go, and it is a part of a `Tunnel` struct method named `keepAliveLoop`. This method is used to maintain an active SSH (Secure Shell) connection by periodically sending a \"ping\" request to the server and expecting a \"pong\" response. \n\nHere's a detailed breakdown of the code:\n\n1. `func (t *Tunnel) keepAliveLoop(sshConn ssh.Conn)`: This defines a method named `keepAliveLoop` on a `Tunnel` struct. The method takes an `ssh.Conn` type parameter, which is an SSH connection.\n\n2. `for { ... }`: This is an infinite loop that will continue until explicitly broken.\n\n3. `time.Sleep(t.Config.KeepAlive)`: The method sleeps for a duration specified by `t.Config.KeepAlive`. This is likely a configuration setting for the duration between each \"ping\" request.\n\n4. `_, b, err := sshConn.SendRequest(\"ping\", true, nil)`: The method sends a \"ping\" request to the server over the SSH connection. The `SendRequest` method returns three values: a boolean indicating whether the request was accepted, a byte slice containing the response, and an error if one occurred.\n\n5. `if err != nil { break }`: If there is an error in sending the request, the infinite loop is broken, effectively ending the keep-alive process.\n\n6. `if len(b) > 0 && !bytes.Equal(b, []byte(\"pong\")) { ... }`: The method checks if the response is not empty and not equal to \"pong\". If this condition is true, it logs a debug message saying \"strange ping response\" and breaks the loop.\n\n7. `sshConn.Close()`: If the loop is broken due to an error or an unexpected response, the SSH connection is closed.\n\nThe algorithm used here is a simple keep-alive mechanism for an SSH connection. It periodically sends a \"ping\" request to the server and expects a \"pong\" response. If it doesn't receive the expected response or encounters an error, it closes the connection.\n\nFor more information and background on Go and SSH, you can refer to the following resources:\n- Go Documentation: https://golang.org/doc/\n- Go SSH package documentation: https://pkg.go.dev/golang.org/x/crypto/ssh\n- SSH Protocol: https://tools.ietf.org/html/rfc4251\n- Keep-Alive Mechanism: https://en.wikipedia.org/wiki/Keepalive\n\nAs for the architectural guidelines, the code seems to follow standard practices for maintaining an SSH connection in Go and does not appear to conflict with any general architectural guidelines. However, the specific details would depend on the broader context of the `Tunnel` struct and its usage within the project."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Wednesday, September 6, 2023 at 11:45:36 PM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->A;\nA-->B;\nB-->C;\nC-->D;\nD-->E;\nE-->F;\nF-->G;\nG-->H;\nH-->I;\nI-->J;\nJ-->K;\nK-->L;\nL-->M;\nM-->N;\nN-->O;\nO-->P;\nP-->Q;\nQ-->R;\nR-->S;\nS-->T;\nT-->U;\nU-->V;\nV-->W;\nW-->X;\nX-->Y;\nY-->Z;\nZ-->End;\n\nstyle A fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle B fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle C fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle D fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle E fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle F fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle G fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle H fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle I fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle J fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle K fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle L fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle M fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle N fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle O fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle P fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Q fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle R fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle S fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle T fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle U fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle V fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle W fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle X fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Y fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Z fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle End fill:#228B22, stroke:#000000, stroke-width:2px;\n```\n\nThe control flow graph for the `keepAliveLoop` function is shown above. The primary path is represented by the green arrows, while the error path is represented by the red arrows.\n\nThe function starts at the \"Start\" node and then goes through a loop. Inside the loop, it sleeps for a certain duration specified by `t.Config.KeepAlive`. Then, it sends a \"ping\" request using the `sshConn` connection. If there is an error sending the request, it breaks out of the loop and goes to the \"End\" node.\n\nIf the request is sent successfully, it checks the response. If the response is not equal to \"pong\", it logs a message and breaks out of the loop, going to the \"End\" node.\n\nIf the response is equal to \"pong\", the loop continues and repeats the process.\n\nFinally, when the loop is broken, the `sshConn` connection is closed and the function ends at the \"End\" node."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:48:01 PM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 352\n\n   **Bug Type**: Insecure Communication\n\n   **Description**: The function keepAliveLoop sends a 'ping' request to the ssh server and expects a 'pong' response. However, there is no validation or authentication of the response. An attacker could potentially intercept the communication and send a 'pong' response, leading to a Man-in-the-Middle (MITM) attack.\n\n   **Solution**: Implement validation of the response. This could be achieved by signing the 'pong' response with a secret key and verifying the signature on the client side. Here is a useful resource on secure communication: https://owasp.org/www-community/Secure_Communication\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 357\n\n   **Bug Type**: Resource Leak\n\n   **Description**: The function keepAliveLoop closes the ssh connection when an abnormal ping response is received. However, it does not close the connection in case of a normal termination of the loop (e.g., if the sshConn object is destroyed). This could lead to resource leaks and potential Denial of Service (DoS) attacks.\n\n   **Solution**: Ensure that the ssh connection is always closed, even in case of normal termination. This could be achieved by using a 'defer' statement at the beginning of the function. Here is a useful resource on resource management in Go: https://gobyexample.com/defer\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 179,
+                "severity": 5,
+                "bugType": "Insecure Communication",
+                "description": "The function keepAliveLoop sends a 'ping' request to the ssh server and expects a 'pong' response. However, there is no validation or authentication of the response. An attacker could potentially intercept the communication and send a 'pong' response, leading to a Man-in-the-Middle (MITM) attack.",
+                "solution": "Implement validation of the response. This could be achieved by signing the 'pong' response with a secret key and verifying the signature on the client side. Here is a useful resource on secure communication: https://owasp.org/www-community/Secure_Communication"
+              },
+              {
+                "lineNumber": 184,
+                "severity": 6,
+                "bugType": "Resource Leak",
+                "description": "The function keepAliveLoop closes the ssh connection when an abnormal ping response is received. However, it does not close the connection in case of a normal termination of the loop (e.g., if the sshConn object is destroyed). This could lead to resource leaks and potential Denial of Service (DoS) attacks.",
+                "solution": "Ensure that the ssh connection is always closed, even in case of normal termination. This could be achieved by using a 'defer' statement at the beginning of the function. Here is a useful resource on resource management in Go: https://gobyexample.com/defer"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:53:23 PM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 352\n\n   **Bug Type**: CPU\n\n   **Description**: The use of time.Sleep in a loop can be CPU intensive as it causes the goroutine to sleep and wake up repeatedly.\n\n   **Solution**: Consider using a time.Ticker for more efficient periodic tasks. Example: ticker := time.NewTicker(t.Config.KeepAlive); for _ = range ticker.C { ... }\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 354\n\n   **Bug Type**: Network\n\n   **Description**: Continuous sending of 'ping' requests without checking the connection status can lead to unnecessary network usage if the connection is lost.\n\n   **Solution**: Check the status of the connection before sending the 'ping' request. If the connection is lost, break the loop.\n\n\n3. **Severity**: 2/10\n\n   **Line Number**: 360\n\n   **Bug Type**: CPU\n\n   **Description**: The sshConn.Close() function is called regardless of whether the loop was exited due to an error or normal execution. This can lead to unnecessary CPU usage.\n\n   **Solution**: Call sshConn.Close() only when necessary, i.e., when the loop is exited due to an error.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 179,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The use of time.Sleep in a loop can be CPU intensive as it causes the goroutine to sleep and wake up repeatedly.",
+                "solution": "Consider using a time.Ticker for more efficient periodic tasks. Example: ticker := time.NewTicker(t.Config.KeepAlive); for _ = range ticker.C { ... }"
+              },
+              {
+                "lineNumber": 181,
+                "severity": 6,
+                "bugType": "Network",
+                "description": "Continuous sending of 'ping' requests without checking the connection status can lead to unnecessary network usage if the connection is lost.",
+                "solution": "Check the status of the connection before sending the 'ping' request. If the connection is lost, break the loop."
+              },
+              {
+                "lineNumber": 187,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The sshConn.Close() function is called regardless of whether the loop was exited due to an error or normal execution. This can lead to unnecessary CPU usage.",
+                "solution": "Call sshConn.Close() only when necessary, i.e., when the loop is exited due to an error."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Wednesday, September 6, 2023 at 11:59:29 PM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 356\n\n   **Bug Type**: Data compliance\n\n   **Description**: The 'ping' request does not include any form of encryption or secure communication. This may lead to potential data leaks or unauthorized access.\n\n   **Solution**: Implement encryption or use secure communication methods for the 'ping' request. This could be achieved using secure protocols such as HTTPS or SSL/TLS for communication.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 362\n\n   **Bug Type**: Data compliance\n\n   **Description**: The SSH connection is closed without any checks or confirmation, which could potentially lead to data loss or incomplete transactions.\n\n   **Solution**: Implement a confirmation or check before closing the SSH connection. This could be a simple 'Are you sure?' prompt or a more complex check to ensure no data is being transmitted before closing the connection.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 183,
+                "severity": 4,
+                "bugType": "Data compliance",
+                "description": "The 'ping' request does not include any form of encryption or secure communication. This may lead to potential data leaks or unauthorized access.",
+                "solution": "Implement encryption or use secure communication methods for the 'ping' request. This could be achieved using secure protocols such as HTTPS or SSL/TLS for communication.",
+                "webLink": "https://owasp.org/www-community/controls/Secure_Network_Infrastructure"
+              },
+              {
+                "lineNumber": 189,
+                "severity": 6,
+                "bugType": "Data compliance",
+                "description": "The SSH connection is closed without any checks or confirmation, which could potentially lead to data loss or incomplete transactions.",
+                "solution": "Implement a confirmation or check before closing the SSH connection. This could be a simple 'Are you sure?' prompt or a more complex check to ensure no data is being transmitted before closing the connection.",
+                "webLink": "https://www.ssh.com/ssh/tunneling/example"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "7",
       "value": "\nfunc (t *Tunnel) keepAliveLoop(sshConn ssh.Conn) {\n\t//ping forever\n\tfor {\n\t\ttime.Sleep(t.Config.KeepAlive)\n\t\t_, b, err := sshConn.SendRequest(\"ping\", true, nil)\n\t\tif err != nil {\n\t\t\tbreak\n\t\t}\n\t\tif len(b) > 0 && !bytes.Equal(b, []byte(\"pong\")) {\n\t\t\tt.Debugf(\"strange ping response\")\n\t\t\tbreak\n\t\t}\n\t}\n\t//close ssh connection on abnormal ping\n\tsshConn.Close()\n}\n",

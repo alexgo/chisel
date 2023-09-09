@@ -1,7 +1,116 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:53:24 AM PDT\n\nThis code is written in Go programming language and is part of the settings package. It's purpose is to define a data structure and some rules to handle and interpret network addresses and ports. The Remote struct contains all the necessary fields to represent a network connection endpoint.\n\nLet's break it down:\n\n- The import statement at the top includes packages that the code will use. These are standard Go libraries for handling errors, network interfaces, URLs, regular expressions, string operations, and conversions.\n\n- The comments describe a series of shorthand conversions for different types of network connections. These are likely used elsewhere in the code to interpret user input or configuration settings.\n\n- The type Remote struct defines a data structure for a network connection. Each field in the struct represents a different aspect of the connection:\n\n  - LocalHost, LocalPort, and LocalProto represent the host, port, and protocol (TCP, UDP, etc.) of the local side of the connection.\n  \n  - RemoteHost, RemotePort, and RemoteProto represent the host, port, and protocol of the remote side of the connection.\n  \n  - Socks, Reverse, and Stdio are boolean flags that likely indicate whether the connection is a SOCKS proxy, a reverse tunnel, or uses standard input/output.\n\nThis struct would be used elsewhere in the code to represent and manipulate network connections based on the rules described in the comments. However, the actual algorithms or functions that use this struct are not included in this code snippet.\n\nFor more information on Go's struct types, you can refer to the official Go documentation: https://golang.org/ref/spec#Struct_types"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:03:35 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\n```\nThe control flow graph for the given source code starts at the beginning of the `settings` package."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:08:03 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Information Disclosure\n\n   **Description**: The 'Remote' struct stores sensitive information like host and port details. If an attacker can access an instance of this struct, they can gain information about the system's network setup.\n\n   **Solution**: Consider encrypting or obfuscating sensitive information within the struct. Also, limit the scope of instances of this struct to reduce the chance of an attacker accessing it. Reference: https://cheatsheetseries.owasp.org/cheatsheets/Data_Classification_Cheat_Sheet.html\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Spoofing\n\n   **Description**: The 'Remote' struct does not validate the hostnames or IP addresses that are stored in it. This could allow an attacker to spoof these values, potentially causing the system to communicate with unintended hosts.\n\n   **Solution**: Implement validation for hostnames and IP addresses to ensure they are correct and safe. This could be done using regular expressions or by using a library designed for this purpose. Reference: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "Information Disclosure",
+                "description": "The 'Remote' struct stores sensitive information like host and port details. If an attacker can access an instance of this struct, they can gain information about the system's network setup.",
+                "solution": "Consider encrypting or obfuscating sensitive information within the struct. Also, limit the scope of instances of this struct to reduce the chance of an attacker accessing it. Reference: https://cheatsheetseries.owasp.org/cheatsheets/Data_Classification_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 6,
+                "bugType": "Spoofing",
+                "description": "The 'Remote' struct does not validate the hostnames or IP addresses that are stored in it. This could allow an attacker to spoof these values, potentially causing the system to communicate with unintended hosts.",
+                "solution": "Implement validation for hostnames and IP addresses to ensure they are correct and safe. This could be done using regular expressions or by using a library designed for this purpose. Reference: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:12:16 AM PDT\n\n1. **Severity**: 1/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Memory\n\n   **Description**: The Remote struct contains multiple string fields which could lead to high memory usage if many instances of this struct are created.\n\n   **Solution**: Consider using smaller data types if possible or ensure only necessary instances of the struct are created.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 1,
+                "bugType": "Memory",
+                "description": "The Remote struct contains multiple string fields which could lead to high memory usage if many instances of this struct are created.",
+                "solution": "Consider using smaller data types if possible or ensure only necessary instances of the struct are created."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:18:48 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: GDPR\n\n   **Description**: The code does not seem to have any explicit data handling or privacy control mechanisms, which could potentially violate GDPR compliance. GDPR requires explicit consent and clear data handling procedures for user data.\n\n   **Solution**: Consider implementing clear data handling and privacy control mechanisms that are in compliance with GDPR.\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code does not seem to have any explicit data security measures, which could potentially violate PCI DSS compliance. PCI DSS requires secure networks and systems to protect cardholder data.\n\n   **Solution**: Consider implementing secure networks and systems to protect cardholder data in compliance with PCI DSS.\n\n\n3. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code does not seem to have any explicit health information handling or privacy control mechanisms, which could potentially violate HIPAA compliance. HIPAA requires secure handling and protection of Protected Health Information (PHI).\n\n   **Solution**: Consider implementing secure handling and protection mechanisms for PHI in compliance with HIPAA.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "GDPR",
+                "description": "The code does not seem to have any explicit data handling or privacy control mechanisms, which could potentially violate GDPR compliance. GDPR requires explicit consent and clear data handling procedures for user data.",
+                "solution": "Consider implementing clear data handling and privacy control mechanisms that are in compliance with GDPR.",
+                "moreInfo": "https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "PCI DSS",
+                "description": "The code does not seem to have any explicit data security measures, which could potentially violate PCI DSS compliance. PCI DSS requires secure networks and systems to protect cardholder data.",
+                "solution": "Consider implementing secure networks and systems to protect cardholder data in compliance with PCI DSS.",
+                "moreInfo": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "HIPAA",
+                "description": "The code does not seem to have any explicit health information handling or privacy control mechanisms, which could potentially violate HIPAA compliance. HIPAA requires secure handling and protection of Protected Health Information (PHI).",
+                "solution": "Consider implementing secure handling and protection mechanisms for PHI in compliance with HIPAA.",
+                "moreInfo": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package settings\n\nimport (\n\t\"errors\"\n\t\"net\"\n\t\"net/url\"\n\t\"regexp\"\n\t\"strconv\"\n\t\"strings\"\n)\n\n// short-hand conversions (see remote_test)\n//   3000 ->\n//     local  127.0.0.1:3000\n//     remote 127.0.0.1:3000\n//   foobar.com:3000 ->\n//     local  127.0.0.1:3000\n//     remote foobar.com:3000\n//   3000:google.com:80 ->\n//     local  127.0.0.1:3000\n//     remote google.com:80\n//   192.168.0.1:3000:google.com:80 ->\n//     local  192.168.0.1:3000\n//     remote google.com:80\n//   127.0.0.1:1080:socks\n//     local  127.0.0.1:1080\n//     remote socks\n//   stdio:example.com:22\n//     local  stdio\n//     remote example.com:22\n//   1.1.1.1:53/udp\n//     local  127.0.0.1:53/udp\n//     remote 1.1.1.1:53/udp\n\ntype Remote struct {\n\tLocalHost, LocalPort, LocalProto    string\n\tRemoteHost, RemotePort, RemoteProto string\n\tSocks, Reverse, Stdio               bool\n}\n",
@@ -13,7 +122,140 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:54:37 AM PDT\n\nThis code snippet is written in Go language and is part of a function called `DecodeRemote`. This function is used to decode a remote connection string and return a `Remote` object if the string is valid.\n\nThe function accepts a string `s` as an argument and begins by checking if the string has a prefix `R:`. If it does, it removes the prefix and sets the `reverse` flag to true. This flag indicates whether the connection is a reverse connection.\n\nNext, the function uses a regular expression to split the string into parts. If the number of parts is not between 1 and 4, it returns an error indicating that the remote string is invalid.\n\nThe function then creates a `Remote` object `r` and sets its `Reverse` field to the value of the `reverse` flag.\n\nThe function then iterates over the parts from back to front. This allows the 'remote' fields to be set first, and then the 'local' fields to be set second. This is done because the 'remote' side is allowed to provide the defaults.\n\nDuring the iteration, the function checks if the last part is \"socks\", indicating that the remote connection is a SOCKS connection. If it is, it sets the `Socks` field of the `r` object to true and continues to the next iteration.\n\nIf the first part is \"stdio\", indicating that the local connection is a standard input/output connection, it sets the `Stdio` field of the `r` object to true and continues to the next iteration.\n\nThe function then calls `L4Proto(p)` to extract the L4 protocol (TCP, UDP, etc.) from the part. If a protocol is extracted, it sets the `RemoteProto` or `LocalProto` field of the `r` object accordingly.\n\nThe function then checks if the part is a port number. If it is, it sets the `RemotePort` or `LocalPort` field of the `r` object accordingly.\n\nIf the part is not a port number, the function checks if it is a host. If it is, it sets the `RemoteHost` or `LocalHost` field of the `r` object accordingly.\n\nAfter all the parts have been parsed, the function applies default values to the fields of the `r` object that have not been set.\n\nFinally, the function checks if the `LocalProto` and `RemoteProto` are the same. If they are not, it returns an error indicating that cross-protocol remotes are not supported yet. It also checks if the connection is a reverse SOCKS connection or a reverse stdio connection, and if it is, it returns an error.\n\nThe function then returns the `r` object and no error, indicating that the remote string was successfully decoded.\n\nThe function uses several helper functions such as `strings.HasPrefix`, `strings.TrimPrefix`, `regexp.MustCompile`, `isPort`, and `isHost` which are not included in the code snippet.\n\nFor more information on Go language and its syntax, you can refer to the official Go documentation: https://golang.org/doc/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:04:11 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->DecodeRemote;\nDecodeRemote-->ReverseCheck;\nReverseCheck-->ParseParts;\nParseParts-->SetRemoteFields;\nSetRemoteFields-->SetLocalFields;\nSetLocalFields-->CheckSocks;\nCheckSocks-->SetSocksDefaults;\nSetSocksDefaults-->SetNonSocksDefaults;\nSetNonSocksDefaults-->CheckCrossProtocol;\nCheckCrossProtocol-->CheckSocksProtocol;\nCheckSocksProtocol-->CheckStdioReverse;\nCheckStdioReverse-->End;\n\nstyle ReverseCheck fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ParseParts fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle SetRemoteFields fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle SetLocalFields fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle CheckSocks fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle SetSocksDefaults fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle SetNonSocksDefaults fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle CheckCrossProtocol fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle CheckSocksProtocol fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle CheckStdioReverse fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle End fill:#228B22, stroke:#000000, stroke-width:2px;\n```\n\nThe primary path through the code starts at the `DecodeRemote` function and follows the following steps:\n\n1. `DecodeRemote` function is called.\n2. Reverse check is performed to determine if the remote string has a reverse prefix.\n3. The remote string is parsed into parts using regular expressions.\n4. The remote fields are set first, followed by the local fields.\n5. The socks check is performed to determine if the remote portion is for socks.\n6. If the remote portion is for socks, the socks defaults are set.\n7. If the remote portion is not for socks, the non-socks defaults are set.\n8. Cross-protocol check is performed to ensure that the remote and local protocols are the same.\n9. Socks protocol check is performed to ensure that only TCP SOCKS is supported.\n10. Stdio reverse check is performed to ensure that stdio cannot be reversed.\n11. The process ends.\n\nThe error path occurs when any of the following conditions are met:\n\n1. The remote string is invalid.\n2. The number of parts in the remote string is less than or equal to 0 or greater than or equal to 5.\n3. Missing ports in the remote string.\n4. Invalid host in the remote string.\n5. Cross-protocol remotes are not supported yet.\n6. Only TCP SOCKS is supported.\n7. Stdio cannot be reversed.\n\nIn the error path, the process ends with an error."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:09:49 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 84\n\n   **Bug Type**: Insecure Regular Expressions\n\n   **Description**: The use of regular expressions can lead to ReDoS (Regular Expression Denial of Service) if not properly sanitized. The use of `regexp.MustCompile` can lead to catastrophic backtracking, causing the application to hang.\n\n   **Solution**: Avoid using complex regular expressions and consider using string functions for parsing strings. If regular expressions are necessary, ensure they are well-optimized and can't be exploited for ReDoS attacks. Learn more here: https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 91\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error message 'Invalid remote' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.\n\n   **Solution**: Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n3. **Severity**: 3/10\n\n   **Line Number**: 130\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error message 'Missing ports' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.\n\n   **Solution**: Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n4. **Severity**: 3/10\n\n   **Line Number**: 135\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error message 'Invalid host' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.\n\n   **Solution**: Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n5. **Severity**: 3/10\n\n   **Line Number**: 178\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error message 'cross-protocol remotes are not supported yet' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.\n\n   **Solution**: Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n6. **Severity**: 3/10\n\n   **Line Number**: 183\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error message 'only TCP SOCKS is supported' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.\n\n   **Solution**: Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n7. **Severity**: 3/10\n\n   **Line Number**: 188\n\n   **Bug Type**: Error Handling\n\n   **Description**: The error message 'stdio cannot be reversed' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.\n\n   **Solution**: Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 45,
+                "severity": 5,
+                "bugType": "Insecure Regular Expressions",
+                "description": "The use of regular expressions can lead to ReDoS (Regular Expression Denial of Service) if not properly sanitized. The use of `regexp.MustCompile` can lead to catastrophic backtracking, causing the application to hang.",
+                "solution": "Avoid using complex regular expressions and consider using string functions for parsing strings. If regular expressions are necessary, ensure they are well-optimized and can't be exploited for ReDoS attacks. Learn more here: https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"
+              },
+              {
+                "lineNumber": 52,
+                "severity": 3,
+                "bugType": "Error Handling",
+                "description": "The error message 'Invalid remote' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.",
+                "solution": "Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              },
+              {
+                "lineNumber": 91,
+                "severity": 3,
+                "bugType": "Error Handling",
+                "description": "The error message 'Missing ports' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.",
+                "solution": "Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              },
+              {
+                "lineNumber": 96,
+                "severity": 3,
+                "bugType": "Error Handling",
+                "description": "The error message 'Invalid host' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.",
+                "solution": "Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              },
+              {
+                "lineNumber": 139,
+                "severity": 3,
+                "bugType": "Error Handling",
+                "description": "The error message 'cross-protocol remotes are not supported yet' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.",
+                "solution": "Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              },
+              {
+                "lineNumber": 144,
+                "severity": 3,
+                "bugType": "Error Handling",
+                "description": "The error message 'only TCP SOCKS is supported' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.",
+                "solution": "Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              },
+              {
+                "lineNumber": 149,
+                "severity": 3,
+                "bugType": "Error Handling",
+                "description": "The error message 'stdio cannot be reversed' does not provide enough context about what exactly caused the error. This can make debugging difficult and may not provide the user with a clear understanding of what went wrong.",
+                "solution": "Provide more specific error messages that explain what the exact problem is. However, be careful not to reveal sensitive information in error messages. Learn more here: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "application/vnd.code.notebook.error",
+              "data": "{\"name\":\"Error\",\"message\":\"Boost Performance Analysis failed: Unable to process this source code. This can be caused by a temporary issue with the Boost Cloud Service, or by an issue in the source input. Please try again, and if the problem persists, please contact Boost Support.\"}"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": {}
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:19:05 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 86\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The code does not validate the input data, which can lead to security vulnerabilities such as injection attacks. This can compromise data compliance under GDPR, PCI DSS, and HIPAA.\n\n   **Solution**: Implement input validation to ensure only expected and safe data is processed. Use a library or built-in functions for input validation in Go.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 96\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The code does not encrypt data during transmission, which can lead to data breaches. This can violate the GDPR's data protection principle, PCI DSS Requirement 4, and HIPAA's Technical Safeguards.\n\n   **Solution**: Encrypt data during transmission using secure protocols such as TLS or HTTPS. In Go, use the 'crypto/tls' package to implement TLS encryption.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 137\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The code supports only TCP SOCKS, which can limit the security of data transmission. This can potentially compromise data compliance under GDPR, PCI DSS, and HIPAA.\n\n   **Solution**: Consider supporting more secure protocols for data transmission, such as TLS or HTTPS. In Go, use the 'crypto/tls' package to implement TLS encryption.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 47,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The code does not validate the input data, which can lead to security vulnerabilities such as injection attacks. This can compromise data compliance under GDPR, PCI DSS, and HIPAA.",
+                "solution": "Implement input validation to ensure only expected and safe data is processed. Use a library or built-in functions for input validation in Go."
+              },
+              {
+                "lineNumber": 57,
+                "severity": 6,
+                "bugType": "Data Compliance",
+                "description": "The code does not encrypt data during transmission, which can lead to data breaches. This can violate the GDPR's data protection principle, PCI DSS Requirement 4, and HIPAA's Technical Safeguards.",
+                "solution": "Encrypt data during transmission using secure protocols such as TLS or HTTPS. In Go, use the 'crypto/tls' package to implement TLS encryption."
+              },
+              {
+                "lineNumber": 98,
+                "severity": 8,
+                "bugType": "Data Compliance",
+                "description": "The code supports only TCP SOCKS, which can limit the security of data transmission. This can potentially compromise data compliance under GDPR, PCI DSS, and HIPAA.",
+                "solution": "Consider supporting more secure protocols for data transmission, such as TLS or HTTPS. In Go, use the 'crypto/tls' package to implement TLS encryption."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\nconst revPrefix = \"R:\"\n\nfunc DecodeRemote(s string) (*Remote, error) {\n\treverse := false\n\tif strings.HasPrefix(s, revPrefix) {\n\t\ts = strings.TrimPrefix(s, revPrefix)\n\t\treverse = true\n\t}\n\tparts := regexp.MustCompile(`(\\[[^\\[\\]]+\\]|[^\\[\\]:]+):?`).FindAllStringSubmatch(s, -1)\n\tif len(parts) <= 0 || len(parts) >= 5 {\n\t\treturn nil, errors.New(\"Invalid remote\")\n\t}\n\tr := &Remote{Reverse: reverse}\n\t//parse from back to front, to set 'remote' fields first,\n\t//then to set 'local' fields second (allows the 'remote' side\n\t//to provide the defaults)\n\tfor i := len(parts) - 1; i >= 0; i-- {\n\t\tp := parts[i][1]\n\t\t//remote portion is socks?\n\t\tif i == len(parts)-1 && p == \"socks\" {\n\t\t\tr.Socks = true\n\t\t\tcontinue\n\t\t}\n\t\t//local portion is stdio?\n\t\tif i == 0 && p == \"stdio\" {\n\t\t\tr.Stdio = true\n\t\t\tcontinue\n\t\t}\n\t\tp, proto := L4Proto(p)\n\t\tif proto != \"\" {\n\t\t\tif r.RemotePort == \"\" {\n\t\t\t\tr.RemoteProto = proto\n\t\t\t} else if r.LocalProto == \"\" {\n\t\t\t\tr.LocalProto = proto\n\t\t\t}\n\t\t}\n\t\tif isPort(p) {\n\t\t\tif !r.Socks && r.RemotePort == \"\" {\n\t\t\t\tr.RemotePort = p\n\t\t\t}\n\t\t\tr.LocalPort = p\n\t\t\tcontinue\n\t\t}\n\t\tif !r.Socks && (r.RemotePort == \"\" && r.LocalPort == \"\") {\n\t\t\treturn nil, errors.New(\"Missing ports\")\n\t\t}\n\t\tif !isHost(p) {\n\t\t\treturn nil, errors.New(\"Invalid host\")\n\t\t}\n\t\tif !r.Socks && r.RemoteHost == \"\" {\n\t\t\tr.RemoteHost = p\n\t\t} else {\n\t\t\tr.LocalHost = p\n\t\t}\n\t}\n\t//remote string parsed, apply defaults...\n\tif r.Socks {\n\t\t//socks defaults\n\t\tif r.LocalHost == \"\" {\n\t\t\tr.LocalHost = \"127.0.0.1\"\n\t\t}\n\t\tif r.LocalPort == \"\" {\n\t\t\tr.LocalPort = \"1080\"\n\t\t}\n\t} else {\n\t\t//non-socks defaults\n\t\tif r.LocalHost == \"\" {\n\t\t\tr.LocalHost = \"0.0.0.0\"\n\t\t}\n\t\tif r.RemoteHost == \"\" {\n\t\t\tr.RemoteHost = \"127.0.0.1\"\n\t\t}\n\t}\n\tif r.RemoteProto == \"\" {\n\t\tr.RemoteProto = \"tcp\"\n\t}\n\tif r.LocalProto == \"\" {\n\t\tr.LocalProto = r.RemoteProto\n\t}\n\tif r.LocalProto != r.RemoteProto {\n\t\t//TODO support cross protocol\n\t\t//tcp <-> udp, is faily straight forward\n\t\t//udp <-> tcp, is trickier since udp is stateless and tcp is not\n\t\treturn nil, errors.New(\"cross-protocol remotes are not supported yet\")\n\t}\n\tif r.Socks && r.RemoteProto != \"tcp\" {\n\t\treturn nil, errors.New(\"only TCP SOCKS is supported\")\n\t}\n\tif r.Stdio && r.Reverse {\n\t\treturn nil, errors.New(\"stdio cannot be reversed\")\n\t}\n\treturn r, nil\n}\n",
@@ -25,7 +267,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:55:26 AM PDT\n\nThe provided code is a function written in Go language. The function is named `isPort` and it takes a string `s` as an argument. The purpose of this function is to determine if the provided string can be interpreted as a valid port number.\n\nThe function uses the `strconv.Atoi` function to attempt to convert the string to an integer. This function returns two values: the converted integer and an error. If the conversion is successful, the error will be `nil`, otherwise, it will contain information about the error.\n\nHere is a step-by-step explanation of the code:\n\n1. `n, err := strconv.Atoi(s)`: This line attempts to convert the string `s` to an integer. The converted integer is stored in `n` and any error that occurs during the conversion is stored in `err`.\n\n2. `if err != nil { return false }`: This line checks if an error occurred during the conversion. If `err` is not `nil`, this means that an error occurred, so the function returns `false`, indicating that `s` is not a valid port number.\n\n3. `if n <= 0 || n > 65535 { return false }`: This line checks if the converted integer is within the valid range for port numbers. In networking, a port number is a 16-bit unsigned integer, so valid port numbers are in the range 1 to 65535. If `n` is not in this range, the function returns `false`.\n\n4. `return true`: If the function has not yet returned, this means that no errors occurred and the integer is within the valid range, so the function returns `true`, indicating that `s` is a valid port number.\n\nIn terms of algorithms, this function uses a simple error checking and range checking algorithm.\n\nFor more information on port numbers and `strconv.Atoi`, you can refer to the following links:\n- Port Numbers: https://en.wikipedia.org/wiki/Port_(computer_networking)\n- strconv.Atoi: https://pkg.go.dev/strconv#Atoi\n\nRegarding the architectural guidelines, this function is a utility function and does not directly relate to the architecture of a software system. However, it adheres to good coding practices by performing error checking and validation, which are important for system robustness and reliability."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:04:56 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->A;\nA-->B;\nB-->C;\nC-->D;\nD-->E;\nE-->F;\nF-->G;\nG-->H;\nH-->I;\nI-->J;\nJ-->K;\nK-->L;\nL-->M;\nM-->N;\nN-->O;\nO-->P;\nP-->Q;\nQ-->R;\nR-->S;\nS-->T;\nT-->U;\nU-->V;\nV-->W;\nW-->X;\nX-->Y;\nY-->Z;\nZ-->End;\n\nstyle A fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle B fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle C fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle D fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle E fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle F fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle G fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle H fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle I fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle J fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle K fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle L fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle M fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle N fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle O fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle P fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Q fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle R fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle S fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle T fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle U fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle V fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle W fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle X fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Y fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Z fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle End fill:#228B22, stroke:#000000, stroke-width:2px;\n```\n\nThe control flow graph for the `isPort` function is shown above. The primary path is represented by the green-colored nodes, while the error path is represented by the red-colored nodes. The function starts at the `Start` node and goes through a series of conditional checks (`A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L`, `M`, `N`, `O`, `P`, `Q`, `R`, `S`, `T`, `U`, `V`, `W`, `X`, `Y`, `Z`) before reaching the `End` node. The error path is taken if any of the conditional checks fail."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:09:54 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:13:10 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:19:09 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\nfunc isPort(s string) bool {\n\tn, err := strconv.Atoi(s)\n\tif err != nil {\n\t\treturn false\n\t}\n\tif n <= 0 || n > 65535 {\n\t\treturn false\n\t}\n\treturn true\n}\n",
@@ -37,7 +340,76 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:56:05 AM PDT\n\nThis function `isHost` is written in Go programming language. Its purpose is to determine if a given string `s` can be parsed into a valid `URL` (Uniform Resource Locator). \n\nHere's a detailed breakdown of the code:\n\n- The function takes one argument `s`, which is a string.\n\n- `url.Parse(\"//\" + s)` is used to parse the string `s` into a URL. The `//` is prepended to the string `s` to ensure that it is parsed as a host:port pair. The `url.Parse` function returns a `URL` object and an `error` object.\n\n- If the `url.Parse` function returns an error (`err != nil`), it means that the string `s` could not be parsed into a valid URL, so the function returns `false`.\n\n- If no error is returned, it means that the string `s` could be parsed into a valid URL, so the function returns `true`.\n\nThis function uses the built-in `url.Parse` function in Go's `net/url` package to parse URLs. The `url.Parse` function is part of Go's standard library and is widely used for parsing URLs in Go programs.\n\nAs far as architectural guidelines are concerned, this function is quite straightforward and doesn't seem to conflict with any architectural guidelines. It's a simple utility function that checks if a string can be parsed into a URL, and can be used anywhere in a program where such a check is needed.\n\nFor more information on Go's `net/url` package and the `url.Parse` function, you can refer to the official Go documentation here: https://golang.org/pkg/net/url/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:05:14 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ParseURL;\nParseURL-->CheckError;\nCheckError-->ReturnFalse;\nCheckError-->ReturnTrue;\nReturnFalse-->End;\nReturnTrue-->End;\n```\n\nIn the above control flow graph, the function `isHost` is analyzed. The control flow starts at the `Start` node and goes to the `ParseURL` node, which represents the call to the `url.Parse` function. From there, the control flow splits into two paths. If there is an error (`err != nil`), the control flow goes to the `CheckError` node, which then leads to the `ReturnFalse` node. If there is no error, the control flow goes directly from `ParseURL` to `ReturnTrue`. Both `ReturnFalse` and `ReturnTrue` nodes lead to the `End` node, representing the end of the function.\n\nThe `ParseURL` node represents the call to the external library function `url.Parse`. The `CheckError` node represents the decision point based on the error returned by `url.Parse`. The `ReturnFalse` and `ReturnTrue` nodes represent the return statements in the code."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:09:58 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:13:26 AM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 288\n\n   **Bug Type**: Memory\n\n   **Description**: Inefficient string concatenation. The '+' operator creates a new string which can be costly in terms of memory and performance.\n\n   **Solution**: Consider using a buffer or the 'fmt' package for string concatenation. This is more efficient as it does not create a new string. Here is an example: `fmt.Sprintf(\"//%s\", s)`\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 144,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "Inefficient string concatenation. The '+' operator creates a new string which can be costly in terms of memory and performance.",
+                "solution": "Consider using a buffer or the 'fmt' package for string concatenation. This is more efficient as it does not create a new string. Here is an example: `fmt.Sprintf(\"//%s\", s)`"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:19:13 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\nfunc isHost(s string) bool {\n\t_, err := url.Parse(\"//\" + s)\n\tif err != nil {\n\t\treturn false\n\t}\n\treturn true\n}\n",
@@ -49,7 +421,98 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:56:59 AM PDT\n\nThis code snippet is written in Go, a statically typed, compiled language developed by Google. The code defines a regular expression and a function to extract the layer-4 protocol (transport layer protocol) from a given string.\n\nLet's break it down:\n\n`var l4Proto = regexp.MustCompile(`(?i)\\/(tcp|udp)$`)`\n\nThis line of code is defining a global variable `l4Proto` which is a regular expression. The `regexp.MustCompile` function compiles the regular expression and returns a Regexp object. This object can be used to match the pattern in the input strings. The pattern `(?i)\\/(tcp|udp)$` is designed to match strings ending with \"/tcp\" or \"/udp\", case-insensitively. The `(?i)` makes the match case-insensitive, the `\\/` matches a \"/\" character, `(tcp|udp)` matches either \"tcp\" or \"udp\", and `$` asserts the end of the string.\n\n`func L4Proto(s string) (head, proto string) {`\n\nThis line of code is defining a function named `L4Proto` that takes a string `s` as input and returns two strings: `head` and `proto`.\n\n`if l4Proto.MatchString(s) {`\n\nThe function first checks if the input string `s` matches the pattern defined by `l4Proto`. If it does, the following block of code is executed:\n\n`l := len(s)\n return strings.ToLower(s[:l-4]), s[l-3:]`\n\nThe length of the string `s` is calculated and stored in `l`. The function then returns two strings: the first string is the input string `s` with the last four characters removed and converted to lowercase. The second string is the last three characters of the input string `s`. These two strings represent the head and the protocol of the input string, respectively.\n\n`return s, \"\"`\n\nIf the input string `s` does not match the pattern defined by `l4Proto`, the function simply returns the input string `s` as the head and an empty string as the protocol.\n\nThis function could be used in a networking application to extract the transport layer protocol (TCP or UDP) from a string that represents a network address or a URL. \n\nFor further understanding, you can refer to the official Go documentation on regular expressions: https://golang.org/pkg/regexp/ and strings: https://golang.org/pkg/strings/."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:05:26 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExampleErrorPath-->End;\n```\n\nThe control flow graph for the given source code is as follows:\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle L4Proto fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->L4Proto;\n```\n\nThe primary path through the code is from the start of the function to the `L4Proto` function."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:10:21 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 307\n\n   **Bug Type**: Regular Expression Denial of Service (ReDoS)\n\n   **Description**: The regular expression used in the `MatchString` function is susceptible to Regular Expression Denial of Service (ReDoS). An attacker can provide a specially crafted string that can cause the application to consume an excessive amount of CPU, leading to a denial of service.\n\n   **Solution**: To mitigate this, limit the input length for the `MatchString` function or use a safer way to parse the protocol from the string. You can also consider using a timeout when executing the regular expression to prevent excessive CPU usage. More information can be found here: https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 155,
+                "severity": 5,
+                "bugType": "Regular Expression Denial of Service (ReDoS)",
+                "description": "The regular expression used in the `MatchString` function is susceptible to Regular Expression Denial of Service (ReDoS). An attacker can provide a specially crafted string that can cause the application to consume an excessive amount of CPU, leading to a denial of service.",
+                "solution": "To mitigate this, limit the input length for the `MatchString` function or use a safer way to parse the protocol from the string. You can also consider using a timeout when executing the regular expression to prevent excessive CPU usage. More information can be found here: https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:14:12 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 304\n\n   **Bug Type**: CPU\n\n   **Description**: The use of regular expressions can be CPU-intensive, especially if the pattern is complex and the input string is long. This can lead to high CPU usage and can impact the performance of the application.\n\n   **Solution**: Consider using simpler string processing functions if possible. For example, you can use the strings package's HasSuffix function to check if the string ends with '/tcp' or '/udp'. If regular expressions are necessary, consider precompiling them and reusing the compiled expressions, as you have done here. Reference: https://golang.org/pkg/regexp/\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 308\n\n   **Bug Type**: Memory\n\n   **Description**: The use of the function strings.ToLower can lead to increased memory usage as it creates a new string in memory. If this function is called frequently, it can lead to high memory usage.\n\n   **Solution**: Consider using the original string if case sensitivity is not a concern. If case sensitivity is a concern, consider converting the string to lower case once and reusing the lower case string. Reference: https://golang.org/pkg/strings/#ToLower\n\n\n3. **Severity**: 3/10\n\n   **Line Number**: 308\n\n   **Bug Type**: CPU\n\n   **Description**: The use of string slicing and concatenation can be CPU-intensive, especially if done frequently. This can impact the performance of the application.\n\n   **Solution**: Consider using a buffer or a builder to concatenate strings, as these are more efficient. If the size of the strings is small and the operation is not done frequently, this may not be a significant concern. Reference: https://golang.org/pkg/strings/#Builder\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 152,
+                "severity": 7,
+                "bugType": "CPU",
+                "description": "The use of regular expressions can be CPU-intensive, especially if the pattern is complex and the input string is long. This can lead to high CPU usage and can impact the performance of the application.",
+                "solution": "Consider using simpler string processing functions if possible. For example, you can use the strings package's HasSuffix function to check if the string ends with '/tcp' or '/udp'. If regular expressions are necessary, consider precompiling them and reusing the compiled expressions, as you have done here. Reference: https://golang.org/pkg/regexp/"
+              },
+              {
+                "lineNumber": 156,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "The use of the function strings.ToLower can lead to increased memory usage as it creates a new string in memory. If this function is called frequently, it can lead to high memory usage.",
+                "solution": "Consider using the original string if case sensitivity is not a concern. If case sensitivity is a concern, consider converting the string to lower case once and reusing the lower case string. Reference: https://golang.org/pkg/strings/#ToLower"
+              },
+              {
+                "lineNumber": 156,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The use of string slicing and concatenation can be CPU-intensive, especially if done frequently. This can impact the performance of the application.",
+                "solution": "Consider using a buffer or a builder to concatenate strings, as these are more efficient. If the size of the strings is small and the operation is not done frequently, this may not be a significant concern. Reference: https://golang.org/pkg/strings/#Builder"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:19:17 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "4",
       "value": "\nvar l4Proto = regexp.MustCompile(`(?i)\\/(tcp|udp)$`)\n\n//L4Proto extacts the layer-4 protocol from the given string\nfunc L4Proto(s string) (head, proto string) {\n\tif l4Proto.MatchString(s) {\n\t\tl := len(s)\n\t\treturn strings.ToLower(s[:l-4]), s[l-3:]\n\t}\n\treturn s, \"\"\n}\n",
@@ -61,7 +524,92 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:57:36 AM PDT\n\nThis Go code snippet is a method implementation for a type called `Remote`. The method is implementing the `Stringer` interface from the Go standard library. The `Stringer` interface is a single method interface that requires the implementation of a `String` method that returns a string. It is similar to the `toString` method in Java. When a type implements the `Stringer` interface, it can be used with the `fmt` package and the value will be formatted as the string returned by the `String` method.\n\nHere is a detailed explanation of the code:\n\n```go\n//implement Stringer\nfunc (r Remote) String() string {\n```\nThis line defines a method called `String` on the `Remote` type. The method takes no arguments and returns a string. The `r Remote` is a receiver, which means the method is bound to the `Remote` type.\n\n```go\nsb := strings.Builder{}\n```\nThis line initializes a new instance of `strings.Builder`. This is a type in the Go standard library that provides an efficient way to concatenate strings.\n\n```go\nif r.Reverse {\n\tsb.WriteString(revPrefix)\n}\n```\nThis block checks if the `Reverse` field of the `Remote` type is `true`. If it is, it writes a string, `revPrefix`, to the `strings.Builder`.\n\n```go\nsb.WriteString(strings.TrimPrefix(r.Local(), \"0.0.0.0:\"))\n```\nThis line trims the prefix \"0.0.0.0:\" from the string returned by the `r.Local()` method and writes the resulting string to the `strings.Builder`.\n\n```go\nsb.WriteString(\"=>\")\n```\nThis line writes the string \"=>\" to the `strings.Builder`.\n\n```go\nsb.WriteString(strings.TrimPrefix(r.Remote(), \"127.0.0.1:\"))\n```\nThis line trims the prefix \"127.0.0.1:\" from the string returned by the `r.Remote()` method and writes the resulting string to the `strings.Builder`.\n\n```go\nif r.RemoteProto == \"udp\" {\n\tsb.WriteString(\"/udp\")\n}\n```\nThis block checks if the `RemoteProto` field of the `Remote` type is \"udp\". If it is, it writes the string \"/udp\" to the `strings.Builder`.\n\n```go\nreturn sb.String()\n```\nThis line calls the `String` method on the `strings.Builder` to get a string that represents the current concatenation of all the strings written to it. This string is then returned as the result of the `String` method on the `Remote` type.\n\nThe algorithm used in this code is simple string concatenation and manipulation. It constructs a string representation of a `Remote` object by concatenating various parts of the object, with some conditional logic for the `Reverse` and `RemoteProto` fields.\n\nTo learn more about the `strings.Builder` type and the `Stringer` interface, you can check out the official Go documentation:\n\n- `strings.Builder`: https://golang.org/pkg/strings/#Builder\n- `fmt.Stringer`: https://golang.org/pkg/fmt/#Stringer\n\nAs for architectural guidelines, this code follows the common Go practice of using the `Stringer` interface to provide a string representation for a type. The code also uses the `strings.Builder` for efficient string concatenation, which is a good practice for performance. There are no apparent conflicts with the provided architectural guidelines."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:05:31 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:10:24 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:14:37 AM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 326\n\n   **Bug Type**: CPU\n\n   **Description**: Inefficient usage of strings.TrimPrefix function. The TrimPrefix function is called twice in this function, which can cause unnecessary CPU usage.\n\n   **Solution**: Consider using string manipulation techniques that don't involve creating new strings. For example, you could use 'strings.Index' to find the index of ':' and then slice the string. Here is a resource on efficient string manipulation in Go: https://yourbasic.org/golang/strings-explained/\n\n\n2. **Severity**: 1/10\n\n   **Line Number**: 326\n\n   **Bug Type**: Memory\n\n   **Description**: The strings.Builder{} is used to concatenate strings. However, this is not a performance issue, but rather a good practice. The strings.Builder{} is efficient and doesn't cause unnecessary memory allocations.\n\n   **Solution**: No action needed.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 163,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "Inefficient usage of strings.TrimPrefix function. The TrimPrefix function is called twice in this function, which can cause unnecessary CPU usage.",
+                "solution": "Consider using string manipulation techniques that don't involve creating new strings. For example, you could use 'strings.Index' to find the index of ':' and then slice the string. Here is a resource on efficient string manipulation in Go: https://yourbasic.org/golang/strings-explained/"
+              },
+              {
+                "lineNumber": 163,
+                "severity": 1,
+                "bugType": "Memory",
+                "description": "The strings.Builder{} is used to concatenate strings. However, this is not a performance issue, but rather a good practice. The strings.Builder{} is efficient and doesn't cause unnecessary memory allocations.",
+                "solution": "No action needed."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:19:38 AM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 329\n\n   **Bug Type**: Data Compliance\n\n   **Description**: Potential exposure of sensitive data. The function 'String' does not have any clear data sanitization or validation processes. This could lead to potential security vulnerabilities such as data exposure or injection attacks.\n\n   **Solution**: Implement data sanitization and validation before processing or outputting data. For example, you could use a secure function to sanitize the data before it's processed to prevent potential injection attacks. You should also consider encrypting sensitive data to prevent data exposure. It's important to follow secure coding practices to prevent potential data compliance issues.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 166,
+                "severity": 2,
+                "bugType": "Data Compliance",
+                "description": "Potential exposure of sensitive data. The function 'String' does not have any clear data sanitization or validation processes. This could lead to potential security vulnerabilities such as data exposure or injection attacks.",
+                "solution": "Implement data sanitization and validation before processing or outputting data. For example, you could use a secure function to sanitize the data before it's processed to prevent potential injection attacks. You should also consider encrypting sensitive data to prevent data exposure. It's important to follow secure coding practices to prevent potential data compliance issues.",
+                "webLink": "https://owasp.org/www-project-top-ten/2017/A1_2017-Injection"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "5",
       "value": "\n//implement Stringer\nfunc (r Remote) String() string {\n\tsb := strings.Builder{}\n\tif r.Reverse {\n\t\tsb.WriteString(revPrefix)\n\t}\n\tsb.WriteString(strings.TrimPrefix(r.Local(), \"0.0.0.0:\"))\n\tsb.WriteString(\"=>\")\n\tsb.WriteString(strings.TrimPrefix(r.Remote(), \"127.0.0.1:\"))\n\tif r.RemoteProto == \"udp\" {\n\t\tsb.WriteString(\"/udp\")\n\t}\n\treturn sb.String()\n}\n",
@@ -73,7 +621,105 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:58:49 AM PDT\n\nThe provided code is written in Go language and is a method called `Encode()` on the `Remote` struct. It seems to be part of a larger codebase, possibly a networking application, where this method is used to encode a remote connection into a string format.\n\nHere's a detailed line-by-line breakdown:\n\n1. `func (r Remote) Encode() string {`: This line defines a method called `Encode()`. The method is associated with a struct `Remote` and it returns a string. The `Remote` struct and its fields are not defined in the provided code snippet, but we can infer some details based on how they are used in this method.\n\n2. `if r.LocalPort == \"\" {`: This line checks if the `LocalPort` field of `Remote` struct is an empty string. \n\n3. `r.LocalPort = r.RemotePort`: If `LocalPort` is an empty string, then it is set to the value of `RemotePort`. This suggests that `LocalPort` and `RemotePort` are string fields in the `Remote` struct representing the local and remote port numbers respectively.\n\n4. `}`: This line ends the if condition.\n\n5. `local := r.Local()`: This line calls the `Local()` method on `r` and assigns the returned value to the `local` variable. The `Local()` method is not defined in the provided code snippet, but it likely returns a string representing the local address or port.\n\n6. `remote := r.Remote()`: Similarly, this line calls the `Remote()` method on `r` and assigns the returned value to the `remote` variable. The `Remote()` method probably returns a string representing the remote address or port.\n\n7. `if r.RemoteProto == \"udp\" {`: This line checks if the `RemoteProto` field of `Remote` struct is equal to \"udp\". This suggests that `RemoteProto` is a string field in the `Remote` struct representing the protocol used for the remote connection.\n\n8. `remote += \"/udp\"`: If `RemoteProto` is \"udp\", then \"/udp\" is appended to the `remote` string. \n\n9. `}`: This line ends the if condition.\n\n10. `if r.Reverse {`: This line checks if the `Reverse` field of `Remote` struct is true. This suggests that `Reverse` is a boolean field in the `Remote` struct indicating whether the connection is a reverse connection.\n\n11. `return \"R:\" + local + \":\" + remote`: If `Reverse` is true, the method returns a string in the format \"R:local:remote\".\n\n12. `}`: This line ends the if condition.\n\n13. `return local + \":\" + remote`: If `Reverse` is false, the method returns a string in the format \"local:remote\".\n\n14. `}`: This line ends the method definition.\n\nThe algorithm used in this code is quite straightforward. It checks certain conditions and formats a string based on those conditions. There are no complex algorithms involved.\n\nFor more information on Go programming, you can refer to the official Go documentation: https://golang.org/doc/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:05:41 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->Encode;\nEncode-->If;\nIf-- Yes -->SetLocalPort;\nSetLocalPort-->Local;\nLocal-->Remote;\nRemote-->If2;\nIf2-- Yes -->AppendUDP;\nAppendUDP-->Return;\nIf2-- No -->Return;\nIf-- No -->Return;\n\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:10:28 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:15:09 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 361\n\n   **Bug Type**: Memory\n\n   **Description**: Repeated string concatenation in a non-optimal way.\n\n   **Solution**: Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 364\n\n   **Bug Type**: Memory\n\n   **Description**: Repeated string concatenation in a non-optimal way.\n\n   **Solution**: Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder\n\n\n3. **Severity**: 5/10\n\n   **Line Number**: 368\n\n   **Bug Type**: Memory\n\n   **Description**: Repeated string concatenation in a non-optimal way.\n\n   **Solution**: Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder\n\n\n4. **Severity**: 5/10\n\n   **Line Number**: 371\n\n   **Bug Type**: Memory\n\n   **Description**: Repeated string concatenation in a non-optimal way.\n\n   **Solution**: Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 183,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "Repeated string concatenation in a non-optimal way.",
+                "solution": "Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder"
+              },
+              {
+                "lineNumber": 186,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "Repeated string concatenation in a non-optimal way.",
+                "solution": "Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder"
+              },
+              {
+                "lineNumber": 190,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "Repeated string concatenation in a non-optimal way.",
+                "solution": "Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder"
+              },
+              {
+                "lineNumber": 193,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "Repeated string concatenation in a non-optimal way.",
+                "solution": "Consider using a StringBuilder or similar for efficient string concatenation. Reference: https://golang.org/pkg/strings/#Builder"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:19:58 AM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 364\n\n   **Bug Type**: Data Encoding\n\n   **Description**: The function 'Encode()' is encoding data into a string format without any apparent encryption or hashing. This could potentially expose sensitive information if the data being encoded includes personally identifiable information (PII) or other sensitive data. This could be a violation of GDPR, PCI DSS, and HIPAA, which require data to be stored and transmitted securely.\n\n   **Solution**: Consider implementing encryption or hashing before encoding the data to string format. This will help to protect the data even if it is intercepted or accessed without authorization.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 186,
+                "severity": 2,
+                "bugType": "Data Encoding",
+                "description": "The function 'Encode()' is encoding data into a string format without any apparent encryption or hashing. This could potentially expose sensitive information if the data being encoded includes personally identifiable information (PII) or other sensitive data. This could be a violation of GDPR, PCI DSS, and HIPAA, which require data to be stored and transmitted securely.",
+                "solution": "Consider implementing encryption or hashing before encoding the data to string format. This will help to protect the data even if it is intercepted or accessed without authorization."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "6",
       "value": "\n//Encode remote to a string\nfunc (r Remote) Encode() string {\n\tif r.LocalPort == \"\" {\n\t\tr.LocalPort = r.RemotePort\n\t}\n\tlocal := r.Local()\n\tremote := r.Remote()\n\tif r.RemoteProto == \"udp\" {\n\t\tremote += \"/udp\"\n\t}\n\tif r.Reverse {\n\t\treturn \"R:\" + local + \":\" + remote\n\t}\n\treturn local + \":\" + remote\n}\n",
@@ -85,7 +731,76 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:59:13 AM PDT\n\nThis code is written in Go language and it defines a function named `Local()` that is a method of the `Remote` struct. The function does not take any arguments and returns a string.\n\nHere's a breakdown of the code:\n\n1. `func (r Remote) Local() string {`: This line defines the function `Local()`. The `(r Remote)` part before the function name indicates that this function is a method of the `Remote` struct. This means that the function can be called on an instance of `Remote`. The function returns a string.\n\n2. `if r.Stdio {`: This line starts an if statement that checks if the `Stdio` field of the `Remote` struct is true. If it is, the function returns the string \"stdio\" and ends.\n\n3. `if r.LocalHost == \"\" {`: If the `Stdio` field is not true, the function checks if the `LocalHost` field of the `Remote` struct is an empty string. If it is, the function sets the `LocalHost` field to \"0.0.0.0\".\n\n4. `return r.LocalHost + \":\" + r.LocalPort`: If the `LocalHost` field is not an empty string, the function returns a string that consists of the `LocalHost` field, a colon, and the `LocalPort` field. This string represents a network address.\n\nThe function doesn't use any specific algorithm, it just checks the state of the `Remote` object and returns a string based on that state.\n\nThis code seems to be part of a larger application, possibly a network-related application where remote connections are managed. The `Remote` struct likely represents a remote connection, with `LocalHost` and `LocalPort` representing the local network address and port to which the remote connection is tied.\n\nThe function `Local()` seems to be a getter method that returns the local network address and port as a string. This can be used elsewhere in the application whenever the local address of a remote connection is needed.\n\nFor more on Go methods and structs, you can refer to this link: https://tour.golang.org/methods/1\n\nFor more on network programming in Go, you can refer to this link: https://go.dev/blog/net-http"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:06:04 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->CheckStdio;\nCheckStdio-->|true| Stdio;\nCheckStdio-->|false| CheckLocalHost;\nCheckLocalHost-->|true| SetLocalHost;\nCheckLocalHost-->|false| ReturnLocal;\n\nStdio-->ReturnStdio;\nSetLocalHost-->SetLocalPort;\nSetLocalPort-->ReturnLocal;\nReturnStdio-->End;\nReturnLocal-->End;\n```\n\nThe control flow graph for the `Local()` function is as follows:\n\n1. The control flow starts at the `Start` node.\n2. The first decision point is to check if `r.Stdio` is true or false.\n3. If `r.Stdio` is true, the control flow goes to the `Stdio` node, which represents the return value \"stdio\".\n4. If `r.Stdio` is false, the control flow goes to the `CheckLocalHost` node.\n5. The next decision point is to check if `r.LocalHost` is empty or not.\n6. If `r.LocalHost` is empty, the control flow goes to the `SetLocalHost` node, where `r.LocalHost` is set to \"0.0.0.0\".\n7. The control flow then goes to the `SetLocalPort` node, where `r.LocalPort` is concatenated with `r.LocalHost`.\n8. Finally, the control flow goes to the `ReturnLocal` node, which represents the return value of `r.LocalHost + \":\" + r.LocalPort`.\n9. The control flow ends at the `End` node.\n\nNote: The primary path through the code is represented by the default non-colored style, while the error path is represented by the red-colored style."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:10:33 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:15:28 AM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 395\n\n   **Bug Type**: Memory\n\n   **Description**: Inefficient string concatenation. In Go, string concatenation with the '+' operator can lead to performance issues as it creates a new string and leaves the old ones for garbage collection.\n\n   **Solution**: Use the 'strings.Builder' or 'fmt.Sprintf' for efficient string concatenation. For example, use 'fmt.Sprintf(\"%s:%s\", r.LocalHost, r.LocalPort)'. Reference: https://golang.org/pkg/fmt/#Sprintf\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 201,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "Inefficient string concatenation. In Go, string concatenation with the '+' operator can lead to performance issues as it creates a new string and leaves the old ones for garbage collection.",
+                "solution": "Use the 'strings.Builder' or 'fmt.Sprintf' for efficient string concatenation. For example, use 'fmt.Sprintf(\"%s:%s\", r.LocalHost, r.LocalPort)'. Reference: https://golang.org/pkg/fmt/#Sprintf"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:20:02 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "7",
       "value": "\n//Local is the decodable local portion\nfunc (r Remote) Local() string {\n\tif r.Stdio {\n\t\treturn \"stdio\"\n\t}\n\tif r.LocalHost == \"\" {\n\t\tr.LocalHost = \"0.0.0.0\"\n\t}\n\treturn r.LocalHost + \":\" + r.LocalPort\n}\n",
@@ -97,7 +812,83 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 3:00:14 AM PDT\n\nThe provided code snippet is a method written in Go (Golang). This method is part of a structure named `Remote`. It appears to be a network-related function, possibly part of a larger system that deals with network connections or socket communications.\n\nHere's a line-by-line explanation of the code:\n\n1. `func (r Remote) Remote() string {`: This line defines a method named `Remote` for the `Remote` struct. The method doesn't take any parameters and returns a string. The receiver `(r Remote)` means that this method can be called on instances of the `Remote` struct.\n\n2. `if r.Socks {`: This line checks if the `Socks` field of the `Remote` struct is true. Socks is a common protocol for network proxies, so this might be checking if the connection is a SOCKS proxy.\n\n3. `return \"socks\"`: If `r.Socks` is true, the method returns the string \"socks\". This might be used elsewhere to handle SOCKS connections differently.\n\n4. `if r.RemoteHost == \"\" {`: This line checks if the `RemoteHost` field of the `Remote` struct is an empty string. This might be the case if no remote host has been set.\n\n5. `r.RemoteHost = \"127.0.0.1\"`: If `r.RemoteHost` is an empty string, it's set to \"127.0.0.1\". This is the loopback IP address, commonly used for local testing.\n\n6. `return r.RemoteHost + \":\" + r.RemotePort`: If `r.RemoteHost` is not an empty string, the method returns a string that combines `r.RemoteHost` and `r.RemotePort` with a colon in between. This is a common format for specifying network addresses.\n\nThe algorithm used in this code is simple conditional logic (`if` statements) to determine what string to return based on the properties of the `Remote` struct.\n\nThere are no apparent conflicts with architectural guidelines as this seems to be a helper function for handling network connections, which is consistent with the high-level summaries of the project. However, without more context or specific guidelines, it's hard to say for certain.\n\nFor more information about methods in Go, you may refer to the official Go documentation: https://golang.org/doc/effective_go#methods\n\nFor more information about the SOCKS protocol, you may refer to the Wikipedia page: https://en.wikipedia.org/wiki/SOCKS\n\nFor more information about the loopback IP address, you may refer to the Wikipedia page: https://en.wikipedia.org/wiki/Loopback"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:06:24 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->CheckSocks;\nCheckSocks-->|true| ReturnSocks;\nCheckSocks-->|false| CheckRemoteHost;\nCheckRemoteHost-->|true| SetDefaultRemoteHost;\nCheckRemoteHost-->|false| ReturnRemoteHost;\nSetDefaultRemoteHost-->ReturnRemoteHost;\nReturnRemoteHost-->ReturnRemote;\nReturnSocks-->ReturnRemote;\n\n```\nThe control flow starts at the function `Remote()`. It first checks if `r.Socks` is true. If it is true, it goes to the `ReturnSocks` block and returns \"socks\". If `r.Socks` is false, it goes to the `CheckRemoteHost` block. \n\nIn the `CheckRemoteHost` block, it checks if `r.RemoteHost` is empty. If it is empty, it goes to the `SetDefaultRemoteHost` block and sets `r.RemoteHost` to \"127.0.0.1\". If `r.RemoteHost` is not empty, it goes to the `ReturnRemoteHost` block.\n\nIn the `ReturnRemoteHost` block, it returns `r.RemoteHost + \":\" + r.RemotePort`. \n\nBoth the `ReturnRemoteHost` and `ReturnSocks` blocks lead to the `ReturnRemote` block, which returns the final value."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:10:36 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:15:52 AM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 414\n\n   **Bug Type**: Memory\n\n   **Description**: Inefficient string concatenation in Go.\n\n   **Solution**: Use the `fmt.Sprintf` function for string concatenation. It is more efficient in terms of memory usage. For example: `return fmt.Sprintf(\"%s:%s\", r.RemoteHost, r.RemotePort)`.\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 411\n\n   **Bug Type**: Memory\n\n   **Description**: The method modifies the receiver's RemoteHost field, which can lead to unexpected side effects.\n\n   **Solution**: Avoid modifying the receiver's field. Instead, use a local variable. For example: `var host string; if r.RemoteHost == \"\" { host = \"127.0.0.1\" } else { host = r.RemoteHost } return fmt.Sprintf(\"%s:%s\", host, r.RemotePort)`.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 209,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "Inefficient string concatenation in Go.",
+                "solution": "Use the `fmt.Sprintf` function for string concatenation. It is more efficient in terms of memory usage. For example: `return fmt.Sprintf(\"%s:%s\", r.RemoteHost, r.RemotePort)`."
+              },
+              {
+                "lineNumber": 206,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "The method modifies the receiver's RemoteHost field, which can lead to unexpected side effects.",
+                "solution": "Avoid modifying the receiver's field. Instead, use a local variable. For example: `var host string; if r.RemoteHost == \"\" { host = \"127.0.0.1\" } else { host = r.RemoteHost } return fmt.Sprintf(\"%s:%s\", host, r.RemotePort)`."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:20:06 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "8",
       "value": "\n//Remote is the decodable remote portion\nfunc (r Remote) Remote() string {\n\tif r.Socks {\n\t\treturn \"socks\"\n\t}\n\tif r.RemoteHost == \"\" {\n\t\tr.RemoteHost = \"127.0.0.1\"\n\t}\n\treturn r.RemoteHost + \":\" + r.RemotePort\n}\n",
@@ -109,7 +900,105 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 3:01:02 AM PDT\n\nThe provided code is a method named `UserAddr` of the `Remote` struct (not shown in the snippet). This method is used to generate a string representation of a user's address, which is used when checking if a user has access to a given remote. \n\nThe code is written in Go, a statically typed, compiled language developed by Google. Go is often used for system-level programming and is known for its simplicity and efficiency.\n\nLet's break down the code:\n\n- The `UserAddr` method doesn't take any arguments and returns a string. \n- Inside the method, there's a conditional `if` statement that checks if the `Reverse` field of the `Remote` struct is `true`. The `Reverse` field likely indicates whether the connection is a reverse connection or not.\n- If `Reverse` is `true`, the method returns a string that starts with \"R:\" followed by the `LocalHost` field, a colon, and the `LocalPort` field of the `Remote` struct. This format suggests that the user is connecting from the local host and port.\n- If `Reverse` is `false`, the method returns a string that consists of the `RemoteHost` field, a colon, and the `RemotePort` field of the `Remote` struct. This format suggests that the user is connecting to the remote host and port.\n\nThe algorithm used in this code is straightforward: it checks a condition and returns a string based on that condition.\n\nThis code appears to be consistent with general Go programming conventions and doesn't seem to conflict with any architectural guidelines. \n\nFor more information about Go and its syntax, you can check out the official Go documentation: https://golang.org/doc/\n\nFor more information about the if-else statements in Go, you can check out this tutorial: https://www.tutorialspoint.com/go/go_if_else_statement.htm"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:06:38 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```\n\nIn the provided code, there is only one control flow path. The function `UserAddr()` takes a `Remote` object as input and returns a string. The control flow starts at the function declaration and goes directly to the `if` statement. \n\nThe `if` statement checks the value of the `Reverse` field of the `Remote` object. If it is `true`, the control flow goes to the `return` statement with the string \"R:\" concatenated with the `LocalHost`, `LocalPort` fields of the `Remote` object. If the `Reverse` field is `false`, the control flow goes to the `return` statement with the `RemoteHost` and `RemotePort` fields of the `Remote` object concatenated.\n\nSince there are no external library calls or non-standard functions in this code, the control flow graph is simple and does not have any error paths."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:10:40 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:16:26 AM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 436\n\n   **Bug Type**: Memory\n\n   **Description**: Inefficient string concatenation using '+'. This approach can lead to high memory usage due to the creation of new temporary strings for each concatenation.\n\n   **Solution**: Use a StringBuilder or similar mechanism for efficient string concatenation. This approach can significantly reduce memory usage. For Go, you can use the strings.Builder type. More info: https://golang.org/pkg/strings/#Builder\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 439\n\n   **Bug Type**: Memory\n\n   **Description**: Inefficient string concatenation using '+'. This approach can lead to high memory usage due to the creation of new temporary strings for each concatenation.\n\n   **Solution**: Use a StringBuilder or similar mechanism for efficient string concatenation. This approach can significantly reduce memory usage. For Go, you can use the strings.Builder type. More info: https://golang.org/pkg/strings/#Builder\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 220,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "Inefficient string concatenation using '+'. This approach can lead to high memory usage due to the creation of new temporary strings for each concatenation.",
+                "solution": "Use a StringBuilder or similar mechanism for efficient string concatenation. This approach can significantly reduce memory usage. For Go, you can use the strings.Builder type. More info: https://golang.org/pkg/strings/#Builder"
+              },
+              {
+                "lineNumber": 223,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "Inefficient string concatenation using '+'. This approach can lead to high memory usage due to the creation of new temporary strings for each concatenation.",
+                "solution": "Use a StringBuilder or similar mechanism for efficient string concatenation. This approach can significantly reduce memory usage. For Go, you can use the strings.Builder type. More info: https://golang.org/pkg/strings/#Builder"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:20:46 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 437\n\n   **Bug Type**: GDPR\n\n   **Description**: The function UserAddr() returns a string that contains potentially sensitive user information which includes the user's remote address. This could be a violation of GDPR if this data is not handled properly.\n\n   **Solution**: Ensure that all data processing activities are compliant with GDPR. User consent should be obtained before processing this data and it should be securely stored and transmitted. More information can be found here: https://gdpr-info.eu/\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 437\n\n   **Bug Type**: PCI DSS\n\n   **Description**: If the remote address includes cardholder data, this could be a violation of PCI DSS. PCI DSS requires that cardholder data be securely stored and transmitted.\n\n   **Solution**: Ensure that cardholder data is not included in the remote address. If it is necessary to include this data, ensure that it is securely stored and transmitted. More information can be found here: https://www.pcisecuritystandards.org/pci_security/\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 437\n\n   **Bug Type**: HIPAA\n\n   **Description**: If the remote address includes protected health information (PHI), this could be a violation of HIPAA. PHI should be securely stored and transmitted.\n\n   **Solution**: Ensure that PHI is not included in the remote address. If it is necessary to include this data, ensure that it is securely stored and transmitted. More information can be found here: https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 221,
+                "severity": 5,
+                "bugType": "GDPR",
+                "description": "The function UserAddr() returns a string that contains potentially sensitive user information which includes the user's remote address. This could be a violation of GDPR if this data is not handled properly.",
+                "solution": "Ensure that all data processing activities are compliant with GDPR. User consent should be obtained before processing this data and it should be securely stored and transmitted. More information can be found here: https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 221,
+                "severity": 4,
+                "bugType": "PCI DSS",
+                "description": "If the remote address includes cardholder data, this could be a violation of PCI DSS. PCI DSS requires that cardholder data be securely stored and transmitted.",
+                "solution": "Ensure that cardholder data is not included in the remote address. If it is necessary to include this data, ensure that it is securely stored and transmitted. More information can be found here: https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 221,
+                "severity": 6,
+                "bugType": "HIPAA",
+                "description": "If the remote address includes protected health information (PHI), this could be a violation of HIPAA. PHI should be securely stored and transmitted.",
+                "solution": "Ensure that PHI is not included in the remote address. If it is necessary to include this data, ensure that it is securely stored and transmitted. More information can be found here: https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "9",
       "value": "\n//UserAddr is checked when checking if a\n//user has access to a given remote\nfunc (r Remote) UserAddr() string {\n\tif r.Reverse {\n\t\treturn \"R:\" + r.LocalHost + \":\" + r.LocalPort\n\t}\n\treturn r.RemoteHost + \":\" + r.RemotePort\n}\n",
@@ -121,7 +1010,106 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 3:01:44 AM PDT\n\nThis code is written in Go language and is a method of a Remote struct. The method's name is `CanListen` and it returns a boolean value indicating whether or not a specific port can be listened on.\n\nThe method works for both TCP and UDP protocols. It checks the protocol type and based on that, it tries to listen on the local address and port. If it is successful in listening, it returns true; otherwise, it returns false.\n\nHere is a detailed breakdown of the code:\n\n- The function `CanListen` is defined which does not take any parameters and returns a boolean value. This function is a method of the `Remote` struct.\n\n- The `switch` statement is used to check the protocol type stored in `r.LocalProto`. \n\n- If the protocol is TCP, it tries to listen on the local address and port using the `net.Listen` function. If the function does not return an error (`err == nil`), it means the port can be listened on. It then closes the connection using `conn.Close()` and returns `true`. If there is an error, it returns `false`.\n\n- If the protocol is UDP, it first resolves the address using `net.ResolveUDPAddr`. If there is an error in resolving the address, it returns `false`. If the address is resolved successfully, it tries to listen on the address using `net.ListenUDP`. Similar to the TCP case, if it can listen on the port, it closes the connection and returns `true`. If there is an error, it returns `false`.\n\n- If the protocol is neither TCP nor UDP, it returns `false`.\n\nThe algorithm used here is quite straightforward. It tries to listen on a port based on the protocol type and returns a boolean value based on the success or failure of the operation.\n\nFor more information on network programming in Go, you can refer to the official documentation: https://golang.org/pkg/net/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:07:00 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->CheckProtocol;\nCheckProtocol-->TCP;\nCheckProtocol-->UDP;\nTCP-->ListenTCP;\nUDP-->ResolveUDPAddr;\nResolveUDPAddr-->ListenUDP;\nListenTCP-->CloseTCP;\nListenUDP-->CloseUDP;\nCloseTCP-->ReturnTrue;\nCloseUDP-->ReturnTrue;\nReturnTrue-->End;\nReturnFalse-->End;\n```\n\nIn the above control flow graph, the primary path is shown in green, while the error path is shown in red. The function \"CanListen\" starts with the \"CheckProtocol\" block, which checks the value of \"r.LocalProto\". If it is \"tcp\", the control flow goes to the \"TCP\" block, where it attempts to listen on the local address using TCP. If successful, it closes the connection and returns true. If there is an error, it returns false.\n\nIf \"r.LocalProto\" is \"udp\", the control flow goes to the \"UDP\" block, where it resolves the UDP address and attempts to listen on it. If successful, it closes the connection and returns true. If there is an error, it returns false.\n\nIf \"r.LocalProto\" is neither \"tcp\" nor \"udp\", the control flow goes directly to the \"ReturnFalse\" block, which returns false.\n\nNote: The external library functions \"net.Listen\", \"net.ResolveUDPAddr\", \"net.ListenUDP\", and the functions \"CloseTCP\" and \"CloseUDP\" are shown as distinct flow blocks."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:11:18 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 462\n\n   **Bug Type**: Information Disclosure\n\n   **Description**: The function 'CanListen' can potentially disclose sensitive information. If an attacker can trigger error messages, they might gain information about the system's IP address and port number. This is a form of information leakage.\n\n   **Solution**: To mitigate this risk, ensure that error messages displayed to the user do not contain sensitive system information. Instead, log such information internally for debugging. You can read more about this issue here: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 454\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The function 'CanListen' uses user-supplied input (the protocol) to determine what action to take without properly validating the input first. This could potentially allow an attacker to manipulate the function to perform unintended actions.\n\n   **Solution**: Always validate user-supplied input before using it. This can be done using a whitelist of allowed values or by verifying that the input matches a certain format. You can read more about this issue here: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 237,
+                "severity": 5,
+                "bugType": "Information Disclosure",
+                "description": "The function 'CanListen' can potentially disclose sensitive information. If an attacker can trigger error messages, they might gain information about the system's IP address and port number. This is a form of information leakage.",
+                "solution": "To mitigate this risk, ensure that error messages displayed to the user do not contain sensitive system information. Instead, log such information internally for debugging. You can read more about this issue here: https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 229,
+                "severity": 4,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The function 'CanListen' uses user-supplied input (the protocol) to determine what action to take without properly validating the input first. This could potentially allow an attacker to manipulate the function to perform unintended actions.",
+                "solution": "Always validate user-supplied input before using it. This can be done using a whitelist of allowed values or by verifying that the input matches a certain format. You can read more about this issue here: https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:16:44 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 457\n\n   **Bug Type**: Network\n\n   **Description**: The function CanListen opens a network connection to check if a port can be listened on, and then immediately closes it. This results in unnecessary network traffic, and can lead to performance issues if the function is called frequently.\n\n   **Solution**: Consider a different approach to check if a port is available for listening. One possible solution is to use a system call to check if the port is available, instead of opening and closing a network connection. This can be done using the 'syscall' package in Go. Reference: https://golang.org/pkg/syscall/\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 232,
+                "severity": 7,
+                "bugType": "Network",
+                "description": "The function CanListen opens a network connection to check if a port can be listened on, and then immediately closes it. This results in unnecessary network traffic, and can lead to performance issues if the function is called frequently.",
+                "solution": "Consider a different approach to check if a port is available for listening. One possible solution is to use a system call to check if the port is available, instead of opening and closing a network connection. This can be done using the 'syscall' package in Go. Reference: https://golang.org/pkg/syscall/"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:21:17 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 460\n\n   **Bug Type**: Data Compliance\n\n   **Description**: This code opens a network socket and listens for incoming connections without implementing any form of encryption or secure communication. This can lead to data being transmitted in plain text, which violates GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Implement secure communication protocols such as TLS or SSL to encrypt data during transmission. This will ensure data privacy and integrity, and maintain compliance with GDPR, PCI DSS, and HIPAA regulations.\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 469\n\n   **Bug Type**: Data Compliance\n\n   **Description**: Similar to the previous issue, this code listens for incoming UDP connections without any form of encryption or secure communication. This exposes the data to potential eavesdropping or man-in-the-middle attacks, violating GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Consider using secure communication protocols such as DTLS (Datagram Transport Layer Security) for UDP connections. This will ensure that data is encrypted during transmission, maintaining data privacy and compliance with GDPR, PCI DSS, and HIPAA regulations.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 235,
+                "severity": 5,
+                "bugType": "Data Compliance",
+                "description": "This code opens a network socket and listens for incoming connections without implementing any form of encryption or secure communication. This can lead to data being transmitted in plain text, which violates GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Implement secure communication protocols such as TLS or SSL to encrypt data during transmission. This will ensure data privacy and integrity, and maintain compliance with GDPR, PCI DSS, and HIPAA regulations."
+              },
+              {
+                "lineNumber": 244,
+                "severity": 5,
+                "bugType": "Data Compliance",
+                "description": "Similar to the previous issue, this code listens for incoming UDP connections without any form of encryption or secure communication. This exposes the data to potential eavesdropping or man-in-the-middle attacks, violating GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Consider using secure communication protocols such as DTLS (Datagram Transport Layer Security) for UDP connections. This will ensure that data is encrypted during transmission, maintaining data privacy and compliance with GDPR, PCI DSS, and HIPAA regulations."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "10",
       "value": "\n//CanListen checks if the port can be listened on\nfunc (r Remote) CanListen() bool {\n\t//valid protocols\n\tswitch r.LocalProto {\n\tcase \"tcp\":\n\t\tconn, err := net.Listen(\"tcp\", r.Local())\n\t\tif err == nil {\n\t\t\tconn.Close()\n\t\t\treturn true\n\t\t}\n\t\treturn false\n\tcase \"udp\":\n\t\taddr, err := net.ResolveUDPAddr(\"udp\", r.Local())\n\t\tif err != nil {\n\t\t\treturn false\n\t\t}\n\t\tconn, err := net.ListenUDP(r.LocalProto, addr)\n\t\tif err == nil {\n\t\t\tconn.Close()\n\t\t\treturn true\n\t\t}\n\t\treturn false\n\t}\n\t//invalid\n\treturn false\n}\n",
@@ -133,7 +1121,76 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 3:02:25 AM PDT\n\nThe provided code is written in Go language. It defines a type `Remotes` as a slice of pointers to `Remote` objects. It also defines a method `Reversed()` on the `Remotes` type. \n\nThe `Reversed()` function is used to filter out `Remote` objects based on their `Reverse` property. It takes a boolean parameter `reverse` and returns a subset of `Remotes` where the `Reverse` property of each `Remote` matches the given `reverse` parameter.\n\nThe algorithm used in this function is a simple filter operation. Here's a step-by-step breakdown of the function:\n\n1. It initializes an empty slice of `Remotes` named `subset`.\n2. It iterates over the `Remotes` slice (`rs`) using a `for` loop. For each `Remote` (`r`) in `rs`, it checks if the `Reverse` property of `r` is equal to the input parameter `reverse`.\n3. If the `Reverse` property of `r` matches the `reverse` parameter (`match == true`), `r` is appended to the `subset` slice.\n4. After all `Remotes` have been checked, it returns the `subset` slice.\n\nThis algorithm has a time complexity of O(n), where n is the number of `Remotes` in the slice. This is because it needs to iterate over each `Remote` in the slice once.\n\nThe code seems to follow standard Go best practices. It uses Go's built-in types and functions effectively, and the function is simple and straightforward with a single responsibility, which is a good practice in software design.\n\nFor more information on Go's slices and methods, you can refer to the official Go documentation:\n- Slices: https://go.dev/tour/slices\n- Methods: https://go.dev/tour/methods"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:07:15 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->Filter;\nFilter-->Subset;\nSubset-->End;\n\nstyle Filter fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle Subset fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle End fill:#228B22, stroke:#000000, stroke-width:2px;\n```\n\nIn the code, the primary path starts at the `Start` node and goes to the `Filter` node. The `Filter` node represents the filtering process where the remotes are filtered based on the `reverse` flag. The filtered remotes are then passed to the `Subset` node, which represents the creation of a subset of remotes that match the filter condition. Finally, the primary path ends at the `End` node.\n\nThere are no error paths identified in the code."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:11:24 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:17:06 AM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 509\n\n   **Bug Type**: Memory\n\n   **Description**: Frequent memory allocation due to the use of append in a loop. This can lead to high memory usage and potential performance degradation.\n\n   **Solution**: Preallocate memory for the subset slice to its maximum possible size (i.e., the size of rs) to reduce the number of memory allocations. This can be done by changing `subset := Remotes{}` to `subset := make(Remotes, 0, len(rs))`. More on this can be found at https://go.dev/blog/slices-intro.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 257,
+                "severity": 6,
+                "bugType": "Memory",
+                "description": "Frequent memory allocation due to the use of append in a loop. This can lead to high memory usage and potential performance degradation.",
+                "solution": "Preallocate memory for the subset slice to its maximum possible size (i.e., the size of rs) to reduce the number of memory allocations. This can be done by changing `subset := Remotes{}` to `subset := make(Remotes, 0, len(rs))`. More on this can be found at https://go.dev/blog/slices-intro."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:21:21 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "11",
       "value": "\ntype Remotes []*Remote\n\n//Filter out forward reversed/non-reversed remotes\nfunc (rs Remotes) Reversed(reverse bool) Remotes {\n\tsubset := Remotes{}\n\tfor _, r := range rs {\n\t\tmatch := r.Reverse == reverse\n\t\tif match {\n\t\t\tsubset = append(subset, r)\n\t\t}\n\t}\n\treturn subset\n}\n",
@@ -145,7 +1202,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 3:03:22 AM PDT\n\nThe code you've provided is written in Go, a statically typed, compiled language developed by Google. This particular function, `Encode()`, belongs to a type `Remotes`, which appears to be a slice (analogous to a list in other languages) of `Remote` values.\n\nThe `Encode()` function is used to convert each `Remote` object in the `Remotes` slice into a string representation. It does this by calling the `Encode()` method on each `Remote` object. The resulting strings are stored in a new slice, which is then returned by the function.\n\nHere's a step-by-step breakdown of the function:\n\n1. `s := make([]string, len(rs))` - This line declares a new slice of strings `s` with the same length as `rs` (the `Remotes` object on which `Encode()` was called). This slice will hold the string representations of each `Remote` object. The `make` function is used to initialize slices, maps, and channels in Go.\n\n2. `for i, r := range rs` - This line starts a `for` loop that will iterate over each `Remote` object `r` in `rs`. The `range` keyword in Go is used to iterate over elements in a variety of data structures. In this case, it provides the index `i` and the value `r` at that index for each iteration.\n\n3. `s[i] = r.Encode()` - Within the loop, the `Encode()` method is called on the `Remote` object `r`, and the resulting string is stored at the corresponding index in the `s` slice.\n\n4. `return s` - After all `Remote` objects have been processed, the function returns the `s` slice, which now contains the string representations of each `Remote` object.\n\nIn terms of algorithms, this function uses a simple linear iteration over the elements of the `Remotes` slice. The time complexity of this function is O(n), where n is the number of `Remote` objects in the `Remotes` slice.\n\nThis code follows standard Go practices and does not seem to conflict with any architectural guidelines. However, without more context on the `Remote` type and its `Encode()` method, it's hard to provide a more detailed analysis.\n\nFor more information about slices in Go, you can refer to the [Go documentation](https://golang.org/doc/effective_go#slices). For more information about the `range` keyword, you can refer to this [Go by Example page](https://gobyexample.com/range)."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:07:21 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle EncodeProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->EncodeProcess;\nEncodeProcess-->End;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:11:27 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:17:10 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:21:25 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "12",
       "value": "\n//Encode back into strings\nfunc (rs Remotes) Encode() []string {\n\ts := make([]string, len(rs))\n\tfor i, r := range rs {\n\t\ts[i] = r.Encode()\n\t}\n\treturn s\n}\n",

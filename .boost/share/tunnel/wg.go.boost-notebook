@@ -1,7 +1,68 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:01:15 AM PDT\n\nThis is a simple piece of Go code that defines a new type `waitGroup` which is a thin wrapper around the standard library's `sync.WaitGroup` type. This code is typically used in multi-threaded applications where synchronization between different threads (or go routines in the case of Go language) is required.\n\nLet's break down the code:\n\n- `package tunnel` - This line defines the package name for this code. In Go, all files in the same directory should have the same package name.\n\n- `import` - This statement is used to include code from other packages. In this case, two packages are imported: `sync` and `sync/atomic`. The `sync` package provides basic synchronization primitives, such as mutual exclusion locks. The `sync/atomic` package provides low-level atomic memory primitives useful for implementing synchronization algorithms.\n\n- `type waitGroup struct` - This line defines a new type named `waitGroup`. This type is a struct, which means it's a collection of fields.\n\n- `inner sync.WaitGroup` - This is a field of the `waitGroup` struct. It is of type `sync.WaitGroup`. The `sync.WaitGroup` type is a counter that can be incremented and decremented, typically used to wait for a group of goroutines to finish their execution.\n\n- `n     int32` - This is another field of the `waitGroup` struct. It is of type `int32`. This field could be used to keep track of the number of active goroutines or any other count that needs to be managed in the context of this `waitGroup`.\n\nThe purpose of this code is to define a new type that extends the functionality of the `sync.WaitGroup` type. The additional `n` field could be used to provide additional functionality not provided by the `sync.WaitGroup` type.\n\nHowever, without additional methods defined on this `waitGroup` type, it's hard to say exactly how this type is intended to be used. Typically, you might see methods that increment, decrement, and wait on the `waitGroup`, similar to the `Add`, `Done`, and `Wait` methods on `sync.WaitGroup`.\n\nFor more information on `sync.WaitGroup` and `sync/atomic`, you can refer to the official Go documentation:\n- sync.WaitGroup: https://golang.org/pkg/sync/#WaitGroup\n- sync/atomic: https://golang.org/pkg/sync/atomic/ \n\nRegarding the architectural guidelines, as mentioned, there are no special architectural guidelines or constraints provided for this software project. This code snippet does not seem to conflict with any common architectural principles. It's a low-level synchronization construct that could be used in a variety of different software architectures."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:04:28 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:05:15 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:06:45 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:08:09 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package tunnel\n\nimport (\n\t\"sync\"\n\t\"sync/atomic\"\n)\n\ntype waitGroup struct {\n\tinner sync.WaitGroup\n\tn     int32\n}\n",
@@ -13,7 +74,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:01:58 AM PDT\n\nThe provided code snippet is a function method in the Go programming language. It belongs to a struct type called `waitGroup`. The `waitGroup` type is not shown in the provided code, but based on the method, it likely has at least two fields: `n` of type `int32` and `inner` of type `sync.WaitGroup`.\n\nThe function `Add(n int)` takes an integer `n` as an argument. It is used to increment the counter of the `waitGroup` by `n`. In other words, it adds `n` to the number of goroutines to wait for.\n\nThe function uses two operations:\n\n1. `atomic.AddInt32(&w.n, int32(n))`: This line of code uses the `atomic` package's `AddInt32` function. This function atomically adds `n` to `w.n` and returns the new value. It is safe to be called concurrently from multiple goroutines. The atomic package provides low-level atomic memory primitives useful for implementing synchronization algorithms. More information can be found here: [Go atomic package](https://golang.org/pkg/sync/atomic/)\n\n2. `w.inner.Add(n)`: This line of code calls the `Add` method on `w.inner`, which is presumably of type `sync.WaitGroup`. The `sync.WaitGroup` type is a simple way to wait for multiple goroutines to finish. The `Add` method increments the `WaitGroup` counter by `n`. If `n` is negative, `Add` panics. More information can be found here: [Go sync.WaitGroup](https://golang.org/pkg/sync/#WaitGroup.Add)\n\nThis code is consistent with common Go concurrency patterns and does not appear to conflict with any architectural guidelines. It uses standard Go concurrency primitives (`sync.WaitGroup` and `sync/atomic`) and follows standard Go naming and structuring conventions."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:04:38 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->Add;\n\nAdd-->atomic.AddInt32;\natomic.AddInt32-->w.n;\nw.n-->w.inner.Add;\nw.inner.Add-->End;\n```\n\nIn this code, the control flow starts at the `Add` function. The function first calls `atomic.AddInt32` to increment the value of `w.n` by `n`. Then, it calls `w.inner.Add` passing `n` as an argument. Finally, the control flow ends."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:05:19 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:06:49 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:08:14 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\nfunc (w *waitGroup) Add(n int) {\n\tatomic.AddInt32(&w.n, int32(n))\n\tw.inner.Add(n)\n}\n",
@@ -25,7 +147,77 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:02:50 AM PDT\n\nThis function is part of a custom implementation of a `WaitGroup` in Go. A `WaitGroup` is a simple mechanism that allows one goroutine to wait for a group of goroutines to finish their execution. Here's a detailed explanation of the function:\n\n```go\nfunc (w *waitGroup) Done() {\n\tif n := atomic.LoadInt32(&w.n); n > 0 && atomic.CompareAndSwapInt32(&w.n, n, n-1) {\n\t\tw.inner.Done()\n\t}\n}\n```\n\n1. `func (w *waitGroup) Done() {...}`: This is a method named `Done` on a type named `waitGroup`. The `Done` method is typically called to indicate that a goroutine has finished its execution.\n\n2. `if n := atomic.LoadInt32(&w.n); n > 0 && atomic.CompareAndSwapInt32(&w.n, n, n-1) {...}`: This is an `if` statement with an initialization clause. The initialization clause `n := atomic.LoadInt32(&w.n)` loads the value of `w.n` atomically, which means it is safe to use in a concurrent context. The loaded value is stored in `n`.\n\n3. `n > 0 && atomic.CompareAndSwapInt32(&w.n, n, n-1)`: This is the condition of the `if` statement. It checks if `n` is greater than `0` and if the atomic compare-and-swap operation is successful. The `atomic.CompareAndSwapInt32` function atomically compares the value at `&w.n` with `n` and if they are equal, it sets the value at `&w.n` to `n-1`. This operation is atomic, meaning it is safe to use in a concurrent context. \n\n4. `w.inner.Done()`: If the condition of the `if` statement is `true`, then it calls the `Done` method on `w.inner`. `w.inner` is presumably another `WaitGroup` or similar type with a `Done` method. This is likely used to signal to another part of the code that the current goroutine has finished execution.\n\nThis code uses the atomic package from Go's standard library. The atomic package provides low-level atomic memory primitives useful for implementing synchronization algorithms.\n\nFor more information about `sync.WaitGroup` and `atomic` package, you can refer to the official Go documentation:\n- `sync.WaitGroup`: https://golang.org/pkg/sync/#WaitGroup\n- `atomic`: https://golang.org/pkg/sync/atomic/ \n\nIn terms of architectural guidelines, this code appears to be a standard implementation of a `WaitGroup` and makes use of Go's native concurrency mechanisms and atomic operations, so it should not conflict with any general architectural guidelines or constraints."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:04:45 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart \u0001 -->ExampleProcess;\nExampleProcess-->End;\n\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:05:23 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:06:52 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:08:27 AM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 34\n\n   **Bug Type**: Data Race Condition\n\n   **Description**: This code is prone to a race condition due to the usage of atomic operations. In a high concurrency scenario, it could lead to inconsistent data states.\n\n   **Solution**: Consider using a Mutex or a RWMutex for synchronizing access to shared state across multiple goroutines. This will help in avoiding race conditions.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 18,
+                "severity": 2,
+                "bugType": "Data Race Condition",
+                "description": "This code is prone to a race condition due to the usage of atomic operations. In a high concurrency scenario, it could lead to inconsistent data states.",
+                "solution": "Consider using a Mutex or a RWMutex for synchronizing access to shared state across multiple goroutines. This will help in avoiding race conditions.",
+                "webLink": "https://golang.org/pkg/sync/"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\nfunc (w *waitGroup) Done() {\n\tif n := atomic.LoadInt32(&w.n); n > 0 && atomic.CompareAndSwapInt32(&w.n, n, n-1) {\n\t\tw.inner.Done()\n\t}\n}\n",
@@ -37,7 +229,84 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:03:41 AM PDT\n\nThis code snippet is written in Go programming language and it defines a method `DoneAll()` for a `waitGroup` type. \n\nConceptually, a wait group is used to wait for a collection of goroutines (lightweight threads managed by Go runtime) to finish execution. The primary methods for a wait group are `Add(int)`, `Done()`, and `Wait()`. `Add(int)` is used to increment the counter by the passed integer, `Done()` is used to decrement the counter by one, and `Wait()` is used to block until the counter goes back to 0.\n\nThis `DoneAll()` method is not a standard method in Go's `sync.WaitGroup` but seems to be a custom implementation. The purpose of this method is to call `Done()` method until the counter `n` goes to 0. \n\nThe `atomic.LoadInt32(&w.n) > 0` statement is used for thread-safe reading of the `n` field from the `waitGroup` object. It uses the `atomic` package from Go's standard library which provides low-level atomic memory primitives useful for implementing synchronization algorithms.\n\nIf the value of `n` (the counter of the wait group) is greater than 0, the `Done()` method is called. This loop continues until `n` is 0.\n\nPlease note that this is an unusual usage of a wait group. Normally, you would call `Add(int)` to increment the counter for each goroutine you're starting, call `Done()` in each of those goroutines when they finish, and then call `Wait()` to block until all goroutines have called `Done()` and the counter has reached 0.\n\nFor more information on `sync.WaitGroup` and `atomic` package, you can refer to the official Go documentation:\n- sync.WaitGroup: https://pkg.go.dev/sync#WaitGroup\n- atomic package: https://pkg.go.dev/sync/atomic\n\nAs for the architectural guidelines, this code does not seem to conflict with any architectural guidelines since none were provided. However, the use of atomic operations and wait groups is a common practice in concurrent programming and aligns well with Go's emphasis on simplicity and efficiency in handling concurrency."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:04:56 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->Loop;\nLoop-->Condition;\nCondition-- Yes -->Decrement;\nDecrement-->Loop;\nCondition-- No -->End;\n\n```\nThe control flow graph for the given source code is as follows:\n\n1. The control flow starts at the \"Start\" node.\n2. The loop starts at the \"Loop\" node.\n3. The condition is checked at the \"Condition\" node.\n4. If the condition is true (Yes), the decrement operation is performed at the \"Decrement\" node and the control flow goes back to the \"Loop\" node.\n5. If the condition is false (No), the control flow goes to the \"End\" node.\n\nThis control flow represents a loop that continues until the value of the variable \"w.n\" becomes 0."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:05:42 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 46\n\n   **Bug Type**: Concurrency\n\n   **Description**: This function could lead to a race condition. If 'DoneAll' is called at the same time as another function that modifies 'w.n', it could result in an unexpected state. This is because the check for 'w.n' > 0 and the call to 'w.Done()' are not atomic, meaning that the state of 'w.n' could change between these two operations.\n\n   **Solution**: To avoid this issue, you could use a mutex to ensure that only one goroutine can access or modify 'w.n' at a time. This would ensure that the check and decrement of 'w.n' are atomic. Here is a link to more information on how to use mutexes in Go: https://tour.golang.org/concurrency/9\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 24,
+                "severity": 7,
+                "bugType": "Concurrency",
+                "description": "This function could lead to a race condition. If 'DoneAll' is called at the same time as another function that modifies 'w.n', it could result in an unexpected state. This is because the check for 'w.n' > 0 and the call to 'w.Done()' are not atomic, meaning that the state of 'w.n' could change between these two operations.",
+                "solution": "To avoid this issue, you could use a mutex to ensure that only one goroutine can access or modify 'w.n' at a time. This would ensure that the check and decrement of 'w.n' are atomic. Here is a link to more information on how to use mutexes in Go: https://tour.golang.org/concurrency/9"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:07:07 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 46\n\n   **Bug Type**: CPU\n\n   **Description**: The DoneAll function is repeatedly calling atomic.LoadInt32 in a loop until the condition is met. This can lead to high CPU usage, especially if the value of w.n is large.\n\n   **Solution**: Consider using a synchronization primitive like a condition variable to signal when all goroutines are done, instead of repeatedly checking in a loop. This will reduce CPU usage. For more information, refer to this link: https://gobyexample.com/worker-pools\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 24,
+                "severity": 7,
+                "bugType": "CPU",
+                "description": "The DoneAll function is repeatedly calling atomic.LoadInt32 in a loop until the condition is met. This can lead to high CPU usage, especially if the value of w.n is large.",
+                "solution": "Consider using a synchronization primitive like a condition variable to signal when all goroutines are done, instead of repeatedly checking in a loop. This will reduce CPU usage. For more information, refer to this link: https://gobyexample.com/worker-pools"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:08:31 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\nfunc (w *waitGroup) DoneAll() {\n\tfor atomic.LoadInt32(&w.n) > 0 {\n\t\tw.Done()\n\t}\n}\n",
@@ -49,7 +318,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:04:13 AM PDT\n\nThis code is written in Go and it's a method associated with the `waitGroup` type. The `waitGroup` type is not defined in this code snippet, but it's typically a struct that includes a `sync.WaitGroup` as one of its fields. The `sync.WaitGroup` type is a part of the Go standard library and it's used for waiting for a collection of goroutines to finish executing.\n\nThe `Wait` method in this code calls the `Wait` method of the `sync.WaitGroup` type. The `sync.WaitGroup.Wait` method blocks until the `WaitGroup` counter is zero. This is typically used when you have multiple goroutines and you want to wait for all of them to finish before proceeding. \n\nThe `sync.WaitGroup` uses a very simple algorithm. It has a counter which is incremented each time a new goroutine is added to the group (using the `Add` method) and decremented each time a goroutine finishes (using the `Done` method). The `Wait` method simply blocks until this counter reaches zero.\n\nHere is a link to the official Go documentation for the `sync.WaitGroup` type: https://golang.org/pkg/sync/#WaitGroup\n\nAs for the architectural guidelines, this code is quite standard and should not conflict with most architectural guidelines. It's a common pattern in Go for handling synchronization between goroutines."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:05:02 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nExampleProcess-->End;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:05:46 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:07:11 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:08:35 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "4",
       "value": "\nfunc (w *waitGroup) Wait() {\n\tw.inner.Wait()\n}\n",

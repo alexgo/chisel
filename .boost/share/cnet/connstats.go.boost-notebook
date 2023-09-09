@@ -1,7 +1,68 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:47:44 AM PDT\n\nThis Go code snippet is a part of a package named `cnet`. The code defines a struct `ConnCount` which will be used to keep track of the number of open and total connections in a network application.\n\nLet's break it down:\n\n- `package cnet`: This line declares the package name for the current file. All the Go source files in the same directory should have the same package name.\n\n- `import`: This keyword is used to import other packages that are needed in this file. In this case, `fmt` (which provides I/O functions to print output) and `sync/atomic` (which provides low-level atomic memory primitives useful for implementing synchronization algorithms) are imported.\n\n- `type ConnCount struct`: This line defines a new type `ConnCount` which is a struct. A struct in Go is a collection of fields. \n\n- `count int32`: This is a field in the `ConnCount` struct. It is of type `int32` and presumably represents the total number of connections.\n\n- `open  int32`: This is another field in the `ConnCount` struct. It is also of type `int32` and presumably represents the number of open connections.\n\nThe `sync/atomic` package that is imported in this file provides functions for performing atomic operations which can be used to safely increment, decrement, or update these fields from multiple goroutines without causing data races. However, in the provided code snippet, there are no such operations present.\n\nThis code snippet does not contain any specific algorithms. It is simply a definition of a struct, which is a common data structure in Go. \n\nFor more information and learning resources about Go, you can visit the official Go documentation: https://golang.org/doc/\n\nFor more information about the `sync/atomic` package, you can visit its documentation page: https://golang.org/pkg/sync/atomic/ \n\nSince this code is part of a network application, it is likely to follow the client-server architecture. However, this specific code snippet is just a struct definition and does not conflict with any architectural guidelines. It is a common practice to define such structs to manage and manipulate connection information in network applications."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:50:55 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```\n\nThe control flow graph for the given code is a simple one. It starts with the `ConnCount` struct definition and there are no further control flow paths or function calls in this code. Therefore, the control flow graph consists of a single node representing the `ConnCount` struct definition."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:51:37 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:04 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:30 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package cnet\n\nimport (\n\t\"fmt\"\n\t\"sync/atomic\"\n)\n\n//ConnCount is a connection counter\ntype ConnCount struct {\n\tcount int32\n\topen  int32\n}\n",
@@ -13,7 +74,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:48:24 AM PDT\n\nThis is a simple piece of code written in the Go programming language. It defines a method `New()` on the type `*ConnCount`. The `*ConnCount` is a pointer to a `ConnCount` struct, which is not shown in this snippet but presumably contains an `int32` field named `count`.\n\nThe `New()` method increments the `count` field by one in a thread-safe manner and returns the new value. The thread-safety is achieved by using the `AddInt32` function from Go's `sync/atomic` package. \n\nThe `sync/atomic` package provides low-level atomic memory primitives useful for implementing synchronization algorithms. The `AddInt32` function atomically adds `delta` to `*addr` and returns the new value. In this case, `delta` is `1` and `*addr` is `&c.count`.\n\nThis function is likely used in a multi-threaded context where multiple goroutines may be calling the `New` method concurrently. The use of `atomic.AddInt32` ensures that the increment operation is atomic, i.e., it completes in a single operation without the possibility of another goroutine reading or writing the `count` field in the middle of the operation.\n\nFor more information on atomic operations and the `sync/atomic` package in Go, you can refer to the Go documentation: https://pkg.go.dev/sync/atomic\n\nAs for the architectural guidelines, since there are no specific constraints or guidelines mentioned, we can assume that this code is consistent with general best practices for concurrent programming in Go. It uses atomic operations to ensure thread safety, which is essential in a multi-threaded environment."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:51:02 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nExampleProcess-->End;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:51:41 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:09 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:33 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\nfunc (c *ConnCount) New() int32 {\n\treturn atomic.AddInt32(&c.count, 1)\n}\n",
@@ -25,7 +147,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:49:02 AM PDT\n\nThis code is written in Go, a statically typed, compiled language developed by Google. It's a part of a method on a struct called `ConnCount`, which presumably keeps track of the number of open connections.\n\nThe function `Open` is a method of the struct `ConnCount`. This function is used to increment the `open` field of the `ConnCount` struct by 1, which probably represents an open connection. \n\nThe `atomic.AddInt32` function is used to perform the increment operation. The `atomic` package provides low-level atomic memory primitives useful for implementing synchronization algorithms. The `AddInt32` function atomically adds `delta` to `*addr` and returns the new value. \n\nIn this case, `&c.open` is the address of the `open` field in the `ConnCount` struct and `1` is the delta being added. The atomic addition ensures that the increment operation is thread-safe, meaning that even if multiple threads or goroutines try to update the `open` value at the same time, the operation will be correctly performed without any race conditions.\n\nHere is the link to atomic package in Go: [https://pkg.go.dev/sync/atomic](https://pkg.go.dev/sync/atomic)\n\nThis code is consistent with general Go programming guidelines. It uses the `atomic` package to ensure thread safety, which is a common practice in Go when dealing with concurrent updates to a shared variable. The code is simple, readable, and efficient, which are all important characteristics of idiomatic Go code."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:51:07 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:51:46 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:12 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:37 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\nfunc (c *ConnCount) Open() {\n\tatomic.AddInt32(&c.open, 1)\n}\n",
@@ -37,7 +220,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:49:52 AM PDT\n\nThis is a simple function written in Go language. The function `Close` is a method on the `ConnCount` struct. The purpose of this function is to decrease the count of open connections by 1.\n\nLet's break it down:\n\n- `func (c *ConnCount) Close()`: This is the declaration of the method `Close` on the `ConnCount` struct. The `c *ConnCount` part means that this function is a method on the `ConnCount` type and `c` is a pointer to the `ConnCount` instance on which the method is called.\n\n- `atomic.AddInt32(&c.open, -1)`: This line of code decreases the `open` field of the `ConnCount` struct by 1 in a thread-safe manner. The `atomic.AddInt32` function is a part of the `sync/atomic` package in Go. This package provides low-level atomic memory primitives useful for implementing synchronization algorithms. The `&c.open` is a pointer to the `open` field of the `ConnCount` struct and `-1` is the value that is added to the original `open` value.\n\nThe `sync/atomic` package provides functions for atomically manipulating types. The `AddInt32` function atomically adds `delta` to `*addr` and returns the new value. That is, to add `-1` to `c.open`, the function `atomic.AddInt32(&c.open, -1)` is called. This function is atomic, which means it completes in a single step relative to other threads. Other threads can't see the addition half-complete. This is important in multi-threaded programming, as it prevents race conditions.\n\nIn terms of the architectural guidelines, this function doesn't conflict with any guidelines as it's a simple function that decreases the count of open connections. It seems to be part of a larger system that manages connections, possibly in a network or database context. \n\nFor more information on atomic operations and the `sync/atomic` package in Go, you can visit the official Go documentation: [sync/atomic - The Go Programming Language](https://golang.org/pkg/sync/atomic/)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:51:15 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nExampleProcess-->End;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:51:51 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:16 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:41 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\nfunc (c *ConnCount) Close() {\n\tatomic.AddInt32(&c.open, -1)\n}\n",
@@ -49,7 +293,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:50:41 AM PDT\n\nThe provided code is written in Go, a statically typed, compiled language developed by Google. The code defines a method named `String()` for a type named `ConnCount`. This method returns a string representation of `ConnCount`.\n\nLet's break down the code:\n\n1. `func (c *ConnCount) String() string`: This line defines the method `String()` for the `ConnCount` type. The `func` keyword is used to declare a function in Go. `(c *ConnCount)` is the receiver of the method, meaning that the method is associated with the `ConnCount` type. The `String()` method does not take any arguments and returns a string (`string`).\n\n2. `return fmt.Sprintf(\"[%d/%d]\", atomic.LoadInt32(&c.open), atomic.LoadInt32(&c.count))`: This line uses the `Sprintf` function from the `fmt` package to format and return a string. The format specifier `[%d/%d]` is used, where `%d` is a placeholder for an integer. The `atomic.LoadInt32` function is used to safely load the value of `c.open` and `c.count`, which are presumably integer fields in the `ConnCount` type. The `&` operator is used to get the address of these fields, as `LoadInt32` requires a pointer to an `int32`.\n\nThe `atomic` package provides low-level atomic memory primitives useful for implementing synchronization algorithms. In this case, `atomic.LoadInt32` is used, which atomically loads the `*int32` from memory, providing a way to read the value in a thread-safe manner.\n\nThe `String()` method is a common method in Go, often used to provide a string representation of a type. This is similar to the `toString()` method in languages like Java.\n\nThe method doesn't seem to conflict with any architectural guidelines provided. It is a simple, thread-safe method that provides a string representation of a `ConnCount` object.\n\nFor more information on the `atomic` package in Go, you can refer to the official Go documentation: https://pkg.go.dev/sync/atomic\nFor more information on the `fmt` package and the `Sprintf` function, you can refer to: https://pkg.go.dev/fmt#Sprintf"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:51:23 AM PDT\n\n```mermaid\ngraph TD;\n    style Start fill:#228B22, stroke:#000000, stroke-width:2px;\n    style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\n    Start-->ExampleProcess;\n```\n\nThe control flow graph for the `String` function is a simple linear flow. The function returns a formatted string using the `fmt.Sprintf` function. There are no external library calls or error paths in this code."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:51:54 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:20 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:52:44 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "4",
       "value": "\nfunc (c *ConnCount) String() string {\n\treturn fmt.Sprintf(\"[%d/%d]\", atomic.LoadInt32(&c.open), atomic.LoadInt32(&c.count))\n}\n",

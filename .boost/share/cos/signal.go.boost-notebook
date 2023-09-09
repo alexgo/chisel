@@ -1,7 +1,98 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:09:40 AM PDT\n\nThis code is written in Go and is part of a package named \"cos\". It's a function that prints statistics about the Go runtime when it receives a certain system signal (SIGUSR2). This includes the number of goroutines (lightweight threads managed by the Go runtime) and the memory usage of the Go process.\n\nHere is a detailed breakdown of the code:\n\n1. `//+build !windows`: This line is a build tag that tells the Go compiler to exclude this file when building for Windows. This is because SIGUSR2 is not available on Windows.\n\n2. `package cos`: This line declares the package name, which is \"cos\".\n\n3. The `import` statement: This imports several packages that the code needs. The `log`, `os`, `os/signal`, `runtime`, `syscall`, and `time` packages are part of the standard library. The `github.com/jpillora/sizestr` package is an external package that provides a function for converting sizes to strings.\n\n4. `func GoStats()`: This declares a function named `GoStats` that takes no arguments and returns no results.\n\n5. `const SIGUSR2 = syscall.Signal(0x1f)`: This line declares a constant named SIGUSR2 with the value of the SIGUSR2 signal. The value `0x1f` is the hexadecimal representation of the SIGUSR2 signal in Unix-like systems.\n\n6. `c := make(chan os.Signal, 1)`: This line creates a channel that can receive `os.Signal` values. The channel has a buffer size of 1, meaning it can hold one signal value that hasn't been processed yet.\n\n7. `signal.Notify(c, SIGUSR2)`: This line tells the `os/signal` package to send SIGUSR2 signals to the channel `c`.\n\n8. `for range c`: This starts an infinite loop that receives values from the channel `c`. Each time a signal is received, the loop body is executed.\n\n9. Inside the loop body, the function collects memory statistics from the Go runtime using `runtime.ReadMemStats()`, and then logs the number of goroutines and memory usage using `log.Printf()`.\n\nThe algorithm used here is relatively simple: it's a loop that waits for a specific signal and then logs some statistics. The key aspects of this code are its use of channels and goroutines, which are central to Go's model of concurrency, and its use of the `os/signal` package to handle system signals.\n\nFor more information on these topics, you can refer to the following resources:\n\n- Go by Example: Signals: https://gobyexample.com/signals\n- Go by Example: Channels: https://gobyexample.com/channels\n- Go by Example: Goroutines: https://gobyexample.com/goroutines\n- Go Documentation: Package runtime: https://golang.org/pkg/runtime/\n- Go Documentation: Package signal: https://golang.org/pkg/os/signal/"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:10:54 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExampleErrorPath-->End;\n```\n\nThe code provided does not have any control flow."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:11:17 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:12:07 AM PDT\n\n1. **Severity**: 2/10\n\n   **Line Number**: 19\n\n   **Bug Type**: CPU\n\n   **Description**: The function GoStats() is continuously running in a loop to listen for SIGUSR2 signals. This could potentially lead to unnecessary CPU usage if this function is not needed to be constantly running.\n\n   **Solution**: Consider using a more event-driven approach, where this function is only called when a SIGUSR2 signal is actually received. This could potentially reduce unnecessary CPU usage. Reference: https://gobyexample.com/signals\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 23\n\n   **Bug Type**: Memory\n\n   **Description**: The function runtime.ReadMemStats(&memStats) is called every time a SIGUSR2 signal is received. This function populates a runtime.MemStats struct with memory statistics, which could potentially lead to unnecessary memory usage if this function is called frequently.\n\n   **Solution**: Consider only calling this function when necessary, for example, when debugging or monitoring memory usage. Alternatively, consider using a more lightweight method for gathering memory statistics if possible. Reference: https://pkg.go.dev/runtime#ReadMemStats\n\n\n3. **Severity**: 2/10\n\n   **Line Number**: 24\n\n   **Bug Type**: CPU\n\n   **Description**: The use of log.Printf could potentially lead to high CPU usage if it is called frequently. This is because the function has to format the string and write it to the standard output.\n\n   **Solution**: Consider using a more efficient logging method, or only logging when necessary. Alternatively, consider using a logging library that supports different logging levels, so that you can control the amount and type of logs that are output. Reference: https://golang.org/pkg/log/\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 19,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The function GoStats() is continuously running in a loop to listen for SIGUSR2 signals. This could potentially lead to unnecessary CPU usage if this function is not needed to be constantly running.",
+                "solution": "Consider using a more event-driven approach, where this function is only called when a SIGUSR2 signal is actually received. This could potentially reduce unnecessary CPU usage. Reference: https://gobyexample.com/signals"
+              },
+              {
+                "lineNumber": 23,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "The function runtime.ReadMemStats(&memStats) is called every time a SIGUSR2 signal is received. This function populates a runtime.MemStats struct with memory statistics, which could potentially lead to unnecessary memory usage if this function is called frequently.",
+                "solution": "Consider only calling this function when necessary, for example, when debugging or monitoring memory usage. Alternatively, consider using a more lightweight method for gathering memory statistics if possible. Reference: https://pkg.go.dev/runtime#ReadMemStats"
+              },
+              {
+                "lineNumber": 24,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The use of log.Printf could potentially lead to high CPU usage if it is called frequently. This is because the function has to format the string and write it to the standard output.",
+                "solution": "Consider using a more efficient logging method, or only logging when necessary. Alternatively, consider using a logging library that supports different logging levels, so that you can control the amount and type of logs that are output. Reference: https://golang.org/pkg/log/"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:12:57 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 13\n\n   **Bug Type**: GDPR\n\n   **Description**: The function GoStats() logs potentially sensitive information such as the number of go-routines and memory usage, which could be considered as personal data under GDPR. There is no clear indication of where these logs are stored, who has access to them, and how long they are retained.\n\n   **Solution**: Ensure that logs do not contain sensitive information. If they do, it should be clearly documented where these logs are stored, who has access to them, and for how long they are retained. Use anonymization or pseudonymization where possible. Implement access controls and data retention policies to comply with GDPR.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 13,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The function GoStats() logs potentially sensitive information such as the number of go-routines and memory usage, which could be considered as personal data under GDPR. There is no clear indication of where these logs are stored, who has access to them, and how long they are retained.",
+                "solution": "Ensure that logs do not contain sensitive information. If they do, it should be clearly documented where these logs are stored, who has access to them, and for how long they are retained. Use anonymization or pseudonymization where possible. Implement access controls and data retention policies to comply with GDPR."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "//+build !windows\n\npackage cos\n\nimport (\n\t\"log\"\n\t\"os\"\n\t\"os/signal\"\n\t\"runtime\"\n\t\"syscall\"\n\t\"time\"\n\n\t\"github.com/jpillora/sizestr\"\n)\n\n//GoStats prints statistics to\n//stdout on SIGUSR2 (posix-only)\nfunc GoStats() {\n\t//silence complaints from windows\n\tconst SIGUSR2 = syscall.Signal(0x1f)\n\ttime.Sleep(time.Second)\n\tc := make(chan os.Signal, 1)\n\tsignal.Notify(c, SIGUSR2)\n\tfor range c {\n\t\tmemStats := runtime.MemStats{}\n\t\truntime.ReadMemStats(&memStats)\n\t\tlog.Printf(\"recieved SIGUSR2, go-routines: %d, go-memory-usage: %s\",\n\t\t\truntime.NumGoroutine(),\n\t\t\tsizestr.ToString(int64(memStats.Alloc)))\n\t}\n}\n",
@@ -13,7 +104,83 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:10:43 AM PDT\n\nThis Go code defines a function named `AfterSignal` that creates and returns a channel which will be closed either after a specified duration has passed or when a SIGHUP signal is received. \n\nThe SIGHUP signal is a signal sent to a process when its controlling terminal is closed. It was originally designed to notify the process that the user had disconnected, but it's also commonly used to instruct applications to reload their configuration files.\n\nHere's a detailed breakdown of the code:\n\n- `func AfterSignal(d time.Duration) <-chan struct{} {...}`: This function takes a `time.Duration` as input and returns a receive-only channel of empty struct. The `time.Duration` represents the amount of time to wait before closing the channel if no SIGHUP signal is received.\n\n- `ch := make(chan struct{})`: This line creates a channel of empty struct. This channel will be closed either when the specified duration has passed or a SIGHUP signal is received.\n\n- `go func() {...}()`: This is a goroutine, a lightweight thread managed by the Go runtime. The goroutine will run concurrently with the rest of the program.\n\n- `sig := make(chan os.Signal, 1)`: This line creates a channel that can receive `os.Signal` values. The capacity of the channel is 1.\n\n- `signal.Notify(sig, syscall.SIGHUP)`: This line registers the `sig` channel to receive notifications of the SIGHUP signal.\n\n- `select {...}`: The `select` statement lets a goroutine wait on multiple communication operations. The `select` statement blocks until one of its cases can run, then it executes that case.\n\n- `case <-time.After(d):`: This case will be selected when the specified duration `d` has passed. The `time.After(d)` function returns a channel that will send the current time after the specified duration.\n\n- `case <-sig:`: This case will be selected when a SIGHUP signal is received.\n\n- `signal.Stop(sig)`: This line deregisters the `sig` channel for the notifications of the specified signals. It's a good practice to stop signal notifications when they are no longer needed to avoid leaking resources.\n\n- `close(ch)`: This line closes the `ch` channel. Closing a channel indicates that no more values will be sent on it.\n\n- `return ch`: This line returns the `ch` channel.\n\nThe function `AfterSignal` uses a goroutine and the `select` statement to wait for either a duration to pass or a SIGHUP signal to be received, whichever comes first. This is an example of using channels for synchronization in Go.\n\nFor more information on Go channels and goroutines, you can refer to the official Go documentation: https://golang.org/doc/effective_go#concurrency\n\nFor more information on the `os/signal` package, you can refer to the Go standard library documentation: https://golang.org/pkg/os/signal/ \n\nFor more information on the SIGHUP signal, you can refer to this link: https://en.wikipedia.org/wiki/Signal_(IPC)#SIGHUP"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:11:03 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->ExampleProcess;\nStart-->ExampleErrorPath;\nExampleProcess-->End;\nExamplErrorPath-->End;\n```\n\nThe code you provided does not have any control flow."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:11:22 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:12:31 AM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 65\n\n   **Bug Type**: CPU\n\n   **Description**: This function creates a new goroutine every time it is called, which could lead to high CPU usage if called frequently.\n\n   **Solution**: Consider using a single long-lived goroutine and a buffered channel to handle multiple signals. This will reduce the overhead of constantly creating and destroying goroutines.\n\n\n2. **Severity**: 2/10\n\n   **Line Number**: 67\n\n   **Bug Type**: Memory\n\n   **Description**: The function creates a new channel every time it is called, which could lead to memory leaks if the channel is not properly closed or garbage collected.\n\n   **Solution**: Ensure that all channels are properly closed once they are no longer needed. Consider using a 'defer' statement to close the channel automatically at the end of the function.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 34,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "This function creates a new goroutine every time it is called, which could lead to high CPU usage if called frequently.",
+                "solution": "Consider using a single long-lived goroutine and a buffered channel to handle multiple signals. This will reduce the overhead of constantly creating and destroying goroutines."
+              },
+              {
+                "lineNumber": 36,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "The function creates a new channel every time it is called, which could lead to memory leaks if the channel is not properly closed or garbage collected.",
+                "solution": "Ensure that all channels are properly closed once they are no longer needed. Consider using a 'defer' statement to close the channel automatically at the end of the function."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:13:01 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\n//AfterSignal returns a channel which will be closed\n//after the given duration or until a SIGHUP is received\nfunc AfterSignal(d time.Duration) <-chan struct{} {\n\tch := make(chan struct{})\n\tgo func() {\n\t\tsig := make(chan os.Signal, 1)\n\t\tsignal.Notify(sig, syscall.SIGHUP)\n\t\tselect {\n\t\tcase <-time.After(d):\n\t\tcase <-sig:\n\t\t}\n\t\tsignal.Stop(sig)\n\t\tclose(ch)\n\t}()\n\treturn ch\n}\n",

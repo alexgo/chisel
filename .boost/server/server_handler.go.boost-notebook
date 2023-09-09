@@ -1,7 +1,127 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 3:45:09 AM PDT\n\nThis code is written in Go language and it's part of a server implementation for a tool named Chisel. Chisel is a fast TCP tunnel over HTTP and this particular function `handleClientHandler` is responsible for handling incoming HTTP requests and upgrading them to WebSocket connections if necessary.\n\nLet's break down the function:\n\n- The function `handleClientHandler` is a method of the `Server` struct. It takes two parameters: an `http.ResponseWriter` and an `*http.Request`. The `ResponseWriter` is an interface for sending HTTP responses, and the `Request` is a data structure that represents the client HTTP request.\n\n- It first checks if the incoming request is attempting to upgrade to a WebSocket connection by looking at the \"Upgrade\" HTTP header. If the value of this header is \"websocket\", it means the client wants to establish a WebSocket connection.\n\n- If the upgrade header is set to \"websocket\", it then checks the \"Sec-WebSocket-Protocol\" header to see if it matches the expected protocol version. If it does, it calls the `handleWebsocket` function to handle the WebSocket connection.\n\n- If the protocol doesn't match, it logs a message about the mismatch and continues to process the request as a normal HTTP request.\n\n- If the server is configured with a reverse proxy, it forwards the request to the reverse proxy.\n\n- If no reverse proxy is defined, it checks the URL path of the request. If it is \"/health\", it responds with \"OK\\n\". If it is \"/version\", it responds with the build version of the Chisel software.\n\n- If none of the above conditions are met, it returns a 404 Not Found error.\n\nThe `atomic`, `sync/errgroup`, and `time` packages are imported but not used in this function. They might be used elsewhere in the `chserver` package.\n\nThe `github.com/jpillora/chisel/share`, `github.com/jpillora/chisel/share/cnet`, `github.com/jpillora/chisel/share/settings`, and `github.com/jpillora/chisel/share/tunnel` packages are imported for shared utilities, network-related functions, settings, and tunneling functionality respectively. \n\nThe `golang.org/x/crypto/ssh` package is imported for handling SSH connections, and `golang.org/x/sync/errgroup` is imported for handling multiple goroutines that return an error.\n\nThe code aligns with the architectural guidelines provided, as it doesn't violate any specific constraints or guidelines. It makes use of standard Go practices for handling HTTP requests and upgrading them to WebSocket connections when necessary."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:46:53 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle handleClientHandler fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle handleWebsocket fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle handleReverseProxy fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle handleHealthCheck fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle handleVersionCheck fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle handleNotFound fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->handleClientHandler;\nhandleClientHandler--\"upgrade == 'websocket' && protocol == chshare.ProtocolVersion\"--handleWebsocket;\nhandleClientHandler--\"upgrade == 'websocket' && protocol != chshare.ProtocolVersion\"--handleNotFound;\nhandleClientHandler--\"s.reverseProxy != nil\"--handleReverseProxy;\nhandleClientHandler--\"s.reverseProxy == nil && r.URL.Path == '/health'\"--handleHealthCheck;\nhandleClientHandler--\"s.reverseProxy == nil && r.URL.Path == '/version'\"--handleVersionCheck;\nhandleClientHandler--\"s.reverseProxy == nil && r.URL.Path != '/health' && r.URL.Path != '/version'\"--handleNotFound;\nhandleWebsocket-->End;\nhandleReverseProxy-->End;\nhandleHealthCheck-->End;\nhandleVersionCheck-->End;\nhandleNotFound-->End;\n```\n\nThe control flow graph for the `handleClientHandler` function is as follows:\n\n1. The function starts at the `Start` node.\n2. If the `upgrade` header is \"websocket\" and the `protocol` header is equal to `chshare.ProtocolVersion`, the control flow goes to the `handleWebsocket` node.\n3. If the `upgrade` header is \"websocket\" but the `protocol` header is not equal to `chshare.ProtocolVersion`, the control flow goes to the `handleNotFound` node.\n4. If `s.reverseProxy` is not `nil`, the control flow goes to the `handleReverseProxy` node.\n5. If `s.reverseProxy` is `nil` and the `r.URL.Path` is \"/health\", the control flow goes to the `handleHealthCheck` node.\n6. If `s.reverseProxy` is `nil` and the `r.URL.Path` is \"/version\", the control flow goes to the `handleVersionCheck` node.\n7. If `s.reverseProxy` is `nil` and the `r.URL.Path` is neither \"/health\" nor \"/version\", the control flow goes to the `handleNotFound` node.\n8. From each of the nodes `handleWebsocket`, `handleReverseProxy`, `handleHealthCheck`, `handleVersionCheck`, and `handleNotFound`, the control flow goes to the `End` node.\n\nNote: The primary path through the code is from the `Start` node to the `handleClientHandler` node, and then to the `End` node. The other paths are alternate non-error paths. The `handleNotFound` node represents an error path."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:49:41 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 20\n\n   **Bug Type**: Improper Input Validation\n\n   **Description**: The function 'handleClientHandler' does not validate the value of the 'Sec-WebSocket-Protocol' header before comparing it to the expected protocol version. An attacker could potentially use this to send malicious data to the server.\n\n   **Solution**: Perform input validation on the 'Sec-WebSocket-Protocol' header to ensure it contains only expected values before comparing it to the 'chshare.ProtocolVersion'. Check out OWASP's guide on Input Validation: https://owasp.org/www-community/controls/Input_Validation\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 35\n\n   **Bug Type**: Information Disclosure\n\n   **Description**: The '/version' endpoint discloses the build version of the software. This information could potentially be used by an attacker to discover known vulnerabilities in specific versions of the software.\n\n   **Solution**: Consider removing the '/version' endpoint or limiting its access to authenticated and authorized users only. For more information, refer to OWASP's guide on Information Disclosure: https://owasp.org/www-community/controls/Information_Disclosure\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 43\n\n   **Bug Type**: Improper Error Handling\n\n   **Description**: The function returns a '404 Not Found' error without any additional information. This could potentially be confusing for users and developers trying to troubleshoot issues.\n\n   **Solution**: Provide more descriptive error messages to help users and developers understand the issue. However, be careful not to disclose sensitive information in error messages. Refer to OWASP's guide on Error Handling: https://owasp.org/www-project-cheat-sheets/cheatsheets/Error_Handling_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 20,
+                "severity": 7,
+                "bugType": "Improper Input Validation",
+                "description": "The function 'handleClientHandler' does not validate the value of the 'Sec-WebSocket-Protocol' header before comparing it to the expected protocol version. An attacker could potentially use this to send malicious data to the server.",
+                "solution": "Perform input validation on the 'Sec-WebSocket-Protocol' header to ensure it contains only expected values before comparing it to the 'chshare.ProtocolVersion'. Check out OWASP's guide on Input Validation: https://owasp.org/www-community/controls/Input_Validation"
+              },
+              {
+                "lineNumber": 35,
+                "severity": 5,
+                "bugType": "Information Disclosure",
+                "description": "The '/version' endpoint discloses the build version of the software. This information could potentially be used by an attacker to discover known vulnerabilities in specific versions of the software.",
+                "solution": "Consider removing the '/version' endpoint or limiting its access to authenticated and authorized users only. For more information, refer to OWASP's guide on Information Disclosure: https://owasp.org/www-community/controls/Information_Disclosure"
+              },
+              {
+                "lineNumber": 43,
+                "severity": 4,
+                "bugType": "Improper Error Handling",
+                "description": "The function returns a '404 Not Found' error without any additional information. This could potentially be confusing for users and developers trying to troubleshoot issues.",
+                "solution": "Provide more descriptive error messages to help users and developers understand the issue. However, be careful not to disclose sensitive information in error messages. Refer to OWASP's guide on Error Handling: https://owasp.org/www-project-cheat-sheets/cheatsheets/Error_Handling_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:52:03 AM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 23\n\n   **Bug Type**: CPU\n\n   **Description**: The use of strings.ToLower function on the 'Upgrade' header for every request can be CPU-intensive, especially for high traffic servers.\n\n   **Solution**: Consider storing the 'Upgrade' header value in its lower case form, or use a case-insensitive comparison method, such as strings.EqualFold.\n\n\n2. **Severity**: 2/10\n\n   **Line Number**: 36\n\n   **Bug Type**: Memory\n\n   **Description**: The repeated creation of the 'OK\\n' and 'Not found' strings can lead to unnecessary memory allocation.\n\n   **Solution**: Consider defining these strings as constants at the package level to avoid repeated memory allocation.\n\n\n3. **Severity**: 2/10\n\n   **Line Number**: 38\n\n   **Bug Type**: CPU\n\n   **Description**: The use of the switch-case statement for routing can lead to sub-optimal performance for large numbers of routes.\n\n   **Solution**: Consider using a more efficient routing mechanism, such as a trie or a hash map, especially if the number of routes is expected to grow.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 23,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The use of strings.ToLower function on the 'Upgrade' header for every request can be CPU-intensive, especially for high traffic servers.",
+                "solution": "Consider storing the 'Upgrade' header value in its lower case form, or use a case-insensitive comparison method, such as strings.EqualFold."
+              },
+              {
+                "lineNumber": 36,
+                "severity": 2,
+                "bugType": "Memory",
+                "description": "The repeated creation of the 'OK\\n' and 'Not found' strings can lead to unnecessary memory allocation.",
+                "solution": "Consider defining these strings as constants at the package level to avoid repeated memory allocation."
+              },
+              {
+                "lineNumber": 38,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The use of the switch-case statement for routing can lead to sub-optimal performance for large numbers of routes.",
+                "solution": "Consider using a more efficient routing mechanism, such as a trie or a hash map, especially if the number of routes is expected to grow."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:54:19 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 17\n\n   **Bug Type**: Data Transmission\n\n   **Description**: The application is using websockets for data transmission without explicitly implementing any form of encryption like TLS (Transport Layer Security). This could potentially expose sensitive data during transmission, violating GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Implement TLS or a similar encryption protocol to secure data during transmission. This will ensure that any sensitive data is encrypted and secure from potential eavesdropping attacks.\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 36\n\n   **Bug Type**: Data Exposure\n\n   **Description**: The application exposes '/health' and '/version' endpoints without any form of authentication or authorization. This could potentially expose sensitive system information, violating GDPR regulations.\n\n   **Solution**: Implement proper authentication and authorization mechanisms to restrict access to these endpoints. This will ensure that only authorized users can access this information.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 17,
+                "severity": 7,
+                "bugType": "Data Transmission",
+                "description": "The application is using websockets for data transmission without explicitly implementing any form of encryption like TLS (Transport Layer Security). This could potentially expose sensitive data during transmission, violating GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Implement TLS or a similar encryption protocol to secure data during transmission. This will ensure that any sensitive data is encrypted and secure from potential eavesdropping attacks."
+              },
+              {
+                "lineNumber": 36,
+                "severity": 5,
+                "bugType": "Data Exposure",
+                "description": "The application exposes '/health' and '/version' endpoints without any form of authentication or authorization. This could potentially expose sensitive system information, violating GDPR regulations.",
+                "solution": "Implement proper authentication and authorization mechanisms to restrict access to these endpoints. This will ensure that only authorized users can access this information."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package chserver\n\nimport (\n\t\"net/http\"\n\t\"strings\"\n\t\"sync/atomic\"\n\t\"time\"\n\n\tchshare \"github.com/jpillora/chisel/share\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/chisel/share/tunnel\"\n\t\"golang.org/x/crypto/ssh\"\n\t\"golang.org/x/sync/errgroup\"\n)\n\n// handleClientHandler is the main http websocket handler for the chisel server\nfunc (s *Server) handleClientHandler(w http.ResponseWriter, r *http.Request) {\n\t//websockets upgrade AND has chisel prefix\n\tupgrade := strings.ToLower(r.Header.Get(\"Upgrade\"))\n\tprotocol := r.Header.Get(\"Sec-WebSocket-Protocol\")\n\tif upgrade == \"websocket\"  {\n\t\tif protocol == chshare.ProtocolVersion {\n\t\t\ts.handleWebsocket(w, r)\n\t\t\treturn\n\t\t}\n\t\t//print into server logs and silently fall-through\n\t\ts.Infof(\"ignored client connection using protocol '%s', expected '%s'\",\n\t\t\tprotocol, chshare.ProtocolVersion)\n\t}\n\t//proxy target was provided\n\tif s.reverseProxy != nil {\n\t\ts.reverseProxy.ServeHTTP(w, r)\n\t\treturn\n\t}\n\t//no proxy defined, provide access to health/version checks\n\tswitch r.URL.Path {\n\tcase \"/health\":\n\t\tw.Write([]byte(\"OK\\n\"))\n\t\treturn\n\tcase \"/version\":\n\t\tw.Write([]byte(chshare.BuildVersion))\n\t\treturn\n\t}\n\t//missing :O\n\tw.WriteHeader(404)\n\tw.Write([]byte(\"Not found\"))\n}\n",
@@ -13,7 +133,181 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 3:46:08 AM PDT\n\nThis is a Go function that handles a WebSocket connection on the server side. The function takes an HTTP response writer and an HTTP request as arguments. \n\nThe function begins by incrementing a session counter using the atomic `AddInt32` function, which safely increments an integer even in a concurrent context. It then forks a new logger for the session.\n\nThe HTTP connection is then upgraded to a WebSocket connection using the `Upgrade` function from the `upgrader` object. If this fails, it logs the error and returns.\n\nNext, it wraps the WebSocket connection in a new `WebSocketConn` object and performs an SSH handshake on the resulting `net.Conn` object. If this fails, it logs the error and returns.\n\nAfter the SSH handshake, the function retrieves the user from the session map and performs a handshake with the chisel server. It waits for a request from the client with a timeout, and if a request is not received within the timeout, it closes the SSH connection and returns.\n\nThe function then decodes the client's configuration and validates it. If the client's version differs from the server's, it logs this information. It then validates the client's requested remotes. If a user is provided, it checks if the user has access to the desired remotes. If the client requests a reverse tunnel but reverse tunnels are not allowed on the server, it logs this and returns an error. If the client requests a reverse tunnel but the server cannot listen on the requested address, it logs this and returns an error.\n\nIf the configuration is successfully validated, the function replies to the client's request and sets up a new tunnel for the SSH connection. It then binds the tunnel to the SSH connection and any reversed remotes.\n\nFinally, the function waits for all goroutines in the error group to finish. If an error occurs and it's not an EOF error, it logs the error and the connection is closed.\n\nThe algorithm used in this function is a typical server-side WebSocket handling algorithm, with additional steps to handle SSH handshaking and tunneling. This function is specific to the chisel project, a fast TCP/UDP tunnel over HTTP, and might not be applicable to other projects.\n\nFor more information on WebSockets in Go, you can refer to this link: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers\n\nFor more information on SSH in Go, you can refer to this link: https://pkg.go.dev/golang.org/x/crypto/ssh\n\nFor more information on the chisel project, you can refer to this link: https://github.com/jpillora/chisel"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 3:48:48 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle External fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle Error fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Default fill:#FFFFFF, stroke:#000000, stroke-width:2px;\n\nStart-->Upgrade;\nUpgrade-->HandleUpgrade;\nHandleUpgrade-->NewWebSocketConn;\nNewWebSocketConn-->Handshake;\nHandshake-->NewServerConn;\nNewServerConn-->PullUsers;\nPullUsers-->VerifyConfiguration;\nVerifyConfiguration-->WaitForRequest;\nWaitForRequest-->Failed;\nWaitForRequest-->DecodeConfig;\nDecodeConfig-->PrintVersions;\nPrintVersions-->ValidateRemotes;\nValidateRemotes-->BindSSH;\nBindSSH-->BindRemotes;\nBindRemotes-->ClosedConnection;\n\nUpgrade-->ErrorUpgrade;\nErrorUpgrade-->ClosedConnection;\n\nUpgrade-->ExternalUpgrade;\nExternalUpgrade-->ClosedConnection;\n\nUpgrade-->DefaultUpgrade;\nDefaultUpgrade-->ClosedConnection;\n\nHandleUpgrade-->ErrorHandleUpgrade;\nErrorHandleUpgrade-->ClosedConnection;\n\nHandleUpgrade-->ExternalHandleUpgrade;\nExternalHandleUpgrade-->ClosedConnection;\n\nHandleUpgrade-->DefaultHandleUpgrade;\nDefaultHandleUpgrade-->ClosedConnection;\n\nNewWebSocketConn-->ErrorNewWebSocketConn;\nErrorNewWebSocketConn-->ClosedConnection;\n\nNewWebSocketConn-->ExternalNewWebSocketConn;\nExternalNewWebSocketConn-->ClosedConnection;\n\nNewWebSocketConn-->DefaultNewWebSocketConn;\nDefaultNewWebSocketConn-->ClosedConnection;\n\nHandshake-->ErrorHandshake;\nErrorHandshake-->ClosedConnection;\n\nHandshake-->ExternalHandshake;\nExternalHandshake-->ClosedConnection;\n\nHandshake-->DefaultHandshake;\nDefaultHandshake-->ClosedConnection;\n\nNewServerConn-->ErrorNewServerConn;\nErrorNewServerConn-->ClosedConnection;\n\nNewServerConn-->ExternalNewServerConn;\nExternalNewServerConn-->ClosedConnection;\n\nNewServerConn-->DefaultNewServerConn;\nDefaultNewServerConn-->ClosedConnection;\n\nPullUsers-->ErrorPullUsers;\nErrorPullUsers-->ClosedConnection;\n\nPullUsers-->ExternalPullUsers;\nExternalPullUsers-->ClosedConnection;\n\nPullUsers-->DefaultPullUsers;\nDefaultPullUsers-->ClosedConnection;\n\nVerifyConfiguration-->ErrorVerifyConfiguration;\nErrorVerifyConfiguration-->ClosedConnection;\n\nVerifyConfiguration-->ExternalVerifyConfiguration;\nExternalVerifyConfiguration-->ClosedConnection;\n\nVerifyConfiguration-->DefaultVerifyConfiguration;\nDefaultVerifyConfiguration-->ClosedConnection;\n\nWaitForRequest-->ErrorWaitForRequest;\nErrorWaitForRequest-->ClosedConnection;\n\nWaitForRequest-->ExternalWaitForRequest;\nExternalWaitForRequest-->ClosedConnection;\n\nWaitForRequest-->DefaultWaitForRequest;\nDefaultWaitForRequest-->ClosedConnection;\n\nFailed-->ClosedConnection;\n\nDecodeConfig-->ErrorDecodeConfig;\nErrorDecodeConfig-->ClosedConnection;\n\nDecodeConfig-->ExternalDecodeConfig;\nExternalDecodeConfig-->ClosedConnection;\n\nDecodeConfig-->DefaultDecodeConfig;\nDefaultDecodeConfig-->ClosedConnection;\n\nPrintVersions-->ErrorPrintVersions;\nErrorPrintVersions-->ClosedConnection;\n\nPrintVersions-->ExternalPrintVersions;\nExternalPrintVersions-->ClosedConnection;\n\nPrintVersions-->DefaultPrintVersions;\nDefaultPrintVersions-->ClosedConnection;\n\nValidateRemotes-->ErrorValidateRemotes;\nErrorValidateRemotes-->ClosedConnection;\n\nValidateRemotes-->ExternalValidateRemotes;\nExternalValidateRemotes-->ClosedConnection;\n\nValidateRemotes-->DefaultValidateRemotes;\nDefaultValidateRemotes-->ClosedConnection;\n\nBindSSH-->ErrorBindSSH;\nErrorBindSSH-->ClosedConnection;\n\nBindSSH-->ExternalBindSSH;\nExternalBindSSH-->ClosedConnection;\n\nBindSSH-->DefaultBindSSH;\nDefaultBindSSH-->ClosedConnection;\n\nBindRemotes-->ErrorBindRemotes;\nErrorBindRemotes-->ClosedConnection;\n\nBindRemotes-->ExternalBindRemotes;\nExternalBindRemotes-->ClosedConnection;\n\nBindRemotes-->DefaultBindRemotes;\nDefaultBindRemotes-->ClosedConnection;\n\nClosedConnection-->End;\n\nstyle Upgrade fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle HandleUpgrade fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle NewWebSocketConn fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Handshake fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle NewServerConn fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle PullUsers fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle VerifyConfiguration fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle WaitForRequest fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Failed fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DecodeConfig fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle PrintVersions fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ValidateRemotes fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle BindSSH fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle BindRemotes fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ClosedConnection fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExternalUpgrade fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalHandleUpgrade fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalNewWebSocketConn fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalHandshake fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalNewServerConn fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalPullUsers fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalVerifyConfiguration fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalWaitForRequest fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalDecodeConfig fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalPrintVersions fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalValidateRemotes fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalBindSSH fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ExternalBindRemotes fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorUpgrade fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorHandleUpgrade fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorNewWebSocketConn fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorHandshake fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorNewServerConn fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorPullUsers fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorVerifyConfiguration fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorWaitForRequest fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorDecodeConfig fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorPrintVersions fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorValidateRemotes fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorBindSSH fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ErrorBindRemotes fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DefaultUpgrade fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultHandleUpgrade fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultNewWebSocketConn fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultHandshake fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultNewServerConn fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultPullUsers fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultVerifyConfiguration fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultWaitForRequest fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultDecodeConfig fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultPrintVersions fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultValidateRemotes fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultBindSSH fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultBindRemotes fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;\nstyle ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:50:39 AM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 100\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The session ID is directly used to fetch the user from the session map. If session IDs are predictable or can be brute-forced, this could lead to unauthorized access.\n\n   **Solution**: Use secure and unpredictable session IDs. Consider using a secure random number generator for session ID creation. Also, validate the session ID before using it. More info: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 102\n\n   **Bug Type**: Insecure Error Handling\n\n   **Description**: The application panics if it cannot find the user in the session map. This could lead to Denial of Service (DoS) if an attacker can trigger this condition frequently and crash the application.\n\n   **Solution**: Instead of panicking, handle the error gracefully. Log the error and return a generic error message to the user. More info: https://owasp.org/www-community/Improper_Error_Handling\n\n\n3. **Severity**: 5/10\n\n   **Line Number**: 117\n\n   **Bug Type**: Sensitive Data Exposure\n\n   **Description**: The client and server versions are logged if they do not match. This could expose sensitive information about the software and potentially aid an attacker in exploiting version-specific vulnerabilities.\n\n   **Solution**: Avoid logging sensitive information. If it's necessary to compare versions, do so without logging the exact versions or consider logging only in a secure and controlled environment. More info: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\n\n\n4. **Severity**: 6/10\n\n   **Line Number**: 132\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The application allows direct reference to objects (in this case, reverse tunnels) based on user input. If the user input is not properly validated, this can lead to unauthorized access to internal objects.\n\n   **Solution**: Always validate user input before using it to reference internal objects. Consider using access control checks or indirect references. More info: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 52,
+                "severity": 6,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The session ID is directly used to fetch the user from the session map. If session IDs are predictable or can be brute-forced, this could lead to unauthorized access.",
+                "solution": "Use secure and unpredictable session IDs. Consider using a secure random number generator for session ID creation. Also, validate the session ID before using it. More info: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control"
+              },
+              {
+                "lineNumber": 54,
+                "severity": 7,
+                "bugType": "Insecure Error Handling",
+                "description": "The application panics if it cannot find the user in the session map. This could lead to Denial of Service (DoS) if an attacker can trigger this condition frequently and crash the application.",
+                "solution": "Instead of panicking, handle the error gracefully. Log the error and return a generic error message to the user. More info: https://owasp.org/www-community/Improper_Error_Handling"
+              },
+              {
+                "lineNumber": 69,
+                "severity": 5,
+                "bugType": "Sensitive Data Exposure",
+                "description": "The client and server versions are logged if they do not match. This could expose sensitive information about the software and potentially aid an attacker in exploiting version-specific vulnerabilities.",
+                "solution": "Avoid logging sensitive information. If it's necessary to compare versions, do so without logging the exact versions or consider logging only in a secure and controlled environment. More info: https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure"
+              },
+              {
+                "lineNumber": 84,
+                "severity": 6,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The application allows direct reference to objects (in this case, reverse tunnels) based on user input. If the user input is not properly validated, this can lead to unauthorized access to internal objects.",
+                "solution": "Always validate user input before using it to reference internal objects. Consider using access control checks or indirect references. More info: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:52:59 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 97\n\n   **Bug Type**: CPU\n\n   **Description**: Atomic operations are generally more expensive than normal operations. The atomic operation here is used to generate session ids, which may not be necessary.\n\n   **Solution**: Consider using a simpler method for generating session ids if thread safety is not a concern. If it is, consider using sync.Mutex for locking instead of atomic operations.\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 99\n\n   **Bug Type**: CPU\n\n   **Description**: The 'Fork' operation may be expensive, especially if it involves creating a new goroutine.\n\n   **Solution**: If 'Fork' creates a new goroutine, consider using a worker pool to limit the number of goroutines that can be created. This can prevent excessive CPU usage.\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 117\n\n   **Bug Type**: Memory\n\n   **Description**: The use of a map for storing sessions can lead to high memory usage if the number of sessions is large.\n\n   **Solution**: Consider using a more memory-efficient data structure, such as a hash table with linked lists for collision resolution. Additionally, consider implementing a session timeout to remove inactive sessions.\n\n\n4. **Severity**: 4/10\n\n   **Line Number**: 126\n\n   **Bug Type**: CPU\n\n   **Description**: The use of a select statement with a timeout can lead to high CPU usage if the timeout is frequently reached.\n\n   **Solution**: Consider using a different method for handling timeouts, such as a context with a deadline.\n\n\n5. **Severity**: 7/10\n\n   **Line Number**: 165\n\n   **Bug Type**: CPU\n\n   **Description**: The use of an error group and context for handling errors can lead to high CPU usage, especially if errors are frequent.\n\n   **Solution**: Consider using a simpler method for error handling, such as returning errors directly. If concurrent error handling is necessary, consider using a worker pool to limit the number of goroutines.\n\n\n6. **Severity**: 4/10\n\n   **Line Number**: 177\n\n   **Bug Type**: CPU\n\n   **Description**: The use of strings.HasSuffix for error checking can be inefficient, especially if the error message is long.\n\n   **Solution**: Consider using error types for error checking instead of string comparison. This can improve performance and make the code more robust.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 49,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "Atomic operations are generally more expensive than normal operations. The atomic operation here is used to generate session ids, which may not be necessary.",
+                "solution": "Consider using a simpler method for generating session ids if thread safety is not a concern. If it is, consider using sync.Mutex for locking instead of atomic operations."
+              },
+              {
+                "lineNumber": 51,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The 'Fork' operation may be expensive, especially if it involves creating a new goroutine.",
+                "solution": "If 'Fork' creates a new goroutine, consider using a worker pool to limit the number of goroutines that can be created. This can prevent excessive CPU usage."
+              },
+              {
+                "lineNumber": 69,
+                "severity": 6,
+                "bugType": "Memory",
+                "description": "The use of a map for storing sessions can lead to high memory usage if the number of sessions is large.",
+                "solution": "Consider using a more memory-efficient data structure, such as a hash table with linked lists for collision resolution. Additionally, consider implementing a session timeout to remove inactive sessions."
+              },
+              {
+                "lineNumber": 78,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The use of a select statement with a timeout can lead to high CPU usage if the timeout is frequently reached.",
+                "solution": "Consider using a different method for handling timeouts, such as a context with a deadline."
+              },
+              {
+                "lineNumber": 117,
+                "severity": 7,
+                "bugType": "CPU",
+                "description": "The use of an error group and context for handling errors can lead to high CPU usage, especially if errors are frequent.",
+                "solution": "Consider using a simpler method for error handling, such as returning errors directly. If concurrent error handling is necessary, consider using a worker pool to limit the number of goroutines."
+              },
+              {
+                "lineNumber": 129,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The use of strings.HasSuffix for error checking can be inefficient, especially if the error message is long.",
+                "solution": "Consider using error types for error checking instead of string comparison. This can improve performance and make the code more robust."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 3:55:25 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 96\n\n   **Bug Type**: GDPR\n\n   **Description**: The code is using an atomic operation to increment a session counter. This can be a violation of GDPR as it might be considered as processing personal data without explicit consent if the session ID is used to track users.\n\n   **Solution**: Ensure that the session IDs are not used to track users without their explicit consent. If needed, implement a mechanism to obtain user consent before tracking their sessions.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 101\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code is upgrading an HTTP connection to a WebSocket connection without explicit checks for secure (HTTPS) connection. This can lead to transmission of data over an insecure connection, a violation of the HIPAA Security Rule.\n\n   **Solution**: Ensure that all connections are secure by using HTTPS for all connections or by implementing other appropriate security measures.\n\n\n3. **Severity**: 10/10\n\n   **Line Number**: 108\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code is performing an SSH handshake without validating the client's identity, which could allow unauthorized access to sensitive data, a violation of PCI DSS Requirement 8.\n\n   **Solution**: Implement client validation during the SSH handshake to ensure that only authorized clients can access the server.\n\n\n4. **Severity**: 9/10\n\n   **Line Number**: 115\n\n   **Bug Type**: GDPR\n\n   **Description**: The code is pulling user data from the session map without explicit user consent, which could be a violation of GDPR.\n\n   **Solution**: Implement a mechanism to obtain explicit user consent before accessing their data.\n\n\n5. **Severity**: 7/10\n\n   **Line Number**: 148\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code is creating a new tunnel without validating the destination, which could potentially lead to unauthorized access to or disclosure of protected health information (PHI), a violation of the HIPAA Security Rule.\n\n   **Solution**: Implement destination validation to ensure that PHI is only transmitted to authorized entities.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 48,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The code is using an atomic operation to increment a session counter. This can be a violation of GDPR as it might be considered as processing personal data without explicit consent if the session ID is used to track users.",
+                "solution": "Ensure that the session IDs are not used to track users without their explicit consent. If needed, implement a mechanism to obtain user consent before tracking their sessions.",
+                "webLink": "https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 53,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The code is upgrading an HTTP connection to a WebSocket connection without explicit checks for secure (HTTPS) connection. This can lead to transmission of data over an insecure connection, a violation of the HIPAA Security Rule.",
+                "solution": "Ensure that all connections are secure by using HTTPS for all connections or by implementing other appropriate security measures.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              },
+              {
+                "lineNumber": 60,
+                "severity": 10,
+                "bugType": "PCI DSS",
+                "description": "The code is performing an SSH handshake without validating the client's identity, which could allow unauthorized access to sensitive data, a violation of PCI DSS Requirement 8.",
+                "solution": "Implement client validation during the SSH handshake to ensure that only authorized clients can access the server.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/maintaining_payment_security"
+              },
+              {
+                "lineNumber": 67,
+                "severity": 9,
+                "bugType": "GDPR",
+                "description": "The code is pulling user data from the session map without explicit user consent, which could be a violation of GDPR.",
+                "solution": "Implement a mechanism to obtain explicit user consent before accessing their data.",
+                "webLink": "https://gdpr-info.eu/"
+              },
+              {
+                "lineNumber": 100,
+                "severity": 7,
+                "bugType": "HIPAA",
+                "description": "The code is creating a new tunnel without validating the destination, which could potentially lead to unauthorized access to or disclosure of protected health information (PHI), a violation of the HIPAA Security Rule.",
+                "solution": "Implement destination validation to ensure that PHI is only transmitted to authorized entities.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\n// handleWebsocket is responsible for handling the websocket connection\nfunc (s *Server) handleWebsocket(w http.ResponseWriter, req *http.Request) {\n\tid := atomic.AddInt32(&s.sessCount, 1)\n\tl := s.Fork(\"session#%d\", id)\n\twsConn, err := upgrader.Upgrade(w, req, nil)\n\tif err != nil {\n\t\tl.Debugf(\"Failed to upgrade (%s)\", err)\n\t\treturn\n\t}\n\tconn := cnet.NewWebSocketConn(wsConn)\n\t// perform SSH handshake on net.Conn\n\tl.Debugf(\"Handshaking with %s...\", req.RemoteAddr)\n\tsshConn, chans, reqs, err := ssh.NewServerConn(conn, s.sshConfig)\n\tif err != nil {\n\t\ts.Debugf(\"Failed to handshake (%s)\", err)\n\t\treturn\n\t}\n\t// pull the users from the session map\n\tvar user *settings.User\n\tif s.users.Len() > 0 {\n\t\tsid := string(sshConn.SessionID())\n\t\tu, ok := s.sessions.Get(sid)\n\t\tif !ok {\n\t\t\tpanic(\"bug in ssh auth handler\")\n\t\t}\n\t\tuser = u\n\t\ts.sessions.Del(sid)\n\t}\n\t// chisel server handshake (reverse of client handshake)\n\t// verify configuration\n\tl.Debugf(\"Verifying configuration\")\n\t// wait for request, with timeout\n\tvar r *ssh.Request\n\tselect {\n\tcase r = <-reqs:\n\tcase <-time.After(settings.EnvDuration(\"CONFIG_TIMEOUT\", 10*time.Second)):\n\t\tl.Debugf(\"Timeout waiting for configuration\")\n\t\tsshConn.Close()\n\t\treturn\n\t}\n\tfailed := func(err error) {\n\t\tl.Debugf(\"Failed: %s\", err)\n\t\tr.Reply(false, []byte(err.Error()))\n\t}\n\tif r.Type != \"config\" {\n\t\tfailed(s.Errorf(\"expecting config request\"))\n\t\treturn\n\t}\n\tc, err := settings.DecodeConfig(r.Payload)\n\tif err != nil {\n\t\tfailed(s.Errorf(\"invalid config\"))\n\t\treturn\n\t}\n\t//print if client and server  versions dont match\n\tif c.Version != chshare.BuildVersion {\n\t\tv := c.Version\n\t\tif v == \"\" {\n\t\t\tv = \"<unknown>\"\n\t\t}\n\t\tl.Infof(\"Client version (%s) differs from server version (%s)\",\n\t\t\tv, chshare.BuildVersion)\n\t}\n\t//validate remotes\n\tfor _, r := range c.Remotes {\n\t\t//if user is provided, ensure they have\n\t\t//access to the desired remotes\n\t\tif user != nil {\n\t\t\taddr := r.UserAddr()\n\t\t\tif !user.HasAccess(addr) {\n\t\t\t\tfailed(s.Errorf(\"access to '%s' denied\", addr))\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\t//confirm reverse tunnels are allowed\n\t\tif r.Reverse && !s.config.Reverse {\n\t\t\tl.Debugf(\"Denied reverse port forwarding request, please enable --reverse\")\n\t\t\tfailed(s.Errorf(\"Reverse port forwaring not enabled on server\"))\n\t\t\treturn\n\t\t}\n\t\t//confirm reverse tunnel is available\n\t\tif r.Reverse && !r.CanListen() {\n\t\t\tfailed(s.Errorf(\"Server cannot listen on %s\", r.String()))\n\t\t\treturn\n\t\t}\n\t}\n\t//successfuly validated config!\n\tr.Reply(true, nil)\n\t//tunnel per ssh connection\n\ttunnel := tunnel.New(tunnel.Config{\n\t\tLogger:    l,\n\t\tInbound:   s.config.Reverse,\n\t\tOutbound:  true, //server always accepts outbound\n\t\tSocks:     s.config.Socks5,\n\t\tKeepAlive: s.config.KeepAlive,\n\t})\n\t//bind\n\teg, ctx := errgroup.WithContext(req.Context())\n\teg.Go(func() error {\n\t\t//connected, handover ssh connection for tunnel to use, and block\n\t\treturn tunnel.BindSSH(ctx, sshConn, reqs, chans)\n\t})\n\teg.Go(func() error {\n\t\t//connected, setup reversed-remotes?\n\t\tserverInbound := c.Remotes.Reversed(true)\n\t\tif len(serverInbound) == 0 {\n\t\t\treturn nil\n\t\t}\n\t\t//block\n\t\treturn tunnel.BindRemotes(ctx, serverInbound)\n\t})\n\terr = eg.Wait()\n\tif err != nil && !strings.HasSuffix(err.Error(), \"EOF\") {\n\t\tl.Debugf(\"Closed connection (%s)\", err)\n\t} else {\n\t\tl.Debugf(\"Closed connection\")\n\t}\n}\n",

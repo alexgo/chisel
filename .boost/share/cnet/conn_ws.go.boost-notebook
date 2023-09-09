@@ -1,7 +1,90 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:31:57 AM PDT\n\nThis code is written in Go programming language and it is a part of a package named `cnet`. The purpose of this code is to define a new type `wsConn` which is a structure that holds a connection to a WebSocket and a buffer.\n\nLet's break it down:\n\n- `package cnet`: This line declares the package that this file is part of. In Go, code is organized into packages. A package is a collection of source files in the same directory that are compiled together.\n\n- `import`: This keyword is used to import other packages that are needed in this code. In this case, three packages are imported:\n\n  - `net`: This is a built-in Go package that provides a portable interface for network I/O, including TCP/IP, UDP, domain name resolution, and Unix domain sockets.\n  \n  - `time`: This is another built-in Go package that provides functionality for measuring and displaying time.\n  \n  - `github.com/gorilla/websocket`: This is an external package that provides a complete and tested implementation of the WebSocket protocol. The WebSocket protocol enables interaction between a web browser (or other client application) and a web server with lower overheads, facilitating real-time data transfer from and to the server. \n\n- `type wsConn struct`: This line declares a new type named `wsConn`. In Go, a `struct` is a composite data type that groups together zero or more values of different types. Here, the `wsConn` struct contains two fields:\n\n  - `*websocket.Conn`: This is a pointer to a `Conn` type from the `websocket` package. This represents a WebSocket connection.\n  \n  - `buff []byte`: This is a slice of bytes. In Go, a slice is a segment of an array. Slices are indexable and have a length. Unlike arrays, they can be resized. The `buff` slice is probably used as a buffer for data that is being sent or received over the WebSocket connection.\n\nThis code does not seem to have any specific algorithms. It's more about data structure definition and package importation. \n\nFor more information about the imported packages, you can visit:\n\n- `net` package: [https://golang.org/pkg/net/](https://golang.org/pkg/net/)\n- `time` package: [https://golang.org/pkg/time/](https://golang.org/pkg/time/)\n- `gorilla/websocket` package: [https://github.com/gorilla/websocket](https://github.com/gorilla/websocket)\n\nIn terms of architectural guidelines, this code snippet does not appear to violate any known principles or constraints. It is modular (contained within the `cnet` package), it uses standard Go idioms (like `struct` for grouping related data), and it leverages external packages to avoid reinventing the wheel (like `gorilla/websocket` for handling WebSocket connections)."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:35:49 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle wsConn fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->wsConn;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:36:52 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:38:29 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:40:46 AM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 4\n\n   **Bug Type**: GDPR\n\n   **Description**: The use of 'github.com/gorilla/websocket' library might imply that the application is using websockets to transmit data. If any personal data is being transmitted over these websockets, it could potentially be a violation of GDPR compliance, as the data might not be properly encrypted and there is no clear mechanism for consent management.\n\n   **Solution**: Ensure that any personal data transmitted over websockets is properly encrypted and that users have given explicit consent for their data to be used in this way. Consider using a library that supports secure websockets (wss://) and provides features for consent management.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 4\n\n   **Bug Type**: PCI DSS\n\n   **Description**: If cardholder data is being transmitted through these websockets, it could be a violation of PCI DSS compliance. PCI DSS requires that cardholder data be transmitted over a secure channel using strong cryptography.\n\n   **Solution**: Ensure that any cardholder data transmitted over websockets is properly encrypted using strong cryptography. Consider using a library that supports secure websockets (wss://).\n\n\n3. **Severity**: 7/10\n\n   **Line Number**: 4\n\n   **Bug Type**: HIPAA\n\n   **Description**: If Protected Health Information (PHI) is being transmitted through these websockets, it could be a violation of HIPAA compliance. HIPAA requires that PHI be transmitted over a secure channel using strong cryptography.\n\n   **Solution**: Ensure that any PHI transmitted over websockets is properly encrypted using strong cryptography. Consider using a library that supports secure websockets (wss://).\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 4,
+                "severity": 8,
+                "bugType": "GDPR",
+                "description": "The use of 'github.com/gorilla/websocket' library might imply that the application is using websockets to transmit data. If any personal data is being transmitted over these websockets, it could potentially be a violation of GDPR compliance, as the data might not be properly encrypted and there is no clear mechanism for consent management.",
+                "solution": "Ensure that any personal data transmitted over websockets is properly encrypted and that users have given explicit consent for their data to be used in this way. Consider using a library that supports secure websockets (wss://) and provides features for consent management."
+              },
+              {
+                "lineNumber": 4,
+                "severity": 7,
+                "bugType": "PCI DSS",
+                "description": "If cardholder data is being transmitted through these websockets, it could be a violation of PCI DSS compliance. PCI DSS requires that cardholder data be transmitted over a secure channel using strong cryptography.",
+                "solution": "Ensure that any cardholder data transmitted over websockets is properly encrypted using strong cryptography. Consider using a library that supports secure websockets (wss://)."
+              },
+              {
+                "lineNumber": 4,
+                "severity": 7,
+                "bugType": "HIPAA",
+                "description": "If Protected Health Information (PHI) is being transmitted through these websockets, it could be a violation of HIPAA compliance. HIPAA requires that PHI be transmitted over a secure channel using strong cryptography.",
+                "solution": "Ensure that any PHI transmitted over websockets is properly encrypted using strong cryptography. Consider using a library that supports secure websockets (wss://)."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package cnet\n\nimport (\n\t\"net\"\n\t\"time\"\n\n\t\"github.com/gorilla/websocket\"\n)\n\ntype wsConn struct {\n\t*websocket.Conn\n\tbuff []byte\n}\n",
@@ -13,7 +96,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:32:45 AM PDT\n\nThe code is written in Go language and is a simple function to convert a WebSocket connection into a net.Conn type connection. The function name is `NewWebSocketConn` and it takes one parameter, `websocketConn`, which is a pointer to a WebSocket connection. \n\nLet's break down the code:\n\n1. `func NewWebSocketConn(websocketConn *websocket.Conn) net.Conn {`: This is the function declaration. The function `NewWebSocketConn` takes one parameter, `websocketConn`, which is a pointer to a `websocket.Conn` object. The function returns a value of type `net.Conn`.\n\n2. `c := wsConn{ Conn: websocketConn, }`: This line creates a new `wsConn` object and assigns it to the variable `c`. The `wsConn` struct has one field, `Conn`, which is assigned the `websocketConn` that was passed into the function.\n\n3. `return &c`: This line returns the address of the `wsConn` object `c`. Since `wsConn` implements the `net.Conn` interface (not shown in the provided code snippet), this is a valid return value for the function.\n\nThis function is a simple wrapper that allows a `websocket.Conn` to be used wherever a `net.Conn` is expected. This can be useful in scenarios where you have code that works with `net.Conn` objects, but you want to use it with a WebSocket connection.\n\nThe algorithm used here is very straightforward - it simply wraps the `websocket.Conn` in a struct that implements the `net.Conn` interface.\n\nFor more information on the `net.Conn` interface in Go, you can refer to the official Go documentation: https://golang.org/pkg/net/#Conn\n\nFor more information on WebSockets in Go, you can refer to the Gorilla WebSocket package documentation: http://www.gorillatoolkit.org/pkg/websocket\n\nAs per the provided architectural guidelines, there are no specific constraints or guidelines mentioned. However, this code appears to be consistent with general good practices in Go, such as using interfaces to allow for flexible code that can work with different types of connections."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:35:54 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->ExampleProcess;\n```\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:36:56 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:38:33 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:40:50 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\n//NewWebSocketConn converts a websocket.Conn into a net.Conn\nfunc NewWebSocketConn(websocketConn *websocket.Conn) net.Conn {\n\tc := wsConn{\n\t\tConn: websocketConn,\n\t}\n\treturn &c\n}\n",
@@ -25,7 +169,113 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:33:42 AM PDT\n\nThis Go code defines a method `Read` for a custom structure `wsConn`. This method is used to read data from a WebSocket connection and write it into the provided byte slice `dst`. The method returns the number of bytes read and an error if any occurred. \n\nHere's the breakdown of the code:\n\n1. The method receives a byte slice `dst` as a parameter. The length of `dst` is stored in `ldst`.\n\n2. The code then checks if there's any data in the buffer `c.buff`. If there is, it uses this data as the source of the copy operation (`src = c.buff`) and empties the buffer (`c.buff = nil`).\n\n3. If the buffer is empty, it tries to read a new message from the WebSocket connection `c.Conn.ReadMessage()`. If the read is successful, the message is used as the source of the copy operation (`src = msg`). If there's an error, the method returns 0 and the error.\n\n4. The code then performs the copy operation from `src` to `dst`. It also checks if the length of `src` is greater than the length of `dst`. If it is, it copies as much as possible from `src` into `dst` and stores the remainder in the buffer `c.buff`.\n\n5. If the length of `src` is not greater than `dst`, it copies all of `src` into `dst`.\n\n6. Finally, the method returns the number of bytes copied (`n`) and `nil` for the error (indicating that no error occurred).\n\nIn terms of algorithms, this method uses a simple buffer management strategy to handle cases where the source data is larger than the destination. The `copy` function is a built-in Go function that copies elements from one slice to another.\n\nThis method is not thread-safe, meaning it's not meant to be used concurrently by multiple goroutines. This is not a problem in this case, as the comment at the beginning of the method explains that there should never be more than one reader.\n\nFor more information on Go's `copy` function and slices, you can refer to the official Go documentation: \n- Slices: https://blog.golang.org/slices-intro\n- Copy function: https://golang.org/pkg/builtin/#copy"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:36:19 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle Read fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ReadErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle ConnReadMessage fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ConnReadMessageErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->Read;\nRead-->ldstCheck;\nldstCheck-->BuffCheck;\nBuffCheck-->BuffNotEmpty;\nBuffCheck-->ConnReadMessage;\nBuffNotEmpty-->CopySrcToDest;\nCopySrcToDest-->ReturnBytesCopied;\nConnReadMessage-->CopySrcToDest;\nCopySrcToDest-->ReturnBytesCopied;\nBuffNotEmpty-->ReturnBytesCopied;\nConnReadMessage-->ConnReadMessageErrorPath;\nConnReadMessageErrorPath-->ReturnError;\nRead-->ReadErrorPath;\nReadErrorPath-->ReturnError;\n```\n\nThe control flow graph for the `Read` function is as follows:\n\n1. The function starts at the `Start` node.\n2. It then goes to the `Read` node.\n3. From the `Read` node, it goes to the `ldstCheck` node to check the length of the destination buffer.\n4. From the `ldstCheck` node, it goes to the `BuffCheck` node to check if there is any data in the buffer.\n5. If the buffer is not empty, it goes to the `BuffNotEmpty` node and copies the data from the buffer to the destination.\n6. If the buffer is empty, it goes to the `ConnReadMessage` node to read a new message from the connection.\n7. From the `ConnReadMessage` node, it goes to the `CopySrcToDest` node to copy the data from the source to the destination.\n8. After copying the data, it goes to the `ReturnBytesCopied` node to return the number of bytes copied.\n9. If there is an error while reading the message from the connection, it goes to the `ConnReadMessageErrorPath` node and returns an error.\n10. If there is an error while reading from the buffer or an error occurred during the read operation, it goes to the `ReadErrorPath` node and returns an error."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:37:20 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 42\n\n   **Bug Type**: Concurrency Issue\n\n   **Description**: The Read function is not thread-safe. Even though the comment suggests that there should never be more than one reader, this cannot be guaranteed in a multi-threaded environment. If multiple threads try to read simultaneously, it may lead to race conditions and data inconsistency.\n\n   **Solution**: Consider using synchronization mechanisms like Mutexes or Channels to ensure thread-safety. More on this can be found here: https://golang.org/doc/faq#What_is_the_purpose_of_the_'Go'_command\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 51\n\n   **Bug Type**: Memory Management\n\n   **Description**: Excessive use of make() for buffer creation. This can lead to memory inefficiency if the buffer sizes are large and frequently reallocated.\n\n   **Solution**: Consider using a dynamic buffer or a buffer pool to efficiently manage memory. More on this can be found here: https://golang.org/pkg/bytes/#Buffer\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 21,
+                "severity": 7,
+                "bugType": "Concurrency Issue",
+                "description": "The Read function is not thread-safe. Even though the comment suggests that there should never be more than one reader, this cannot be guaranteed in a multi-threaded environment. If multiple threads try to read simultaneously, it may lead to race conditions and data inconsistency.",
+                "solution": "Consider using synchronization mechanisms like Mutexes or Channels to ensure thread-safety. More on this can be found here: https://golang.org/doc/faq#What_is_the_purpose_of_the_'Go'_command"
+              },
+              {
+                "lineNumber": 30,
+                "severity": 5,
+                "bugType": "Memory Management",
+                "description": "Excessive use of make() for buffer creation. This can lead to memory inefficiency if the buffer sizes are large and frequently reallocated.",
+                "solution": "Consider using a dynamic buffer or a buffer pool to efficiently manage memory. More on this can be found here: https://golang.org/pkg/bytes/#Buffer"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:39:08 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 47\n\n   **Bug Type**: Memory\n\n   **Description**: The use of a buffer (c.buff) to store data that couldn't fit into the destination slice can lead to high memory usage if the source data is significantly larger than the destination slice. This is because the buffer will hold onto the data until the next read operation, which might not happen immediately.\n\n   **Solution**: Consider using a dynamic buffer that can grow or shrink as needed, or limit the size of the source data to ensure it doesn't exceed the capacity of the destination slice by a large margin. Alternatively, consider redesigning the read operation to handle larger source data more efficiently, such as by processing the data in smaller chunks.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 53\n\n   **Bug Type**: CPU\n\n   **Description**: The creation of a new buffer and copying of data into it in the case where the source data is larger than the destination slice can be CPU-intensive, especially if this situation occurs frequently and the source data is large.\n\n   **Solution**: Consider optimizing the data copying process. One way could be to use a built-in function like append() instead of make() and copy(). This could reduce the number of operations and thus the CPU usage. Also, consider processing the data in smaller chunks to spread out the CPU load.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 26,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "The use of a buffer (c.buff) to store data that couldn't fit into the destination slice can lead to high memory usage if the source data is significantly larger than the destination slice. This is because the buffer will hold onto the data until the next read operation, which might not happen immediately.",
+                "solution": "Consider using a dynamic buffer that can grow or shrink as needed, or limit the size of the source data to ensure it doesn't exceed the capacity of the destination slice by a large margin. Alternatively, consider redesigning the read operation to handle larger source data more efficiently, such as by processing the data in smaller chunks."
+              },
+              {
+                "lineNumber": 32,
+                "severity": 7,
+                "bugType": "CPU",
+                "description": "The creation of a new buffer and copying of data into it in the case where the source data is larger than the destination slice can be CPU-intensive, especially if this situation occurs frequently and the source data is large.",
+                "solution": "Consider optimizing the data copying process. One way could be to use a built-in function like append() instead of make() and copy(). This could reduce the number of operations and thus the CPU usage. Also, consider processing the data in smaller chunks to spread out the CPU load."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:41:07 AM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 42\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function 'Read' reads data from a WebSocket connection into a byte array. The data is not encrypted or obfuscated in any way, which could potentially expose sensitive data during transmission. This could violate GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Consider implementing end-to-end encryption to secure the data during transmission. This could be done using a secure protocol such as TLS. Additionally, consider using secure coding practices to further protect the data, such as input validation, output encoding, and proper error handling.\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 46\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function 'Read' stores the remainder of the 'src' byte array in a buffer 'c.buff' if 'src' is larger than 'dst'. This buffer is not secured in any way, which could potentially expose sensitive data at rest. This could violate GDPR, PCI DSS, and HIPAA regulations.\n\n   **Solution**: Consider implementing secure data storage practices, such as encrypting the data at rest and using secure data handling practices, such as proper disposal of sensitive data after use. Additionally, consider using secure coding practices to further protect the data, such as input validation, output encoding, and proper error handling.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 21,
+                "severity": 6,
+                "bugType": "Data Compliance",
+                "description": "The function 'Read' reads data from a WebSocket connection into a byte array. The data is not encrypted or obfuscated in any way, which could potentially expose sensitive data during transmission. This could violate GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Consider implementing end-to-end encryption to secure the data during transmission. This could be done using a secure protocol such as TLS. Additionally, consider using secure coding practices to further protect the data, such as input validation, output encoding, and proper error handling."
+              },
+              {
+                "lineNumber": 25,
+                "severity": 5,
+                "bugType": "Data Compliance",
+                "description": "The function 'Read' stores the remainder of the 'src' byte array in a buffer 'c.buff' if 'src' is larger than 'dst'. This buffer is not secured in any way, which could potentially expose sensitive data at rest. This could violate GDPR, PCI DSS, and HIPAA regulations.",
+                "solution": "Consider implementing secure data storage practices, such as encrypting the data at rest and using secure data handling practices, such as proper disposal of sensitive data after use. Additionally, consider using secure coding practices to further protect the data, such as input validation, output encoding, and proper error handling."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\n//Read is not threadsafe though thats okay since there\n//should never be more than one reader\nfunc (c *wsConn) Read(dst []byte) (int, error) {\n\tldst := len(dst)\n\t//use buffer or read new message\n\tvar src []byte\n\tif len(c.buff) > 0 {\n\t\tsrc = c.buff\n\t\tc.buff = nil\n\t} else if _, msg, err := c.Conn.ReadMessage(); err == nil {\n\t\tsrc = msg\n\t} else {\n\t\treturn 0, err\n\t}\n\t//copy src->dest\n\tvar n int\n\tif len(src) > ldst {\n\t\t//copy as much as possible of src into dst\n\t\tn = copy(dst, src[:ldst])\n\t\t//copy remainder into buffer\n\t\tr := src[ldst:]\n\t\tlr := len(r)\n\t\tc.buff = make([]byte, lr)\n\t\tcopy(c.buff, r)\n\t} else {\n\t\t//copy all of src into dst\n\t\tn = copy(dst, src)\n\t}\n\t//return bytes copied\n\treturn n, nil\n}\n",
@@ -37,7 +287,76 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:34:40 AM PDT\n\nThe provided code is a method in Go language. It is part of a `wsConn` struct and is named `Write`. This method is used to write data to a WebSocket connection. \n\nThe method takes two parameters: a byte slice `b` and returns two values: an integer and an error. \n\nHere is a breakdown of the code:\n\n1. `func (c *wsConn) Write(b []byte) (int, error) {`: This line defines the method signature. The `Write` method is associated with the `wsConn` struct, which likely represents a WebSocket connection. The method takes a byte slice `b` as input and returns two values: an integer and an error. The integer typically represents the number of bytes written, and the error represents any issues that occurred during the write operation.\n\n2. `if err := c.Conn.WriteMessage(websocket.BinaryMessage, b); err != nil {`: This line is writing the byte slice `b` as a binary message to the WebSocket connection. If there is an error during this operation, it is captured in `err`.\n\n3. `return 0, err`: If there was an error during the write operation, the method returns `0` (indicating that no bytes were successfully written) and the error.\n\n4. `n := len(b)`: This line is calculating the length of the byte slice `b`, which represents the number of bytes that were intended to be written to the WebSocket.\n\n5. `return n, nil`: If the write operation was successful, the method returns the number of bytes written and `nil` for the error (indicating that no error occurred).\n\nAs for the algorithm used, it's a straightforward write operation to a WebSocket connection using the `WriteMessage` method provided by the WebSocket library. This method likely uses the WebSocket protocol to send the data over the network.\n\nFor more information on WebSockets and the Go `websocket` package, you can refer to the following resources:\n\n- [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API): A detailed guide on WebSockets from Mozilla Developer Network.\n- [Go WebSocket package](https://pkg.go.dev/github.com/gorilla/websocket): The documentation for the `websocket` package in Go.\n\nAs for the architectural guidelines, since there are no special architectural guidelines or constraints provided for this software project, we can only say that this code is consistent with common practices for writing data to a WebSocket connection in Go."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:36:29 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->WriteMessage;\nWriteMessage-->End;\nWriteMessage-->ErrorPath;\nErrorPath-->End;\n```\n\nIn the above control flow graph, the primary path is represented by the green-colored flow, which indicates the successful execution of the `Write` function. The `WriteMessage` block represents the call to the `WriteMessage` function of the `websocket` package, which sends a binary message over the WebSocket connection. If there is an error during the execution of the `WriteMessage` function, the control flow follows the red-colored error path, which leads to the `ErrorPath` block and then to the `End` block."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:37:24 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:39:12 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:41:22 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 109\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The function writes data to a WebSocket connection without any explicit data encryption or sanitization. This might lead to a violation of GDPR, PCI DSS, and HIPAA if the data includes personal, payment, or health information.\n\n   **Solution**: Consider encrypting the data before writing to the WebSocket connection and ensure data sanitization to avoid any sensitive data leakage. Use libraries that provide encryption and sanitization features.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 56,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The function writes data to a WebSocket connection without any explicit data encryption or sanitization. This might lead to a violation of GDPR, PCI DSS, and HIPAA if the data includes personal, payment, or health information.",
+                "solution": "Consider encrypting the data before writing to the WebSocket connection and ensure data sanitization to avoid any sensitive data leakage. Use libraries that provide encryption and sanitization features."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\nfunc (c *wsConn) Write(b []byte) (int, error) {\n\tif err := c.Conn.WriteMessage(websocket.BinaryMessage, b); err != nil {\n\t\treturn 0, err\n\t}\n\tn := len(b)\n\treturn n, nil\n}\n",
@@ -49,7 +368,68 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:35:40 AM PDT\n\nThe code snippet you provided is a method in Go programming language. The method is named `SetDeadline` and it belongs to the `wsConn` struct (which is presumably a WebSocket connection). This method sets a deadline for future `Read` and `Write` operations. If a `Read` or `Write` takes too long (longer than the set deadline), it will return an error.\n\nThe `SetDeadline` method takes one argument, `t`, of the `time.Time` type. `time.Time` is a struct provided by Go's standard library `time` package, which represents an instant in time with nanosecond precision.\n\nThe method returns an `error`, which is a built-in interface type in Go. This can be `nil` if no error occurred, or it can hold an error object that provides more information about what went wrong.\n\nInside the method, it first calls the `SetReadDeadline` method on the `c.Conn` object, passing `t` as the argument. `SetReadDeadline` sets a time after which future read operations will fail with an error. If an error occurs during this call, it is returned immediately.\n\nIf no error occurs during the `SetReadDeadline` call, it then calls the `SetWriteDeadline` method on the `c.Conn` object, again passing `t` as the argument. `SetWriteDeadline` sets a time after which future write operations will fail with an error. The error from this call is then returned.\n\nThe `SetReadDeadline` and `SetWriteDeadline` methods are part of the `net.Conn` interface in the Go standard library, which is a generic network connection. `c.Conn` is likely an embedded field of `wsConn`, meaning that `wsConn` automatically has all the methods that `c.Conn`'s type has.\n\nThe algorithm used in this code is straightforward: it sets deadlines for read and write operations. This is a common practice in network programming to prevent operations from hanging indefinitely and to handle network issues gracefully.\n\nFor more information on the `net.Conn` interface and its `SetDeadline` methods, you can refer to the official Go documentation: https://golang.org/pkg/net/#Conn\n\nFor more information on the `time.Time` type, you can refer to the official Go documentation: https://golang.org/pkg/time/#Time \n\nIn terms of architectural guidelines, without additional context, it's hard to say whether this code conflicts with any. However, it seems to follow good practices for network programming, including handling potential errors and preventing operations from hanging indefinitely."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:36:38 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->SetReadDeadline;\nSetReadDeadline-->SetWriteDeadline;\nSetWriteDeadline-->End;\n```\n\nIn the above control flow graph, the primary path is shown in green, which represents the normal flow of execution. The `SetDeadline` function starts by calling `SetReadDeadline` and then calls `SetWriteDeadline`. Finally, the function ends."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:37:28 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:39:16 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:41:26 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": []
+          }
+        }
+      ],
       "languageId": "go",
       "id": "4",
       "value": "\nfunc (c *wsConn) SetDeadline(t time.Time) error {\n\tif err := c.Conn.SetReadDeadline(t); err != nil {\n\t\treturn err\n\t}\n\treturn c.Conn.SetWriteDeadline(t)\n}\n",

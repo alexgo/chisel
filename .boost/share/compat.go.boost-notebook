@@ -1,7 +1,93 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 12:16:14 AM PDT\n\nThe provided code is written in Go and belongs to the package `chshare` of the `chisel` project. This file seems to exist for the purpose of maintaining backwards compatibility, as stated in the comment at the start of the file. This is commonly done when code refactoring or other changes might break the existing code that depends on this package.\n\nThe code is importing several packages from the `chisel` project, each of which is responsible for a specific functionality. For example, `ccrypto` is likely handling cryptographic operations, `cio` is likely dealing with input/output operations, and `cnet` is likely managing network-related tasks.\n\nThe `const` block is creating an alias for the constant `DetermRandIter` from the `ccrypto` package. This is likely a parameter related to a deterministic random number generator used in cryptographic operations.\n\nThe `type` block is creating type aliases for various types defined in the imported packages. This can be useful for maintaining backwards compatibility as it allows the code using this package to continue using the old type names even if they have been changed in the actual packages.\n\nThe `var` block is defining several variables which are assigned the functions from the imported packages. Again, this is useful for maintaining backwards compatibility as it allows the code using this package to continue calling the old function names.\n\nThe function `EncodeConfig` at the end of the file takes a pointer to a `settings.Config` object, encodes it using the `settings.EncodeConfig` function, and returns the result. This function seems to be an older version of the encoding function, kept for backwards compatibility.\n\nAs for the algorithms used, the specific algorithms can't be determined from this code alone, as they would be implemented in the functions from the imported packages. However, given the context, it's likely that cryptographic algorithms are used in the `ccrypto` package, and networking protocols are used in the `cnet` package.\n\nFor further education on Go, you can refer to the official Go documentation: https://golang.org/doc/\n\nFor understanding more about maintaining backwards compatibility in Go, this link might be helpful: https://go.dev/blog/module-compatibility\n\nPlease note that the actual implementation details might differ based on the specific code in the imported packages."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 12:16:25 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle External fill:#FFA500, stroke:#000000, stroke-width:2px;\nstyle EncodeConfig fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->External;\nStart-->EncodeConfig;\n```\n\nIn the code, there is no control flow other than the import statements. Therefore, the control flow graph consists of two nodes: the start node and the EncodeConfig node. The start node represents the start of the code, and the EncodeConfig node represents the EncodeConfig function. The import statements are represented as external nodes."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:16:32 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:16:40 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 12:17:26 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 1\n\n   **Bug Type**: GDPR\n\n   **Description**: The code imports packages related to cryptography and networking but does not include any explicit data protection or privacy measures. This could lead to potential GDPR compliance issues as the handling of personal data is not clearly defined.\n\n   **Solution**: Ensure that personal data is processed in a way that ensures appropriate security, including protection against unauthorised or unlawful processing and against accidental loss, destruction or damage. Implement data encryption, pseudonymisation, and anonymisation techniques where possible. Regularly review and update the data protection measures as per the GDPR guidelines.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 1\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code does not include any explicit measures for the secure handling of cardholder data, which could lead to potential PCI DSS compliance issues.\n\n   **Solution**: Ensure that cardholder data is stored and transmitted securely. Implement strong encryption measures for data in transit and at rest. Regularly review and update the data protection measures as per the PCI DSS guidelines.\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 1\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code does not include any explicit measures for the secure handling of Protected Health Information (PHI), which could lead to potential HIPAA compliance issues.\n\n   **Solution**: Ensure that PHI is stored and transmitted securely. Implement strong encryption measures for data in transit and at rest. Regularly review and update the data protection measures as per the HIPAA guidelines.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The code imports packages related to cryptography and networking but does not include any explicit data protection or privacy measures. This could lead to potential GDPR compliance issues as the handling of personal data is not clearly defined.",
+                "solution": "Ensure that personal data is processed in a way that ensures appropriate security, including protection against unauthorised or unlawful processing and against accidental loss, destruction or damage. Implement data encryption, pseudonymisation, and anonymisation techniques where possible. Regularly review and update the data protection measures as per the GDPR guidelines.",
+                "reference": "https://gdpr.eu/data-privacy/"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 8,
+                "bugType": "PCI DSS",
+                "description": "The code does not include any explicit measures for the secure handling of cardholder data, which could lead to potential PCI DSS compliance issues.",
+                "solution": "Ensure that cardholder data is stored and transmitted securely. Implement strong encryption measures for data in transit and at rest. Regularly review and update the data protection measures as per the PCI DSS guidelines.",
+                "reference": "https://www.pcisecuritystandards.org/pci_security/"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 9,
+                "bugType": "HIPAA",
+                "description": "The code does not include any explicit measures for the secure handling of Protected Health Information (PHI), which could lead to potential HIPAA compliance issues.",
+                "solution": "Ensure that PHI is stored and transmitted securely. Implement strong encryption measures for data in transit and at rest. Regularly review and update the data protection measures as per the HIPAA guidelines.",
+                "reference": "https://www.hhs.gov/hipaa/for-professionals/security/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package chshare\n\n//this file exists to maintain backwards compatibility\n\nimport (\n\t\"github.com/jpillora/chisel/share/ccrypto\"\n\t\"github.com/jpillora/chisel/share/cio\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/cos\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"github.com/jpillora/chisel/share/tunnel\"\n)\n\nconst (\n\tDetermRandIter = ccrypto.DetermRandIter\n)\n\ntype (\n\tConfig     = settings.Config\n\tRemote     = settings.Remote\n\tRemotes    = settings.Remotes\n\tUser       = settings.User\n\tUsers      = settings.Users\n\tUserIndex  = settings.UserIndex\n\tHTTPServer = cnet.HTTPServer\n\tConnStats  = cnet.ConnCount\n\tLogger     = cio.Logger\n\tTCPProxy   = tunnel.Proxy\n)\n\nvar (\n\tNewDetermRand    = ccrypto.NewDetermRand\n\tGenerateKey      = ccrypto.GenerateKey\n\tFingerprintKey   = ccrypto.FingerprintKey\n\tPipe             = cio.Pipe\n\tNewLoggerFlag    = cio.NewLoggerFlag\n\tNewLogger        = cio.NewLogger\n\tStdio            = cio.Stdio\n\tDecodeConfig     = settings.DecodeConfig\n\tDecodeRemote     = settings.DecodeRemote\n\tNewUsers         = settings.NewUsers\n\tNewUserIndex     = settings.NewUserIndex\n\tUserAllowAll     = settings.UserAllowAll\n\tParseAuth        = settings.ParseAuth\n\tNewRWCConn       = cnet.NewRWCConn\n\tNewWebSocketConn = cnet.NewWebSocketConn\n\tNewHTTPServer    = cnet.NewHTTPServer\n\tGoStats          = cos.GoStats\n\tSleepSignal      = cos.SleepSignal\n\tNewTCPProxy      = tunnel.NewProxy\n)\n\n//EncodeConfig old version\nfunc EncodeConfig(c *settings.Config) ([]byte, error) {\n\treturn settings.EncodeConfig(*c), nil\n}\n",

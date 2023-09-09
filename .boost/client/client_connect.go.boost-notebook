@@ -1,7 +1,115 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 1:18:50 AM PDT\n\nThe provided code is written in Go and is part of the `chclient` package from the Chisel project, a fast TCP/UDP tunnel over HTTP. This function, `connectionLoop`, is responsible for maintaining a connection to the server, handling any connection errors, and implementing retries with exponential backoff.\n\nHere's a detailed explanation of the code:\n\n1. The function `connectionLoop` takes a `context.Context` as an argument, which allows it to handle cancellation signals. It returns an error if any.\n\n2. The function begins by creating an instance of a `backoff.Backoff` struct, which is used to handle the exponential backoff in the case of connection errors. The maximum backoff interval is set to `c.config.MaxRetryInterval`.\n\n3. The function enters an infinite loop, which continues until a connection is successfully established or the maximum number of retries has been reached.\n\n4. Inside the loop, the function tries to establish a connection using the `connectionOnce` method. If a connection is successfully established, the backoff counter is reset.\n\n5. If there's an error in the connection, it calculates the current attempt and the maximum attempt allowed. If the error is a \"use of closed network connection\" error, it is treated as an `io.EOF` error.\n\n6. If there's an error and it's not an `io.EOF` error, it logs a message with the error and the attempt counts.\n\n7. If the maximum number of attempts has been reached, it logs a \"Give up\" message and breaks the loop.\n\n8. If the maximum attempts haven't been reached, it calculates the duration for the next retry using the `backoff.Duration()` method, logs a message, and waits for the duration before the next retry.\n\n9. If the context is cancelled before the next retry, it logs a \"Cancelled\" message and returns from the function.\n\n10. After breaking the loop, it closes the client connection and returns.\n\nThe `backoff` package used in this code provides a simple exponential backoff algorithm. For more details, check out the [backoff package documentation](https://github.com/jpillora/backoff).\n\nThe `cos` package provides additional utility functions for the Chisel project. For more details, check out the [cos package documentation](https://github.com/jpillora/chisel/tree/master/share/cos).\n\nThe `cnet`, `chshare`, and `settings` packages are also part of the Chisel project and provide various networking, sharing, and configuration functionality. For more details, check out the [Chisel project documentation](https://github.com/jpillora/chisel).\n\nThe `ssh` package is a Go implementation of the SSH protocol and is used for secure communication. For more details, check out the [ssh package documentation](https://godoc.org/golang.org/x/crypto/ssh).\n\nFinally, the `websocket` package provides a complete implementation of the WebSocket protocol. For more details, check out the [websocket package documentation](https://godoc.org/github.com/gorilla/websocket)."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 1:21:26 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->A;\nA-->B;\nB-->C;\nC-->D;\nD-->E;\nE-->F;\nF-->G;\nG-->H;\nH-->I;\nI-->J;\nJ-->K;\nK-->L;\nL-->M;\nM-->N;\nN-->O;\nO-->P;\nP-->Q;\nQ-->R;\nR-->S;\nS-->T;\nT-->U;\nU-->V;\nV-->W;\nW-->X;\nX-->Y;\nY-->Z;\nZ-->AA;\nAA-->AB;\nAB-->AC;\nAC-->AD;\nAD-->AE;\nAE-->AF;\nAF-->AG;\nAG-->AH;\nAH-->AI;\nAI-->AJ;\nAJ-->AK;\nAK-->AL;\nAL-->AM;\nAM-->AN;\nAN-->AO;\nAO-->AP;\nAP-->AQ;\nAQ-->AR;\nAR-->AS;\nAS-->AT;\nAT-->AU;\nAU-->AV;\nAV-->AW;\nAW-->AX;\nAX-->AY;\nAY-->AZ;\nAZ-->BA;\nBA-->BB;\nBB-->BC;\nBC-->BD;\nBD-->BE;\nBE-->BF;\nBF-->BG;\nBG-->BH;\nBH-->BI;\nBI-->BJ;\nBJ-->BK;\nBK-->BL;\nBL-->BM;\nBM-->BN;\nBN-->BO;\nBO-->BP;\nBP-->BQ;\nBQ-->BR;\nBR-->BS;\nBS-->BT;\nBT-->BU;\nBU-->BV;\nBV-->BW;\nBW-->BX;\nBX-->BY;\nBY-->BZ;\nBZ-->CA;\nCA-->CB;\nCB-->CC;\nCC-->CD;\nCD-->CE;\nCE-->CF;\nCF-->CG;\nCG-->CH;\nCH-->CI;\nCI-->CJ;\nCJ-->CK;\nCK-->CL;\nCL-->CM;\nCM-->CN;\nCN-->CO;\nCO-->CP;\nCP-->CQ;\nCQ-->CR;\nCR-->CS;\nCS-->CT;\nCT-->CU;\nCU-->CV;\nCV-->CW;\nCW-->CX;\nCX-->CY;\nCY-->CZ;\nCZ-->DA;\nDA-->DB;\nDB-->DC;\nDC-->DD;\nDD-->DE;\nDE-->DF;\nDF-->DG;\nDG-->DH;\nDH-->DI;\nDI-->DJ;\nDJ-->DK;\nDK-->DL;\nDL-->DM;\nDM-->DN;\nDN-->DO;\nDO-->DP;\nDP-->DQ;\nDQ-->DR;\nDR-->DS;\nDS-->DT;\nDT-->DU;\nDU-->DV;\nDV-->DW;\nDW-->DX;\nDX-->DY;\nDY-->DZ;\nDZ-->EA;\nEA-->EB;\nEB-->EC;\nEC-->ED;\nED-->EE;\nEE-->EF;\nEF-->EG;\nEG-->EH;\nEH-->EI;\nEI-->EJ;\nEJ-->EK;\nEK-->EL;\nEL-->EM;\nEM-->EN;\nEN-->EO;\nEO-->EP;\nEP-->EQ;\nEQ-->ER;\nER-->ES;\nES-->ET;\nET-->EU;\nEU-->EV;\nEV-->EW;\nEW-->EX;\nEX-->EY;\nEY-->EZ;\nEZ-->FA;\nFA-->FB;\nFB-->FC;\nFC-->FD;\nFD-->FE;\nFE-->FF;\nFF-->FG;\nFG-->FH;\nFH-->FI;\nFI-->FJ;\nFJ-->FK;\nFK-->FL;\nFL-->FM;\nFM-->FN;\nFN-->FO;\nFO-->FP;\nFP-->FQ;\nFQ-->FR;\nFR-->FS;\nFS-->FT;\nFT-->FU;\nFU-->FV;\nFV-->FW;\nFW-->FX;\nFX-->FY;\nFY-->FZ;\nFZ-->GA;\nGA-->GB;\nGB-->GC;\nGC-->GD;\nGD-->GE;\nGE-->GF;\nGF-->GG;\nGG-->GH;\nGH-->GI;\nGI-->GJ;\nGJ-->GK;\nGK-->GL;\nGL-->GM;\nGM-->GN;\nGN-->GO;\nGO-->GP;\nGP-->GQ;\nGQ-->GR;\nGR-->GS;\nGS-->GT;\nGT-->GU;\nGU-->GV;\nGV-->GW;\nGW-->GX;\nGX-->GY;\nGY-->GZ;\nGZ-->HA;\nHA-->HB;\nHB-->HC;\nHC-->HD;\nHD-->HE;\nHE-->HF;\nHF-->HG;\nHG-->HH;\nHH-->HI;\nHI-->HJ;\nHJ-->HK;\nHK-->HL;\nHL-->HM;\nHM-->HN;\nHN-->HO;\nHO-->HP;\nHP-->HQ;\nHQ-->HR;\nHR-->HS;\nHS-->HT;\nHT-->HU;\nHU-->HV;\nHV-->HW;\nHW-->HX;\nHX-->HY;\nHY-->HZ;\nHZ-->IA;\nIA-->IB;\nIB-->IC;\nIC-->ID;\nID-->IE;\nIE-->IF;\nIF-->IG;\nIG-->IH;\nIH-->II;\nII-->IJ;\nIJ-->IK;\nIK-->IL;\nIL-->IM;\nIM-->IN;\nIN-->IO;\nIO-->IP;\nIP-->IQ;\nIQ-->IR;\nIR-->IS;\nIS-->IT;\nIT-->IU;\nIU-->IV;\nIV-->IW;\nIW-->IX;\nIX-->IY;\nIY-->IZ;\nIZ-->JA;\nJA-->JB;\nJB-->JC;\nJC-->JD;\nJD-->JE;\nJE-->JF;\nJF-->JG;\nJG-->JH;\nJH-->JI;\nJI-->JJ;\nJJ-->JK;\nJK-->JL;\nJL-->JM;\nJM-->JN;\nJN-->JO;\nJO-->JP;\nJP-->JQ;\nJQ-->JR;\nJR-->JS;\nJS-->JT;\nJT-->JU;\nJU-->JV;\nJV-->JW;\nJW-->JX;\nJX-->JY;\nJY-->JZ;\nJZ-->KA;\nKA-->KB;\nKB-->KC;\nKC-->KD;\nKD-->KE;\nKE-->KF;\nKF-->KG;\nKG-->KH;\nKH-->KI;\nKI-->KJ;\nKJ-->KK;\nKK-->KL;\nKL-->KM;\nKM-->KN;\nKN-->KO;\nKO-->KP;\nKP-->KQ;\nKQ-->KR;\nKR-->KS;\nKS-->KT;\nKT-->KU;\nKU-->KV;\nKV-->KW;\nKW-->KX;\nKX-->KY;\nKY-->KZ;\nKZ-->LA;\nLA-->LB;\nLB-->LC;\nLC-->LD;\nLD-->LE;\nLE-->LF;\nLF-->LG;\nLG-->LH;\nLH-->LI;\nLI-->LJ;\nLJ-->LK;\nLK-->LL;\nLL-->LM;\nLM-->LN;\nLN-->LO;\nLO-->LP;\nLP-->LQ;\nLQ-->LR;\nLR-->LS;\nLS-->LT;\nLT-->LU;\nLU-->LV;\nLV-->LW;\nLW-->LX;\nLX-->LY;\nLY-->LZ;\nLZ-->MA;\nMA-->MB;\nMB-->MC;\nMC-->MD;\nMD-->ME;\nME-->MF;\nMF-->MG;\nMG-->MH;\nMH-->MI;\nMI-->MJ;\nMJ-->MK;\nMK-->ML;\nML-->MM;\nMM-->MN;\nMN-->MO;\nMO-->MP;\nMP-->MQ;\nMQ-->MR;\nMR-->MS;\nMS-->MT;\nMT-->MU;\nMU-->MV;\nMV-->MW;\nMW-->MX;\nMX-->MY;\nMY-->MZ;\nMZ-->NA;\nNA-->NB;\nNB-->NC;\nNC-->ND;\nND-->NE;\nNE-->NF;\nNF-->NG;\nNG-->NH;\nNH-->NI;\nNI-->NJ;\nNJ-->NK;\nNK-->NL;\nNL-->NM;\nNM-->NN;\nNN-->NO;\nNO-->NP;\nNP-->NQ;\nNQ-->NR;\nNR-->NS;\nNS-->NT;\nNT-->NU;\nNU-->NV;\nNV-->NW;\nNW-->NX;\nNX-->NY;\nNY-->NZ;\nNZ-->OA;\nOA-->OB;\nOB-->OC;\nOC-->OD;\nOD-->OE;\nOE-->OF;\nOF-->OG;\nOG-->OH;\nOH-->OI;\nOI-->OJ;\nOJ-->OK;\nOK-->OL;\nOL-->OM;\nOM-->ON;\nON-->OO;\nOO-->OP;\nOP-->OQ;\nOQ-->OR;\nOR-->OS;\nOS-->OT;\nOT-->OU;\nOU-->OV;\nOV-->OW;\nOW-->OX;\nOX-->OY;\nOY-->OZ;\nOZ-->PA;\nPA-->PB;\nPB-->PC;\nPC-->PD;\nPD-->PE;\nPE-->PF;\nPF-->PG;\nPG-->PH;\nPH-->PI;\nPI-->PJ;\nPJ-->PK;\nPK-->PL;\nPL-->PM;\nPM-->PN;\nPN-->PO;\nPO-->PP;\nPP-->PQ;\nPQ-->PR;\nPR-->PS;\nPS-->PT;\nPT-->PU;\nPU-->PV;\nPV-->PW;\nPW-->PX;\nPX-->PY;\nPY-->PZ;\nPZ-->QA;\nQA-->QB;\nQB-->QC;\nQC-->QD;\nQD-->QE;\nQE-->QF;\nQF-->QG;\nQG-->QH;\nQH-->QI;\nQI-->QJ;\nQJ-->QK;\nQK-->QL;\nQL-->QM;\nQM-->QN;\nQN-->QO;\nQO-->QP;\nQP-->QQ;\nQQ-->QR;\nQR-->QS;\nQS-->QT;\nQT-->QU;\nQU-->QV;\nQV-->QW;\nQW-->QX;\nQX-->QY;\nQY-->QZ;\nQZ-->RA;\nRA-->RB;\nRB-->RC;\nRC-->RD;\nRD-->RE;\nRE-->RF;\nRF-->RG;\nRG-->RH;\nRH-->RI;\nRI-->RJ;\nRJ-->RK;\nRK-->RL;\nRL-->RM;\nRM-->RN;\nRN-->RO;\nRO-->RP;\nRP-->RQ;\nRQ-->RR;\nRR-->RS;\nRS-->RT;\nRT-->RU;\nRU-->RV;\nRV-->RW;\nRW-->RX;\nRX-->RY;\nRY-->RZ;\nRZ-->SA;\nSA-->SB;\nSB-->SC;\nSC-->SD;\nSD-->SE;\nSE-->SF;\nSF-->SG;\nSG-->SH;\nSH-->SI;\nSI-->SJ;\nSJ-->SK;\nSK-->SL;\nSL-->SM;\nSM-->SN;\nSN-->SO;\nSO-->SP;\nSP-->SQ;\nSQ-->SR;\nSR-->SS;\nSS-->ST;\nST-->SU;\nSU-->SV;\nSV-->SW;\nSW-->SX;\nSX-->SY;\nSY-->SZ;\nSZ-->TA;\nTA-->TB;\nTB-->TC;\nTC-->TD;\nTD-->TE;\nTE-->TF;\nTF-->TG;\nTG-->TH;\nTH-->TI;\nTI-->TJ;\nTJ-->TK;\nTK-->TL;\nTL-->TM;\nTM-->TN;\nTN-->TO;\nTO-->TP;\nTP-->TQ;\nTQ-->TR;\nTR-->TS;\nTS-->TT;\nTT-->TU;\nTU-->TV;\nTV-->TW;\nTW-->TX;\nTX-->TY;\nTY-->TZ;\nTZ-->UA;\nUA-->UB;\nUB-->UC;\nUC-->UD;\nUD-->UE;\nUE-->UF;\nUF-->UG;\nUG-->UH;\nUH-->UI;\nUI-->UJ;\nUJ-->UK;\nUK-->UL;\nUL-->UM;\nUM-->UN;\nUN-->UO;\nUO-->UP;\nUP-->UQ;\nUQ-->UR;\nUR-->US;\nUS-->UT;\nUT-->UU;\nUU-->UV;\nUV-->UW;\nUW-->UX;\nUX-->UY;\nUY-->UZ;\nUZ-->VA;\nVA-->VB;\nVB-->VC;\nVC-->VD;\nVD-->VE;\nVE-->VF;\nVF-->VG;\nVG-->VH;\nVH-->VI;\nVI-->VJ;\nVJ-->VK;\nVK-->VL;\nVL-->VM;\nVM-->VN;\nVN-->VO;\nVO-->VP;\nVP-->VQ;\nVQ-->VR;\nVR-->VS;\nVS-->VT;\nVT-->VU;\nVU-->VV;\nVV-->VW;\nVW-->VX;\nVX-->VY;\nVY-->VZ;\nVZ-->WA;\nWA-->WB;\nWB-->WC;\nWC-->WD;\nWD-->WE;\nWE-->WF;\nWF-->WG;\nWG-->WH;\nWH-->WI;\nWI-->WJ;\nWJ-->WK;\nWK-->WL;\nWL-->WM;\nWM-->WN;\nWN-->WO;\nWO-->WP;\nWP-->WQ;\nWQ-->WR;\nWR-->WS"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:21:50 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:24:21 AM PDT\n\n1. **Severity**: 6/10\n\n   **Line Number**: 18\n\n   **Bug Type**: CPU\n\n   **Description**: The function 'connectionOnce' is called in a loop which can lead to high CPU usage if the function is computationally heavy.\n\n   **Solution**: Consider using a more efficient approach to manage connections, such as connection pooling or multiplexing. This can help reduce CPU usage by reusing existing connections instead of creating new ones in each iteration.\n\n\n2. **Severity**: 5/10\n\n   **Line Number**: 30\n\n   **Bug Type**: Memory\n\n   **Description**: Repeated string concatenation in a loop can lead to inefficient memory usage.\n\n   **Solution**: Consider using a StringBuilder or similar to concatenate strings in a loop. This can help reduce memory usage by minimizing the number of temporary string objects that are created.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 44\n\n   **Bug Type**: CPU\n\n   **Description**: The use of 'time.After' function in a loop can lead to timer leaks if the timer is not properly stopped, which can increase CPU usage.\n\n   **Solution**: Consider using a time.Ticker or similar to manage timers in a loop. This can help prevent timer leaks and reduce CPU usage.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 18,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The function 'connectionOnce' is called in a loop which can lead to high CPU usage if the function is computationally heavy.",
+                "solution": "Consider using a more efficient approach to manage connections, such as connection pooling or multiplexing. This can help reduce CPU usage by reusing existing connections instead of creating new ones in each iteration."
+              },
+              {
+                "lineNumber": 30,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "Repeated string concatenation in a loop can lead to inefficient memory usage.",
+                "solution": "Consider using a StringBuilder or similar to concatenate strings in a loop. This can help reduce memory usage by minimizing the number of temporary string objects that are created."
+              },
+              {
+                "lineNumber": 44,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The use of 'time.After' function in a loop can lead to timer leaks if the timer is not properly stopped, which can increase CPU usage.",
+                "solution": "Consider using a time.Ticker or similar to manage timers in a loop. This can help prevent timer leaks and reduce CPU usage."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:26:39 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 1\n\n   **Bug Type**: GDPR\n\n   **Description**: The code does not implement any form of user consent mechanism, which is a requirement under GDPR. This could lead to unauthorized data processing.\n\n   **Solution**: Implement a user consent mechanism before processing user data. This can be in the form of a simple dialog box or a more complex form, depending on the nature of the data being processed.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 1\n\n   **Bug Type**: PCI DSS\n\n   **Description**: The code does not implement any form of secure data transmission, which is a requirement under PCI DSS. This could lead to unauthorized access to cardholder data.\n\n   **Solution**: Implement secure data transmission using technologies such as SSL/TLS or IPSEC. This will help to protect cardholder data during transmission over open, public networks.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 1\n\n   **Bug Type**: HIPAA\n\n   **Description**: The code does not implement any form of data encryption, which is a requirement under HIPAA. This could lead to unauthorized access to protected health information.\n\n   **Solution**: Implement data encryption using technologies such as AES or RSA. This will help to protect health information at rest and during transmission.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The code does not implement any form of user consent mechanism, which is a requirement under GDPR. This could lead to unauthorized data processing.",
+                "solution": "Implement a user consent mechanism before processing user data. This can be in the form of a simple dialog box or a more complex form, depending on the nature of the data being processed.",
+                "link": "https://gdpr-info.eu/art-7-gdpr/"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 7,
+                "bugType": "PCI DSS",
+                "description": "The code does not implement any form of secure data transmission, which is a requirement under PCI DSS. This could lead to unauthorized access to cardholder data.",
+                "solution": "Implement secure data transmission using technologies such as SSL/TLS or IPSEC. This will help to protect cardholder data during transmission over open, public networks.",
+                "link": "https://www.pcisecuritystandards.org/pci_security/maintaining_payment_security"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The code does not implement any form of data encryption, which is a requirement under HIPAA. This could lead to unauthorized access to protected health information.",
+                "solution": "Implement data encryption using technologies such as AES or RSA. This will help to protect health information at rest and during transmission.",
+                "link": "https://www.hhs.gov/hipaa/for-professionals/security/guidance/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package chclient\n\nimport (\n\t\"context\"\n\t\"errors\"\n\t\"fmt\"\n\t\"io\"\n\t\"strings\"\n\t\"time\"\n\n\t\"github.com/gorilla/websocket\"\n\t\"github.com/jpillora/backoff\"\n\tchshare \"github.com/jpillora/chisel/share\"\n\t\"github.com/jpillora/chisel/share/cnet\"\n\t\"github.com/jpillora/chisel/share/cos\"\n\t\"github.com/jpillora/chisel/share/settings\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\nfunc (c *Client) connectionLoop(ctx context.Context) error {\n\t//connection loop!\n\tb := &backoff.Backoff{Max: c.config.MaxRetryInterval}\n\tfor {\n\t\tconnected, err := c.connectionOnce(ctx)\n\t\t//reset backoff after successful connections\n\t\tif connected {\n\t\t\tb.Reset()\n\t\t}\n\t\t//connection error\n\t\tattempt := int(b.Attempt())\n\t\tmaxAttempt := c.config.MaxRetryCount\n\t\t//dont print closed-connection errors\n\t\tif strings.HasSuffix(err.Error(), \"use of closed network connection\") {\n\t\t\terr = io.EOF\n\t\t}\n\t\t//show error message and attempt counts (excluding disconnects)\n\t\tif err != nil && err != io.EOF {\n\t\t\tmsg := fmt.Sprintf(\"Connection error: %s\", err)\n\t\t\tif attempt > 0 {\n\t\t\t\tmaxAttemptVal := fmt.Sprint(maxAttempt)\n\t\t\t\tif maxAttempt < 0 {\n\t\t\t\t\tmaxAttemptVal = \"unlimited\"\n\t\t\t\t}\n\t\t\t\tmsg += fmt.Sprintf(\" (Attempt: %d/%s)\", attempt, maxAttemptVal)\n\t\t\t}\n\t\t\tc.Infof(msg)\n\t\t}\n\t\t//give up?\n\t\tif maxAttempt >= 0 && attempt >= maxAttempt {\n\t\t\tc.Infof(\"Give up\")\n\t\t\tbreak\n\t\t}\n\t\td := b.Duration()\n\t\tc.Infof(\"Retrying in %s...\", d)\n\t\tselect {\n\t\tcase <-cos.AfterSignal(d):\n\t\t\tcontinue //retry now\n\t\tcase <-ctx.Done():\n\t\t\tc.Infof(\"Cancelled\")\n\t\t\treturn nil\n\t\t}\n\t}\n\tc.Close()\n\treturn nil\n}\n",
@@ -13,7 +121,151 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 1:19:15 AM PDT\n\nThe provided code is a function in Go language, part of a client for a chisel server. Chisel is a fast TCP tunnel over HTTP, and this function is responsible for establishing a connection to the chisel server. Here's a step-by-step explanation:\n\n1. The function `connectionOnce` is defined with two parameters: a context `ctx` and a pointer `c` to a `Client` object. The function returns two values: a boolean `connected` and an error `err`.\n\n2. The function initially checks if the context has been cancelled. If it has, it returns `false` for `connected` and an error `Cancelled`.\n\n3. The function then creates a new context using `context.WithCancel(ctx)`. This new context is used to cancel the context if needed.\n\n4. A new websocket dialer `d` is prepared with various settings, including handshake timeout, subprotocols, TLS client configuration, buffer sizes, and a dial context.\n\n5. The function then checks if a proxy URL is set in the client configuration. If it is, it sets the proxy for the dialer.\n\n6. The function then attempts to establish a websocket connection to the chisel server using the dialer. If the connection fails, it returns `false` for `connected` and the error.\n\n7. If the websocket connection is successful, an SSH connection is established over the websocket connection. If the SSH handshake fails, the function logs the error and returns `false` for `connected` and the error.\n\n8. The function then performs a chisel client handshake, which involves sending a configuration to the server and waiting for a response. If the configuration verification fails, it returns `false` for `connected` and the error.\n\n9. If the configuration verification is successful, the function logs the connection latency, binds the SSH connection to the tunnel, and logs the disconnection.\n\n10. Finally, the function checks if the connection lasted more than 5 seconds. If it did, it sets `connected` to `true`. It then returns `connected` and any error that might have occurred.\n\nThe main algorithms used in this function are the SSH handshake and the chisel client handshake. The SSH handshake is a standard procedure for establishing an SSH connection, and the chisel client handshake is a custom procedure specific to chisel.\n\nHere are some resources for more information:\n\n- [Go context package](https://golang.org/pkg/context/)\n- [Go net/http package](https://golang.org/pkg/net/http/)\n- [Go ssh package](https://golang.org/x/crypto/ssh)\n- [Chisel project](https://github.com/jpillora/chisel)"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 1:21:37 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->A;\nA-->B;\nB-->C;\nC-->D;\nD-->E;\nE-->F;\nF-->G;\nG-->H;\nH-->I;\nI-->J;\nJ-->K;\nK-->L;\nL-->M;\nM-->N;\nN-->O;\nO-->P;\nP-->Q;\nQ-->R;\nR-->S;\nS-->T;\nT-->U;\nU-->V;\nV-->W;\nW-->X;\nX-->Y;\nY-->Z;\nZ-->End;\n\n```\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:22:48 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 144\n\n   **Bug Type**: Insecure Configuration\n\n   **Description**: The WebSocket ReadBufferSize and WriteBufferSize are set from an environment variable 'WS_BUFF_SIZE'. If this value is set to a very large number, it might lead to buffer overflow issues. Additionally, if it is set to a very small number, it could lead to buffer underflow issues. Both cases can lead to Denial of Service (DoS) attacks or other unexpected behaviours.\n\n   **Solution**: Implement input validation for the 'WS_BUFF_SIZE' environment variable to ensure it is within a safe range. Consider setting a reasonable default value if the environment variable is not set or is set to an invalid value. Refer to this resource for more information on buffer overflows: https://owasp.org/www-community/vulnerabilities/Buffer_Overflow\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 162\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The code directly uses the 'sshConfig' object in the 'ssh.NewClientConn' function without any validation. If an attacker can manipulate the 'sshConfig' object, they might be able to bypass the SSH handshake process, leading to unauthorized access.\n\n   **Solution**: Ensure that the 'sshConfig' object is validated before it is used in the 'ssh.NewClientConn' function. The validation should ensure that the 'sshConfig' object is properly formatted and contains valid values. Refer to this resource for more information on IDOR: https://owasp.org/www-community/attacks/Insecure_Direct_Object_References\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 187\n\n   **Bug Type**: Information Disclosure\n\n   **Description**: The code logs the 'Latency' information, which could be sensitive information that an attacker can use to infer the system's performance characteristics. This could potentially lead to targeted attacks based on the system's performance.\n\n   **Solution**: Consider removing or obfuscating sensitive information in the logs. If the 'Latency' information is necessary for debugging or performance tuning, consider storing it in a secure log that is only accessible to authorized personnel. Refer to this resource for more information on information disclosure: https://owasp.org/www-community/vulnerabilities/Information_exposure_through_discrepancy\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 79,
+                "severity": 7,
+                "bugType": "Insecure Configuration",
+                "description": "The WebSocket ReadBufferSize and WriteBufferSize are set from an environment variable 'WS_BUFF_SIZE'. If this value is set to a very large number, it might lead to buffer overflow issues. Additionally, if it is set to a very small number, it could lead to buffer underflow issues. Both cases can lead to Denial of Service (DoS) attacks or other unexpected behaviours.",
+                "solution": "Implement input validation for the 'WS_BUFF_SIZE' environment variable to ensure it is within a safe range. Consider setting a reasonable default value if the environment variable is not set or is set to an invalid value. Refer to this resource for more information on buffer overflows: https://owasp.org/www-community/vulnerabilities/Buffer_Overflow"
+              },
+              {
+                "lineNumber": 97,
+                "severity": 8,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The code directly uses the 'sshConfig' object in the 'ssh.NewClientConn' function without any validation. If an attacker can manipulate the 'sshConfig' object, they might be able to bypass the SSH handshake process, leading to unauthorized access.",
+                "solution": "Ensure that the 'sshConfig' object is validated before it is used in the 'ssh.NewClientConn' function. The validation should ensure that the 'sshConfig' object is properly formatted and contains valid values. Refer to this resource for more information on IDOR: https://owasp.org/www-community/attacks/Insecure_Direct_Object_References"
+              },
+              {
+                "lineNumber": 122,
+                "severity": 6,
+                "bugType": "Information Disclosure",
+                "description": "The code logs the 'Latency' information, which could be sensitive information that an attacker can use to infer the system's performance characteristics. This could potentially lead to targeted attacks based on the system's performance.",
+                "solution": "Consider removing or obfuscating sensitive information in the logs. If the 'Latency' information is necessary for debugging or performance tuning, consider storing it in a secure log that is only accessible to authorized personnel. Refer to this resource for more information on information disclosure: https://owasp.org/www-community/vulnerabilities/Information_exposure_through_discrepancy"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:25:04 AM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 133\n\n   **Bug Type**: CPU\n\n   **Description**: The use of context.WithCancel might lead to high CPU usage if not managed properly.\n\n   **Solution**: Ensure the cancel function returned by context.WithCancel is called as soon as the work is done so the context does not remain open unnecessarily.\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 139\n\n   **Bug Type**: Memory\n\n   **Description**: The ReadBufferSize and WriteBufferSize are set to 0 by default, which means the buffer sizes are unlimited. This might lead to high memory usage.\n\n   **Solution**: Consider setting a sensible default value for these parameters, or provide a configuration option for the user to set these values.\n\n\n3. **Severity**: 7/10\n\n   **Line Number**: 150\n\n   **Bug Type**: Network\n\n   **Description**: The DialContext function is used to establish a connection. If the server is slow or unresponsive, this could lead to high network usage and latency.\n\n   **Solution**: Consider using a timeout or a cancellation context to limit the amount of time spent waiting for a response from the server.\n\n\n4. **Severity**: 5/10\n\n   **Line Number**: 160\n\n   **Bug Type**: CPU\n\n   **Description**: The SSH handshake process can be CPU-intensive, especially if the server's public key is large or if there are many authentication methods available.\n\n   **Solution**: Consider using a lighter-weight authentication method if possible, or perform the handshake in a separate goroutine to avoid blocking the main thread.\n\n\n5. **Severity**: 6/10\n\n   **Line Number**: 181\n\n   **Bug Type**: CPU\n\n   **Description**: The BindSSH function is called without a cancellation context or timeout, which could lead to high CPU usage if the function takes a long time to complete.\n\n   **Solution**: Consider passing in a cancellation context or using a timeout to ensure the function does not run indefinitely.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 68,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The use of context.WithCancel might lead to high CPU usage if not managed properly.",
+                "solution": "Ensure the cancel function returned by context.WithCancel is called as soon as the work is done so the context does not remain open unnecessarily."
+              },
+              {
+                "lineNumber": 74,
+                "severity": 4,
+                "bugType": "Memory",
+                "description": "The ReadBufferSize and WriteBufferSize are set to 0 by default, which means the buffer sizes are unlimited. This might lead to high memory usage.",
+                "solution": "Consider setting a sensible default value for these parameters, or provide a configuration option for the user to set these values."
+              },
+              {
+                "lineNumber": 85,
+                "severity": 7,
+                "bugType": "Network",
+                "description": "The DialContext function is used to establish a connection. If the server is slow or unresponsive, this could lead to high network usage and latency.",
+                "solution": "Consider using a timeout or a cancellation context to limit the amount of time spent waiting for a response from the server."
+              },
+              {
+                "lineNumber": 95,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "The SSH handshake process can be CPU-intensive, especially if the server's public key is large or if there are many authentication methods available.",
+                "solution": "Consider using a lighter-weight authentication method if possible, or perform the handshake in a separate goroutine to avoid blocking the main thread."
+              },
+              {
+                "lineNumber": 116,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The BindSSH function is called without a cancellation context or timeout, which could lead to high CPU usage if the function takes a long time to complete.",
+                "solution": "Consider passing in a cancellation context or using a timeout to ensure the function does not run indefinitely."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:27:16 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 131\n\n   **Bug Type**: GDPR\n\n   **Description**: The function connectionOnce does not have a mechanism to handle user consent for data processing, which is a requirement under GDPR.\n\n   **Solution**: Implement a user consent mechanism before processing user data. This can be done by adding a prompt or a checkbox for the user to give their consent.\n\n\n2. **Severity**: 9/10\n\n   **Line Number**: 150\n\n   **Bug Type**: PCI DSS\n\n   **Description**: Sensitive data like user credentials are being transferred over the network without explicit mention of encryption, which is a violation of PCI DSS requirement 4.\n\n   **Solution**: Ensure that all transmitted data is encrypted. Use protocols like HTTPS or secure FTP for data transmission.\n\n\n3. **Severity**: 8/10\n\n   **Line Number**: 160\n\n   **Bug Type**: HIPAA\n\n   **Description**: The function does not seem to implement any mechanism for secure data storage, which is a requirement under the HIPAA Security Rule.\n\n   **Solution**: Ensure that all stored data is encrypted and secure. Implement access controls to prevent unauthorized access to stored data.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 66,
+                "severity": 7,
+                "bugType": "GDPR",
+                "description": "The function connectionOnce does not have a mechanism to handle user consent for data processing, which is a requirement under GDPR.",
+                "solution": "Implement a user consent mechanism before processing user data. This can be done by adding a prompt or a checkbox for the user to give their consent.",
+                "webLink": "https://gdpr-info.eu/art-7-gdpr/"
+              },
+              {
+                "lineNumber": 85,
+                "severity": 9,
+                "bugType": "PCI DSS",
+                "description": "Sensitive data like user credentials are being transferred over the network without explicit mention of encryption, which is a violation of PCI DSS requirement 4.",
+                "solution": "Ensure that all transmitted data is encrypted. Use protocols like HTTPS or secure FTP for data transmission.",
+                "webLink": "https://www.pcisecuritystandards.org/pci_security/maintaining_payment_security"
+              },
+              {
+                "lineNumber": 95,
+                "severity": 8,
+                "bugType": "HIPAA",
+                "description": "The function does not seem to implement any mechanism for secure data storage, which is a requirement under the HIPAA Security Rule.",
+                "solution": "Ensure that all stored data is encrypted and secure. Implement access controls to prevent unauthorized access to stored data.",
+                "webLink": "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\n// connectionOnce connects to the chisel server and blocks\nfunc (c *Client) connectionOnce(ctx context.Context) (connected bool, err error) {\n\t//already closed?\n\tselect {\n\tcase <-ctx.Done():\n\t\treturn false, errors.New(\"Cancelled\")\n\tdefault:\n\t\t//still open\n\t}\n\tctx, cancel := context.WithCancel(ctx)\n\tdefer cancel()\n\t//prepare dialer\n\td := websocket.Dialer{\n\t\tHandshakeTimeout: settings.EnvDuration(\"WS_TIMEOUT\", 45*time.Second),\n\t\tSubprotocols:     []string{chshare.ProtocolVersion},\n\t\tTLSClientConfig:  c.tlsConfig,\n\t\tReadBufferSize:   settings.EnvInt(\"WS_BUFF_SIZE\", 0),\n\t\tWriteBufferSize:  settings.EnvInt(\"WS_BUFF_SIZE\", 0),\n\t\tNetDialContext:   c.config.DialContext,\n\t}\n\t//optional proxy\n\tif p := c.proxyURL; p != nil {\n\t\tif err := c.setProxy(p, &d); err != nil {\n\t\t\treturn false, err\n\t\t}\n\t}\n\twsConn, _, err := d.DialContext(ctx, c.server, c.config.Headers)\n\tif err != nil {\n\t\treturn false, err\n\t}\n\tconn := cnet.NewWebSocketConn(wsConn)\n\t// perform SSH handshake on net.Conn\n\tc.Debugf(\"Handshaking...\")\n\tsshConn, chans, reqs, err := ssh.NewClientConn(conn, \"\", c.sshConfig)\n\tif err != nil {\n\t\te := err.Error()\n\t\tif strings.Contains(e, \"unable to authenticate\") {\n\t\t\tc.Infof(\"Authentication failed\")\n\t\t\tc.Debugf(e)\n\t\t} else {\n\t\t\tc.Infof(e)\n\t\t}\n\t\treturn false, err\n\t}\n\tdefer sshConn.Close()\n\t// chisel client handshake (reverse of server handshake)\n\t// send configuration\n\tc.Debugf(\"Sending config\")\n\tt0 := time.Now()\n\t_, configerr, err := sshConn.SendRequest(\n\t\t\"config\",\n\t\ttrue,\n\t\tsettings.EncodeConfig(c.computed),\n\t)\n\tif err != nil {\n\t\tc.Infof(\"Config verification failed\")\n\t\treturn false, err\n\t}\n\tif len(configerr) > 0 {\n\t\treturn false, errors.New(string(configerr))\n\t}\n\tc.Infof(\"Connected (Latency %s)\", time.Since(t0))\n\t//connected, handover ssh connection for tunnel to use, and block\n\terr = c.tunnel.BindSSH(ctx, sshConn, reqs, chans)\n\tc.Infof(\"Disconnected\")\n\tconnected = time.Since(t0) > 5*time.Second\n\treturn connected, err\n}\n",

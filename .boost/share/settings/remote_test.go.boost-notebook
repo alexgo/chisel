@@ -1,7 +1,113 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 2:43:33 AM PDT\n\nThis Go code is a test function for a function named `DecodeRemote` and its counterpart `Encode` in a package named `settings`. The function `DecodeRemote` is likely used to parse a string into a `Remote` struct, while `Encode` is used to convert a `Remote` struct back into a string.\n\nThe `Remote` struct is defined as follows (based on the fields used in the test cases):\n\n```go\ntype Remote struct {\n\tLocalHost   string\n\tLocalPort   string\n\tLocalProto  string\n\tRemoteHost  string\n\tRemotePort  string\n\tRemoteProto string\n\tReverse     bool\n\tSocks       bool\n}\n```\n\nLet's break down the test function:\n\n- It uses table-driven tests, a common idiom in Go for testing similar functionality with different inputs and expected outputs. The table is an array of anonymous structs, each representing a test case with `Input`, `Output` (expected result after decoding), and `Encoded` (expected result after encoding) fields.\n\n- For each test case, it first sets up some default values for the expected output. If `LocalHost` is not specified, it defaults to `\"0.0.0.0\"`, and if `RemoteProto` and `LocalProto` are not specified, they default to `\"tcp\"`.\n\n- It then calls `DecodeRemote` with the input string and checks if there was an error. If there was an error, the test fails with a message indicating which test case failed and why.\n\n- The returned `Remote` struct is then compared to the expected output using the `reflect.DeepEqual` function, which checks if two values are deeply identical. If they are not identical, the test fails with a detailed message.\n\n- Finally, the function calls `Encode` on the returned `Remote` struct and checks if the result matches the expected encoded string. If they do not match, the test fails with a detailed message.\n\nThis test function is a good example of how to write comprehensive unit tests in Go. It checks both the main functionality of the `DecodeRemote` and `Encode` functions and their error handling, and provides detailed error messages to help with debugging if a test fails.\n\nAs for the architectural guidelines, this code seems to be well-structured and follows common Go idioms, which suggests that it would fit well into a larger Go project. There are no obvious conflicts with the architectural guidelines provided."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 2:45:30 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->DecodeRemote;\nDecodeRemote-->DecodeRemoteLoop;\nDecodeRemoteLoop-->DecodeRemoteLoopCondition;\nDecodeRemoteLoopCondition-- Yes -->DecodeRemoteLoop;\nDecodeRemoteLoopCondition-- No -->DecodeRemoteLoopEnd;\nDecodeRemoteLoopEnd-->DecodeRemoteLoopEndCondition;\nDecodeRemoteLoopEndCondition-- Yes -->DecodeRemoteLoopEnd;\nDecodeRemoteLoopEndCondition-- No -->DecodeRemoteLoopEndEnd;\nDecodeRemoteLoopEndEnd-->DecodeRemoteLoopEndEndCondition;\nDecodeRemoteLoopEndEndCondition-- Yes -->DecodeRemoteLoopEndEnd;\nDecodeRemoteLoopEndEndCondition-- No -->DecodeRemoteLoopEndEndEnd;\nDecodeRemoteLoopEndEndEnd-->DecodeRemoteLoopEndEndEndCondition;\nDecodeRemoteLoopEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEnd;\nDecodeRemoteLoopEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- Yes -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition-- No -->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd;\nDecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEnd-->DecodeRemoteLoopEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndEndCondition;\nDecodeRemoteLoopEndEndEndEndEnd"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:46:09 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Input Validation and Representation\n\n   **Description**: The function DecodeRemote(test.Input) does not validate the input it receives. This could potentially lead to security vulnerabilities such as SQL Injection, Command Injection, or Buffer Overflow if the input is not properly sanitized.\n\n   **Solution**: The function should validate and sanitize the input before processing it. This can be achieved using regular expressions, whitelist input validation, or by using a library that provides input sanitization functions. Refer to this resource for more information: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html\n\n\n2. **Severity**: 4/10\n\n   **Line Number**: 1\n\n   **Bug Type**: Error Handling\n\n   **Description**: The function DecodeRemote(test.Input) does not handle errors properly. When an error occurs, it is logged to the console using t.Fatalf(), but the function does not return or stop execution. This could potentially lead to unexpected behavior or crashes.\n\n   **Solution**: The function should handle errors in a way that does not disrupt the program's execution. This could be done by returning an error to the caller, or by using a try-catch block to handle the error and recover from it. Refer to this resource for more information: https://blog.golang.org/error-handling-and-go\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 5,
+                "bugType": "Input Validation and Representation",
+                "description": "The function DecodeRemote(test.Input) does not validate the input it receives. This could potentially lead to security vulnerabilities such as SQL Injection, Command Injection, or Buffer Overflow if the input is not properly sanitized.",
+                "solution": "The function should validate and sanitize the input before processing it. This can be achieved using regular expressions, whitelist input validation, or by using a library that provides input sanitization functions. Refer to this resource for more information: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 1,
+                "severity": 4,
+                "bugType": "Error Handling",
+                "description": "The function DecodeRemote(test.Input) does not handle errors properly. When an error occurs, it is logged to the console using t.Fatalf(), but the function does not return or stop execution. This could potentially lead to unexpected behavior or crashes.",
+                "solution": "The function should handle errors in a way that does not disrupt the program's execution. This could be done by returning an error to the caller, or by using a try-catch block to handle the error and recover from it. Refer to this resource for more information: https://blog.golang.org/error-handling-and-go"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:46:28 AM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 3\n\n   **Bug Type**: Memory\n\n   **Description**: The use of reflect package for comparison may lead to memory inefficiency as it uses reflection to compare the entire struct, including unexported fields.\n\n   **Solution**: Consider using a custom comparison function that only compares the fields you care about. This can be more efficient than using reflection.\n\n\n2. **Severity**: 2/10\n\n   **Line Number**: 3\n\n   **Bug Type**: CPU\n\n   **Description**: The use of reflect.DeepEqual can be CPU intensive, especially for larger data structures.\n\n   **Solution**: Consider using a custom comparison function that only compares the fields you care about. This can be more efficient than using reflection.\n\n\n3. **Severity**: 1/10\n\n   **Line Number**: 1\n\n   **Bug Type**: CPU\n\n   **Description**: The use of a for loop for test cases may lead to increased CPU usage, especially with a large number of test cases.\n\n   **Solution**: Consider using a testing framework that supports parallel execution of tests to reduce the overall CPU usage.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 3,
+                "severity": 3,
+                "bugType": "Memory",
+                "description": "The use of reflect package for comparison may lead to memory inefficiency as it uses reflection to compare the entire struct, including unexported fields.",
+                "solution": "Consider using a custom comparison function that only compares the fields you care about. This can be more efficient than using reflection."
+              },
+              {
+                "lineNumber": 3,
+                "severity": 2,
+                "bugType": "CPU",
+                "description": "The use of reflect.DeepEqual can be CPU intensive, especially for larger data structures.",
+                "solution": "Consider using a custom comparison function that only compares the fields you care about. This can be more efficient than using reflection."
+              },
+              {
+                "lineNumber": 1,
+                "severity": 1,
+                "bugType": "CPU",
+                "description": "The use of a for loop for test cases may lead to increased CPU usage, especially with a large number of test cases.",
+                "solution": "Consider using a testing framework that supports parallel execution of tests to reduce the overall CPU usage."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 2:46:48 AM PDT\n\n1. **Severity**: 3/10\n\n   **Line Number**: 1\n\n   **Bug Type**: GDPR\n\n   **Description**: The code doesn't have any explicit data handling, storage or transmission, but it does process potentially sensitive data such as IP addresses and ports. Under GDPR, IP addresses are considered personal data.\n\n   **Solution**: Ensure that any processing of IP addresses complies with GDPR principles, such as data minimization, purpose limitation, and ensuring appropriate security measures.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 1,
+                "severity": 3,
+                "bugType": "GDPR",
+                "description": "The code doesn't have any explicit data handling, storage or transmission, but it does process potentially sensitive data such as IP addresses and ports. Under GDPR, IP addresses are considered personal data.",
+                "solution": "Ensure that any processing of IP addresses complies with GDPR principles, such as data minimization, purpose limitation, and ensuring appropriate security measures."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package settings\n\nimport (\n\t\"reflect\"\n\t\"testing\"\n)\n\nfunc TestRemoteDecode(t *testing.T) {\n\t//test table\n\tfor i, test := range []struct {\n\t\tInput   string\n\t\tOutput  Remote\n\t\tEncoded string\n\t}{\n\t\t{\n\t\t\t\"3000\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"3000\",\n\t\t\t\tRemoteHost: \"127.0.0.1\",\n\t\t\t\tRemotePort: \"3000\",\n\t\t\t},\n\t\t\t\"0.0.0.0:3000:127.0.0.1:3000\",\n\t\t},\n\t\t{\n\t\t\t\"google.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"80\",\n\t\t\t\tRemoteHost: \"google.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t},\n\t\t\t\"0.0.0.0:80:google.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"R:google.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"80\",\n\t\t\t\tRemoteHost: \"google.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t\tReverse:    true,\n\t\t\t},\n\t\t\t\"R:0.0.0.0:80:google.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"示例網站.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:  \"80\",\n\t\t\t\tRemoteHost: \"示例網站.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t},\n\t\t\t\"0.0.0.0:80:示例網站.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"socks\",\n\t\t\tRemote{\n\t\t\t\tLocalHost: \"127.0.0.1\",\n\t\t\t\tLocalPort: \"1080\",\n\t\t\t\tSocks:     true,\n\t\t\t},\n\t\t\t\"127.0.0.1:1080:socks\",\n\t\t},\n\t\t{\n\t\t\t\"127.0.0.1:1081:socks\",\n\t\t\tRemote{\n\t\t\t\tLocalHost: \"127.0.0.1\",\n\t\t\t\tLocalPort: \"1081\",\n\t\t\t\tSocks:     true,\n\t\t\t},\n\t\t\t\"127.0.0.1:1081:socks\",\n\t\t},\n\t\t{\n\t\t\t\"1.1.1.1:53/udp\",\n\t\t\tRemote{\n\t\t\t\tLocalPort:   \"53\",\n\t\t\t\tLocalProto:  \"udp\",\n\t\t\t\tRemoteHost:  \"1.1.1.1\",\n\t\t\t\tRemotePort:  \"53\",\n\t\t\t\tRemoteProto: \"udp\",\n\t\t\t},\n\t\t\t\"0.0.0.0:53:1.1.1.1:53/udp\",\n\t\t},\n\t\t{\n\t\t\t\"localhost:5353:1.1.1.1:53/udp\",\n\t\t\tRemote{\n\t\t\t\tLocalHost:   \"localhost\",\n\t\t\t\tLocalPort:   \"5353\",\n\t\t\t\tLocalProto:  \"udp\",\n\t\t\t\tRemoteHost:  \"1.1.1.1\",\n\t\t\t\tRemotePort:  \"53\",\n\t\t\t\tRemoteProto: \"udp\",\n\t\t\t},\n\t\t\t\"localhost:5353:1.1.1.1:53/udp\",\n\t\t},\n\t\t{\n\t\t\t\"[::1]:8080:google.com:80\",\n\t\t\tRemote{\n\t\t\t\tLocalHost:  \"[::1]\",\n\t\t\t\tLocalPort:  \"8080\",\n\t\t\t\tRemoteHost: \"google.com\",\n\t\t\t\tRemotePort: \"80\",\n\t\t\t},\n\t\t\t\"[::1]:8080:google.com:80\",\n\t\t},\n\t\t{\n\t\t\t\"R:[::]:3000:[::1]:3000\",\n\t\t\tRemote{\n\t\t\t\tLocalHost:  \"[::]\",\n\t\t\t\tLocalPort:  \"3000\",\n\t\t\t\tRemoteHost: \"[::1]\",\n\t\t\t\tRemotePort: \"3000\",\n\t\t\t\tReverse:    true,\n\t\t\t},\n\t\t\t\"R:[::]:3000:[::1]:3000\",\n\t\t},\n\t} {\n\t\t//expected defaults\n\t\texpected := test.Output\n\t\tif expected.LocalHost == \"\" {\n\t\t\texpected.LocalHost = \"0.0.0.0\"\n\t\t}\n\t\tif expected.RemoteProto == \"\" {\n\t\t\texpected.RemoteProto = \"tcp\"\n\t\t}\n\t\tif expected.LocalProto == \"\" {\n\t\t\texpected.LocalProto = \"tcp\"\n\t\t}\n\t\t//compare\n\t\tgot, err := DecodeRemote(test.Input)\n\t\tif err != nil {\n\t\t\tt.Fatalf(\"decode #%d '%s' failed: %s\", i+1, test.Input, err)\n\t\t}\n\t\tif !reflect.DeepEqual(got, &expected) {\n\t\t\tt.Fatalf(\"decode #%d '%s' expected\\n  %#v\\ngot\\n  %#v\", i+1, test.Input, expected, got)\n\t\t}\n\t\tif e := got.Encode(); test.Encoded != e {\n\t\t\tt.Fatalf(\"encode #%d '%s' expected\\n  %#v\\ngot\\n  %#v\", i+1, test.Input, test.Encoded, e)\n\t\t}\n\t}\n}\n",

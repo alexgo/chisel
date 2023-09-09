@@ -1,0 +1,809 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"; mermaid.initialize({ startOnLoad: true });</script>
+    <style>
+        @page {
+            margin: 2cm;
+            size: letter;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.0;
+            overflow-x: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        /* Use this class for analysis sections */
+        .analysis-section {
+            padding-top: 16px;
+            margin-top: 24px;
+            font-size: 12px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .new-page-section {
+            page-break-before: always;
+        }
+
+        .analysis-section h1, .analysis-section h2 {
+            color: #444;
+        }
+
+        .analysis-section p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Polyverse Boost Source Analysis Details: ./server/server_handler.go</h1>
+    <p>Date Generated: Thursday, September 7, 2023 at 3:55:25 AM PDT</p>
+    <div class="><hr>
+<h3 id="boost-architectural-quick-summary-security-report">Boost Architectural Quick Summary Security Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:50:10 PM PDT</p>
+<h1 id="executive-report">Executive Report</h1>
+<h2 id="architectural-impact-and-risk-analysis">Architectural Impact and Risk Analysis</h2>
+<p>Based on the analysis of the software project, the following key points have been identified:</p>
+<ol>
+<li><p><strong>High Severity Issues</strong>: The file <code>server/server_handler.go</code> has been flagged with multiple high-severity issues, including Improper Input Validation and Insecure Direct Object References (IDOR). These issues can potentially lead to security vulnerabilities, impacting the integrity and reliability of the software. </p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: The identified issues, particularly the Improper Input Validation, could potentially allow an attacker to send malicious data to the server. This could lead to unauthorized access or data breaches, negatively impacting the customers&#39; trust and the software&#39;s reputation.</p>
+</li>
+<li><p><strong>Overall Health of the Project Source</strong>: The analysis indicates that the project source has issues in one file out of the total files analyzed. This suggests that a significant portion of the project may be affected by these issues. However, it&#39;s important to note that the severity and impact of these issues vary, and not all issues may have a significant impact on the overall project.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: Given the severity of the issues identified, there is a high risk associated with the current state of the project. The Improper Input Validation and Insecure Direct Object References (IDOR) issues, in particular, pose a significant security risk.</p>
+</li>
+</ol>
+<h2 id="recommendations">Recommendations</h2>
+<p>To mitigate the identified risks and potential customer impact, it is recommended to:</p>
+<ul>
+<li>Implement proper input validation in the <code>handleClientHandler</code> function to prevent potential attacks.</li>
+<li>Review and address the Insecure Direct Object References (IDOR) issue to prevent potential unauthorized access.</li>
+<li>Conduct a thorough review of the entire codebase to identify and address any additional issues.</li>
+</ul>
+<p>By addressing these issues, the software project can significantly improve its security, reliability, and overall health.</p>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-performance-report">Boost Architectural Quick Summary Performance Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:50:46 PM PDT</p>
+<h2 id="executive-report-software-project-analysis">Executive Report: Software Project Analysis</h2>
+<p>Based on the analysis of the software project, the following key points have been identified:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The project follows a client-server architecture and uses secure communication for tunneling. However, there is a potential issue with the use of a map for storing sessions in the <code>server/server_handler.go</code> file. This could lead to high memory usage if the number of sessions is large, which could impact the overall performance and scalability of the application.</p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The risk associated with this issue is moderate. While it could potentially impact the performance and scalability of the application, it is not a security risk. The risk could be mitigated by using a more memory-efficient data structure and implementing a session timeout to remove inactive sessions.</p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: If left unaddressed, this issue could lead to performance degradation and potential application crashes due to high memory usage, especially under heavy load. This could negatively impact the user experience and potentially lead to loss of users or customers.</p>
+</li>
+<li><p><strong>Overall Issues</strong>: The <code>server/server_handler.go</code> file has the most severe issues, with 6 CPU-related issues and 2 memory-related issues. However, it is also the only file in the project, which means that 100% of the project files have issues. This indicates that there may be a need for code optimization and refactoring to improve the performance and efficiency of the application.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: Given that all the project files have issues, the overall health of the project source could be considered as moderate. The issues identified are not security risks, but they could impact the performance and scalability of the application. Therefore, it is recommended to address these issues to improve the overall health and quality of the project.</p>
+</li>
+</ol>
+<p>In conclusion, while the project follows good architectural principles and practices, there are areas for improvement in terms of performance and efficiency. Addressing these issues will not only improve the overall health of the project but also enhance the user experience and potentially attract more users or customers.</p>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-compliance-report">Boost Architectural Quick Summary Compliance Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:51:28 PM PDT</p>
+<h2 id="executive-report">Executive Report</h2>
+<h3 id="architectural-impact-and-risk-analysis">Architectural Impact and Risk Analysis</h3>
+<ol>
+<li><p><strong>Issue Severity and Distribution:</strong> The most severe issues found in the project are categorized as &quot;Error&quot; and are related to PCI DSS and GDPR compliance. These issues are found in the <code>server/server_handler.go</code> file. This file is responsible for handling server-side operations, which is a critical part of the software&#39;s functionality. </p>
+<ul>
+<li><strong>Metrics:</strong> Out of the total files analyzed, 100% have issues of varying severity. The <code>server/server_handler.go</code> file has the highest severity issues.</li>
+</ul>
+</li>
+<li><p><strong>Potential Customer Impact:</strong> The identified issues could potentially impact customers in several ways. The PCI DSS related issue could allow unauthorized access to sensitive data, which could lead to data breaches. The GDPR related issue could lead to non-compliance with data protection regulations, potentially resulting in legal consequences and loss of customer trust.</p>
+<ul>
+<li><strong>Context:</strong> The software project is a command-line tool that allows users to create secure tunnels to expose local servers to the internet or access remote servers securely. Any security or compliance issues could directly impact the software&#39;s primary functionality and its users.</li>
+</ul>
+</li>
+<li><p><strong>Overall Health of the Project Source:</strong> The overall health of the project source is concerning due to the severity and distribution of the issues found. All files analyzed have issues, with the most severe being categorized as &quot;Error&quot;. </p>
+<ul>
+<li><strong>Risk Assessment:</strong> The risk associated with the project source is high due to the presence of severe issues in all files analyzed. This could potentially lead to significant customer impact and legal consequences.</li>
+</ul>
+</li>
+<li><p><strong>Architectural Consistency:</strong> The software project follows the client-server architecture and uses secure communication for tunneling, which aligns with the architectural principles defined in the guidelines. However, the identified issues indicate potential inconsistencies in the implementation of these principles, particularly in relation to secure communication and data protection.</p>
+<ul>
+<li><strong>Details:</strong> The PCI DSS related issue indicates a potential flaw in the implementation of secure communication, while the GDPR related issue suggests a potential inconsistency in the handling of user data.</li>
+</ul>
+</li>
+</ol>
+<h3 id="recommendations">Recommendations</h3>
+<ol>
+<li>Prioritize the resolution of the identified &quot;Error&quot; level issues, starting with those related to PCI DSS and GDPR compliance.</li>
+<li>Conduct a thorough review of the entire codebase to identify and address any additional issues.</li>
+<li>Implement rigorous testing and code review processes to prevent the introduction of new issues.</li>
+<li>Consider seeking expert advice on PCI DSS and GDPR compliance to ensure that all requirements are met.</li>
+<li>Regularly update and refine the architectural guidelines to reflect changes in the project and regulatory environment.</li>
+</ol>
+</div><p></p>
+    <h1>Detailed Analysis</h1><div>
+                    <h2>./server/server_handler.go :</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>package chserver
+
+import (
+	<span class="hljs-string">&quot;net/http&quot;</span>
+	<span class="hljs-string">&quot;strings&quot;</span>
+	<span class="hljs-string">&quot;sync/atomic&quot;</span>
+	<span class="hljs-string">&quot;time&quot;</span>
+
+	chshare <span class="hljs-string">&quot;github.com/jpillora/chisel/share&quot;</span>
+	<span class="hljs-string">&quot;github.com/jpillora/chisel/share/cnet&quot;</span>
+	<span class="hljs-string">&quot;github.com/jpillora/chisel/share/settings&quot;</span>
+	<span class="hljs-string">&quot;github.com/jpillora/chisel/share/tunnel&quot;</span>
+	<span class="hljs-string">&quot;golang.org/x/crypto/ssh&quot;</span>
+	<span class="hljs-string">&quot;golang.org/x/sync/errgroup&quot;</span>
+)
+
+<span class="hljs-comment">// handleClientHandler is the main http websocket handler for the chisel server</span>
+func (s *Server) <span class="hljs-built_in">handleClientHandler</span>(w http<span class="hljs-selector-class">.ResponseWriter</span>, r *http.Request) {
+	<span class="hljs-comment">//websockets upgrade AND has chisel prefix</span>
+	upgrade := strings<span class="hljs-selector-class">.ToLower</span>(r<span class="hljs-selector-class">.Header</span><span class="hljs-selector-class">.Get</span>(<span class="hljs-string">&quot;Upgrade&quot;</span>))
+	protocol := r<span class="hljs-selector-class">.Header</span><span class="hljs-selector-class">.Get</span>(<span class="hljs-string">&quot;Sec-WebSocket-Protocol&quot;</span>)
+	<span class="hljs-keyword">if</span> upgrade == <span class="hljs-string">&quot;websocket&quot;</span>  {
+		<span class="hljs-keyword">if</span> protocol == chshare<span class="hljs-selector-class">.ProtocolVersion</span> {
+			s<span class="hljs-selector-class">.handleWebsocket</span>(w, r)
+			return
+		}
+		<span class="hljs-comment">//print into server logs and silently fall-through</span>
+		s<span class="hljs-selector-class">.Infof</span>(<span class="hljs-string">&quot;ignored client connection using protocol &#x27;%s&#x27;, expected &#x27;%s&#x27;&quot;</span>,
+			protocol, chshare.ProtocolVersion)
+	}
+	<span class="hljs-comment">//proxy target was provided</span>
+	<span class="hljs-keyword">if</span> s<span class="hljs-selector-class">.reverseProxy</span> != nil {
+		s<span class="hljs-selector-class">.reverseProxy</span><span class="hljs-selector-class">.ServeHTTP</span>(w, r)
+		return
+	}
+	<span class="hljs-comment">//no proxy defined, provide access to health/version checks</span>
+	switch r<span class="hljs-selector-class">.URL</span><span class="hljs-selector-class">.Path</span> {
+	case <span class="hljs-string">&quot;/health&quot;</span>:
+		w<span class="hljs-selector-class">.Write</span>(<span class="hljs-selector-attr">[]</span><span class="hljs-built_in">byte</span>(<span class="hljs-string">&quot;OK\n&quot;</span>))
+		return
+	case <span class="hljs-string">&quot;/version&quot;</span>:
+		w<span class="hljs-selector-class">.Write</span>(<span class="hljs-selector-attr">[]</span><span class="hljs-built_in">byte</span>(chshare.BuildVersion))
+		return
+	}
+	<span class="hljs-comment">//missing :O</span>
+	w<span class="hljs-selector-class">.WriteHeader</span>(<span class="hljs-number">404</span>)
+	w<span class="hljs-selector-class">.Write</span>(<span class="hljs-selector-attr">[]</span><span class="hljs-built_in">byte</span>(<span class="hljs-string">&quot;Not found&quot;</span>))
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:45:09 AM PDT</p>
+<p>This code is written in Go language and it&#39;s part of a server implementation for a tool named Chisel. Chisel is a fast TCP tunnel over HTTP and this particular function <code>handleClientHandler</code> is responsible for handling incoming HTTP requests and upgrading them to WebSocket connections if necessary.</p>
+<p>Let&#39;s break down the function:</p>
+<ul>
+<li><p>The function <code>handleClientHandler</code> is a method of the <code>Server</code> struct. It takes two parameters: an <code>http.ResponseWriter</code> and an <code>*http.Request</code>. The <code>ResponseWriter</code> is an interface for sending HTTP responses, and the <code>Request</code> is a data structure that represents the client HTTP request.</p>
+</li>
+<li><p>It first checks if the incoming request is attempting to upgrade to a WebSocket connection by looking at the &quot;Upgrade&quot; HTTP header. If the value of this header is &quot;websocket&quot;, it means the client wants to establish a WebSocket connection.</p>
+</li>
+<li><p>If the upgrade header is set to &quot;websocket&quot;, it then checks the &quot;Sec-WebSocket-Protocol&quot; header to see if it matches the expected protocol version. If it does, it calls the <code>handleWebsocket</code> function to handle the WebSocket connection.</p>
+</li>
+<li><p>If the protocol doesn&#39;t match, it logs a message about the mismatch and continues to process the request as a normal HTTP request.</p>
+</li>
+<li><p>If the server is configured with a reverse proxy, it forwards the request to the reverse proxy.</p>
+</li>
+<li><p>If no reverse proxy is defined, it checks the URL path of the request. If it is &quot;/health&quot;, it responds with &quot;OK\n&quot;. If it is &quot;/version&quot;, it responds with the build version of the Chisel software.</p>
+</li>
+<li><p>If none of the above conditions are met, it returns a 404 Not Found error.</p>
+</li>
+</ul>
+<p>The <code>atomic</code>, <code>sync/errgroup</code>, and <code>time</code> packages are imported but not used in this function. They might be used elsewhere in the <code>chserver</code> package.</p>
+<p>The <code>github.com/jpillora/chisel/share</code>, <code>github.com/jpillora/chisel/share/cnet</code>, <code>github.com/jpillora/chisel/share/settings</code>, and <code>github.com/jpillora/chisel/share/tunnel</code> packages are imported for shared utilities, network-related functions, settings, and tunneling functionality respectively. </p>
+<p>The <code>golang.org/x/crypto/ssh</code> package is imported for handling SSH connections, and <code>golang.org/x/sync/errgroup</code> is imported for handling multiple goroutines that return an error.</p>
+<p>The code aligns with the architectural guidelines provided, as it doesn&#39;t violate any specific constraints or guidelines. It makes use of standard Go practices for handling HTTP requests and upgrading them to WebSocket connections when necessary.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:46:53 AM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style handleClientHandler fill:#228B22, stroke:#000000, stroke-width:4px;
+style handleWebsocket fill:#228B22, stroke:#000000, stroke-width:4px;
+style handleReverseProxy fill:#228B22, stroke:#000000, stroke-width:4px;
+style handleHealthCheck fill:#228B22, stroke:#000000, stroke-width:4px;
+style handleVersionCheck fill:#228B22, stroke:#000000, stroke-width:4px;
+style handleNotFound fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->handleClientHandler;
+handleClientHandler--"upgrade == 'websocket' && protocol == chshare.ProtocolVersion"--handleWebsocket;
+handleClientHandler--"upgrade == 'websocket' && protocol != chshare.ProtocolVersion"--handleNotFound;
+handleClientHandler--"s.reverseProxy != nil"--handleReverseProxy;
+handleClientHandler--"s.reverseProxy == nil && r.URL.Path == '/health'"--handleHealthCheck;
+handleClientHandler--"s.reverseProxy == nil && r.URL.Path == '/version'"--handleVersionCheck;
+handleClientHandler--"s.reverseProxy == nil && r.URL.Path != '/health' && r.URL.Path != '/version'"--handleNotFound;
+handleWebsocket-->End;
+handleReverseProxy-->End;
+handleHealthCheck-->End;
+handleVersionCheck-->End;
+handleNotFound-->End;</pre>
+</code></pre><p>The control flow graph for the <code>handleClientHandler</code> function is as follows:</p>
+<ol>
+<li>The function starts at the <code>Start</code> node.</li>
+<li>If the <code>upgrade</code> header is &quot;websocket&quot; and the <code>protocol</code> header is equal to <code>chshare.ProtocolVersion</code>, the control flow goes to the <code>handleWebsocket</code> node.</li>
+<li>If the <code>upgrade</code> header is &quot;websocket&quot; but the <code>protocol</code> header is not equal to <code>chshare.ProtocolVersion</code>, the control flow goes to the <code>handleNotFound</code> node.</li>
+<li>If <code>s.reverseProxy</code> is not <code>nil</code>, the control flow goes to the <code>handleReverseProxy</code> node.</li>
+<li>If <code>s.reverseProxy</code> is <code>nil</code> and the <code>r.URL.Path</code> is &quot;/health&quot;, the control flow goes to the <code>handleHealthCheck</code> node.</li>
+<li>If <code>s.reverseProxy</code> is <code>nil</code> and the <code>r.URL.Path</code> is &quot;/version&quot;, the control flow goes to the <code>handleVersionCheck</code> node.</li>
+<li>If <code>s.reverseProxy</code> is <code>nil</code> and the <code>r.URL.Path</code> is neither &quot;/health&quot; nor &quot;/version&quot;, the control flow goes to the <code>handleNotFound</code> node.</li>
+<li>From each of the nodes <code>handleWebsocket</code>, <code>handleReverseProxy</code>, <code>handleHealthCheck</code>, <code>handleVersionCheck</code>, and <code>handleNotFound</code>, the control flow goes to the <code>End</code> node.</li>
+</ol>
+<p>Note: The primary path through the code is from the <code>Start</code> node to the <code>handleClientHandler</code> node, and then to the <code>End</code> node. The other paths are alternate non-error paths. The <code>handleNotFound</code> node represents an error path.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:49:41 AM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 20</p>
+<p><strong>Bug Type</strong>: Improper Input Validation</p>
+<p><strong>Description</strong>: The function &#39;handleClientHandler&#39; does not validate the value of the &#39;Sec-WebSocket-Protocol&#39; header before comparing it to the expected protocol version. An attacker could potentially use this to send malicious data to the server.</p>
+<p><strong>Solution</strong>: Perform input validation on the &#39;Sec-WebSocket-Protocol&#39; header to ensure it contains only expected values before comparing it to the &#39;chshare.ProtocolVersion&#39;. Check out OWASP&#39;s guide on Input Validation: <a href="https://owasp.org/www-community/controls/Input_Validation">https://owasp.org/www-community/controls/Input_Validation</a></p>
+</li>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 35</p>
+<p><strong>Bug Type</strong>: Information Disclosure</p>
+<p><strong>Description</strong>: The &#39;/version&#39; endpoint discloses the build version of the software. This information could potentially be used by an attacker to discover known vulnerabilities in specific versions of the software.</p>
+<p><strong>Solution</strong>: Consider removing the &#39;/version&#39; endpoint or limiting its access to authenticated and authorized users only. For more information, refer to OWASP&#39;s guide on Information Disclosure: <a href="https://owasp.org/www-community/controls/Information_Disclosure">https://owasp.org/www-community/controls/Information_Disclosure</a></p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 43</p>
+<p><strong>Bug Type</strong>: Improper Error Handling</p>
+<p><strong>Description</strong>: The function returns a &#39;404 Not Found&#39; error without any additional information. This could potentially be confusing for users and developers trying to troubleshoot issues.</p>
+<p><strong>Solution</strong>: Provide more descriptive error messages to help users and developers understand the issue. However, be careful not to disclose sensitive information in error messages. Refer to OWASP&#39;s guide on Error Handling: <a href="https://owasp.org/www-project-cheat-sheets/cheatsheets/Error_Handling_Cheat_Sheet.html">https://owasp.org/www-project-cheat-sheets/cheatsheets/Error_Handling_Cheat_Sheet.html</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:52:03 AM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 3/10</p>
+<p><strong>Line Number</strong>: 23</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The use of strings.ToLower function on the &#39;Upgrade&#39; header for every request can be CPU-intensive, especially for high traffic servers.</p>
+<p><strong>Solution</strong>: Consider storing the &#39;Upgrade&#39; header value in its lower case form, or use a case-insensitive comparison method, such as strings.EqualFold.</p>
+</li>
+<li><p><strong>Severity</strong>: 2/10</p>
+<p><strong>Line Number</strong>: 36</p>
+<p><strong>Bug Type</strong>: Memory</p>
+<p><strong>Description</strong>: The repeated creation of the &#39;OK\n&#39; and &#39;Not found&#39; strings can lead to unnecessary memory allocation.</p>
+<p><strong>Solution</strong>: Consider defining these strings as constants at the package level to avoid repeated memory allocation.</p>
+</li>
+<li><p><strong>Severity</strong>: 2/10</p>
+<p><strong>Line Number</strong>: 38</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The use of the switch-case statement for routing can lead to sub-optimal performance for large numbers of routes.</p>
+<p><strong>Solution</strong>: Consider using a more efficient routing mechanism, such as a trie or a hash map, especially if the number of routes is expected to grow.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:54:19 AM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 17</p>
+<p><strong>Bug Type</strong>: Data Transmission</p>
+<p><strong>Description</strong>: The application is using websockets for data transmission without explicitly implementing any form of encryption like TLS (Transport Layer Security). This could potentially expose sensitive data during transmission, violating GDPR, PCI DSS, and HIPAA regulations.</p>
+<p><strong>Solution</strong>: Implement TLS or a similar encryption protocol to secure data during transmission. This will ensure that any sensitive data is encrypted and secure from potential eavesdropping attacks.</p>
+</li>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 36</p>
+<p><strong>Bug Type</strong>: Data Exposure</p>
+<p><strong>Description</strong>: The application exposes &#39;/health&#39; and &#39;/version&#39; endpoints without any form of authentication or authorization. This could potentially expose sensitive system information, violating GDPR regulations.</p>
+<p><strong>Solution</strong>: Implement proper authentication and authorization mechanisms to restrict access to these endpoints. This will ensure that only authorized users can access this information.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./server/server_handler.go line 49:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-comment">// handleWebsocket is responsible for handling the websocket connection</span>
+func (s *Server) <span class="hljs-built_in">handleWebsocket</span>(w http<span class="hljs-selector-class">.ResponseWriter</span>, req *http.Request) {
+	id := atomic<span class="hljs-selector-class">.AddInt32</span>(&amp;s<span class="hljs-selector-class">.sessCount</span>, <span class="hljs-number">1</span>)
+	l := s<span class="hljs-selector-class">.Fork</span>(<span class="hljs-string">&quot;session#%d&quot;</span>, id)
+	wsConn, err := upgrader<span class="hljs-selector-class">.Upgrade</span>(w, req, nil)
+	<span class="hljs-keyword">if</span> err != nil {
+		l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Failed to upgrade (%s)&quot;</span>, err)
+		return
+	}
+	conn := cnet<span class="hljs-selector-class">.NewWebSocketConn</span>(wsConn)
+	<span class="hljs-comment">// perform SSH handshake on net.Conn</span>
+	l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Handshaking with %s...&quot;</span>, req.RemoteAddr)
+	sshConn, chans, reqs, err := ssh<span class="hljs-selector-class">.NewServerConn</span>(conn, s.sshConfig)
+	<span class="hljs-keyword">if</span> err != nil {
+		s<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Failed to handshake (%s)&quot;</span>, err)
+		return
+	}
+	<span class="hljs-comment">// pull the users from the session map</span>
+	<span class="hljs-selector-tag">var</span> user *settings<span class="hljs-selector-class">.User</span>
+	<span class="hljs-keyword">if</span> s<span class="hljs-selector-class">.users</span><span class="hljs-selector-class">.Len</span>() &gt; <span class="hljs-number">0</span> {
+		sid := <span class="hljs-built_in">string</span>(sshConn<span class="hljs-selector-class">.SessionID</span>())
+		u, ok := s<span class="hljs-selector-class">.sessions</span><span class="hljs-selector-class">.Get</span>(sid)
+		<span class="hljs-keyword">if</span> !ok {
+			<span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;bug in ssh auth handler&quot;</span>)
+		}
+		user = u
+		s<span class="hljs-selector-class">.sessions</span><span class="hljs-selector-class">.Del</span>(sid)
+	}
+	<span class="hljs-comment">// chisel server handshake (reverse of client handshake)</span>
+	<span class="hljs-comment">// verify configuration</span>
+	l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Verifying configuration&quot;</span>)
+	<span class="hljs-comment">// wait for request, with timeout</span>
+	<span class="hljs-selector-tag">var</span> r *ssh<span class="hljs-selector-class">.Request</span>
+	select {
+	case r = &lt;-reqs:
+	case &lt;-<span class="hljs-selector-tag">time</span><span class="hljs-selector-class">.After</span>(settings<span class="hljs-selector-class">.EnvDuration</span>(<span class="hljs-string">&quot;CONFIG_TIMEOUT&quot;</span>, <span class="hljs-number">10</span>*<span class="hljs-selector-tag">time</span>.Second)):
+		l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Timeout waiting for configuration&quot;</span>)
+		sshConn<span class="hljs-selector-class">.Close</span>()
+		return
+	}
+	failed := <span class="hljs-built_in">func</span>(err error) {
+		l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Failed: %s&quot;</span>, err)
+		r<span class="hljs-selector-class">.Reply</span>(false, <span class="hljs-selector-attr">[]</span><span class="hljs-built_in">byte</span>(err<span class="hljs-selector-class">.Error</span>()))
+	}
+	<span class="hljs-keyword">if</span> r<span class="hljs-selector-class">.Type</span> != <span class="hljs-string">&quot;config&quot;</span> {
+		<span class="hljs-built_in">failed</span>(s<span class="hljs-selector-class">.Errorf</span>(<span class="hljs-string">&quot;expecting config request&quot;</span>))
+		return
+	}
+	c, err := settings<span class="hljs-selector-class">.DecodeConfig</span>(r.Payload)
+	<span class="hljs-keyword">if</span> err != nil {
+		<span class="hljs-built_in">failed</span>(s<span class="hljs-selector-class">.Errorf</span>(<span class="hljs-string">&quot;invalid config&quot;</span>))
+		return
+	}
+	<span class="hljs-comment">//print if client and server  versions dont match</span>
+	<span class="hljs-keyword">if</span> c<span class="hljs-selector-class">.Version</span> != chshare<span class="hljs-selector-class">.BuildVersion</span> {
+		v := c<span class="hljs-selector-class">.Version</span>
+		<span class="hljs-keyword">if</span> v == <span class="hljs-string">&quot;&quot;</span> {
+			v = <span class="hljs-string">&quot;&lt;unknown&gt;&quot;</span>
+		}
+		l<span class="hljs-selector-class">.Infof</span>(<span class="hljs-string">&quot;Client version (%s) differs from server version (%s)&quot;</span>,
+			v, chshare.BuildVersion)
+	}
+	<span class="hljs-comment">//validate remotes</span>
+	<span class="hljs-keyword">for</span> _, r := range c<span class="hljs-selector-class">.Remotes</span> {
+		<span class="hljs-comment">//if user is provided, ensure they have</span>
+		<span class="hljs-comment">//access to the desired remotes</span>
+		<span class="hljs-keyword">if</span> user != nil {
+			addr := r<span class="hljs-selector-class">.UserAddr</span>()
+			<span class="hljs-keyword">if</span> !user<span class="hljs-selector-class">.HasAccess</span>(addr) {
+				<span class="hljs-built_in">failed</span>(s<span class="hljs-selector-class">.Errorf</span>(<span class="hljs-string">&quot;access to &#x27;%s&#x27; denied&quot;</span>, addr))
+				return
+			}
+		}
+		<span class="hljs-comment">//confirm reverse tunnels are allowed</span>
+		<span class="hljs-keyword">if</span> r<span class="hljs-selector-class">.Reverse</span> &amp;&amp; !s<span class="hljs-selector-class">.config</span><span class="hljs-selector-class">.Reverse</span> {
+			l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Denied reverse port forwarding request, please enable --reverse&quot;</span>)
+			<span class="hljs-built_in">failed</span>(s<span class="hljs-selector-class">.Errorf</span>(<span class="hljs-string">&quot;Reverse port forwaring not enabled on server&quot;</span>))
+			return
+		}
+		<span class="hljs-comment">//confirm reverse tunnel is available</span>
+		<span class="hljs-keyword">if</span> r<span class="hljs-selector-class">.Reverse</span> &amp;&amp; !r<span class="hljs-selector-class">.CanListen</span>() {
+			<span class="hljs-built_in">failed</span>(s<span class="hljs-selector-class">.Errorf</span>(<span class="hljs-string">&quot;Server cannot listen on %s&quot;</span>, r<span class="hljs-selector-class">.String</span>()))
+			return
+		}
+	}
+	<span class="hljs-comment">//successfuly validated config!</span>
+	r<span class="hljs-selector-class">.Reply</span>(true, nil)
+	<span class="hljs-comment">//tunnel per ssh connection</span>
+	tunnel := tunnel<span class="hljs-selector-class">.New</span>(tunnel.Config{
+		Logger:    l,
+		Inbound:   s<span class="hljs-selector-class">.config</span><span class="hljs-selector-class">.Reverse</span>,
+		Outbound:  true, <span class="hljs-comment">//server always accepts outbound</span>
+		Socks:     s<span class="hljs-selector-class">.config</span><span class="hljs-selector-class">.Socks5</span>,
+		KeepAlive: s<span class="hljs-selector-class">.config</span><span class="hljs-selector-class">.KeepAlive</span>,
+	})
+	<span class="hljs-comment">//bind</span>
+	eg, ctx := errgroup<span class="hljs-selector-class">.WithContext</span>(req<span class="hljs-selector-class">.Context</span>())
+	eg<span class="hljs-selector-class">.Go</span>(<span class="hljs-built_in">func</span>() error {
+		<span class="hljs-comment">//connected, handover ssh connection for tunnel to use, and block</span>
+		return tunnel<span class="hljs-selector-class">.BindSSH</span>(ctx, sshConn, reqs, chans)
+	})
+	eg<span class="hljs-selector-class">.Go</span>(<span class="hljs-built_in">func</span>() error {
+		<span class="hljs-comment">//connected, setup reversed-remotes?</span>
+		serverInbound := c<span class="hljs-selector-class">.Remotes</span><span class="hljs-selector-class">.Reversed</span>(true)
+		<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(serverInbound) == <span class="hljs-number">0</span> {
+			return nil
+		}
+		<span class="hljs-comment">//block</span>
+		return tunnel<span class="hljs-selector-class">.BindRemotes</span>(ctx, serverInbound)
+	})
+	err = eg<span class="hljs-selector-class">.Wait</span>()
+	<span class="hljs-keyword">if</span> err != nil &amp;&amp; !strings<span class="hljs-selector-class">.HasSuffix</span>(err<span class="hljs-selector-class">.Error</span>(), <span class="hljs-string">&quot;EOF&quot;</span>) {
+		l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Closed connection (%s)&quot;</span>, err)
+	} <span class="hljs-keyword">else</span> {
+		l<span class="hljs-selector-class">.Debugf</span>(<span class="hljs-string">&quot;Closed connection&quot;</span>)
+	}
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:46:08 AM PDT</p>
+<p>This is a Go function that handles a WebSocket connection on the server side. The function takes an HTTP response writer and an HTTP request as arguments. </p>
+<p>The function begins by incrementing a session counter using the atomic <code>AddInt32</code> function, which safely increments an integer even in a concurrent context. It then forks a new logger for the session.</p>
+<p>The HTTP connection is then upgraded to a WebSocket connection using the <code>Upgrade</code> function from the <code>upgrader</code> object. If this fails, it logs the error and returns.</p>
+<p>Next, it wraps the WebSocket connection in a new <code>WebSocketConn</code> object and performs an SSH handshake on the resulting <code>net.Conn</code> object. If this fails, it logs the error and returns.</p>
+<p>After the SSH handshake, the function retrieves the user from the session map and performs a handshake with the chisel server. It waits for a request from the client with a timeout, and if a request is not received within the timeout, it closes the SSH connection and returns.</p>
+<p>The function then decodes the client&#39;s configuration and validates it. If the client&#39;s version differs from the server&#39;s, it logs this information. It then validates the client&#39;s requested remotes. If a user is provided, it checks if the user has access to the desired remotes. If the client requests a reverse tunnel but reverse tunnels are not allowed on the server, it logs this and returns an error. If the client requests a reverse tunnel but the server cannot listen on the requested address, it logs this and returns an error.</p>
+<p>If the configuration is successfully validated, the function replies to the client&#39;s request and sets up a new tunnel for the SSH connection. It then binds the tunnel to the SSH connection and any reversed remotes.</p>
+<p>Finally, the function waits for all goroutines in the error group to finish. If an error occurs and it&#39;s not an EOF error, it logs the error and the connection is closed.</p>
+<p>The algorithm used in this function is a typical server-side WebSocket handling algorithm, with additional steps to handle SSH handshaking and tunneling. This function is specific to the chisel project, a fast TCP/UDP tunnel over HTTP, and might not be applicable to other projects.</p>
+<p>For more information on WebSockets in Go, you can refer to this link: <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers">https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers</a></p>
+<p>For more information on SSH in Go, you can refer to this link: <a href="https://pkg.go.dev/golang.org/x/crypto/ssh">https://pkg.go.dev/golang.org/x/crypto/ssh</a></p>
+<p>For more information on the chisel project, you can refer to this link: <a href="https://github.com/jpillora/chisel">https://github.com/jpillora/chisel</a></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:48:48 AM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style External fill:#FFA500, stroke:#000000, stroke-width:2px;
+style Error fill:#B22222, stroke:#000000, stroke-width:2px;
+style Default fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+
+Start-->Upgrade;
+Upgrade-->HandleUpgrade;
+HandleUpgrade-->NewWebSocketConn;
+NewWebSocketConn-->Handshake;
+Handshake-->NewServerConn;
+NewServerConn-->PullUsers;
+PullUsers-->VerifyConfiguration;
+VerifyConfiguration-->WaitForRequest;
+WaitForRequest-->Failed;
+WaitForRequest-->DecodeConfig;
+DecodeConfig-->PrintVersions;
+PrintVersions-->ValidateRemotes;
+ValidateRemotes-->BindSSH;
+BindSSH-->BindRemotes;
+BindRemotes-->ClosedConnection;
+
+Upgrade-->ErrorUpgrade;
+ErrorUpgrade-->ClosedConnection;
+
+Upgrade-->ExternalUpgrade;
+ExternalUpgrade-->ClosedConnection;
+
+Upgrade-->DefaultUpgrade;
+DefaultUpgrade-->ClosedConnection;
+
+HandleUpgrade-->ErrorHandleUpgrade;
+ErrorHandleUpgrade-->ClosedConnection;
+
+HandleUpgrade-->ExternalHandleUpgrade;
+ExternalHandleUpgrade-->ClosedConnection;
+
+HandleUpgrade-->DefaultHandleUpgrade;
+DefaultHandleUpgrade-->ClosedConnection;
+
+NewWebSocketConn-->ErrorNewWebSocketConn;
+ErrorNewWebSocketConn-->ClosedConnection;
+
+NewWebSocketConn-->ExternalNewWebSocketConn;
+ExternalNewWebSocketConn-->ClosedConnection;
+
+NewWebSocketConn-->DefaultNewWebSocketConn;
+DefaultNewWebSocketConn-->ClosedConnection;
+
+Handshake-->ErrorHandshake;
+ErrorHandshake-->ClosedConnection;
+
+Handshake-->ExternalHandshake;
+ExternalHandshake-->ClosedConnection;
+
+Handshake-->DefaultHandshake;
+DefaultHandshake-->ClosedConnection;
+
+NewServerConn-->ErrorNewServerConn;
+ErrorNewServerConn-->ClosedConnection;
+
+NewServerConn-->ExternalNewServerConn;
+ExternalNewServerConn-->ClosedConnection;
+
+NewServerConn-->DefaultNewServerConn;
+DefaultNewServerConn-->ClosedConnection;
+
+PullUsers-->ErrorPullUsers;
+ErrorPullUsers-->ClosedConnection;
+
+PullUsers-->ExternalPullUsers;
+ExternalPullUsers-->ClosedConnection;
+
+PullUsers-->DefaultPullUsers;
+DefaultPullUsers-->ClosedConnection;
+
+VerifyConfiguration-->ErrorVerifyConfiguration;
+ErrorVerifyConfiguration-->ClosedConnection;
+
+VerifyConfiguration-->ExternalVerifyConfiguration;
+ExternalVerifyConfiguration-->ClosedConnection;
+
+VerifyConfiguration-->DefaultVerifyConfiguration;
+DefaultVerifyConfiguration-->ClosedConnection;
+
+WaitForRequest-->ErrorWaitForRequest;
+ErrorWaitForRequest-->ClosedConnection;
+
+WaitForRequest-->ExternalWaitForRequest;
+ExternalWaitForRequest-->ClosedConnection;
+
+WaitForRequest-->DefaultWaitForRequest;
+DefaultWaitForRequest-->ClosedConnection;
+
+Failed-->ClosedConnection;
+
+DecodeConfig-->ErrorDecodeConfig;
+ErrorDecodeConfig-->ClosedConnection;
+
+DecodeConfig-->ExternalDecodeConfig;
+ExternalDecodeConfig-->ClosedConnection;
+
+DecodeConfig-->DefaultDecodeConfig;
+DefaultDecodeConfig-->ClosedConnection;
+
+PrintVersions-->ErrorPrintVersions;
+ErrorPrintVersions-->ClosedConnection;
+
+PrintVersions-->ExternalPrintVersions;
+ExternalPrintVersions-->ClosedConnection;
+
+PrintVersions-->DefaultPrintVersions;
+DefaultPrintVersions-->ClosedConnection;
+
+ValidateRemotes-->ErrorValidateRemotes;
+ErrorValidateRemotes-->ClosedConnection;
+
+ValidateRemotes-->ExternalValidateRemotes;
+ExternalValidateRemotes-->ClosedConnection;
+
+ValidateRemotes-->DefaultValidateRemotes;
+DefaultValidateRemotes-->ClosedConnection;
+
+BindSSH-->ErrorBindSSH;
+ErrorBindSSH-->ClosedConnection;
+
+BindSSH-->ExternalBindSSH;
+ExternalBindSSH-->ClosedConnection;
+
+BindSSH-->DefaultBindSSH;
+DefaultBindSSH-->ClosedConnection;
+
+BindRemotes-->ErrorBindRemotes;
+ErrorBindRemotes-->ClosedConnection;
+
+BindRemotes-->ExternalBindRemotes;
+ExternalBindRemotes-->ClosedConnection;
+
+BindRemotes-->DefaultBindRemotes;
+DefaultBindRemotes-->ClosedConnection;
+
+ClosedConnection-->End;
+
+style Upgrade fill:#228B22, stroke:#000000, stroke-width:2px;
+style HandleUpgrade fill:#228B22, stroke:#000000, stroke-width:2px;
+style NewWebSocketConn fill:#228B22, stroke:#000000, stroke-width:2px;
+style Handshake fill:#228B22, stroke:#000000, stroke-width:2px;
+style NewServerConn fill:#228B22, stroke:#000000, stroke-width:2px;
+style PullUsers fill:#228B22, stroke:#000000, stroke-width:2px;
+style VerifyConfiguration fill:#228B22, stroke:#000000, stroke-width:2px;
+style WaitForRequest fill:#228B22, stroke:#000000, stroke-width:2px;
+style Failed fill:#B22222, stroke:#000000, stroke-width:2px;
+style DecodeConfig fill:#228B22, stroke:#000000, stroke-width:2px;
+style PrintVersions fill:#228B22, stroke:#000000, stroke-width:2px;
+style ValidateRemotes fill:#228B22, stroke:#000000, stroke-width:2px;
+style BindSSH fill:#228B22, stroke:#000000, stroke-width:2px;
+style BindRemotes fill:#228B22, stroke:#000000, stroke-width:2px;
+style ClosedConnection fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExternalUpgrade fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalHandleUpgrade fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalNewWebSocketConn fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalHandshake fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalNewServerConn fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalPullUsers fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalVerifyConfiguration fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalWaitForRequest fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalDecodeConfig fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalPrintVersions fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalValidateRemotes fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalBindSSH fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ExternalBindRemotes fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ErrorUpgrade fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorHandleUpgrade fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorNewWebSocketConn fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorHandshake fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorNewServerConn fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorPullUsers fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorVerifyConfiguration fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorWaitForRequest fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorDecodeConfig fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorPrintVersions fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorValidateRemotes fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorBindSSH fill:#B22222, stroke:#000000, stroke-width:2px;
+style ErrorBindRemotes fill:#B22222, stroke:#000000, stroke-width:2px;
+style DefaultUpgrade fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultHandleUpgrade fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultNewWebSocketConn fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultHandshake fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultNewServerConn fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultPullUsers fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultVerifyConfiguration fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultWaitForRequest fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultDecodeConfig fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultPrintVersions fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultValidateRemotes fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultBindSSH fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultBindRemotes fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;
+style DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;
+style DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;
+style DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;
+style DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width:2px;
+style DefaultClosedConnection fill:#FFFFFF, stroke:#000000, stroke-width:2px;
+style ExternalClosedConnection fill:#FFA500, stroke:#000000, stroke-width:2px;
+style ErrorClosedConnection fill:#B22222, stroke:#000000, stroke-width</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:50:39 AM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 100</p>
+<p><strong>Bug Type</strong>: Insecure Direct Object References (IDOR)</p>
+<p><strong>Description</strong>: The session ID is directly used to fetch the user from the session map. If session IDs are predictable or can be brute-forced, this could lead to unauthorized access.</p>
+<p><strong>Solution</strong>: Use secure and unpredictable session IDs. Consider using a secure random number generator for session ID creation. Also, validate the session ID before using it. More info: <a href="https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control">https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control</a></p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 102</p>
+<p><strong>Bug Type</strong>: Insecure Error Handling</p>
+<p><strong>Description</strong>: The application panics if it cannot find the user in the session map. This could lead to Denial of Service (DoS) if an attacker can trigger this condition frequently and crash the application.</p>
+<p><strong>Solution</strong>: Instead of panicking, handle the error gracefully. Log the error and return a generic error message to the user. More info: <a href="https://owasp.org/www-community/Improper_Error_Handling">https://owasp.org/www-community/Improper_Error_Handling</a></p>
+</li>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 117</p>
+<p><strong>Bug Type</strong>: Sensitive Data Exposure</p>
+<p><strong>Description</strong>: The client and server versions are logged if they do not match. This could expose sensitive information about the software and potentially aid an attacker in exploiting version-specific vulnerabilities.</p>
+<p><strong>Solution</strong>: Avoid logging sensitive information. If it&#39;s necessary to compare versions, do so without logging the exact versions or consider logging only in a secure and controlled environment. More info: <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure</a></p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 132</p>
+<p><strong>Bug Type</strong>: Insecure Direct Object References (IDOR)</p>
+<p><strong>Description</strong>: The application allows direct reference to objects (in this case, reverse tunnels) based on user input. If the user input is not properly validated, this can lead to unauthorized access to internal objects.</p>
+<p><strong>Solution</strong>: Always validate user input before using it to reference internal objects. Consider using access control checks or indirect references. More info: <a href="https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control">https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:52:59 AM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 97</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: Atomic operations are generally more expensive than normal operations. The atomic operation here is used to generate session ids, which may not be necessary.</p>
+<p><strong>Solution</strong>: Consider using a simpler method for generating session ids if thread safety is not a concern. If it is, consider using sync.Mutex for locking instead of atomic operations.</p>
+</li>
+<li><p><strong>Severity</strong>: 3/10</p>
+<p><strong>Line Number</strong>: 99</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The &#39;Fork&#39; operation may be expensive, especially if it involves creating a new goroutine.</p>
+<p><strong>Solution</strong>: If &#39;Fork&#39; creates a new goroutine, consider using a worker pool to limit the number of goroutines that can be created. This can prevent excessive CPU usage.</p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 117</p>
+<p><strong>Bug Type</strong>: Memory</p>
+<p><strong>Description</strong>: The use of a map for storing sessions can lead to high memory usage if the number of sessions is large.</p>
+<p><strong>Solution</strong>: Consider using a more memory-efficient data structure, such as a hash table with linked lists for collision resolution. Additionally, consider implementing a session timeout to remove inactive sessions.</p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 126</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The use of a select statement with a timeout can lead to high CPU usage if the timeout is frequently reached.</p>
+<p><strong>Solution</strong>: Consider using a different method for handling timeouts, such as a context with a deadline.</p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 165</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The use of an error group and context for handling errors can lead to high CPU usage, especially if errors are frequent.</p>
+<p><strong>Solution</strong>: Consider using a simpler method for error handling, such as returning errors directly. If concurrent error handling is necessary, consider using a worker pool to limit the number of goroutines.</p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 177</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The use of strings.HasSuffix for error checking can be inefficient, especially if the error message is long.</p>
+<p><strong>Solution</strong>: Consider using error types for error checking instead of string comparison. This can improve performance and make the code more robust.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Thursday, September 7, 2023 at 3:55:25 AM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 96</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The code is using an atomic operation to increment a session counter. This can be a violation of GDPR as it might be considered as processing personal data without explicit consent if the session ID is used to track users.</p>
+<p><strong>Solution</strong>: Ensure that the session IDs are not used to track users without their explicit consent. If needed, implement a mechanism to obtain user consent before tracking their sessions.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 101</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: The code is upgrading an HTTP connection to a WebSocket connection without explicit checks for secure (HTTPS) connection. This can lead to transmission of data over an insecure connection, a violation of the HIPAA Security Rule.</p>
+<p><strong>Solution</strong>: Ensure that all connections are secure by using HTTPS for all connections or by implementing other appropriate security measures.</p>
+</li>
+<li><p><strong>Severity</strong>: 10/10</p>
+<p><strong>Line Number</strong>: 108</p>
+<p><strong>Bug Type</strong>: PCI DSS</p>
+<p><strong>Description</strong>: The code is performing an SSH handshake without validating the client&#39;s identity, which could allow unauthorized access to sensitive data, a violation of PCI DSS Requirement 8.</p>
+<p><strong>Solution</strong>: Implement client validation during the SSH handshake to ensure that only authorized clients can access the server.</p>
+</li>
+<li><p><strong>Severity</strong>: 9/10</p>
+<p><strong>Line Number</strong>: 115</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The code is pulling user data from the session map without explicit user consent, which could be a violation of GDPR.</p>
+<p><strong>Solution</strong>: Implement a mechanism to obtain explicit user consent before accessing their data.</p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 148</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: The code is creating a new tunnel without validating the destination, which could potentially lead to unauthorized access to or disclosure of protected health information (PHI), a violation of the HIPAA Security Rule.</p>
+<p><strong>Solution</strong>: Implement destination validation to ensure that PHI is only transmitted to authorized entities.</p>
+</li>
+</ol>
+</div'></div>
+</body>
+</html>

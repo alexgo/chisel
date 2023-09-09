@@ -1,5 +1,79 @@
 {
-  "cells": [],
+  "cells": [
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysis"
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "29f30d65-797f-4a8a-a2f1-a06c8e78e5c5",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Security Report\n\nLast Updated: Thursday, September 7, 2023 at 12:11:24 AM PDT\n\n\nExecutive Report:\n\n1. **Architectural Impact**: The analysis of this file has not revealed any severe issues.\n2. **Risk Analysis**: The analysis of this file has not revealed any severe issues.\n3. **Potential Customer Impact**: Based on the analysis, there are no severe issues that could potentially impact customers.\n4. **Performance Issues**: Our analysis did not identify any explicit performance issues in the file.\n5. **Risk Assessment**: Based on the current analysis of this file, no severe issues have been found. However, this doesn't guarantee that the file is risk-free.\n\nHighlights:\n\n- No severe issues were identified in the current analysis of this file.\n",
+      "kind": 1,
+      "metadata": {
+        "id": "29f30d65-797f-4a8a-a2f1-a06c8e78e5c5",
+        "outputType": "bugAnalysis",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "performance"
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "995d53db-c1ed-4f4f-a4ff-0660f447c91a",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Performance Report\n\nLast Updated: Thursday, September 7, 2023 at 12:12:33 AM PDT\n\n\nExecutive Report:\n\n1. **Architectural Impact**: The analysis of this file has not revealed any severe issues.\n2. **Risk Analysis**: The analysis of this file has not revealed any severe issues.\n3. **Potential Customer Impact**: Based on the analysis, there are no severe issues that could potentially impact customers.\n4. **Performance Issues**: Our analysis did not identify any explicit performance issues in the file.\n5. **Risk Assessment**: Based on the current analysis of this file, no severe issues have been found. However, this doesn't guarantee that the file is risk-free.\n\nHighlights:\n\n- No severe issues were identified in the current analysis of this file.\n",
+      "kind": 1,
+      "metadata": {
+        "id": "995d53db-c1ed-4f4f-a4ff-0660f447c91a",
+        "outputType": "performance",
+        "summaryType": "quick"
+      }
+    },
+    {
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": ""
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCode",
+            "details": []
+          }
+        }
+      ],
+      "languageId": "markdown",
+      "id": "82bd7c2a-3f04-4382-b0d6-b8bca136d995",
+      "value": "\n\n---\n\n### Boost Architectural Quick Summary Compliance Report\n\nLast Updated: Thursday, September 7, 2023 at 12:13:49 AM PDT\n\nExecutive Level Report:\n\n1. **Architectural Impact**: The software project is a command-line tool written in Go, designed for secure tunneling of network connections. The architecture is sound and follows best practices for Go programming. However, there is a potential GDPR compliance issue in the file `share/cos/signal.go` that logs potentially sensitive information. This could have an impact on the overall architecture if changes are needed to ensure GDPR compliance.\n\n2. **Risk Analysis**: The risk associated with this project is primarily related to data compliance. The GDPR issue identified could potentially lead to legal and financial risks if not addressed. However, it's important to note that this issue was found in only one file out of the entire project, indicating a relatively low risk level.\n\n3. **Potential Customer Impact**: Customers who are concerned about data privacy might be affected by the GDPR issue. If the logged information is considered personal data under GDPR, customers in the EU could potentially be affected. However, the impact is likely to be minimal as the issue is confined to a single file and the function in question logs system statistics, not user-specific data.\n\n4. **Overall Issues**: The overall health of the project is good, with only one file having a detected issue. This represents a small percentage of the total project files, indicating that the project is generally well-maintained and follows good coding practices.\n\nRisk Assessment:\n\n- **Health of the Project Source**: The project source appears to be in good health, with issues detected in only one file. This suggests that the majority of the project files are well-written and adhere to best practices.\n- **Percentage of Files with Issues**: Given that only one file has been identified with an issue, the percentage of files with issues is relatively low. This indicates a low risk level for the project overall.\n\nHighlights:\n\n1. The project is a command-line tool written in Go, following best practices for Go programming.\n2. A potential GDPR compliance issue was identified in the file `share/cos/signal.go`, which could have legal and financial implications.\n3. The potential customer impact is likely to be minimal, as the issue is confined to a single file and the function logs system statistics, not user-specific data.\n4. The overall health of the project is good, with issues detected in only one file, indicating that the project is generally well-maintained.\n5. The risk level for the project is relatively low, given the small percentage of files with issues.",
+      "kind": 1,
+      "metadata": {
+        "id": "82bd7c2a-3f04-4382-b0d6-b8bca136d995",
+        "outputType": "complianceCode",
+        "summaryType": "quick"
+      }
+    }
+  ],
   "metadata": {
     "defaultDir": ".boost",
     "sourceFile": "./share/cos/signal.go"

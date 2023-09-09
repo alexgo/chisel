@@ -1,0 +1,794 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"; mermaid.initialize({ startOnLoad: true });</script>
+    <style>
+        @page {
+            margin: 2cm;
+            size: letter;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.0;
+            overflow-x: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        /* Use this class for analysis sections */
+        .analysis-section {
+            padding-top: 16px;
+            margin-top: 24px;
+            font-size: 12px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .new-page-section {
+            page-break-before: always;
+        }
+
+        .analysis-section h1, .analysis-section h2 {
+            color: #444;
+        }
+
+        .analysis-section p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Polyverse Boost Source Analysis Details: ./share/cio/pipe.go</h1>
+    <p>Date Generated: Wednesday, September 6, 2023 at 9:28:58 PM PDT</p>
+    <div class="><hr>
+<h3 id="boost-architectural-quick-summary-security-report">Boost Architectural Quick Summary Security Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:20:58 PM PDT</p>
+<h2 id="executive-report-software-project-analysis">Executive Report: Software Project Analysis</h2>
+<p>Based on the analysis of the software project, the following key points have been identified:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The project follows a client-server architecture and uses secure communication for tunneling. However, there is a potential architectural issue in the file <code>share/cio/pipe.go</code> where the error returned by <code>io.Copy()</code> is ignored. This could lead to unexpected behavior and potential security issues if the error is related to a failure in data transmission or a network error.</p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The risk associated with the identified issue is moderate. While the issue is not critical, it could potentially lead to unexpected behavior and security issues. The risk is further mitigated by the fact that the issue was found in only one file out of the entire project.</p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: If the identified issue is not addressed, it could potentially impact the reliability and security of the software, which could in turn impact customer trust and satisfaction. However, given that the issue was found in only one file, the overall customer impact is likely to be low.</p>
+</li>
+<li><p><strong>Overall Health of the Project</strong>: The overall health of the project appears to be good. The issue was found in only one file, indicating that the majority of the project files are free of detected issues. This suggests that the project is generally well-structured and follows good coding practices.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: Based on the analysis, the overall risk of the project is low. The majority of the project files are free of detected issues, and the issue that was found is of moderate severity. This suggests that the project is generally well-structured and follows good coding practices.</p>
+</li>
+</ol>
+<p>In conclusion, while there is a potential issue in the project that could impact its reliability and security, the overall health of the project appears to be good. The project follows a client-server architecture and uses secure communication for tunneling, which are in line with the architectural guidelines for this development project. The risk associated with the identified issue is moderate and the potential customer impact is likely to be low.</p>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-performance-report">Boost Architectural Quick Summary Performance Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:21:43 PM PDT</p>
+<h2 id="executive-report">Executive Report</h2>
+<h3 id="architectural-impact-and-risk-analysis">Architectural Impact and Risk Analysis</h3>
+<ol>
+<li><p><strong>CPU-Intensive Code in Critical File:</strong> The file <code>share/cio/pipe.go</code> has been flagged for CPU-intensive code. This file appears to be a critical part of the software, potentially handling data transfer. The current implementation uses a naive approach to copying data, which could lead to performance issues, especially for large data sets. This could impact the overall performance of the software and may lead to customer dissatisfaction due to slow response times or high CPU usage.</p>
+</li>
+<li><p><strong>Memory Usage Concerns:</strong> The same file, <code>share/cio/pipe.go</code>, also has a warning related to memory usage. This could potentially lead to memory leaks or inefficient memory usage, which could impact the stability of the software and could cause crashes or slow performance.</p>
+</li>
+<li><p><strong>Overall Project Health:</strong> Based on the analysis, only one file out of the entire project has been flagged with issues. This suggests that the majority of the project is well-structured and adheres to good coding practices. However, the issues in the <code>share/cio/pipe.go</code> file are of high severity and should be addressed promptly to ensure the overall health of the project.</p>
+</li>
+<li><p><strong>Potential Customer Impact:</strong> The issues identified could lead to performance problems, which could impact the user experience. In the worst-case scenario, this could lead to software crashes or slow response times, which could lead to customer dissatisfaction and potential loss of customers.</p>
+</li>
+<li><p><strong>Risk Assessment:</strong> The risk associated with the identified issues is high due to the potential impact on the software&#39;s performance and stability. However, the risk is mitigated by the fact that the issues are localized to a single file, which should make them easier to address.</p>
+</li>
+</ol>
+<h3 id="recommendations">Recommendations</h3>
+<ul>
+<li><p><strong>Refactor <code>share/cio/pipe.go</code> File:</strong> Consider refactoring the <code>share/cio/pipe.go</code> file to address the CPU and memory usage issues. This could involve using a buffer to temporarily hold data while copying, which could reduce the CPU load and improve performance.</p>
+</li>
+<li><p><strong>Performance Testing:</strong> Conduct thorough performance testing to identify any potential bottlenecks or performance issues. This will help ensure that the software can handle large data sets and high loads without compromising performance or stability.</p>
+</li>
+<li><p><strong>Code Review:</strong> Conduct a code review to ensure that the rest of the project adheres to good coding practices and does not contain any hidden issues. This will help ensure the overall health and stability of the project.</p>
+</li>
+<li><p><strong>Customer Feedback:</strong> Monitor customer feedback closely to identify any potential issues or areas of dissatisfaction. This will help ensure that the software meets customer needs and expectations.</p>
+</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-compliance-report">Boost Architectural Quick Summary Compliance Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:22:23 PM PDT</p>
+<p>Executive Level Report:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The software project, Chisel, is a command-line tool that uses a client-server architecture and secure communication for tunneling. The project is written in Go and supports TLS encryption. However, the analysis of the source code reveals that there are potential issues with data compliance, specifically with GDPR, PCI DSS, and HIPAA. These issues are found in the file <code>share/cio/pipe.go</code>. The lack of data anonymization or pseudonymization and secure data transmission could potentially impact the overall architecture of the project, as these are key requirements for data compliance.</p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The risk associated with the project is moderate. The issues identified are of &#39;Warning&#39; severity, indicating that they are not critical but should be addressed to ensure compliance with data protection regulations. The risk is further compounded by the fact that these issues are found in a single file, <code>share/cio/pipe.go</code>, which could potentially be a critical part of the project. </p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: Customers who are concerned about data privacy and security might be hesitant to use the software due to the identified issues. Non-compliance with GDPR, PCI DSS, and HIPAA could potentially lead to legal implications and loss of customer trust.</p>
+</li>
+<li><p><strong>Overall Issues</strong>: The overall health of the project source is fair. Only one file has been analyzed, and it has issues related to data compliance. However, these issues are of &#39;Warning&#39; severity and can be addressed with proper data anonymization or pseudonymization and secure data transmission techniques.</p>
+</li>
+<li><p><strong>Risk Assessment</strong>: Based on the analysis, 100% of the project files have issues of &#39;Warning&#39; severity. This indicates a need for improvement in the project&#39;s data handling and transmission techniques to ensure compliance with data protection regulations.</p>
+</li>
+</ol>
+<p>In conclusion, while the project follows good architectural practices such as client-server architecture and secure communication for tunneling, there are areas of improvement in terms of data compliance. Addressing these issues will not only ensure compliance with data protection regulations but also enhance customer trust and satisfaction.</p>
+</div><p></p>
+    <h1>Detailed Analysis</h1><div>
+                    <h2>./share/cio/pipe.go :</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code><span class="hljs-keyword">package</span> cio
+
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">&quot;io&quot;</span>
+	<span class="hljs-string">&quot;log&quot;</span>
+	<span class="hljs-string">&quot;sync&quot;</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Pipe</span><span class="hljs-params">(src io.ReadWriteCloser, dst io.ReadWriteCloser)</span></span> (<span class="hljs-type">int64</span>, <span class="hljs-type">int64</span>) {
+	<span class="hljs-keyword">var</span> sent, received <span class="hljs-type">int64</span>
+	<span class="hljs-keyword">var</span> wg sync.WaitGroup
+	<span class="hljs-keyword">var</span> o sync.Once
+	<span class="hljs-built_in">close</span> := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> {
+		src.Close()
+		dst.Close()
+	}
+	wg.Add(<span class="hljs-number">2</span>)
+	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> {
+		received, _ = io.Copy(src, dst)
+		o.Do(<span class="hljs-built_in">close</span>)
+		wg.Done()
+	}()
+	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> {
+		sent, _ = io.Copy(dst, src)
+		o.Do(<span class="hljs-built_in">close</span>)
+		wg.Done()
+	}()
+	wg.Wait()
+	<span class="hljs-keyword">return</span> sent, received
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:21:35 PM PDT</p>
+<p>The provided code is written in Go language and is a part of a package named <code>cio</code>. It imports three packages - <code>io</code>, <code>log</code>, and <code>sync</code>. The <code>io</code> package provides basic interfaces to I/O primitives, <code>log</code> package is used for logging, and <code>sync</code> package provides basic synchronization primitives such as mutual exclusion locks.</p>
+<p>The main function in the code is <code>Pipe</code>, which takes two parameters <code>src</code> and <code>dst</code>, both of type <code>io.ReadWriteCloser</code>. This interface in Go is a combination of <code>io.Reader</code>, <code>io.Writer</code>, and <code>io.Closer</code>. So, both <code>src</code> and <code>dst</code> can read, write, and close.</p>
+<p>The function <code>Pipe</code> is designed to create a bi-directional data transfer pipe between <code>src</code> and <code>dst</code>, copying data from <code>src</code> to <code>dst</code> and vice versa concurrently. The function returns the number of bytes sent and received.</p>
+<p>Here is the step-by-step explanation of the <code>Pipe</code> function:</p>
+<ol>
+<li><p>It declares two <code>int64</code> variables <code>sent</code> and <code>received</code> to keep track of the number of bytes sent and received.</p>
+</li>
+<li><p>It declares a <code>sync.WaitGroup</code> variable <code>wg</code>. The <code>WaitGroup</code> type is used to wait for a collection of goroutines to finish their execution. The main goroutine calls <code>Add</code> to set the number of goroutines to wait for, which is 2 in this case.</p>
+</li>
+<li><p>It declares a <code>sync.Once</code> variable <code>o</code>. The <code>Once</code> type is used to perform exactly one action, in this case, the <code>close</code> function which closes both <code>src</code> and <code>dst</code>.</p>
+</li>
+<li><p>It launches two goroutines that copy data from <code>src</code> to <code>dst</code> and from <code>dst</code> to <code>src</code> respectively using <code>io.Copy</code>. The <code>io.Copy</code> function reads from the source and writes to the destination until either EOF is reached on the source or an error occurs. It returns the number of bytes copied and the first error encountered while copying, if any. The error is ignored in this case.</p>
+</li>
+<li><p>After each copy operation, it calls <code>o.Do(close)</code>, which ensures that the <code>close</code> function is executed only once even though it is called from two different goroutines.</p>
+</li>
+<li><p>It then calls <code>wg.Done()</code> to indicate that this goroutine has finished its execution.</p>
+</li>
+<li><p>It waits for both goroutines to finish their execution using <code>wg.Wait()</code>.</p>
+</li>
+<li><p>Finally, it returns the number of bytes sent and received.</p>
+</li>
+</ol>
+<p>The algorithm used in this code is a simple read-write algorithm with synchronization for concurrent execution.</p>
+<p>To learn more about the Go&#39;s <code>io</code> package, <code>sync</code> package, and goroutines, you can refer to the following resources:</p>
+<ul>
+<li><a href="https://gobyexample.com/goroutines">Go by Example: Goroutines</a></li>
+<li><a href="https://gobyexample.com/waitgroups">Go by Example: WaitGroups</a></li>
+<li><a href="https://golang.org/pkg/io/">Package io</a></li>
+<li><a href="https://golang.org/pkg/sync/">Package sync</a></li>
+</ul>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:24:36 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->ExampleProcess;
+Start-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess;
+ExampleProcess-->ExampleProcess</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:25:17 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 14</p>
+<p><strong>Bug Type</strong>: Insecure Error Handling</p>
+<p><strong>Description</strong>: The error returned by io.Copy() is ignored. This can lead to unexpected behavior and potential security issues if the error is related to a failure in data transmission or a network error.</p>
+<p><strong>Solution</strong>: It is recommended to handle the error returned by io.Copy(). This could be as simple as logging the error or as complex as implementing retry logic. Refer to <a href="https://golang.org/pkg/io/#Copy">https://golang.org/pkg/io/#Copy</a> for more information.</p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 20</p>
+<p><strong>Bug Type</strong>: Insecure Error Handling</p>
+<p><strong>Description</strong>: The error returned by io.Copy() is ignored. This can lead to unexpected behavior and potential security issues if the error is related to a failure in data transmission or a network error.</p>
+<p><strong>Solution</strong>: It is recommended to handle the error returned by io.Copy(). This could be as simple as logging the error or as complex as implementing retry logic. Refer to <a href="https://golang.org/pkg/io/#Copy">https://golang.org/pkg/io/#Copy</a> for more information.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:26:45 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 10</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: This code uses a naive approach to copying data from one source to another, which can be CPU-intensive for large data sets.</p>
+<p><strong>Solution</strong>: Consider using a buffer to temporarily hold data while copying. This can reduce the CPU load and improve performance. See <a href="https://golang.org/pkg/io/#CopyBuffer">https://golang.org/pkg/io/#CopyBuffer</a> for more information.</p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 10</p>
+<p><strong>Bug Type</strong>: Memory</p>
+<p><strong>Description</strong>: The io.Copy function can potentially consume a lot of memory when copying large data sets, as it reads data into memory before writing it out.</p>
+<p><strong>Solution</strong>: Consider using a buffered reader and writer to limit the amount of data read into memory at once. See <a href="https://golang.org/pkg/bufio/">https://golang.org/pkg/bufio/</a> for more information.</p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 17</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The use of sync.WaitGroup and goroutines for managing concurrency can be CPU-intensive, especially for large data sets.</p>
+<p><strong>Solution</strong>: Consider using a more efficient concurrency model, such as channels, which can provide better control over the number of concurrent operations. See <a href="https://golang.org/doc/effective_go#concurrency">https://golang.org/doc/effective_go#concurrency</a> for more information.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:28:15 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The code does not implement any form of data anonymization or pseudonymization, which is a requirement under GDPR. This can lead to non-compliance with the GDPR.</p>
+<p><strong>Solution</strong>: Consider implementing data anonymization or pseudonymization techniques when handling personal data. This can be achieved by using encryption or tokenization methods. This will ensure that the data is not directly identifiable, reducing the risk of data breaches and ensuring compliance with GDPR.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: PCI DSS</p>
+<p><strong>Description</strong>: The code does not implement any form of encryption or secure data transmission, which is a requirement under PCI DSS. This can lead to non-compliance with the PCI DSS.</p>
+<p><strong>Solution</strong>: Consider implementing encryption or secure data transmission techniques when handling sensitive data. This can be achieved by using encryption algorithms or secure communication protocols. This will ensure that the data is securely transmitted, reducing the risk of data breaches and ensuring compliance with PCI DSS.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 1</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: The code does not implement any form of secure data storage or access controls, which is a requirement under HIPAA. This can lead to non-compliance with the HIPAA.</p>
+<p><strong>Solution</strong>: Consider implementing secure data storage or access controls when handling sensitive health information. This can be achieved by using encryption algorithms or access control mechanisms. This will ensure that the data is securely stored and only accessible to authorized individuals, reducing the risk of data breaches and ensuring compliance with HIPAA.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/cio/pipe.go line 31:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-keyword">const</span> vis = <span class="hljs-literal">false</span>
+
+<span class="hljs-keyword">type</span> pipeVisPrinter <span class="hljs-keyword">struct</span> {
+	name <span class="hljs-type">string</span>
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:22:06 PM PDT</p>
+<p>The code provided is written in Go language. It is a small piece of a larger program and provides only a minimal context. However, I can still explain the basic functionality.</p>
+<p>The first line <code>const vis = false</code> declares a constant named <code>vis</code> and assigns it a boolean value of <code>false</code>. In Go, a <code>const</code> keyword is used to declare a constant value which cannot be modified later in the code. </p>
+<p>The next lines define a new type called <code>pipeVisPrinter</code>. This type is a struct which has one field, <code>name</code> of type <code>string</code>. A <code>struct</code> in Go is a collection of fields, and is analogous to a class in object-oriented programming languages, but without any methods or behaviors attached to it. </p>
+<p>This <code>pipeVisPrinter</code> struct might be used elsewhere in the program to create objects that have a <code>name</code> property, but without the rest of the program, it&#39;s impossible to say exactly how it is used. </p>
+<p>There are no specific algorithms used in this code snippet. It&#39;s more about data structure definition.</p>
+<p>As for architectural guidelines, this code snippet doesn&#39;t provide enough information to determine if it follows or conflicts with any specific architectural guidelines. However, it does follow general good practices in Go programming such as clear naming conventions and the use of constants for values that don&#39;t change.</p>
+<p>For more information on constants and structs in Go, you can refer to the official Go documentation:</p>
+<ul>
+<li>Constants: <a href="https://golang.org/ref/spec#Constants">https://golang.org/ref/spec#Constants</a></li>
+<li>Structs: <a href="https://golang.org/ref/spec#Struct_types">https://golang.org/ref/spec#Struct_types</a></li>
+</ul>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:24:40 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style pipeVisPrinter fill:#228B22, stroke:#000000, stroke-width:4px;
+
+Start-->pipeVisPrinter;</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:25:22 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:26:48 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:28:19 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'></div><div class="new-page-section">
+                    <h2>./share/cio/pipe.go line 37:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p pipeVisPrinter)</span></span> Write(b []<span class="hljs-type">byte</span>) (<span class="hljs-type">int</span>, <span class="hljs-type">error</span>) {
+	log.Printf(<span class="hljs-string">&quot;&gt;&gt;&gt; %s: %x&quot;</span>, p.name, b)
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(b), <span class="hljs-literal">nil</span>
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:22:40 PM PDT</p>
+<p>This is a simple function written in Go language. It&#39;s part of a type called <code>pipeVisPrinter</code>. </p>
+<p>The function <code>Write</code> takes an argument <code>b []byte</code>, which is a slice of bytes. This function is implementing the <code>io.Writer</code> interface which requires a <code>Write</code> method that takes a byte slice and returns an integer and an error. The <code>io.Writer</code> interface is a common interface for all operations that write bytes.</p>
+<p>The function does two things:</p>
+<ol>
+<li><p>It logs a formatted string that includes the name of the <code>pipeVisPrinter</code> and the byte slice in hexadecimal. The <code>%x</code> in the format string is a placeholder for hexadecimal numbers.</p>
+</li>
+<li><p>It returns the length of the byte slice and <code>nil</code> for the error. This means that the function is acknowledging that it has &quot;written&quot; the entire byte slice and that no error has occurred. This is a bit of a dummy implementation, because it doesn&#39;t actually write the bytes to any underlying data stream. It simply logs the bytes and pretends to have written them.</p>
+</li>
+</ol>
+<p>This function might be used for debugging or logging purposes, to visually inspect the bytes being written through this <code>pipeVisPrinter</code>.</p>
+<p>As for the architectural guidelines, since there are no additional special architectural guidelines or constraints provided for this software project, we can say that this function does not conflict with any. It&#39;s a simple, stateless function that doesn&#39;t interact with any external systems or resources, so it&#39;s unlikely to cause any architectural issues.</p>
+<p>For more information on <code>io.Writer</code> interface, you can refer to the official Go documentation: <a href="https://golang.org/pkg/io/#Writer">https://golang.org/pkg/io/#Writer</a></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:24:45 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+
+Start-->ExampleProcess;</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:25:25 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:26:53 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:28:54 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 74</p>
+<p><strong>Bug Type</strong>: GDPR</p>
+<p><strong>Description</strong>: The function logs the output of the pipeVisPrinter which could potentially contain sensitive user data. This could lead to a violation of GDPR as it does not comply with the principles of data minimization and purpose limitation.</p>
+<p><strong>Solution</strong>: To fix this issue, remove the logging of sensitive data or apply anonymization techniques before logging. Also, ensure the logs are stored securely and are only accessible to authorized personnel.</p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 74</p>
+<p><strong>Bug Type</strong>: PCI DSS</p>
+<p><strong>Description</strong>: If the logged data contains cardholder data, this would be a violation of PCI DSS requirements. Storing sensitive authentication data after authorization is prohibited under PCI DSS Requirement 3.2.</p>
+<p><strong>Solution</strong>: Ensure that no cardholder data is logged. If logging is necessary for debugging or other purposes, make sure that sensitive data is masked or tokenized.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 74</p>
+<p><strong>Bug Type</strong>: HIPAA</p>
+<p><strong>Description</strong>: If the logged data includes Protected Health Information (PHI), this could be a violation of HIPAA. HIPAA requires that PHI be protected with appropriate safeguards to ensure its confidentiality, integrity, and availability.</p>
+<p><strong>Solution</strong>: Ensure that no PHI is logged. If logging is necessary for debugging or other purposes, make sure that sensitive data is de-identified in accordance with HIPAA Safe Harbor method.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/cio/pipe.go line 42:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+func pipe<span class="hljs-constructor">Vis(<span class="hljs-params">name</span> <span class="hljs-params">string</span>, <span class="hljs-params">r</span> <span class="hljs-params">io</span>.Reader)</span> io.Reader {
+	<span class="hljs-keyword">if</span> vis {
+		return io.<span class="hljs-constructor">TeeReader(<span class="hljs-params">r</span>, <span class="hljs-params">pipeVisPrinter</span>{<span class="hljs-params">name</span>})</span>
+	}
+	return r
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:23:15 PM PDT</p>
+<p>This is a function in Go programming language. The function is named <code>pipeVis</code> and it takes two parameters. The first parameter <code>name</code> is of type <code>string</code>. The second parameter <code>r</code> is of type <code>io.Reader</code>, which is an interface that represents the read end of a stream of data.</p>
+<p>The function <code>pipeVis</code> returns a value of type <code>io.Reader</code>. </p>
+<p>The function first checks if the global variable <code>vis</code> is <code>true</code>. If <code>vis</code> is <code>true</code>, it returns an <code>io.TeeReader</code>. The <code>io.TeeReader</code> function in Go takes two arguments, a reader <code>r</code> and a writer, and returns a reader that writes to the writer what it reads from the reader <code>r</code>. In this case, <code>pipeVisPrinter{name}</code> is the writer. </p>
+<p>So, if <code>vis</code> is <code>true</code>, every time a read is made from the returned <code>io.Reader</code>, the read data is also written to <code>pipeVisPrinter{name}</code>. </p>
+<p>If <code>vis</code> is not <code>true</code>, the function simply returns the original reader <code>r</code>.</p>
+<p>The <code>pipeVis</code> function can be used to monitor the data that is being read from a stream, without modifying the original reader.</p>
+<p>The function does not seem to use any specific algorithm, but it uses the <code>io.TeeReader</code> function from Go&#39;s <code>io</code> package. The <code>io.TeeReader</code> function is a simple and efficient way to monitor or log the data that is being read from a stream.</p>
+<p>For more information about <code>io.TeeReader</code>, you can refer to the official Go documentation: <a href="https://pkg.go.dev/io#TeeReader">https://pkg.go.dev/io#TeeReader</a></p>
+<p>In terms of the architectural guidelines provided, this function appears to be consistent with common Go idioms and practices. It is simple, efficient, and makes effective use of Go&#39;s standard library. It does not seem to conflict with any architectural guidelines or constraints.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:24:51 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->A;
+A-->B;
+A-->C;
+B-->D;
+C-->D;
+D-->End;
+</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:25:29 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:26:56 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:28:58 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'></div>
+</body>
+</html>

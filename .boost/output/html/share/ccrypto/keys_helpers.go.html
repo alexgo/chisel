@@ -1,0 +1,889 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"; mermaid.initialize({ startOnLoad: true });</script>
+    <style>
+        @page {
+            margin: 2cm;
+            size: letter;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.0;
+            overflow-x: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        /* Use this class for analysis sections */
+        .analysis-section {
+            padding-top: 16px;
+            margin-top: 24px;
+            font-size: 12px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .new-page-section {
+            page-break-before: always;
+        }
+
+        .analysis-section h1, .analysis-section h2 {
+            color: #444;
+        }
+
+        .analysis-section p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Polyverse Boost Source Analysis Details: ./share/ccrypto/keys_helpers.go</h1>
+    <p>Date Generated: Wednesday, September 6, 2023 at 10:10:50 PM PDT</p>
+    <div class="><hr>
+<h3 id="boost-architectural-quick-summary-security-report">Boost Architectural Quick Summary Security Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:46:13 PM PDT</p>
+<h2 id="executive-report">Executive Report</h2>
+<h3 id="architectural-impact-and-risk-analysis">Architectural Impact and Risk Analysis</h3>
+<ol>
+<li><p><strong>Insecure Randomness</strong>: The file <code>share/ccrypto/keys_helpers.go</code> has been flagged for insecure randomness. This issue is of high severity and could potentially compromise the security of the application. The function &#39;seed2PrivateKey&#39; uses a deterministic random number generator when a seed is provided. This can lead to predictable keys and compromise the security of the application. This is a significant architectural risk as it could potentially expose sensitive data to unauthorized users.</p>
+</li>
+<li><p><strong>Sensitive Data Exposure</strong>: The same file <code>share/ccrypto/keys_helpers.go</code> has also been flagged for sensitive data exposure. This is a high-risk issue that could lead to unauthorized access to sensitive data. This could have a significant impact on the overall security architecture of the project.</p>
+</li>
+<li><p><strong>Improper Error Handling</strong>: The file <code>share/ccrypto/keys_helpers.go</code> has been flagged for improper error handling. This is a medium-risk issue that could lead to unexpected behavior or crashes in the application. This could impact the reliability and robustness of the software architecture.</p>
+</li>
+<li><p><strong>Use of a Broken or Risky Cryptographic Algorithm</strong>: The file <code>share/ccrypto/keys_helpers.go</code> has been flagged for using a broken or risky cryptographic algorithm. This is a high-risk issue that could compromise the security of the application. This could have a significant impact on the overall security architecture of the project.</p>
+</li>
+</ol>
+<h3 id="potential-customer-impact">Potential Customer Impact</h3>
+<p>The issues identified could potentially impact customers in several ways. Insecure randomness and the use of a broken or risky cryptographic algorithm could compromise the security of the application, potentially leading to unauthorized access to sensitive data. Improper error handling could lead to unexpected behavior or crashes in the application, impacting the user experience.</p>
+<h3 id="overall-health-of-the-project-source">Overall Health of the Project Source</h3>
+<p>Based on the analysis, only one file <code>share/ccrypto/keys_helpers.go</code> has been flagged with issues. This suggests that the majority of the project files are free of detected issues. However, the severity of the issues identified in this file is high, indicating a significant risk to the overall health of the project.</p>
+<h3 id="highlights-of-the-analysis">Highlights of the Analysis</h3>
+<ul>
+<li>The file <code>share/ccrypto/keys_helpers.go</code> has been flagged with multiple high-severity issues, indicating a significant risk to the overall security and reliability of the application.</li>
+<li>The issues identified include insecure randomness, sensitive data exposure, improper error handling, and the use of a broken or risky cryptographic algorithm.</li>
+<li>These issues could potentially lead to unauthorized access to sensitive data and unexpected behavior or crashes in the application.</li>
+<li>Despite the majority of the project files being free of detected issues, the severity of the issues identified in this file suggests a significant risk to the overall health of the project.</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-performance-report">Boost Architectural Quick Summary Performance Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:46:56 PM PDT</p>
+<p>Executive Level Report:</p>
+<ol>
+<li><p><strong>Architectural Impact</strong>: The software project appears to be well-structured and follows the client-server architecture. However, there is a potential performance issue in the <code>share/ccrypto/keys_helpers.go</code> file. The <code>GenerateKeyGo119</code> function can be computationally expensive, leading to high CPU usage. This could impact the overall performance of the software, especially in scenarios where this function is called frequently.</p>
+</li>
+<li><p><strong>Risk Analysis</strong>: The risk associated with this project is moderate. The computationally expensive function could lead to performance degradation, which could impact user experience. However, this risk can be mitigated by optimizing the function or implementing a caching mechanism for frequently used keys.</p>
+</li>
+<li><p><strong>Potential Customer Impact</strong>: If left unaddressed, the performance issue could lead to slower response times, especially under heavy load. This could potentially impact customer satisfaction and the overall user experience.</p>
+</li>
+<li><p><strong>Overall Issues</strong>: The project has a few issues related to CPU and memory usage. However, these issues are not widespread and are concentrated in the <code>share/ccrypto/keys_helpers.go</code> file. This suggests that the overall health of the project is good, but there is room for optimization in specific areas.</p>
+</li>
+</ol>
+<p>Risk Assessment:</p>
+<ul>
+<li><p><strong>Health of the Project Source</strong>: Based on the analysis, only one file (<code>share/ccrypto/keys_helpers.go</code>) has been identified with issues. This suggests that the majority of the project files are free from severe issues, indicating a healthy project source.</p>
+</li>
+<li><p><strong>Percentage of Project Files with Issues</strong>: Given that only one file has been identified with issues out of the total project files, the percentage of files with issues is relatively low. This further supports the assessment of a healthy project source.</p>
+</li>
+</ul>
+<p>Highlights:</p>
+<ul>
+<li>The project follows the client-server architecture and uses secure communication for tunneling, aligning with the architectural guidelines.</li>
+<li>A potential performance issue has been identified in the <code>share/ccrypto/keys_helpers.go</code> file, which could impact the overall performance of the software.</li>
+<li>The risk associated with this project is moderate, primarily due to the potential performance issue.</li>
+<li>The overall health of the project source is good, with a low percentage of files having issues.</li>
+<li>The potential customer impact could be significant if the performance issue is not addressed, potentially leading to slower response times and impacting user experience.</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-compliance-report">Boost Architectural Quick Summary Compliance Report</h3>
+<p>Last Updated: Friday, September 8, 2023 at 5:47:23 PM PDT</p>
+<p>Executive Level Report:</p>
+<ol>
+<li><p><strong>Architectural Impact:</strong> The software project appears to be well-structured, following a client-server architecture and using secure communication for tunneling. However, the file <code>share/ccrypto/keys_helpers.go</code> has been flagged for potential issues related to data encryption and privacy. These issues could have a significant impact on the overall architecture if not addressed, as they could compromise the security of the system.</p>
+</li>
+<li><p><strong>Risk Analysis:</strong> The identified issues in the <code>share/ccrypto/keys_helpers.go</code> file pose a risk to the security of the system. The lack of encryption on the seed in the Seed2PEM function and the unclear handling of the seed in the seed2ChiselKey function could potentially lead to data breaches, unauthorized access, and non-compliance with data protection regulations. This risk is heightened by the fact that this file is the only one in the project, meaning that any issues in this file could have a significant impact on the overall project.</p>
+</li>
+<li><p><strong>Potential Customer Impact:</strong> If the identified issues are not addressed, customers could be at risk of having their data exposed or intercepted. This could lead to a loss of trust in the product and potential legal repercussions if the product is found to be non-compliant with data protection regulations.</p>
+</li>
+<li><p><strong>Overall Issues:</strong> The overall health of the project source appears to be at risk due to the issues identified in the <code>share/ccrypto/keys_helpers.go</code> file. As this is the only file in the project, 100% of the project files have been flagged for issues of varying severity.</p>
+</li>
+</ol>
+<p>Risk Assessment:</p>
+<ul>
+<li><strong>Overall Health:</strong> The overall health of the project source is concerning, as the only file in the project has been flagged for issues. This suggests that there may be systemic issues with the project&#39;s approach to data encryption and privacy.</li>
+<li><strong>Severity of Issues:</strong> The issues identified in the <code>share/ccrypto/keys_helpers.go</code> file are of high severity, potentially compromising the security of the system and putting customer data at risk.</li>
+<li><strong>Percentage of Files with Issues:</strong> 100% of the project files have been flagged for issues, indicating a high risk level for the project.</li>
+</ul>
+<p>Highlights:</p>
+<ul>
+<li>The project follows a client-server architecture and uses secure communication for tunneling.</li>
+<li>The only file in the project, <code>share/ccrypto/keys_helpers.go</code>, has been flagged for issues related to data encryption and privacy.</li>
+<li>The lack of encryption on the seed in the Seed2PEM function and the unclear handling of the seed in the seed2ChiselKey function pose a risk to the security of the system.</li>
+<li>100% of the project files have been flagged for issues, indicating a high risk level for the project.</li>
+<li>If the identified issues are not addressed, customers could be at risk of having their data exposed or intercepted.</li>
+</ul>
+</div><p></p>
+    <h1>Detailed Analysis</h1><div>
+                    <h2>./share/ccrypto/keys_helpers.go :</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code><span class="hljs-keyword">package</span> ccrypto
+
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">&quot;crypto/ecdsa&quot;</span>
+	<span class="hljs-string">&quot;crypto/elliptic&quot;</span>
+	<span class="hljs-string">&quot;crypto/rand&quot;</span>
+	<span class="hljs-string">&quot;crypto/x509&quot;</span>
+	<span class="hljs-string">&quot;encoding/base64&quot;</span>
+	<span class="hljs-string">&quot;encoding/pem&quot;</span>
+	<span class="hljs-string">&quot;strings&quot;</span>
+)
+
+<span class="hljs-keyword">const</span> ChiselKeyPrefix = <span class="hljs-string">&quot;ck-&quot;</span>
+
+<span class="hljs-comment">//  Relations between entities:</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   .............&gt; PEM &lt;...........</span>
+<span class="hljs-comment">//   .               ^             .</span>
+<span class="hljs-comment">//   .               |             .</span>
+<span class="hljs-comment">//   .               |             .</span>
+<span class="hljs-comment">// Seed -------&gt; PrivateKey        .</span>
+<span class="hljs-comment">//   .               ^             .</span>
+<span class="hljs-comment">//   .               |             .</span>
+<span class="hljs-comment">//   .               V             .</span>
+<span class="hljs-comment">//   ..........&gt; ChiselKey .........</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Seed2PEM</span><span class="hljs-params">(seed <span class="hljs-type">string</span>)</span></span> ([]<span class="hljs-type">byte</span>, <span class="hljs-type">error</span>) {
+	privateKey, err := seed2PrivateKey(seed)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err
+	}
+
+	<span class="hljs-keyword">return</span> privateKey2PEM(privateKey)
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:57:22 PM PDT</p>
+<p>The provided code is written in Go and is part of a package named <code>ccrypto</code>. This package seems to be handling cryptographic operations, specifically dealing with keys.</p>
+<p>The import statement at the top includes several libraries that are used for cryptographic operations such as <code>ecdsa</code>, <code>elliptic</code>, <code>rand</code>, <code>x509</code> for generating and handling cryptographic keys, and <code>base64</code>, <code>pem</code> for encoding and decoding data.</p>
+<p>The constant <code>ChiselKeyPrefix</code> is declared with the value &quot;ck-&quot;. This might be used as a prefix to identify keys generated or managed by this package.</p>
+<p>The comment block provides a diagram showing the relationships between different entities in the code. It indicates that a seed is used to generate a private key, which can then be converted into two different formats: PEM and ChiselKey.</p>
+<p>The function <code>Seed2PEM</code> is defined to convert a seed into a PEM format. It does this in two steps:</p>
+<ol>
+<li><p>The seed is converted into a private key using the <code>seed2PrivateKey</code> function. This function is not shown in the provided code, but it likely generates an ECDSA private key using the provided seed. The ECDSA (Elliptic Curve Digital Signature Algorithm) is a cryptographic algorithm used for digital signatures which is based on elliptic curve cryptography.</p>
+</li>
+<li><p>The private key is then converted into PEM format using the <code>privateKey2PEM</code> function. Again, this function is not shown in the provided code, but it likely uses the <code>x509</code> and <code>pem</code> packages to encode the private key into PEM format. PEM (Privacy Enhanced Mail) is a type of encoding for storing and sending cryptographic keys, certificates, and other data.</p>
+</li>
+</ol>
+<p>If any error occurs during these steps, the function will return the error.</p>
+<p>For more details on the cryptographic libraries used in this code, you can refer to the official Go documentation:</p>
+<ul>
+<li><a href="https://golang.org/pkg/crypto/ecdsa/">crypto/ecdsa</a></li>
+<li><a href="https://golang.org/pkg/crypto/elliptic/">crypto/elliptic</a></li>
+<li><a href="https://golang.org/pkg/crypto/rand/">crypto/rand</a></li>
+<li><a href="https://golang.org/pkg/crypto/x509/">crypto/x509</a></li>
+<li><a href="https://golang.org/pkg/encoding/base64/">encoding/base64</a></li>
+<li><a href="https://golang.org/pkg/encoding/pem/">encoding/pem</a></li>
+</ul>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:01:47 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->Seed2PEM;</pre>
+</code></pre><p>The control flow graph for the given code is a simple linear flow from the start of the function <code>Seed2PEM</code> to the end. There are no external library calls or error paths in this code.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:03:33 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:06:36 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 28</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The function Seed2PEM calls two other functions sequentially: seed2PrivateKey and privateKey2PEM. If these functions are computationally expensive, this could lead to high CPU usage.</p>
+<p><strong>Solution</strong>: Consider optimizing the functions seed2PrivateKey and privateKey2PEM if they are computationally expensive. If possible, use concurrent programming techniques to run these functions in parallel.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:08:48 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 19</p>
+<p><strong>Bug Type</strong>: Data Encryption and Privacy</p>
+<p><strong>Description</strong>: The Seed2PEM function converts a seed to a PrivateKey and then to a PEM, but it does not implement any form of encryption on the seed. This could potentially expose sensitive data if the seed is intercepted or logged.</p>
+<p><strong>Solution</strong>: Encrypt the seed using a secure encryption algorithm before converting it to a PrivateKey. This will ensure that the seed cannot be intercepted or logged in its raw form. Also, consider using secure random number generation for seed creation.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/ccrypto/keys_helpers.go line 35:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">seed2ChiselKey</span><span class="hljs-params">(seed <span class="hljs-type">string</span>)</span></span> ([]<span class="hljs-type">byte</span>, <span class="hljs-type">error</span>) {
+	privateKey, err := seed2PrivateKey(seed)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err
+	}
+
+	<span class="hljs-keyword">return</span> privateKey2ChiselKey(privateKey)
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:58:07 PM PDT</p>
+<p>The provided code snippet is a function written in Go language. The function <code>seed2ChiselKey</code> takes a seed string as input and returns a byte slice and an error. The function is part of a larger codebase, most likely a cryptographic or security-related one, given the context of the function names.</p>
+<p>Here&#39;s a detailed breakdown of the function:</p>
+<ol>
+<li><p><code>func seed2ChiselKey(seed string) ([]byte, error) {</code>: This line defines a function named <code>seed2ChiselKey</code>. The function takes one parameter named <code>seed</code> of type string. It returns two values: a slice of bytes (<code>[]byte</code>) and an error.</p>
+</li>
+<li><p><code>privateKey, err := seed2PrivateKey(seed)</code>: This line calls another function named <code>seed2PrivateKey</code>, passing the <code>seed</code> string as an argument. The <code>seed2PrivateKey</code> function is expected to return two values: a private key and an error. The <code>:=</code> operator is a shorthand for declaring and initializing a variable in Go.</p>
+</li>
+<li><p><code>if err != nil {</code>: This line checks if the error returned by the <code>seed2PrivateKey</code> function is not nil. If the error is not nil, it means that an error occurred while generating the private key.</p>
+</li>
+<li><p><code>return nil, err</code>: If an error occurred, the function returns nil for the byte slice and the error that occurred.</p>
+</li>
+<li><p><code>return privateKey2ChiselKey(privateKey)</code>: If no error occurred, the function calls another function named <code>privateKey2ChiselKey</code>, passing the generated private key as an argument. The <code>privateKey2ChiselKey</code> function is expected to return a byte slice and an error, which are the return values of the <code>seed2ChiselKey</code> function.</p>
+</li>
+</ol>
+<p>The specific algorithms used in this function are not visible in the provided code snippet. They would be implemented in the <code>seed2PrivateKey</code> and <code>privateKey2ChiselKey</code> functions, which are not shown. However, given the context, it&#39;s safe to assume that these functions are using some form of cryptographic algorithms to generate a private key from a seed and then convert that private key to a different format.</p>
+<p>This function is consistent with the architectural guidelines mentioned. It&#39;s written in Go and seems to be part of a command-line tool or a server, which fits the project type. The function also seems to be related to secure communication, which is one of the software principles of the project.</p>
+<p>For more information on Go programming, you can refer to the official Go documentation: <a href="https://golang.org/doc/">https://golang.org/doc/</a>
+For more information on cryptography in Go, you can refer to the Go crypto package: <a href="https://golang.org/pkg/crypto/">https://golang.org/pkg/crypto/</a></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:02:24 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->A;
+A-->B;
+B-->C;
+C-->D;
+D-->E;
+E-->F;
+F-->G;
+G-->H;
+H-->I;
+I-->J;
+J-->K;
+K-->L;
+L-->M;
+M-->N;
+N-->O;
+O-->P;
+P-->Q;
+Q-->R;
+R-->S;
+S-->T;
+T-->U;
+U-->V;
+V-->W;
+W-->X;
+X-->Y;
+Y-->Z;
+Z-->End;
+
+style A fill:#B22222, stroke:#000000, stroke-width:2px;
+style B fill:#B22222, stroke:#000000, stroke-width:2px;
+style C fill:#B22222, stroke:#000000, stroke-width:2px;
+style D fill:#B22222, stroke:#000000, stroke-width:2px;
+style E fill:#B22222, stroke:#000000, stroke-width:2px;
+style F fill:#B22222, stroke:#000000, stroke-width:2px;
+style G fill:#B22222, stroke:#000000, stroke-width:2px;
+style H fill:#B22222, stroke:#000000, stroke-width:2px;
+style I fill:#B22222, stroke:#000000, stroke-width:2px;
+style J fill:#B22222, stroke:#000000, stroke-width:2px;
+style K fill:#B22222, stroke:#000000, stroke-width:2px;
+style L fill:#B22222, stroke:#000000, stroke-width:2px;
+style M fill:#B22222, stroke:#000000, stroke-width:2px;
+style N fill:#B22222, stroke:#000000, stroke-width:2px;
+style O fill:#B22222, stroke:#000000, stroke-width:2px;
+style P fill:#B22222, stroke:#000000, stroke-width:2px;
+style Q fill:#B22222, stroke:#000000, stroke-width:2px;
+style R fill:#B22222, stroke:#000000, stroke-width:2px;
+style S fill:#B22222, stroke:#000000, stroke-width:2px;
+style T fill:#B22222, stroke:#000000, stroke-width:2px;
+style U fill:#B22222, stroke:#000000, stroke-width:2px;
+style V fill:#B22222, stroke:#000000, stroke-width:2px;
+style W fill:#B22222, stroke:#000000, stroke-width:2px;
+style X fill:#B22222, stroke:#000000, stroke-width:2px;
+style Y fill:#B22222, stroke:#000000, stroke-width:2px;
+style Z fill:#B22222, stroke:#000000, stroke-width:2px;
+style End fill:#228B22, stroke:#000000, stroke-width:2px;</pre>
+</code></pre><p>The control flow graph for the given source code is as follows:</p>
+<ul>
+<li>The start node represents the beginning of the function <code>seed2ChiselKey</code>.</li>
+<li>The flow goes from the start node to node A, which represents the call to the <code>seed2PrivateKey</code> function.</li>
+<li>From node A, the flow goes to node B, which represents the error check for the <code>seed2PrivateKey</code> function. If an error occurs, the flow goes to the end node.</li>
+<li>If no error occurs, the flow goes from node B to node C, which represents the call to the <code>privateKey2ChiselKey</code> function.</li>
+<li>From node C, the flow goes to node D, which represents the error check for the <code>privateKey2ChiselKey</code> function. If an error occurs, the flow goes to the end node.</li>
+<li>If no error occurs, the flow goes from node D to node E, which represents the return statement of the <code>seed2ChiselKey</code> function.</li>
+<li>Finally, the flow goes from node E to the end node, representing the end of the function.</li>
+</ul>
+<p>The primary path through the code is the straight path from the start node to the end node, passing through nodes A, B, C, D, and E.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:03:37 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:06:40 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:09:09 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 68</p>
+<p><strong>Bug Type</strong>: Data Encryption</p>
+<p><strong>Description</strong>: The function seed2ChiselKey generates a private key from a seed and converts it to a Chisel key. However, the process of how this seed is handled and stored is not shown. If the seed is not properly secured, it can lead to potential data breaches, unauthorized access, and non-compliance with GDPR, PCI DSS, and HIPAA.</p>
+<p><strong>Solution</strong>: Ensure that the seed is securely handled and stored. It should be encrypted at rest and in transit, and should not be logged or exposed in any debugging information. Additionally, consider using a secure random number generator to generate the seed, if not already doing so. Regularly rotate and retire old seeds.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/ccrypto/keys_helpers.go line 44:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+func seed2<span class="hljs-constructor">PrivateKey(<span class="hljs-params">seed</span> <span class="hljs-params">string</span>)</span> (*ecdsa.PrivateKey, error) {
+	<span class="hljs-keyword">if</span> seed<span class="hljs-operator"> == </span><span class="hljs-string">&quot;&quot;</span> {
+		return ecdsa.<span class="hljs-constructor">GenerateKey(<span class="hljs-params">elliptic</span>.P256()</span>, rand.Reader)
+	} <span class="hljs-keyword">else</span> {
+		return <span class="hljs-constructor">GenerateKeyGo119(<span class="hljs-params">elliptic</span>.P256()</span>, <span class="hljs-constructor">NewDetermRand([]<span class="hljs-params">byte</span>(<span class="hljs-params">seed</span>)</span>))
+	}
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:58:57 PM PDT</p>
+<p>This function <code>seed2PrivateKey</code> is written in Go language and is used to generate a private key based on a given seed. It uses the Elliptic Curve Digital Signature Algorithm (ECDSA) for key generation. </p>
+<p>Here&#39;s a breakdown of the code:</p>
+<ul>
+<li>The function <code>seed2PrivateKey</code> takes a string <code>seed</code> as an argument and returns a pointer to an <code>ecdsa.PrivateKey</code> object and an error.</li>
+<li>It checks if the <code>seed</code> is an empty string. If it is, it generates a new ECDSA private key using the <code>ecdsa.GenerateKey</code> function with the P-256 elliptic curve and a random number generator <code>rand.Reader</code> as arguments. The P-256 elliptic curve is a specific type of elliptic curve that&#39;s widely used in cryptography.</li>
+<li>If the <code>seed</code> is not an empty string, it generates a new ECDSA private key using a deterministic random number generator <code>NewDetermRand</code> with the given <code>seed</code> as an argument. This allows for reproducible private keys when the same seed is used.</li>
+<li>The <code>GenerateKeyGo119</code> function is likely a custom function that generates an ECDSA private key in a similar manner to the <code>ecdsa.GenerateKey</code> function, but with a deterministic random number generator instead of a truly random one.</li>
+</ul>
+<p>The algorithm used here is the Elliptic Curve Digital Signature Algorithm (ECDSA). ECDSA is a cryptographic algorithm used for digital signatures, which are a key component in proving the authenticity and integrity of data in many systems. It&#39;s based on elliptic curve cryptography, which provides strong security with relatively small keys, making it more efficient than older methods like RSA.</p>
+<p>The deterministic random number generation used when a seed is provided is likely based on an algorithm like HMAC_DRBG or Hash_DRBG, which are specified in NIST SP 800-90A. These algorithms use a seed to generate a series of numbers that appear random and are reproducible when the same seed is used.</p>
+<p>For more information on ECDSA and elliptic curve cryptography, you might find these resources helpful:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Elliptic-curve_cryptography">Elliptic Curve Cryptography</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm">Elliptic Curve Digital Signature Algorithm</a></li>
+<li><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90Ar1.pdf">NIST SP 800-90A: Recommendation for Random Number Generation Using Deterministic Random Bit Generators</a></li>
+</ul>
+<p>As for the architectural guidelines, since there are no additional special architectural guidelines or constraints provided, it&#39;s assumed that this function adheres to general best practices for secure key generation.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:02:37 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->GenerateKey;
+Start-->GenerateKeyGo119;
+GenerateKey-->End;
+GenerateKeyGo119-->End;</pre>
+</code></pre><p>In this code, the control flow starts at the function <code>seed2PrivateKey</code>. The function checks if the <code>seed</code> parameter is empty. If it is empty, the function calls the <code>GenerateKey</code> function from the <code>ecdsa</code> package to generate a new private key using the P-256 elliptic curve and a random reader. If the <code>seed</code> parameter is not empty, the function calls the <code>GenerateKeyGo119</code> function with the same parameters, but using a deterministic random number generator seeded with the provided <code>seed</code> value.</p>
+<p>Both paths then converge and the control flow ends at the <code>End</code> node.</p>
+<p>Note: The external library function calls (<code>GenerateKey</code> and <code>GenerateKeyGo119</code>) are represented as separate flow blocks in the diagram.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:04:00 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 89</p>
+<p><strong>Bug Type</strong>: Insecure Randomness</p>
+<p><strong>Description</strong>: The function &#39;seed2PrivateKey&#39; uses a deterministic random number generator when a seed is provided. This can lead to predictable keys and compromise the security of the application.</p>
+<p><strong>Solution</strong>: Avoid using deterministic random number generators for cryptographic operations. Instead, always use a secure random number generator like &#39;crypto/rand&#39;. More information can be found here: <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration</a></p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 87</p>
+<p><strong>Bug Type</strong>: Sensitive Data Exposure</p>
+<p><strong>Description</strong>: The function &#39;seed2PrivateKey&#39; accepts a seed as a string, which can potentially expose sensitive information if not handled properly. If this seed is logged or leaked, it can lead to the exposure of private keys.</p>
+<p><strong>Solution</strong>: Ensure that sensitive data like seeds are securely handled and never logged or exposed in any way. Consider using secure methods of input for such data. More information can be found here: <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:07:00 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 88</p>
+<p><strong>Bug Type</strong>: CPU</p>
+<p><strong>Description</strong>: The GenerateKeyGo119 function can be computationally expensive, particularly when using the elliptic.P256() curve. This can lead to high CPU usage.</p>
+<p><strong>Solution</strong>: Consider using a more efficient key generation function if possible, or use a less computationally expensive curve. Alternatively, you could cache keys if the same seed is used often.</p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 86</p>
+<p><strong>Bug Type</strong>: Memory</p>
+<p><strong>Description</strong>: The function seed2PrivateKey creates a new key every time it is called, which can lead to high memory usage if it is called frequently and the keys are not properly disposed of.</p>
+<p><strong>Solution</strong>: Consider implementing a key pool or some other form of key re-use to reduce memory usage. Ensure keys are properly disposed of when no longer needed.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:09:31 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 89</p>
+<p><strong>Bug Type</strong>: Data Privacy</p>
+<p><strong>Description</strong>: The seed used to generate the private key is potentially insecure. If the seed is not securely generated or stored, it could be guessed or leaked, compromising the private key and any data it is used to secure.</p>
+<p><strong>Solution</strong>: Ensure the seed is securely generated and stored. Consider using a secure random number generator to generate the seed, and securely storing the seed in a secure vault or using secure environment variables.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 90</p>
+<p><strong>Bug Type</strong>: Data Privacy</p>
+<p><strong>Description</strong>: The private key is generated based on a deterministic random number generator. This could potentially lead to predictable private keys, compromising the security of any data the keys are used to secure.</p>
+<p><strong>Solution</strong>: Consider using a non-deterministic random number generator to generate the private key, to ensure the keys are not predictable.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/ccrypto/keys_helpers.go line 52:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">privateKey2ChiselKey</span><span class="hljs-params">(privateKey *ecdsa.PrivateKey)</span></span> ([]<span class="hljs-type">byte</span>, <span class="hljs-type">error</span>) {
+	b, err := x509.MarshalECPrivateKey(privateKey)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err
+	}
+
+	encodedPrivateKey := <span class="hljs-built_in">make</span>([]<span class="hljs-type">byte</span>, base64.RawStdEncoding.EncodedLen(<span class="hljs-built_in">len</span>(b)))
+	base64.RawStdEncoding.Encode(encodedPrivateKey, b)
+
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">append</span>([]<span class="hljs-type">byte</span>(ChiselKeyPrefix), encodedPrivateKey...), <span class="hljs-literal">nil</span>
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 9:59:34 PM PDT</p>
+<p>This code snippet is written in Go programming language. It defines a function named <code>privateKey2ChiselKey</code> that takes a pointer to an <code>ecdsa.PrivateKey</code> as input and returns a byte slice and an error.</p>
+<p><code>ecdsa.PrivateKey</code> is a structure in Go&#39;s <code>crypto/ecdsa</code> package that represents a private key of the Elliptic Curve Digital Signature Algorithm (ECDSA). ECDSA is an algorithm used for digital signatures. It&#39;s based on elliptic curve cryptography, which provides strong security with relatively small keys. More about ECDSA can be found here: <a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm">https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm</a></p>
+<p>Here is a breakdown of the function:</p>
+<ol>
+<li><p>The function starts by marshalling the <code>ecdsa.PrivateKey</code> into a byte slice using the <code>x509.MarshalECPrivateKey</code> function from Go&#39;s <code>crypto/x509</code> package. Marshalling is the process of transforming the memory representation of an object to a data format suitable for storage or transmission. If an error occurs during this process, the function returns <code>nil</code> and the error.</p>
+</li>
+<li><p>It then calculates the length of the byte slice that will hold the base64 encoded version of the marshalled private key using <code>base64.RawStdEncoding.EncodedLen(len(b))</code> and creates a byte slice of that length.</p>
+</li>
+<li><p>The private key is then encoded using base64 encoding with <code>base64.RawStdEncoding.Encode(encodedPrivateKey, b)</code>. Base64 encoding is a group of binary-to-text encoding schemes that represent binary data in an ASCII string format. More about base64 encoding can be found here: <a href="https://en.wikipedia.org/wiki/Base64">https://en.wikipedia.org/wiki/Base64</a></p>
+</li>
+<li><p>Finally, the function appends the base64 encoded private key to a byte slice that contains a prefix (<code>ChiselKeyPrefix</code>) and returns the resulting byte slice.</p>
+</li>
+</ol>
+<p>This function is probably used to prepare a private key for storage or transmission by converting it to a base64 encoded string with a specific prefix.</p>
+<p>The function follows good Go practices by returning an error when something goes wrong, and it seems to be in line with the general architectural guidelines of the software project. It uses standard Go packages for cryptographic operations and encoding, which is a good practice for security and maintainability.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:02:47 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->A;
+A-->B;
+B-->C;
+C-->D;
+D-->E;
+E-->F;
+F-->G;
+G-->H;
+H-->I;
+I-->J;
+J-->K;
+K-->L;
+L-->M;
+M-->N;
+N-->O;
+O-->P;
+P-->Q;
+Q-->R;
+R-->S;
+S-->T;
+T-->U;
+U-->V;
+V-->W;
+W-->X;
+X-->Y;
+Y-->Z;
+Z-->End;
+</pre>
+</code></pre><p>The control flow graph for the <code>privateKey2ChiselKey</code> function is a linear path from start to end, with no branching or error paths.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:04:19 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 106</p>
+<p><strong>Bug Type</strong>: Insecure Cryptographic Storage</p>
+<p><strong>Description</strong>: The function &#39;privateKey2ChiselKey&#39; is encoding the private key using base64 encoding and appending it to a prefix. Base64 encoding is not a secure method for storing sensitive data like private keys as it can be easily decoded.</p>
+<p><strong>Solution</strong>: It is recommended to use secure methods for storing sensitive data. The private key should be encrypted using strong encryption algorithms such as AES-256 before storing. Also, consider using a secure vault for storing keys. Refer to <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html</a> for more information on secure cryptographic storage.</p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:07:16 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 2/10</p>
+<p><strong>Line Number</strong>: 106</p>
+<p><strong>Bug Type</strong>: Memory</p>
+<p><strong>Description</strong>: The function uses &#39;append&#39; to concatenate two byte slices. Depending on the size of the &#39;encodedPrivateKey&#39;, this operation can be memory-intensive and lead to unnecessary allocation and copying of data.</p>
+<p><strong>Solution</strong>: Consider using a buffer to combine the two byte slices. This can be more efficient in terms of memory usage. Here is a link to a related discussion on StackOverflow: <a href="https://stackoverflow.com/questions/1760757/how-to-efficiently-concatenate-strings-in-go">https://stackoverflow.com/questions/1760757/how-to-efficiently-concatenate-strings-in-go</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:09:51 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 105</p>
+<p><strong>Bug Type</strong>: Data Privacy</p>
+<p><strong>Description</strong>: The function &#39;privateKey2ChiselKey&#39; is handling sensitive cryptographic private key data. It is encoding this key into base64 format, which is not a secure way to store or transmit this type of sensitive data. This could potentially be exploited by an attacker to gain unauthorized access to data, which is a violation of GDPR, PCI DSS, and HIPAA.</p>
+<p><strong>Solution</strong>: The private key should be encrypted using a secure encryption algorithm before being stored or transmitted, and it should be securely erased from memory after use. Additionally, all operations involving private keys should be conducted in a secure, isolated environment to prevent leakage of the key.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/ccrypto/keys_helpers.go line 64:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">privateKey2PEM</span><span class="hljs-params">(privateKey *ecdsa.PrivateKey)</span></span> ([]<span class="hljs-type">byte</span>, <span class="hljs-type">error</span>) {
+	b, err := x509.MarshalECPrivateKey(privateKey)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err
+	}
+
+	<span class="hljs-keyword">return</span> pem.EncodeToMemory(&amp;pem.Block{Type: <span class="hljs-string">&quot;EC PRIVATE KEY&quot;</span>, Bytes: b}), <span class="hljs-literal">nil</span>
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:00:21 PM PDT</p>
+<p>The provided code snippet is a function written in Go programming language. It&#39;s named <code>privateKey2PEM</code> and it takes an <code>ecdsa.PrivateKey</code> as an argument and returns a byte slice and an error.</p>
+<p>Here is an explanation of the code:</p>
+<ol>
+<li><p>The function <code>privateKey2PEM</code> accepts a pointer to an <code>ecdsa.PrivateKey</code> object as an argument. <code>ecdsa</code> stands for Elliptic Curve Digital Signature Algorithm, which is a cryptographic algorithm used for digital signatures. The <code>PrivateKey</code> struct in <code>ecdsa</code> represents a private key.</p>
+</li>
+<li><p>Inside the function, the <code>x509.MarshalECPrivateKey</code> function is called with the <code>privateKey</code> argument. This function converts the <code>ecdsa.PrivateKey</code> into ASN.1 DER encoded form. ASN.1 DER (Distinguished Encoding Rules) is a method for encoding data structures that are described in ASN.1 (Abstract Syntax Notation One), a standard interface description language for defining data structures that can be serialized and deserialized in a cross-platform way. If the marshaling process fails, the function returns <code>nil</code> and the error.</p>
+</li>
+<li><p>If the marshaling is successful, the function <code>pem.EncodeToMemory</code> is called with a pointer to a <code>pem.Block</code> struct. The <code>pem.Block</code> struct represents the contents of a PEM (Privacy-enhanced Electronic Mail) formatted block, which is a base64 encoded DER certificate. The <code>pem.Block</code> struct is initialized with the <code>Type</code> set to &quot;EC PRIVATE KEY&quot; and <code>Bytes</code> set to the marshaled private key.</p>
+</li>
+<li><p>The <code>pem.EncodeToMemory</code> function returns the PEM encoded private key as a byte slice, which is the return value of the <code>privateKey2PEM</code> function.</p>
+</li>
+</ol>
+<p>The code does not seem to have any conflicts with the provided architectural guidelines. It is a utility function that converts an ECDSA private key to a PEM-encoded private key, which is a common operation in software that deals with cryptographic keys.</p>
+<p>For more information on the topics discussed, you can visit the following links:</p>
+<ul>
+<li>ECDSA: <a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm">https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm</a></li>
+<li>ASN.1: <a href="https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One">https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One</a></li>
+<li>PEM: <a href="https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail">https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail</a></li>
+<li>Go&#39;s <code>encoding/pem</code> package: <a href="https://golang.org/pkg/encoding/pem/">https://golang.org/pkg/encoding/pem/</a></li>
+<li>Go&#39;s <code>crypto/x509</code> package: <a href="https://golang.org/pkg/crypto/x509/">https://golang.org/pkg/crypto/x509/</a></li>
+</ul>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:02:53 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->ExampleProcess;
+ExampleProcess-->End;</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:04:23 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:07:20 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:10:05 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 126</p>
+<p><strong>Bug Type</strong>: Data Encryption</p>
+<p><strong>Description</strong>: This function is converting a private key to PEM format. If this private key is not properly protected, it could lead to unauthorized access to encrypted data.</p>
+<p><strong>Solution</strong>: Ensure that the private key is stored securely and is only accessible to authorized individuals. Use secure storage solutions like HSMs (Hardware Security Modules), and always encrypt sensitive data at rest. Also, consider using secure key management practices such as key rotation and audit trails for key access.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/ccrypto/keys_helpers.go line 73:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">chiselKey2PrivateKey</span><span class="hljs-params">(chiselKey []<span class="hljs-type">byte</span>)</span></span> (*ecdsa.PrivateKey, <span class="hljs-type">error</span>) {
+	rawChiselKey := chiselKey[<span class="hljs-built_in">len</span>(ChiselKeyPrefix):]
+
+	decodedPrivateKey := <span class="hljs-built_in">make</span>([]<span class="hljs-type">byte</span>, base64.RawStdEncoding.DecodedLen(<span class="hljs-built_in">len</span>(rawChiselKey)))
+	_, err := base64.RawStdEncoding.Decode(decodedPrivateKey, rawChiselKey)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err
+	}
+
+	<span class="hljs-keyword">return</span> x509.ParseECPrivateKey(decodedPrivateKey)
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:00:42 PM PDT</p>
+<p>This code snippet is written in Go and it is a function named <code>chiselKey2PrivateKey</code>. This function is responsible for converting a Chisel key into an ECDSA (Elliptic Curve Digital Signature Algorithm) private key. The function takes a byte slice <code>chiselKey</code> as an argument and returns a pointer to an <code>ecdsa.PrivateKey</code> structure and an <code>error</code>.</p>
+<p>Here&#39;s a step-by-step breakdown of the code:</p>
+<ol>
+<li><p>The function <code>chiselKey2PrivateKey</code> receives a byte array <code>chiselKey</code> as an argument.</p>
+</li>
+<li><p>The variable <code>rawChiselKey</code> is declared and assigned the value of <code>chiselKey</code> excluding the prefix defined by <code>ChiselKeyPrefix</code>. This is done using Go&#39;s slice syntax, which allows for creating a sub-slice of a slice.</p>
+</li>
+<li><p>The <code>decodedPrivateKey</code> slice is created with a length equal to the decoded length of <code>rawChiselKey</code>, calculated using <code>base64.RawStdEncoding.DecodedLen()</code>. This slice will hold the decoded private key.</p>
+</li>
+<li><p>The function <code>base64.RawStdEncoding.Decode()</code> is called to decode the base64-encoded <code>rawChiselKey</code> into the <code>decodedPrivateKey</code> slice. This function returns the number of bytes written and an error if any. If an error occurs during decoding, the function returns <code>nil</code> and the error.</p>
+</li>
+<li><p>Finally, <code>x509.ParseECPrivateKey()</code> is called with <code>decodedPrivateKey</code> as an argument to parse the ECDSA private key from the byte slice. This function returns a pointer to an <code>ecdsa.PrivateKey</code> structure and an error if any. The function <code>chiselKey2PrivateKey</code> returns these values as its result.</p>
+</li>
+</ol>
+<p>The ECDSA is a variant of the Digital Signature Algorithm (DSA) which uses elliptic curve cryptography. You can learn more about ECDSA here: <a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm">https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm</a></p>
+<p>The <code>base64.RawStdEncoding</code> is a global instance of base64 encoding with standard Raw encoding, which omits padding characters. You can learn more about Base64 encoding here: <a href="https://en.wikipedia.org/wiki/Base64">https://en.wikipedia.org/wiki/Base64</a></p>
+<p>The <code>x509.ParseECPrivateKey()</code> function is used to parse an ECDSA private key in DER format. DER stands for Distinguished Encoding Rules, which is a subset of BER for encoding data structures using ASN.1. You can learn more about it here: <a href="https://en.wikipedia.org/wiki/X.690#DER_encoding">https://en.wikipedia.org/wiki/X.690#DER_encoding</a></p>
+<p>There are no additional special architectural guidelines or constraints mentioned, thus the code seems to be in line with standard Go practices and does not appear to conflict with any architectural guidelines.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:03:07 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->DecodeKey;
+DecodeKey-->ParsePrivateKey;
+ParsePrivateKey-->End;
+DecodeKey-->ErrorPath;
+ErrorPath-->End;
+
+style DecodeKey fill:#228B22, stroke:#000000, stroke-width:4px;
+style ParsePrivateKey fill:#228B22, stroke:#000000, stroke-width:4px;
+style ErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;</pre>
+</code></pre><p>In the code, the control flow starts at the function <code>chiselKey2PrivateKey</code>. The input <code>chiselKey</code> is first processed by removing the <code>ChiselKeyPrefix</code> from it. Then, the <code>rawChiselKey</code> is decoded using base64 decoding. If the decoding is successful, the decoded private key is parsed using <code>x509.ParseECPrivateKey</code>. If any error occurs during the decoding or parsing, the control flow goes to the error path. Otherwise, the control flow reaches the end of the function.</p>
+<p>The primary path is shown in green, while the error path is shown in red.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:05:10 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 149</p>
+<p><strong>Bug Type</strong>: Insecure Direct Object References (IDOR)</p>
+<p><strong>Description</strong>: The function chiselKey2PrivateKey takes a chiselKey as input and directly uses it to create a private key without any validation. This could lead to Insecure Direct Object References (IDOR) vulnerabilities if an attacker can control the input chiselKey. An attacker could potentially use this to generate a private key of their choosing, leading to unauthorized access.</p>
+<p><strong>Solution</strong>: To mitigate this, validate the chiselKey before using it. Ensure that it is of the correct length and format. Additionally, consider using secure input validation libraries to prevent manipulation of the chiselKey. More information about IDOR can be found here: <a href="https://owasp.org/www-community/attacks/Insecure_Direct_Object_References">https://owasp.org/www-community/attacks/Insecure_Direct_Object_References</a></p>
+</li>
+<li><p><strong>Severity</strong>: 6/10</p>
+<p><strong>Line Number</strong>: 152</p>
+<p><strong>Bug Type</strong>: Improper Error Handling</p>
+<p><strong>Description</strong>: The error returned by base64.RawStdEncoding.Decode is directly returned without any additional handling or logging. This could lead to Improper Error Handling vulnerabilities, as it might not provide enough information for debugging in case of an error, and could potentially expose sensitive information about the system to an attacker.</p>
+<p><strong>Solution</strong>: To mitigate this, implement proper error handling. This includes logging the error for debugging purposes, and returning a generic error message to the user. Do not expose any sensitive information in the error message. More information about Improper Error Handling can be found here: <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration</a></p>
+</li>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 155</p>
+<p><strong>Bug Type</strong>: Use of a Broken or Risky Cryptographic Algorithm</p>
+<p><strong>Description</strong>: The function uses the x509.ParseECPrivateKey function to parse the decoded private key. Depending on the version of Go and the specific implementation of this function, it could potentially use weak or outdated cryptographic algorithms, leading to vulnerabilities.</p>
+<p><strong>Solution</strong>: To mitigate this, ensure that you are using the latest version of Go and that the implementation of the x509.ParseECPrivateKey function uses secure and up-to-date cryptographic algorithms. More information about the use of broken or risky cryptographic algorithms can be found here: <a href="https://owasp.org/www-community/vulnerabilities/Use_of_a_Broken_or_Risky_Cryptographic_Algorithm">https://owasp.org/www-community/vulnerabilities/Use_of_a_Broken_or_Risky_Cryptographic_Algorithm</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:07:32 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 3/10</p>
+<p><strong>Line Number</strong>: 151</p>
+<p><strong>Bug Type</strong>: Memory</p>
+<p><strong>Description</strong>: The decodedPrivateKey byte array is created using make() with a size equal to the decoded length of the rawChiselKey. If the rawChiselKey is large, this could lead to excessive memory usage.</p>
+<p><strong>Solution</strong>: Consider using a dynamic buffer or a buffer pool to handle the decoded private key, which could reduce memory usage. Here is a link to an article about buffer pools in Go: <a href="https://www.bwplotka.dev/2018/buffer-pools/">https://www.bwplotka.dev/2018/buffer-pools/</a></p>
+</li>
+</ol>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:10:31 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 7/10</p>
+<p><strong>Line Number</strong>: 147</p>
+<p><strong>Bug Type</strong>: Data Privacy</p>
+<p><strong>Description</strong>: The function chiselKey2PrivateKey decodes a base64 encoded private key. Private keys are considered sensitive data and should not be handled carelessly. The function does not encrypt the decoded private key, which can lead to exposure of sensitive data.</p>
+<p><strong>Solution</strong>: Consider encrypting the decoded private key using a secure encryption algorithm before using it. This will ensure that even if the key is inadvertently exposed, it will not be usable by unauthorized parties.</p>
+</li>
+<li><p><strong>Severity</strong>: 8/10</p>
+<p><strong>Line Number</strong>: 150</p>
+<p><strong>Bug Type</strong>: Data Privacy</p>
+<p><strong>Description</strong>: The function chiselKey2PrivateKey uses the x509.ParseECPrivateKey function to parse the decoded private key. This function can potentially throw an error which includes part of the private key, thus exposing sensitive data.</p>
+<p><strong>Solution</strong>: Consider implementing a custom error handling mechanism that does not expose any part of the private key in error messages. In addition, ensure that all errors are logged in a secure manner that complies with GDPR, PCI DSS, and HIPAA regulations.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/ccrypto/keys_helpers.go line 85:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">ChiselKey2PEM</span><span class="hljs-params">(chiselKey []<span class="hljs-type">byte</span>)</span></span> ([]<span class="hljs-type">byte</span>, <span class="hljs-type">error</span>) {
+	privateKey, err := chiselKey2PrivateKey(chiselKey)
+	<span class="hljs-keyword">if</span> err == <span class="hljs-literal">nil</span> {
+		<span class="hljs-keyword">return</span> privateKey2PEM(privateKey)
+	}
+
+	<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:01:19 PM PDT</p>
+<p>The provided code is a function in Go programming language. The function is named <code>ChiselKey2PEM</code> and it takes in a byte slice <code>chiselKey</code> as an argument. The function returns a byte slice and an error.</p>
+<p>The purpose of this function is to convert a Chisel key (a private key used by the Chisel tool for secure tunneling) into a PEM (Privacy-Enhanced Mail) format. PEM is a widely used format in SSL certificates and SSH. </p>
+<p>Here&#39;s what the function does:</p>
+<ol>
+<li><p>It calls the function <code>chiselKey2PrivateKey</code> with the <code>chiselKey</code> as an argument, which presumably converts the Chisel key into a private key. The function <code>chiselKey2PrivateKey</code> returns a private key and an error.</p>
+</li>
+<li><p>If there&#39;s no error (<code>err == nil</code>), it calls the function <code>privateKey2PEM</code> with the private key as an argument. This function converts the private key into PEM format and returns the PEM-formatted key and an error.</p>
+</li>
+<li><p>If there&#39;s an error in converting the Chisel key into a private key, the function <code>ChiselKey2PEM</code> returns <code>nil</code> for the PEM-formatted key and the error.</p>
+</li>
+</ol>
+<p>This function is a good example of error handling in Go. If an error occurs at any stage of the process, the function immediately returns <code>nil</code> and the error, without attempting to proceed further.</p>
+<p>The algorithms used in this function are dependent on the functions <code>chiselKey2PrivateKey</code> and <code>privateKey2PEM</code>, which are not provided in the code snippet. However, it&#39;s safe to assume that these functions use some form of key conversion algorithms.</p>
+<p>For more information on Go error handling, you can refer to this link: <a href="https://blog.golang.org/error-handling-and-go">https://blog.golang.org/error-handling-and-go</a></p>
+<p>For more information on PEM format, you can refer to this link: <a href="https://tools.ietf.org/html/rfc1421">https://tools.ietf.org/html/rfc1421</a></p>
+<p>Please note that without more context or the rest of the codebase, some assumptions had to be made in this analysis.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:03:15 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->ExampleProcess;
+Start-->ExampleErrorPath;
+ExampleProcess-->End;
+ExampleErrorPath-->End;</pre>
+</code></pre><p>In this code, there is no control flow. The function <code>ChiselKey2PEM</code> simply calls two helper functions <code>chiselKey2PrivateKey</code> and <code>privateKey2PEM</code> and returns their results.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:05:13 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:07:36 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:10:46 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 168</p>
+<p><strong>Bug Type</strong>: Data Encryption</p>
+<p><strong>Description</strong>: The function &#39;ChiselKey2PEM&#39; is converting a key into a PEM format. If the key is not properly secured during this process, it could lead to unauthorized access to sensitive data.</p>
+<p><strong>Solution</strong>: Ensure that the key is securely handled during the conversion process. This could involve encrypting the key before converting it, and securely storing the resulting PEM. Additionally, consider implementing secure key management practices.</p>
+</li>
+</ol>
+</div'></div><div class="new-page-section">
+                    <h2>./share/ccrypto/keys_helpers.go line 94:</h2>
+                    <p>Programming Language: go</p>
+                    <pre><code>
+func <span class="hljs-constructor">IsChiselKey(<span class="hljs-params">chiselKey</span> []<span class="hljs-params">byte</span>)</span> <span class="hljs-built_in">bool</span> {
+	return strings.<span class="hljs-constructor">HasPrefix(<span class="hljs-params">string</span>(<span class="hljs-params">chiselKey</span>)</span>, ChiselKeyPrefix)
+}
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:01:31 PM PDT</p>
+<p>This is a simple function written in Go language. The function is named <code>IsChiselKey</code> and it takes a single parameter: <code>chiselKey</code> which is of type <code>[]byte</code> (a slice of bytes). This function returns a boolean value.</p>
+<p>The function uses the <code>strings.HasPrefix</code> method to check if the string representation of <code>chiselKey</code> starts with a specific prefix, denoted by <code>ChiselKeyPrefix</code>. </p>
+<p>The <code>strings.HasPrefix</code> function is a built-in function in Go&#39;s <code>strings</code> package. It takes two parameters: the string to check and the prefix to look for. It returns <code>true</code> if the string starts with the specified prefix and <code>false</code> otherwise. </p>
+<p>The <code>IsChiselKey</code> function is likely used to validate that a given key (in the form of a byte slice) is a valid Chisel key, based on it having the correct prefix.</p>
+<p>The algorithm used here is straightforward:</p>
+<ol>
+<li>Convert the byte slice to a string.</li>
+<li>Check if the string starts with the <code>ChiselKeyPrefix</code>.</li>
+<li>Return the result.</li>
+</ol>
+<p>This code seems to be consistent with general programming best practices. It&#39;s simple, readable, and does not seem to conflict with any architectural guidelines as none were provided.</p>
+<p>For more information about the <code>strings.HasPrefix</code> function, you can check the official Go documentation: <a href="https://pkg.go.dev/strings#HasPrefix">https://pkg.go.dev/strings#HasPrefix</a></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:03:21 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style ExampleProcess fill:#228B22, stroke:#000000, stroke-width:4px;
+style ExampleErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+
+Start-->ExampleProcess;
+ExampleProcess-->End;
+</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:05:17 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:07:40 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 10:10:50 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'></div>
+</body>
+</html>

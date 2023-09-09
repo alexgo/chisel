@@ -1,7 +1,98 @@
 {
   "cells": [
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 1:29:26 AM PDT\n\nThe code you provided is a test function for a Go package named `chclient`. This package is probably a part of a larger project, likely the `chisel` project mentioned earlier. The function `TestCustomHeaders` is testing whether custom headers are being correctly set and sent in HTTP requests by the client.\n\nLet's break down the code:\n\n1. The code starts by importing necessary Go packages. `sync` is used for managing concurrent execution, `testing` is the Go's standard package for writing unit tests, `net/http` and `net/http/httptest` are for managing HTTP connections and testing them, `time` is for time-related functions, `crypto/elliptic` and `golang.org/x/crypto/ssh` are for cryptographic functions, and `github.com/jpillora/chisel/share/ccrypto` is a custom cryptographic package from the `chisel` project.\n\n2. The test function `TestCustomHeaders` is defined. This function will be run by Go's `testing` package when you run `go test`.\n\n3. A fake HTTP server is created using `httptest.NewServer()`. This server responds to any request by checking if the header \"Foo\" is set to \"Bar\". If not, it raises a fatal error for the test, causing the test to fail.\n\n4. The server is set to close after the function ends with `defer server.Close()`.\n\n5. The client is configured to send requests to the fake server. The client is set to send the header \"Foo\" with the value \"Bar\". The client is also set to keep connections alive for one second, and the maximum retry interval is also one second.\n\n6. A new client is created with the configuration. If there is an error in creating the client, the program will log the error and terminate.\n\n7. The client is run in a separate goroutine. This is done because the `Run()` function of the client is likely a blocking function, which means it will not return until the client is stopped.\n\n8. The function waits for the fake server to finish handling the request with `wg.Wait()`. This is done using a `sync.WaitGroup`, which is a way to wait for one or more goroutines to finish their execution.\n\n9. Finally, the client is closed with `c.Close()`.\n\nThe main algorithm used here is the HTTP protocol for client-server communication. The `Go` language's concurrency model with goroutines and channels is also utilized.\n\nFor more information about HTTP in Go, you can check the official Go documentation: https://golang.org/pkg/net/http/\n\nFor more information about testing in Go, you can check the official Go documentation: https://golang.org/pkg/testing/\n\nFor more information about concurrency in Go, you can check the official Go documentation: https://golang.org/doc/effective_go#concurrency"
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 1:31:52 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle TestCustomHeaders fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle NewClient fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle Run fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle Close fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle Fatal fill:#B22222, stroke:#000000, stroke-width:2px;\nstyle Done fill:#228B22, stroke:#000000, stroke-width:4px;\n\nStart-->TestCustomHeaders;\nTestCustomHeaders-->NewClient;\nNewClient-->Run;\nRun-->Close;\nRun-->Done;\nDone-->Close;\nTestCustomHeaders-->Fatal;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:32:43 AM PDT\n\n**No bugs found**"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:35:56 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 14\n\n   **Bug Type**: CPU\n\n   **Description**: The WaitGroup is used to wait for the server to handle the HTTP request, which can lead to unnecessary CPU idle time if the server takes a long time to respond.\n\n   **Solution**: Consider using a timeout or a context with cancellation to avoid waiting indefinitely. You can find more about this in the Go documentation: https://golang.org/pkg/context/\n\n\n2. **Severity**: 3/10\n\n   **Line Number**: 39\n\n   **Bug Type**: CPU\n\n   **Description**: The `c.Run()` function is run in a separate goroutine, but there is no error handling for this function.\n\n   **Solution**: Consider using a channel to handle any potential errors that may occur during the execution of the `c.Run()` function. This way, you can ensure that any errors are properly handled and do not lead to unexpected behavior or performance issues.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 14,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "The WaitGroup is used to wait for the server to handle the HTTP request, which can lead to unnecessary CPU idle time if the server takes a long time to respond.",
+                "solution": "Consider using a timeout or a context with cancellation to avoid waiting indefinitely. You can find more about this in the Go documentation: https://golang.org/pkg/context/"
+              },
+              {
+                "lineNumber": 39,
+                "severity": 3,
+                "bugType": "CPU",
+                "description": "The `c.Run()` function is run in a separate goroutine, but there is no error handling for this function.",
+                "solution": "Consider using a channel to handle any potential errors that may occur during the execution of the `c.Run()` function. This way, you can ensure that any errors are properly handled and do not lead to unexpected behavior or performance issues."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:38:44 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 11\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The test code uses a hardcoded 'Foo' and 'Bar' for HTTP headers. If this pattern is used in production code, it can lead to privacy and data compliance issues as sensitive data might be hardcoded and exposed in HTTP headers.\n\n   **Solution**: Avoid hardcoding sensitive data in your code. Use environment variables or secure vaults to store and retrieve sensitive data. If headers are used to transmit sensitive data, ensure they are encrypted and secure.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 31\n\n   **Bug Type**: Data Compliance\n\n   **Description**: The 'NewClient' function does not seem to have any input validation for the 'config' parameter. This could lead to potential data compliance issues as it can allow injection of malicious data.\n\n   **Solution**: Implement proper input validation for the 'config' parameter in the 'NewClient' function. Use allow-lists, regex patterns, or frameworks to ensure the input is as expected.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 11,
+                "severity": 7,
+                "bugType": "Data Compliance",
+                "description": "The test code uses a hardcoded 'Foo' and 'Bar' for HTTP headers. If this pattern is used in production code, it can lead to privacy and data compliance issues as sensitive data might be hardcoded and exposed in HTTP headers.",
+                "solution": "Avoid hardcoding sensitive data in your code. Use environment variables or secure vaults to store and retrieve sensitive data. If headers are used to transmit sensitive data, ensure they are encrypted and secure."
+              },
+              {
+                "lineNumber": 31,
+                "severity": 6,
+                "bugType": "Data Compliance",
+                "description": "The 'NewClient' function does not seem to have any input validation for the 'config' parameter. This could lead to potential data compliance issues as it can allow injection of malicious data.",
+                "solution": "Implement proper input validation for the 'config' parameter in the 'NewClient' function. Use allow-lists, regex patterns, or frameworks to ensure the input is as expected."
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "0",
       "value": "package chclient\n\nimport (\n\t\"crypto/elliptic\"\n\t\"log\"\n\t\"net/http\"\n\t\"net/http/httptest\"\n\t\"sync\"\n\t\"testing\"\n\t\"time\"\n\n\t\"github.com/jpillora/chisel/share/ccrypto\"\n\t\"golang.org/x/crypto/ssh\"\n)\n\nfunc TestCustomHeaders(t *testing.T) {\n\t//fake server\n\twg := sync.WaitGroup{}\n\twg.Add(1)\n\tserver := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {\n\t\tif req.Header.Get(\"Foo\") != \"Bar\" {\n\t\t\tt.Fatal(\"expected header Foo to be 'Bar'\")\n\t\t}\n\t\twg.Done()\n\t}))\n\tdefer server.Close()\n\t//client\n\theaders := http.Header{}\n\theaders.Set(\"Foo\", \"Bar\")\n\tconfig := Config{\n\t\tKeepAlive:        time.Second,\n\t\tMaxRetryInterval: time.Second,\n\t\tServer:           server.URL,\n\t\tRemotes:          []string{\"9000\"},\n\t\tHeaders:          headers,\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tgo c.Run()\n\t//wait for test to complete\n\twg.Wait()\n\tc.Close()\n}\n",
@@ -13,7 +104,130 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 1:30:19 AM PDT\n\nThis code is written in Go and is a unit test function named `TestFallbackLegacyFingerprint`. It tests the functionality of server verification with a legacy fingerprint.\n\nHere's a step-by-step explanation of what the code does:\n\n1. The function `TestFallbackLegacyFingerprint` is defined, which takes in a parameter `t` of type `*testing.T`. `*testing.T` is a type provided by Go's `testing` package and is used for reporting test failures and logging additional information.\n\n2. A `Config` struct is created with the `Fingerprint` field set to a predefined string. This is presumably a SHA256 fingerprint of a public key.\n\n3. A new `Client` is created using the `NewClient` function, passing the `Config` struct as a parameter. If an error occurs during the creation of the client, the test fails and the error is logged.\n\n4. A new deterministic random number generator is created using the `ccrypto.NewDetermRand` function with the seed \"test123\". \n\n5. A new private key is generated using the `ccrypto.GenerateKeyGo119` function with the elliptic curve P-256 and the previously created deterministic random number generator. If an error occurs during the generation of the private key, the test fails and the error is logged.\n\n6. A new public key is created using the `ssh.NewPublicKey` function with the public key from the previously generated private key. If an error occurs during the creation of the public key, the test fails and the error is logged.\n\n7. The server is verified using the `verifyServer` method of the `Client` struct with the previously created public key. If an error occurs during the server verification, the test fails and the error is logged.\n\nThe algorithm used here is the Elliptic Curve Digital Signature Algorithm (ECDSA) with the P-256 curve for generating the private key.\n\nFor more information on Go's `testing` package, you can visit: https://golang.org/pkg/testing/\n\nFor more information on ECDSA, you can visit: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm\n\nBased on the provided architectural guidelines, there seem to be no conflicts between the code and the guidelines. The code is well-structured, and error handling is properly done. The use of deterministic random number generator for key generation in tests is a good practice as it ensures reproducibility of the tests."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 1:32:01 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle NewClient fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle GenerateKeyGo119 fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle NewPublicKey fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle VerifyServer fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle TestError fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->NewClient;\nNewClient-->GenerateKeyGo119;\nGenerateKeyGo119-->NewPublicKey;\nNewPublicKey-->VerifyServer;\nVerifyServer-->End;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:33:15 AM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 96\n\n   **Bug Type**: Insecure Randomness\n\n   **Description**: The 'ccrypto.NewDetermRand([]byte(\"test123\"))' function is using a predictable seed for generating random numbers. This can lead to predictable cryptographic keys, which can be exploited by an attacker for various attacks such as brute force.\n\n   **Solution**: Use a strong source of randomness. In Go, you can use 'crypto/rand' package for generating cryptographically secure random numbers. Here is a link for more information: https://golang.org/pkg/crypto/rand/\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 101\n\n   **Bug Type**: Improper Certificate Validation\n\n   **Description**: The 'c.verifyServer(\"\", nil, pub)' function appears to not properly validate the server's certificate. This can lead to man-in-the-middle attacks where an attacker can impersonate the server.\n\n   **Solution**: Ensure that the server's certificate is properly validated. This includes checking the certificate's validity period, the issuer, and that it hasn't been revoked. In Go, you can use 'crypto/tls' package for secure TLS connections. Here is a link for more information: https://golang.org/pkg/crypto/tls/\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 51,
+                "severity": 8,
+                "bugType": "Insecure Randomness",
+                "description": "The 'ccrypto.NewDetermRand([]byte(\"test123\"))' function is using a predictable seed for generating random numbers. This can lead to predictable cryptographic keys, which can be exploited by an attacker for various attacks such as brute force.",
+                "solution": "Use a strong source of randomness. In Go, you can use 'crypto/rand' package for generating cryptographically secure random numbers. Here is a link for more information: https://golang.org/pkg/crypto/rand/"
+              },
+              {
+                "lineNumber": 56,
+                "severity": 7,
+                "bugType": "Improper Certificate Validation",
+                "description": "The 'c.verifyServer(\"\", nil, pub)' function appears to not properly validate the server's certificate. This can lead to man-in-the-middle attacks where an attacker can impersonate the server.",
+                "solution": "Ensure that the server's certificate is properly validated. This includes checking the certificate's validity period, the issuer, and that it hasn't been revoked. In Go, you can use 'crypto/tls' package for secure TLS connections. Here is a link for more information: https://golang.org/pkg/crypto/tls/"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:36:28 AM PDT\n\n1. **Severity**: 4/10\n\n   **Line Number**: 95\n\n   **Bug Type**: Memory\n\n   **Description**: The deterministic random number generator is seeded with a static seed, which can lead to the generation of predictable keys and thus potential memory waste.\n\n   **Solution**: Consider using a dynamic seed for the random number generator to ensure the uniqueness of the keys generated. This can help to optimize memory usage.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 97\n\n   **Bug Type**: CPU\n\n   **Description**: The elliptic curve key generation function `GenerateKeyGo119` can be computationally expensive, particularly if it is called frequently.\n\n   **Solution**: Consider using a key caching mechanism to store and reuse keys, which can help to reduce the computational load and improve performance.\n\n\n3. **Severity**: 2/10\n\n   **Line Number**: 104\n\n   **Bug Type**: Network\n\n   **Description**: The `verifyServer` function is called with an empty string as the server address, which could potentially lead to unnecessary network requests if the function attempts to resolve the address.\n\n   **Solution**: Ensure that the server address is valid before calling the `verifyServer` function to avoid unnecessary network requests.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 50,
+                "severity": 4,
+                "bugType": "Memory",
+                "description": "The deterministic random number generator is seeded with a static seed, which can lead to the generation of predictable keys and thus potential memory waste.",
+                "solution": "Consider using a dynamic seed for the random number generator to ensure the uniqueness of the keys generated. This can help to optimize memory usage."
+              },
+              {
+                "lineNumber": 52,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The elliptic curve key generation function `GenerateKeyGo119` can be computationally expensive, particularly if it is called frequently.",
+                "solution": "Consider using a key caching mechanism to store and reuse keys, which can help to reduce the computational load and improve performance."
+              },
+              {
+                "lineNumber": 59,
+                "severity": 2,
+                "bugType": "Network",
+                "description": "The `verifyServer` function is called with an empty string as the server address, which could potentially lead to unnecessary network requests if the function attempts to resolve the address.",
+                "solution": "Ensure that the server address is valid before calling the `verifyServer` function to avoid unnecessary network requests."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:39:34 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 98\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The use of a deterministic random number generator (ccrypto.NewDetermRand) with a hardcoded seed ('test123') can lead to predictable cryptographic keys, which can be exploited by attackers to compromise the security of the encrypted data.\n\n   **Solution**: Replace the deterministic random number generator with a secure random number generator. Do not use hardcoded seeds. Instead, use a source of entropy that is not predictable, such as the current time or a random value generated by a secure random number generator.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 99\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The use of elliptic.P256() may not provide the necessary level of security for sensitive data, as it uses a 256-bit key, which may not be sufficient for high-security applications. This could lead to a violation of GDPR, PCI DSS, and HIPAA compliance.\n\n   **Solution**: Consider using a stronger elliptic curve, such as Curve448 or Curve25519, which provide a higher level of security. Also, ensure that the implementation of these curves is secure and does not introduce any additional vulnerabilities.\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 108\n\n   **Bug Type**: Data Privacy\n\n   **Description**: The function c.verifyServer is called without checking the server's identity. This could potentially allow a man-in-the-middle attack, compromising the security of the data being transmitted.\n\n   **Solution**: Implement proper server identity verification before establishing a secure connection. This could be done by checking the server's certificate against a list of trusted certificates, or by using a secure handshake protocol that includes server identity verification.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 53,
+                "severity": 7,
+                "bugType": "Data Privacy",
+                "description": "The use of a deterministic random number generator (ccrypto.NewDetermRand) with a hardcoded seed ('test123') can lead to predictable cryptographic keys, which can be exploited by attackers to compromise the security of the encrypted data.",
+                "solution": "Replace the deterministic random number generator with a secure random number generator. Do not use hardcoded seeds. Instead, use a source of entropy that is not predictable, such as the current time or a random value generated by a secure random number generator.",
+                "link": "https://owasp.org/www-community/vulnerabilities/Insecure_Randomness"
+              },
+              {
+                "lineNumber": 54,
+                "severity": 8,
+                "bugType": "Data Privacy",
+                "description": "The use of elliptic.P256() may not provide the necessary level of security for sensitive data, as it uses a 256-bit key, which may not be sufficient for high-security applications. This could lead to a violation of GDPR, PCI DSS, and HIPAA compliance.",
+                "solution": "Consider using a stronger elliptic curve, such as Curve448 or Curve25519, which provide a higher level of security. Also, ensure that the implementation of these curves is secure and does not introduce any additional vulnerabilities.",
+                "link": "https://csrc.nist.gov/Projects/Post-Quantum-Cryptography/Post-Quantum-Cryptography-Standardization"
+              },
+              {
+                "lineNumber": 63,
+                "severity": 6,
+                "bugType": "Data Privacy",
+                "description": "The function c.verifyServer is called without checking the server's identity. This could potentially allow a man-in-the-middle attack, compromising the security of the data being transmitted.",
+                "solution": "Implement proper server identity verification before establishing a secure connection. This could be done by checking the server's certificate against a list of trusted certificates, or by using a secure handshake protocol that includes server identity verification.",
+                "link": "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "1",
       "value": "\nfunc TestFallbackLegacyFingerprint(t *testing.T) {\n\tconfig := Config{\n\t\tFingerprint: \"a5:32:92:c6:56:7a:9e:61:26:74:1b:81:a6:f5:1b:44\",\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tr := ccrypto.NewDetermRand([]byte(\"test123\"))\n\tpriv, err := ccrypto.GenerateKeyGo119(elliptic.P256(), r)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tpub, err := ssh.NewPublicKey(&priv.PublicKey)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\terr = c.verifyServer(\"\", nil, pub)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n}\n",
@@ -25,7 +239,137 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 1:31:08 AM PDT\n\nThis code is a test function for verifying a legacy fingerprint in Go programming language. It is using the built-in testing library and the crypto and ssh libraries for cryptographic operations.\n\nHere's a breakdown of what the code does:\n\n1. The function `TestVerifyLegacyFingerprint` is defined with a single parameter `t` of type `*testing.T`. This is a type provided by Go's testing package and is used to report test failures and log output.\n\n2. A `Config` struct is initialized with a `Fingerprint` field. The `Fingerprint` field is a string representing the fingerprint of a public key.\n\n3. A new client is created by calling `NewClient` function with the `Config` struct. If an error occurs during the client creation, the test will fail and log the error.\n\n4. A deterministic random number generator is created by calling `ccrypto.NewDetermRand` with a byte slice that serves as the seed.\n\n5. A new private key is generated by calling `ccrypto.GenerateKeyGo119` function with the elliptic curve P-256 and the deterministic random number generator. If an error occurs during the private key generation, the test will fail and log the error.\n\n6. A public key is derived from the private key by calling `ssh.NewPublicKey`. If an error occurs during the public key generation, the test will fail and log the error.\n\n7. The legacy fingerprint is verified by calling `c.verifyLegacyFingerprint` with the public key. If an error occurs during the fingerprint verification, the test will fail and log the error.\n\nThe algorithm used is the elliptic curve P-256, which is a widely used elliptic curve for public key cryptography. The deterministic random number generator is used to ensure that the private key generation is repeatable with the same seed.\n\nFor more information about Go's testing package, you can visit: https://golang.org/pkg/testing/\n\nFor more information about Go's crypto and ssh packages, you can visit: https://golang.org/pkg/crypto/ and https://golang.org/x/crypto/ssh respectively.\n\nFor more information about elliptic curve cryptography, you can visit: https://en.wikipedia.org/wiki/Elliptic-curve_cryptography\n\nRegarding the architectural guidelines, since there are no additional special architectural guidelines or constraints provided, the code appears to adhere to standard Go practices and does not seem to conflict with any general principles."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 1:32:19 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle NewClient fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle GenerateKeyGo119 fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle NewPublicKey fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle VerifyLegacyFingerprint fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle TestFatal fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->NewClient;\nNewClient-->GenerateKeyGo119;\nGenerateKeyGo119-->NewPublicKey;\nNewPublicKey-->VerifyLegacyFingerprint;\nVerifyLegacyFingerprint-->TestFatal;\n```\n\nThe control flow starts at the `TestVerifyLegacyFingerprint` function. It creates a `Config` object and initializes it with a fingerprint value. Then, it creates a new client using the `NewClient` function, passing the `Config` object as a parameter. If there is no error, it proceeds to generate a private key using the `GenerateKeyGo119` function. If there is no error, it creates a new public key using the `NewPublicKey` function. Finally, it calls the `verifyLegacyFingerprint` method of the client object and checks for any error. If there is an error, it calls the `Fatal` method of the testing object, indicating a test failure."
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:33:59 AM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 141\n\n   **Bug Type**: Insecure Use of Cryptography\n\n   **Description**: The code uses a deterministic random number generator with a hard-coded seed ('test123'). This can lead to predictable encryption keys, which can be exploited by attackers to decrypt sensitive data.\n\n   **Solution**: Use a secure random number generator (like crypto/rand in Go) and avoid hard-coded seeds. More about this can be found here: https://golang.org/pkg/crypto/rand/\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 146\n\n   **Bug Type**: Insecure Direct Object References (IDOR)\n\n   **Description**: The function verifyLegacyFingerprint(pub) could potentially be vulnerable to Insecure Direct Object References (IDOR) if it directly uses user-supplied input (in this case, 'pub') to access objects without proper authorization checks.\n\n   **Solution**: Ensure to implement proper authorization checks before accessing objects. More about IDOR can be found here: https://owasp.org/www-community/attacks/Insecure_Direct_Object_References\n\n\n3. **Severity**: 7/10\n\n   **Line Number**: 139\n\n   **Bug Type**: Hard-Coded Credentials\n\n   **Description**: The fingerprint is hard-coded into the code. If this is a real fingerprint, it represents a serious security risk as it could provide an attacker with valuable information.\n\n   **Solution**: Never hard-code sensitive information in the code. Consider using secure environment variables or a secure configuration management system. More about this can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 73,
+                "severity": 8,
+                "bugType": "Insecure Use of Cryptography",
+                "description": "The code uses a deterministic random number generator with a hard-coded seed ('test123'). This can lead to predictable encryption keys, which can be exploited by attackers to decrypt sensitive data.",
+                "solution": "Use a secure random number generator (like crypto/rand in Go) and avoid hard-coded seeds. More about this can be found here: https://golang.org/pkg/crypto/rand/"
+              },
+              {
+                "lineNumber": 78,
+                "severity": 6,
+                "bugType": "Insecure Direct Object References (IDOR)",
+                "description": "The function verifyLegacyFingerprint(pub) could potentially be vulnerable to Insecure Direct Object References (IDOR) if it directly uses user-supplied input (in this case, 'pub') to access objects without proper authorization checks.",
+                "solution": "Ensure to implement proper authorization checks before accessing objects. More about IDOR can be found here: https://owasp.org/www-community/attacks/Insecure_Direct_Object_References"
+              },
+              {
+                "lineNumber": 71,
+                "severity": 7,
+                "bugType": "Hard-Coded Credentials",
+                "description": "The fingerprint is hard-coded into the code. If this is a real fingerprint, it represents a serious security risk as it could provide an attacker with valuable information.",
+                "solution": "Never hard-code sensitive information in the code. Consider using secure environment variables or a secure configuration management system. More about this can be found here: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:36:40 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 142\n\n   **Bug Type**: CPU\n\n   **Description**: The use of deterministic random numbers for key generation can be computationally expensive and slow down the test execution.\n\n   **Solution**: Consider using a faster random number generator for test cases, as the security of the key is not a concern in this context.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 143\n\n   **Bug Type**: CPU\n\n   **Description**: Generating a new key pair for every test run can be CPU-intensive, slowing down the execution time of the test suite.\n\n   **Solution**: Consider generating the key pair once and reusing it across multiple test cases, or use a mock key pair for testing purposes.\n\n\n3. **Severity**: 4/10\n\n   **Line Number**: 148\n\n   **Bug Type**: CPU\n\n   **Description**: The function verifyLegacyFingerprint might be CPU-intensive if it involves complex calculations or operations.\n\n   **Solution**: Without the implementation details of verifyLegacyFingerprint, it's hard to provide a specific solution. However, consider optimizing the function if it is found to be a performance bottleneck.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 74,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "The use of deterministic random numbers for key generation can be computationally expensive and slow down the test execution.",
+                "solution": "Consider using a faster random number generator for test cases, as the security of the key is not a concern in this context."
+              },
+              {
+                "lineNumber": 75,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "Generating a new key pair for every test run can be CPU-intensive, slowing down the execution time of the test suite.",
+                "solution": "Consider generating the key pair once and reusing it across multiple test cases, or use a mock key pair for testing purposes."
+              },
+              {
+                "lineNumber": 80,
+                "severity": 4,
+                "bugType": "CPU",
+                "description": "The function verifyLegacyFingerprint might be CPU-intensive if it involves complex calculations or operations.",
+                "solution": "Without the implementation details of verifyLegacyFingerprint, it's hard to provide a specific solution. However, consider optimizing the function if it is found to be a performance bottleneck."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:40:15 AM PDT\n\n1. **Severity**: 8/10\n\n   **Line Number**: 142\n\n   **Bug Type**: Hardcoded credentials\n\n   **Description**: The code contains hardcoded credentials, which is a security risk. Hardcoded credentials can be easily discovered and misused by malicious users.\n\n   **Solution**: Remove hardcoded credentials and use a secure method to store and access credentials, such as environment variables or a secure vault. Always encrypt sensitive data.\n\n\n2. **Severity**: 7/10\n\n   **Line Number**: 143\n\n   **Bug Type**: Insecure cryptographic key generation\n\n   **Description**: The code generates cryptographic keys using a deterministic random number generator, which could result in predictable keys that are easier to crack.\n\n   **Solution**: Use a secure random number generator for key generation. This ensures that the keys are unpredictable and harder to crack.\n\n\n3. **Severity**: 9/10\n\n   **Line Number**: 151\n\n   **Bug Type**: Insecure handling of cryptographic keys\n\n   **Description**: The code handles cryptographic keys insecurely by passing them around in plain text. This can lead to keys being accidentally logged or leaked.\n\n   **Solution**: Always handle cryptographic keys securely. They should never be logged or passed around in plain text. Consider using a secure key management system.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 74,
+                "severity": 8,
+                "bugType": "Hardcoded credentials",
+                "description": "The code contains hardcoded credentials, which is a security risk. Hardcoded credentials can be easily discovered and misused by malicious users.",
+                "solution": "Remove hardcoded credentials and use a secure method to store and access credentials, such as environment variables or a secure vault. Always encrypt sensitive data.",
+                "webLink": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 75,
+                "severity": 7,
+                "bugType": "Insecure cryptographic key generation",
+                "description": "The code generates cryptographic keys using a deterministic random number generator, which could result in predictable keys that are easier to crack.",
+                "solution": "Use a secure random number generator for key generation. This ensures that the keys are unpredictable and harder to crack.",
+                "webLink": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#key-management"
+              },
+              {
+                "lineNumber": 83,
+                "severity": 9,
+                "bugType": "Insecure handling of cryptographic keys",
+                "description": "The code handles cryptographic keys insecurely by passing them around in plain text. This can lead to keys being accidentally logged or leaked.",
+                "solution": "Always handle cryptographic keys securely. They should never be logged or passed around in plain text. Consider using a secure key management system.",
+                "webLink": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "2",
       "value": "\nfunc TestVerifyLegacyFingerprint(t *testing.T) {\n\tconfig := Config{\n\t\tFingerprint: \"a5:32:92:c6:56:7a:9e:61:26:74:1b:81:a6:f5:1b:44\",\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tr := ccrypto.NewDetermRand([]byte(\"test123\"))\n\tpriv, err := ccrypto.GenerateKeyGo119(elliptic.P256(), r)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tpub, err := ssh.NewPublicKey(&priv.PublicKey)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\terr = c.verifyLegacyFingerprint(pub)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n}\n",
@@ -37,7 +381,130 @@
       }
     },
     {
-      "outputs": [],
+      "outputs": [
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Code Explanation\n\nLast Updated: Thursday, September 7, 2023 at 1:31:31 AM PDT\n\nThis code is a test function in the Go programming language. It tests the functionality of verifying a server's fingerprint, which is a part of SSH host key verification. This is a security measure to ensure that you are connecting to the correct server and not a malicious one.\n\nHere's a breakdown of the code:\n\n1. `TestVerifyFingerprint(t *testing.T)`: This is the test function declaration. It accepts a pointer to `testing.T`, which provides methods for error reporting and logging during the test.\n\n2. `config := Config{...}`: A new `Config` struct is initialized with a Fingerprint field. This is likely the expected fingerprint of the server.\n\n3. `c, err := NewClient(&config)`: A new client is created using the `NewClient` function, passing the configuration. If there's an error creating the client, it's stored in `err`.\n\n4. `if err != nil {...}`: This is an error check. If `err` is not `nil`, it means there was an error creating the client, and the test fails with this error message.\n\n5. `r := ccrypto.NewDetermRand([]byte(\"test123\"))`: A new deterministic random number generator is created using a predefined seed (\"test123\").\n\n6. `priv, err := ccrypto.GenerateKeyGo119(elliptic.P256(), r)`: A new elliptic curve private key is generated using the P-256 curve and the previously created deterministic random number generator.\n\n7. `pub, err := ssh.NewPublicKey(&priv.PublicKey)`: The public key associated with the generated private key is obtained.\n\n8. `err = c.verifyServer(\"\", nil, pub)`: The `verifyServer` method of the client is called to verify the server's public key. If there's an error during verification, it's stored in `err`.\n\n9. `if err != nil {...}`: This is another error check. If `err` is not `nil`, it means there was an error verifying the server, and the test fails with this error message.\n\nThe algorithm used here is the elliptic curve digital signature algorithm (ECDSA) with the P-256 curve. ECDSA is a public key cryptography algorithm used for digital signatures, which are a key part of the SSH protocol.\n\nYou can learn more about ECDSA [here](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm) and about Go's `crypto/elliptic` package [here](https://golang.org/pkg/crypto/elliptic/)."
+            }
+          ],
+          "metadata": {
+            "outputType": "explainCode",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Flow Diagram\n\nLast Updated: Thursday, September 7, 2023 at 1:32:29 AM PDT\n\n```mermaid\ngraph TD;\nstyle Start fill:#228B22, stroke:#000000, stroke-width:2px;\nstyle NewClient fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle GenerateKeyGo119 fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle NewPublicKey fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle VerifyServer fill:#228B22, stroke:#000000, stroke-width:4px;\nstyle TestError fill:#B22222, stroke:#000000, stroke-width:2px;\n\nStart-->NewClient;\nNewClient-->GenerateKeyGo119;\nGenerateKeyGo119-->NewPublicKey;\nNewPublicKey-->VerifyServer;\nVerifyServer-->End;\n```"
+            }
+          ],
+          "metadata": {
+            "outputType": "flowDiagram",
+            "details": []
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Security Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:34:28 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 189\n\n   **Bug Type**: Sensitive Data Exposure\n\n   **Description**: The deterministic random number generator is seeded with a hard-coded value ('test123'). This could be exploited to predict the output of the random number generator and compromise security.\n\n   **Solution**: Use a truly random value or a securely generated random value as the seed. Avoid hard-coding sensitive values. Refer to: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 191\n\n   **Bug Type**: Insecure Cryptographic Storage\n\n   **Description**: The elliptic curve 'P256' is used to generate the key. While this is not inherently insecure, it is not the strongest available option and could potentially be exploited in a 'break once, run everywhere' attack.\n\n   **Solution**: Consider using a stronger elliptic curve such as Curve25519. Refer to: https://safecurves.cr.yp.to/\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "bugAnalysisList",
+            "details": [
+              {
+                "lineNumber": 98,
+                "severity": 7,
+                "bugType": "Sensitive Data Exposure",
+                "description": "The deterministic random number generator is seeded with a hard-coded value ('test123'). This could be exploited to predict the output of the random number generator and compromise security.",
+                "solution": "Use a truly random value or a securely generated random value as the seed. Avoid hard-coding sensitive values. Refer to: https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"
+              },
+              {
+                "lineNumber": 100,
+                "severity": 6,
+                "bugType": "Insecure Cryptographic Storage",
+                "description": "The elliptic curve 'P256' is used to generate the key. While this is not inherently insecure, it is not the strongest available option and could potentially be exploited in a 'break once, run everywhere' attack.",
+                "solution": "Consider using a stronger elliptic curve such as Curve25519. Refer to: https://safecurves.cr.yp.to/"
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Performance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:37:12 AM PDT\n\n1. **Severity**: 5/10\n\n   **Line Number**: 186\n\n   **Bug Type**: Memory\n\n   **Description**: The NewDetermRand function creates a new deterministic random number generator, which could consume significant memory if the input byte slice is large.\n\n   **Solution**: Consider using a more memory-efficient random number generator or ensure the input byte slice is not unnecessarily large.\n\n\n2. **Severity**: 6/10\n\n   **Line Number**: 187\n\n   **Bug Type**: CPU\n\n   **Description**: The GenerateKeyGo119 function generates a new private key using the elliptic curve digital signature algorithm. This is a computationally expensive operation and may slow down the test if run frequently.\n\n   **Solution**: If possible, consider generating the key once and reusing it across tests. Alternatively, consider using a lighter algorithm for key generation in tests.\n\n\n3. **Severity**: 5/10\n\n   **Line Number**: 192\n\n   **Bug Type**: CPU\n\n   **Description**: The verifyServer function verifies the server's public key, which is a CPU-intensive operation. If run frequently, this could slow down the test.\n\n   **Solution**: Consider mocking the verification process in tests to reduce CPU usage.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "performanceList",
+            "details": [
+              {
+                "lineNumber": 95,
+                "severity": 5,
+                "bugType": "Memory",
+                "description": "The NewDetermRand function creates a new deterministic random number generator, which could consume significant memory if the input byte slice is large.",
+                "solution": "Consider using a more memory-efficient random number generator or ensure the input byte slice is not unnecessarily large."
+              },
+              {
+                "lineNumber": 96,
+                "severity": 6,
+                "bugType": "CPU",
+                "description": "The GenerateKeyGo119 function generates a new private key using the elliptic curve digital signature algorithm. This is a computationally expensive operation and may slow down the test if run frequently.",
+                "solution": "If possible, consider generating the key once and reusing it across tests. Alternatively, consider using a lighter algorithm for key generation in tests."
+              },
+              {
+                "lineNumber": 101,
+                "severity": 5,
+                "bugType": "CPU",
+                "description": "The verifyServer function verifies the server's public key, which is a CPU-intensive operation. If run frequently, this could slow down the test.",
+                "solution": "Consider mocking the verification process in tests to reduce CPU usage."
+              }
+            ]
+          }
+        },
+        {
+          "items": [
+            {
+              "mime": "text/markdown",
+              "data": "\n\n---\n\n### Boost Source-Level Data and Privacy Compliance Analysis\n\nLast Updated: Thursday, September 7, 2023 at 1:41:01 AM PDT\n\n1. **Severity**: 7/10\n\n   **Line Number**: 187\n\n   **Bug Type**: Hardcoded sensitive data\n\n   **Description**: The function 'ccrypto.NewDetermRand' is using a hardcoded string 'test123' as a seed for generating a deterministic random number. This could lead to predictable encryption keys which can compromise data security.\n\n   **Solution**: Avoid hardcoding sensitive data like encryption seeds. Instead, use secure sources of randomness or environment variables. Use a secure random number generator to generate encryption keys.\n\n\n2. **Severity**: 8/10\n\n   **Line Number**: 188\n\n   **Bug Type**: Insecure key generation\n\n   **Description**: The function 'ccrypto.GenerateKeyGo119' is generating an elliptic curve key pair using the P-256 curve. However, P-256 is considered weak and could potentially be broken by an attacker.\n\n   **Solution**: Use stronger elliptic curves like Curve25519 for key generation. Ensure to follow best practices for cryptographic key generation.\n\n\n3. **Severity**: 6/10\n\n   **Line Number**: 194\n\n   **Bug Type**: Inadequate error handling\n\n   **Description**: The function 'c.verifyServer' is not adequately handling errors. If an error occurs during server verification, the function will terminate prematurely which can lead to unhandled exceptions and potential data leaks.\n\n   **Solution**: Implement proper error handling mechanisms. Instead of terminating the function, log the error and handle it gracefully to prevent potential data leaks.\n\n\n"
+            }
+          ],
+          "metadata": {
+            "outputType": "complianceCodeList",
+            "details": [
+              {
+                "lineNumber": 96,
+                "severity": 7,
+                "bugType": "Hardcoded sensitive data",
+                "description": "The function 'ccrypto.NewDetermRand' is using a hardcoded string 'test123' as a seed for generating a deterministic random number. This could lead to predictable encryption keys which can compromise data security.",
+                "solution": "Avoid hardcoding sensitive data like encryption seeds. Instead, use secure sources of randomness or environment variables. Use a secure random number generator to generate encryption keys.",
+                "webLink": "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#rule---use-cryptographically-secure-pseudo-random-number-generators-csprng"
+              },
+              {
+                "lineNumber": 97,
+                "severity": 8,
+                "bugType": "Insecure key generation",
+                "description": "The function 'ccrypto.GenerateKeyGo119' is generating an elliptic curve key pair using the P-256 curve. However, P-256 is considered weak and could potentially be broken by an attacker.",
+                "solution": "Use stronger elliptic curves like Curve25519 for key generation. Ensure to follow best practices for cryptographic key generation.",
+                "webLink": "https://safecurves.cr.yp.to/"
+              },
+              {
+                "lineNumber": 103,
+                "severity": 6,
+                "bugType": "Inadequate error handling",
+                "description": "The function 'c.verifyServer' is not adequately handling errors. If an error occurs during server verification, the function will terminate prematurely which can lead to unhandled exceptions and potential data leaks.",
+                "solution": "Implement proper error handling mechanisms. Instead of terminating the function, log the error and handle it gracefully to prevent potential data leaks.",
+                "webLink": "https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html"
+              }
+            ]
+          }
+        }
+      ],
       "languageId": "go",
       "id": "3",
       "value": "\nfunc TestVerifyFingerprint(t *testing.T) {\n\tconfig := Config{\n\t\tFingerprint: \"qmrRoo8MIqePv3jC8+wv49gU6uaFgD3FASQx9V8KdmY=\",\n\t}\n\tc, err := NewClient(&config)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tr := ccrypto.NewDetermRand([]byte(\"test123\"))\n\tpriv, err := ccrypto.GenerateKeyGo119(elliptic.P256(), r)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tpub, err := ssh.NewPublicKey(&priv.PublicKey)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\terr = c.verifyServer(\"\", nil, pub)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n}\n",

@@ -1,0 +1,333 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"; mermaid.initialize({ startOnLoad: true });</script>
+    <style>
+        @page {
+            margin: 2cm;
+            size: letter;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.0;
+            overflow-x: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        /* Use this class for analysis sections */
+        .analysis-section {
+            padding-top: 16px;
+            margin-top: 24px;
+            font-size: 12px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .new-page-section {
+            page-break-before: always;
+        }
+
+        .analysis-section h1, .analysis-section h2 {
+            color: #444;
+        }
+
+        .analysis-section p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Polyverse Boost Source Analysis Details: ./go.mod</h1>
+    <p>Date Generated: Wednesday, September 6, 2023 at 8:19:40 PM PDT</p>
+    <div class="><hr>
+<h3 id="boost-architectural-quick-summary-security-report">Boost Architectural Quick Summary Security Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:18:37 PM PDT</p>
+<p>Executive Report:</p>
+<ol>
+<li><strong>Architectural Impact</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Risk Analysis</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Potential Customer Impact</strong>: Based on the analysis, there are no severe issues that could potentially impact customers.</li>
+<li><strong>Performance Issues</strong>: Our analysis did not identify any explicit performance issues in the file.</li>
+<li><strong>Risk Assessment</strong>: Based on the current analysis of this file, no severe issues have been found. However, this doesn&#39;t guarantee that the file is risk-free.</li>
+</ol>
+<p>Highlights:</p>
+<ul>
+<li>No severe issues were identified in the current analysis of this file.</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-performance-report">Boost Architectural Quick Summary Performance Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:18:52 PM PDT</p>
+<p>Executive Report:</p>
+<ol>
+<li><strong>Architectural Impact</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Risk Analysis</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Potential Customer Impact</strong>: Based on the analysis, there are no severe issues that could potentially impact customers.</li>
+<li><strong>Performance Issues</strong>: Our analysis did not identify any explicit performance issues in the file.</li>
+<li><strong>Risk Assessment</strong>: Based on the current analysis of this file, no severe issues have been found. However, this doesn&#39;t guarantee that the file is risk-free.</li>
+</ol>
+<p>Highlights:</p>
+<ul>
+<li>No severe issues were identified in the current analysis of this file.</li>
+</ul>
+</div><p></p><div class="new-page-section><hr>
+<h3 id="boost-architectural-quick-summary-compliance-report">Boost Architectural Quick Summary Compliance Report</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:19:42 PM PDT</p>
+<p>Executive Report:</p>
+<ol>
+<li><strong>Architectural Impact</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Risk Analysis</strong>: The analysis of this file has not revealed any severe issues.</li>
+<li><strong>Potential Customer Impact</strong>: Based on the analysis, there are no severe issues that could potentially impact customers.</li>
+<li><strong>Performance Issues</strong>: Our analysis did not identify any explicit performance issues in the file.</li>
+<li><strong>Risk Assessment</strong>: Based on the current analysis of this file, no severe issues have been found. However, this doesn&#39;t guarantee that the file is risk-free.</li>
+</ol>
+<p>Highlights:</p>
+<ul>
+<li>No severe issues were identified in the current analysis of this file.</li>
+</ul>
+</div><p></p>
+    <h1>Detailed Analysis</h1><div>
+                    <h2>./go.mod line 0:</h2>
+                    <p>Programming Language: plaintext</p>
+                    <pre><code>module github.com<span class="hljs-regexp">/jpillora/</span>chisel
+
+go <span class="hljs-number">1.21</span>
+
+require (
+	github.com<span class="hljs-regexp">/armon/g</span>o-socks5 v0.<span class="hljs-number">0.0</span>-<span class="hljs-number">20160902184237</span>-e75332964ef5
+	github.com<span class="hljs-regexp">/fsnotify/</span>fsnotify v1.<span class="hljs-number">6.0</span>
+	github.com<span class="hljs-regexp">/gorilla/</span>websocket v1.<span class="hljs-number">5.0</span>
+	github.com<span class="hljs-regexp">/jpillora/</span>backoff v1.<span class="hljs-number">0.0</span>
+	github.com<span class="hljs-regexp">/jpillora/</span>requestlog v1.<span class="hljs-number">0.0</span>
+	github.com<span class="hljs-regexp">/jpillora/</span>sizestr v1.<span class="hljs-number">0.0</span>
+	golang.org<span class="hljs-regexp">/x/</span>crypto v0.<span class="hljs-number">12.0</span>
+	golang.org<span class="hljs-regexp">/x/</span>net v0.<span class="hljs-number">14.0</span>
+	golang.org<span class="hljs-regexp">/x/</span>sync v0.<span class="hljs-number">3.0</span>
+)
+
+require (
+	github.com<span class="hljs-regexp">/andrew-d/g</span>o-termutil v0.<span class="hljs-number">0.0</span>-<span class="hljs-number">20150726205930</span>-<span class="hljs-number">009166</span>a695a2 <span class="hljs-regexp">//</span> indirect
+	github.com<span class="hljs-regexp">/jpillora/</span>ansi v1.<span class="hljs-number">0.3</span> <span class="hljs-regexp">//</span> indirect
+	github.com<span class="hljs-regexp">/tomasen/</span>realip v0.<span class="hljs-number">0.0</span>-<span class="hljs-number">20180522021738</span>-f0c99a92ddce <span class="hljs-regexp">//</span> indirect
+	golang.org<span class="hljs-regexp">/x/</span>sys v0.<span class="hljs-number">11.0</span> <span class="hljs-regexp">//</span> indirect
+	golang.org<span class="hljs-regexp">/x/</span>text v0.<span class="hljs-number">12.0</span> <span class="hljs-regexp">//</span> indirect
+)
+</code></pre>
+                </div><div class='analysis-section'><div class='output-item'><hr>
+<h3 id="boost-code-explanation">Boost Code Explanation</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:16:46 PM PDT</p>
+<p>This code is a Go module definition file, specifically the <code>go.mod</code> file for the <code>github.com/jpillora/chisel</code> project. This file is used by the Go package manager to manage the project&#39;s dependencies.</p>
+<p>The <code>module</code> directive at the top of the file declares the module path of the current project, which is <code>github.com/jpillora/chisel</code> in this case.</p>
+<p>The <code>go</code> directive specifies the Go language version that the module requires.</p>
+<p>The <code>require</code> directives list the other modules that this module depends on along with their versions. The dependencies are grouped into two <code>require</code> blocks. The first block lists direct dependencies, and the second block lists indirect dependencies. Indirect dependencies are dependencies of the direct dependencies.</p>
+<p>Let&#39;s go over some of the dependencies:</p>
+<ul>
+<li><code>github.com/armon/go-socks5</code> is a SOCKS5 server implementation in Go.</li>
+<li><code>github.com/fsnotify/fsnotify</code> is a file system notification library in Go.</li>
+<li><code>github.com/gorilla/websocket</code> provides a complete and tested implementation of the WebSocket protocol in Go.</li>
+<li><code>github.com/jpillora/backoff</code> is a simple backoff algorithm in Go.</li>
+<li><code>github.com/jpillora/requestlog</code> is a HTTP request logging middleware.</li>
+<li><code>github.com/jpillora/sizestr</code> is a library to convert sizes in bytes to human-readable strings.</li>
+<li><code>golang.org/x/crypto</code> provides supplementary cryptography libraries.</li>
+<li><code>golang.org/x/net</code> provides supplementary network libraries.</li>
+<li><code>golang.org/x/sync</code> provides supplementary synchronization primitives.</li>
+<li><code>github.com/andrew-d/go-termutil</code> is a terminal utility library.</li>
+<li><code>github.com/jpillora/ansi</code> is a library for ANSI escape codes.</li>
+<li><code>github.com/tomasen/realip</code> is a library to extract the real IP from HTTP requests.</li>
+<li><code>golang.org/x/sys</code> provides low-level interaction with the operating system.</li>
+<li><code>golang.org/x/text</code> provides packages for text manipulation.</li>
+</ul>
+<p>The <code>// indirect</code> comment indicates that the dependency is not directly used by this module, but is used by one of the module&#39;s dependencies.</p>
+<p>For more information about Go modules, you can refer to the <a href="https://golang.org/ref/mod">official Go modules documentation</a>.</p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-flow-diagram">Boost Flow Diagram</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:18:27 PM PDT</p>
+<pre><code class="hljs language-mermaid"><pre class="mermaid">graph TD;
+style Start fill:#228B22, stroke:#000000, stroke-width:2px;
+style main fill:#228B22, stroke:#000000, stroke-width:4px;
+style mainErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style handleSignals-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style handleSignals-->main fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->mainErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill:#B22222, stroke:#000000, stroke-width:2px;
+style main-->handleSignals fill:#228B22, stroke:#000000, stroke-width:4px;
+style main-->handleSignalsErrorPath fill</pre>
+</code></pre></div'><div class='output-item'><hr>
+<h3 id="boost-source-level-security-analysis">Boost Source-Level Security Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:18:35 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-performance-analysis">Boost Source-Level Performance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:18:50 PM PDT</p>
+<p><strong>No bugs found</strong></p>
+</div'><div class='output-item'><hr>
+<h3 id="boost-source-level-data-and-privacy-compliance-analysis">Boost Source-Level Data and Privacy Compliance Analysis</h3>
+<p>Last Updated: Wednesday, September 6, 2023 at 8:19:40 PM PDT</p>
+<ol>
+<li><p><strong>Severity</strong>: 3/10</p>
+<p><strong>Line Number</strong>: 2</p>
+<p><strong>Bug Type</strong>: Data Compliance</p>
+<p><strong>Description</strong>: The project uses an outdated version of Go (1.21). This could potentially lead to security vulnerabilities, as newer versions of Go may have patched existing security issues.</p>
+<p><strong>Solution</strong>: Upgrade to the latest stable version of Go to ensure you have all the latest security patches and updates.</p>
+</li>
+<li><p><strong>Severity</strong>: 5/10</p>
+<p><strong>Line Number</strong>: 5</p>
+<p><strong>Bug Type</strong>: Data Compliance</p>
+<p><strong>Description</strong>: The project uses outdated versions of dependencies such as github.com/gorilla/websocket v1.5.0 and golang.org/x/crypto v0.12.0. These outdated libraries could contain security vulnerabilities which could lead to data breaches.</p>
+<p><strong>Solution</strong>: Update all dependencies to their latest stable versions to ensure you have all the latest security patches and updates.</p>
+</li>
+<li><p><strong>Severity</strong>: 4/10</p>
+<p><strong>Line Number</strong>: 15</p>
+<p><strong>Bug Type</strong>: Data Compliance</p>
+<p><strong>Description</strong>: The project uses a library (github.com/tomasen/realip v0.0.0-20180522021738-f0c99a92ddce) that could potentially expose the real IP address of users. This could violate GDPR and other privacy laws if IP addresses are stored without users&#39; consent.</p>
+<p><strong>Solution</strong>: Ensure that the library is used in a way that respects user privacy. If IP addresses are stored, make sure that users have given their consent and that the data is stored securely.</p>
+</li>
+</ol>
+</div'></div>
+</body>
+</html>
