@@ -3,7 +3,7 @@
   "summary": {
     "projectName": "chisel",
     "summaryUrl": ".boost/chisel.summary.boost-notebook",
-    "filesToAnalyze": 42,
+    "filesToAnalyze": 43,
     "filesAnalyzed": 42,
     "issues": []
   },
@@ -117,8 +117,8 @@
     },
     "generatedCode": {
       "analysisType": "generatedCode",
-      "status": "completed",
-      "completedCells": 28,
+      "status": "incomplete",
+      "completedCells": 29,
       "errorCells": 0,
       "issueCells": 0,
       "totalCells": 28,
@@ -543,9 +543,10 @@
       }
     },
     "server/server.go": {
+      "sourceRelFile": "./server/server.go",
       "notebookRelFile": ".boost/server/server.go.boost-notebook",
       "totalCells": 14,
-      "completedCells": 14,
+      "completedCells": 15,
       "errorCells": 0,
       "issueCells": 10,
       "sections": {
@@ -1072,8 +1073,8 @@
         },
         "generatedCode": {
           "analysisType": "generatedCode",
-          "status": "completed",
-          "completedCells": 14,
+          "status": "incomplete",
+          "completedCells": 15,
           "errorCells": 0,
           "issueCells": 0,
           "totalCells": 14,
@@ -8667,10 +8668,10 @@
     "refreshed": true,
     "enabled": true,
     "status": "paid",
-    "trialRemaining": 7.56,
-    "usageThisMonth": 92.44,
-    "discountedUsage": 92.44,
-    "balanceDue": 0,
+    "trialRemaining": 0,
+    "usageThisMonth": 515.02,
+    "discountedUsage": 100,
+    "balanceDue": 415.02,
     "couponType": "Polyverse Boost Free Trial",
     "org": "polyverse-appsec",
     "owner": "alex@polyverse.io",
